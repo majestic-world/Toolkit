@@ -26,6 +26,12 @@ namespace L2Toolkit.database
             File.WriteAllLines(FilePath, temp);
         }
 
+        public int GetInt(string key, int defaultValue = 0)
+        {
+            var value = GetValue(key, defaultValue.ToString());
+            return int.Parse(value);
+        }
+
         public string GetValue(string key, string defaultValue = "")
         {
             return _data.TryGetValue(key, out var value) ? value : defaultValue;
