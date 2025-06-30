@@ -1,0 +1,97 @@
+<UserControl x:Class="L2Toolkit.DoorGenerateControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             Height="Auto" Width="Auto"
+             Background="#F5F5F5">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="30">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" 
+                       Text="Gerador de portas em XML" 
+                       FontSize="20" 
+                       FontWeight="Bold"
+                       Margin="0,0,0,20"/>
+
+            <StackPanel Grid.Row="1" Orientation="Vertical" Margin="0,0,0,20">
+                <TextBlock Text="Cole o conteúdo do modelo da porta abaixo:" 
+                          FontSize="16" 
+                          FontWeight="SemiBold" 
+                          Margin="0,0,0,8"/>
+                <Border Background="White" CornerRadius="10" BorderBrush="#E0E0E0" BorderThickness="1">
+                    <TextBox x:Name="InputTextBox" 
+                             AcceptsReturn="True" 
+                             TextWrapping="Wrap" 
+                             VerticalScrollBarVisibility="Auto" 
+                             Height="200"
+                             Padding="15,10"
+                             BorderThickness="0"
+                             Background="Transparent"/>
+                </Border>
+            </StackPanel>
+
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
+                <Button x:Name="ConvertButton" 
+                        Content="🔄 Converter para XML" 
+                        Width="180" 
+                        Height="40"
+                        Background="#2196F3" 
+                        Foreground="White"
+                        FontSize="14" 
+                        FontWeight="SemiBold"
+                        BorderThickness="0"
+                        Cursor="Hand"
+                        Margin="0,0,10,0">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="8"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+                
+                <Button x:Name="CopyButton" 
+                        Content="📋 Copiar XML" 
+                        Width="150" 
+                        Height="40"
+                        Background="#4CAF50" 
+                        Foreground="White"
+                        FontSize="14" 
+                        Cursor="Hand"
+                        FontWeight="SemiBold"
+                        BorderThickness="0">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="8"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+            </StackPanel>
+
+            <StackPanel Grid.Row="3" Orientation="Vertical">
+                <TextBlock Text="XML Gerado:" 
+                          FontSize="16" 
+                          FontWeight="SemiBold" 
+                          Margin="0,0,0,8"/>
+                <Border Background="White" CornerRadius="10" BorderBrush="#E0E0E0" BorderThickness="1">
+                    <TextBox x:Name="OutputTextBox" 
+                             AcceptsReturn="True" 
+                             TextWrapping="Wrap" 
+                             VerticalScrollBarVisibility="Auto" 
+                             Height="200"
+                             Padding="15,10"
+                             BorderThickness="0"
+                             Background="Transparent"
+                             IsReadOnly="True"/>
+                </Border>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</UserControl> 

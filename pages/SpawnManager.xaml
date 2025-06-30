@@ -1,0 +1,121 @@
+<UserControl x:Class="L2Toolkit.SpawnManager"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             Height="Auto" Width="Auto"
+             Background="#F5F5F5">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="30">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" 
+                       Text="Gerenciador de Spawns" 
+                       FontSize="20" 
+                       FontWeight="Bold"
+                       Margin="0,0,0,20"/>
+
+            <StackPanel Grid.Row="1" Orientation="Vertical" Margin="0,0,0,15">
+                <TextBlock Text="IDs dos NPCs (separados por ponto e vírgula):" 
+                          FontSize="16" 
+                          FontWeight="SemiBold" 
+                          Margin="0,0,0,8"/>
+                <Border Background="White" CornerRadius="10" BorderBrush="#E0E0E0" BorderThickness="1">
+                    <TextBox x:Name="NPCIdsTextBox" 
+                             Padding="15,10"
+                             Height="40"
+                             BorderThickness="0"
+                             Background="Transparent"/>
+                </Border>
+            </StackPanel>
+
+            <StackPanel Grid.Row="2" Orientation="Vertical" Margin="0,0,0,15">
+                <TextBlock Text="Dados originais de spawn:" 
+                          FontSize="16" 
+                          FontWeight="SemiBold" 
+                          Margin="0,0,0,8"/>
+                <Border Background="White" CornerRadius="10" BorderBrush="#E0E0E0" BorderThickness="1">
+                    <TextBox x:Name="OriginalSpawnTextBox" 
+                             AcceptsReturn="True" 
+                             TextWrapping="Wrap" 
+                             VerticalScrollBarVisibility="Auto" 
+                             Height="200"
+                             Padding="15,10"
+                             BorderThickness="0"
+                             Background="Transparent"/>
+                </Border>
+            </StackPanel>
+
+            <Button x:Name="CreateSpawnsButton" 
+                    Grid.Row="3"
+                    Content="✨ Criar Spawns" 
+                    Width="160" 
+                    Height="40"
+                    Background="#2196F3" 
+                    Foreground="White"
+                    FontSize="14" 
+                    FontWeight="SemiBold"
+                    BorderThickness="0"
+                    Cursor="Hand"
+                    HorizontalAlignment="Center"
+                    Margin="0,0,0,15">
+                <Button.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="8"/>
+                    </Style>
+                </Button.Resources>
+            </Button>
+
+            <StackPanel Grid.Row="4" Orientation="Vertical" Margin="0,0,0,15">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Resultado:" 
+                              FontSize="16" 
+                              FontWeight="SemiBold" 
+                              Margin="0,0,0,8"
+                              Grid.Column="0" />
+                    <Button x:Name="CopyResultButton" 
+                            Content="📋 Copiar" 
+                            Width="100" 
+                            Height="32"
+                            Background="#4CAF50" 
+                            Foreground="White"
+                            FontSize="12" 
+                            Cursor="Hand"
+                            FontWeight="SemiBold"
+                            BorderThickness="0"
+                            Grid.Column="1"
+                            Margin="0,0,0,8">
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="6"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+                </Grid>
+                <Border Background="White" CornerRadius="10" BorderBrush="#E0E0E0" BorderThickness="1">
+                    <TextBox x:Name="ResultTextBox" 
+                             AcceptsReturn="True" 
+                             TextWrapping="Wrap" 
+                             VerticalScrollBarVisibility="Auto" 
+                             Height="200"
+                             Padding="15,10"
+                             BorderThickness="0"
+                             Background="Transparent"
+                             IsReadOnly="True"/>
+                </Border>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</UserControl> 

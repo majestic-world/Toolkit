@@ -1,0 +1,41 @@
+using System.Windows;
+
+namespace L2Toolkit
+{
+    /// <summary>
+    /// Interação lógica para MainWindow.xam
+    /// </summary>
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
+            InitializeComponent();
+            MainContent.Content = new DoorGenerateControl();
+        }
+
+        private void BtnPawnData_Click(object sender, RoutedEventArgs e)
+        {
+            MainContent.Content = new PawnDataControl();
+        }
+
+        private void BtnPrimeShop_Click(object sender, RoutedEventArgs e)
+        {
+            MainContent.Content = new PrimeShopGenerator();
+        }
+
+        private void BtnDoor_Click(object sender, RoutedEventArgs e)
+        {
+            MainContent.Content = new DoorGenerateControl();
+        }
+
+        private void BtnSpawnManager_Click(object sender, RoutedEventArgs e)
+        {
+            MainContent.Content = new SpawnManager();
+        }
+
+        private void BtnDescriptionFix_Click(object sender, RoutedEventArgs e)
+        {
+            MainContent.Content = new DescriptionFix();
+        }
+    }
+} 

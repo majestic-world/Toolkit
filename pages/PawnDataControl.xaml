@@ -1,0 +1,184 @@
+<UserControl x:Class="L2Toolkit.PawnDataControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             Height="Auto" Width="Auto"
+             Background="#F5F5F5">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="30">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="1" Orientation="Vertical" Margin="0,0,0,20">
+                <TextBlock Text="Nome do Pawn" 
+                          FontSize="16" 
+                          FontWeight="SemiBold" 
+                          Margin="0,0,0,4"/>
+                <TextBox x:Name="PawnNameTextBox"
+                        Padding="8,6"
+                        BorderThickness="1"
+                        BorderBrush="#E0E0E0"
+                        Background="White"/>
+            </StackPanel>
+
+            <Border Grid.Row="2" Background="White" CornerRadius="15" BorderBrush="#E0E0E0" BorderThickness="1" Padding="20" Margin="0,0,0,20">
+                <UniformGrid Columns="2" Rows="11">
+                    <StackPanel Margin="8">
+                        <TextBlock Text="1 - Walk" FontWeight="Medium" Margin="0,0,0,4"/>
+                        <TextBox x:Name="Entry_1" Padding="8,6" BorderThickness="1" BorderBrush="#E0E0E0"/>
+                    </StackPanel>
+                    <StackPanel Margin="8">
+                        <TextBlock Text="2 - Run" FontWeight="Medium" Margin="0,0,0,4"/>
+                        <TextBox x:Name="Entry_2" Padding="8,6" BorderThickness="1" BorderBrush="#E0E0E0"/>
+                    </StackPanel>
+                    <StackPanel Margin="8">
+                        <TextBlock Text="8 - AtkWait" FontWeight="Medium" Margin="0,0,0,4"/>
+                        <TextBox x:Name="Entry_8" Padding="8,6" BorderThickness="1" BorderBrush="#E0E0E0"/>
+                    </StackPanel>
+                    <StackPanel Margin="8">
+                        <TextBlock Text="9 - AtkWait" FontWeight="Medium" Margin="0,0,0,4"/>
+                        <TextBox x:Name="Entry_9" Padding="8,6" BorderThickness="1" BorderBrush="#E0E0E0"/>
+                    </StackPanel>
+                    <StackPanel Margin="8">
+                        <TextBlock Text="20 - Attack 01" FontWeight="Medium" Margin="0,0,0,4"/>
+                        <TextBox x:Name="Entry_20" Padding="8,6" BorderThickness="1" BorderBrush="#E0E0E0"/>
+                    </StackPanel>
+                    <StackPanel Margin="8">
+                        <TextBlock Text="21 - Attack 02" FontWeight="Medium" Margin="0,0,0,4"/>
+                        <TextBox x:Name="Entry_21" Padding="8,6" BorderThickness="1" BorderBrush="#E0E0E0"/>
+                    </StackPanel>
+                    <StackPanel Margin="8">
+                        <TextBlock Text="22 - Attack 03" FontWeight="Medium" Margin="0,0,0,4"/>
+                        <TextBox x:Name="Entry_22" Padding="8,6" BorderThickness="1" BorderBrush="#E0E0E0"/>
+                    </StackPanel>
+                    <StackPanel Margin="8">
+                        <TextBlock Text="28 - Special Attack 01" FontWeight="Medium" Margin="0,0,0,4"/>
+                        <TextBox x:Name="Entry_28" Padding="8,6" BorderThickness="1" BorderBrush="#E0E0E0"/>
+                    </StackPanel>
+                    <StackPanel Margin="8">
+                        <TextBlock Text="29 - Special Attack 02" FontWeight="Medium" Margin="0,0,0,4"/>
+                        <TextBox x:Name="Entry_29" Padding="8,6" BorderThickness="1" BorderBrush="#E0E0E0"/>
+                    </StackPanel>
+                    <StackPanel Margin="8">
+                        <TextBlock Text="30 - Special Attack 03" FontWeight="Medium" Margin="0,0,0,4"/>
+                        <TextBox x:Name="Entry_30" Padding="8,6" BorderThickness="1" BorderBrush="#E0E0E0"/>
+                    </StackPanel>
+                    <StackPanel Margin="8">
+                        <TextBlock Text="31 - Special Attack 04" FontWeight="Medium" Margin="0,0,0,4"/>
+                        <TextBox x:Name="Entry_31" Padding="8,6" BorderThickness="1" BorderBrush="#E0E0E0"/>
+                    </StackPanel>
+                    <StackPanel Margin="8">
+                        <TextBlock Text="32 - Special Attack 05" FontWeight="Medium" Margin="0,0,0,4"/>
+                        <TextBox x:Name="Entry_32" Padding="8,6" BorderThickness="1" BorderBrush="#E0E0E0"/>
+                    </StackPanel>
+                    <StackPanel Margin="8">
+                        <TextBlock Text="33 - Special Attack 06" FontWeight="Medium" Margin="0,0,0,4"/>
+                        <TextBox x:Name="Entry_33" Padding="8,6" BorderThickness="1" BorderBrush="#E0E0E0"/>
+                    </StackPanel>
+                    <StackPanel Margin="8">
+                        <TextBlock Text="34 - Special Attack 07" FontWeight="Medium" Margin="0,0,0,4"/>
+                        <TextBox x:Name="Entry_34" Padding="8,6" BorderThickness="1" BorderBrush="#E0E0E0"/>
+                    </StackPanel>
+                    <StackPanel Margin="8">
+                        <TextBlock Text="35 - Special Attack 08" FontWeight="Medium" Margin="0,0,0,4"/>
+                        <TextBox x:Name="Entry_35" Padding="8,6" BorderThickness="1" BorderBrush="#E0E0E0"/>
+                    </StackPanel>
+                    <StackPanel Margin="8">
+                        <TextBlock Text="36 - Special Attack 09" FontWeight="Medium" Margin="0,0,0,4"/>
+                        <TextBox x:Name="Entry_36" Padding="8,6" BorderThickness="1" BorderBrush="#E0E0E0"/>
+                    </StackPanel>
+                    <StackPanel Margin="8">
+                        <TextBlock Text="37 - Special Attack 10" FontWeight="Medium" Margin="0,0,0,4"/>
+                        <TextBox x:Name="Entry_37" Padding="8,6" BorderThickness="1" BorderBrush="#E0E0E0"/>
+                    </StackPanel>
+                    <StackPanel Margin="8">
+                        <TextBlock Text="60 - Death/Exit" FontWeight="Medium" Margin="0,0,0,4"/>
+                        <TextBox x:Name="Entry_60" Padding="8,6" BorderThickness="1" BorderBrush="#E0E0E0"/>
+                    </StackPanel>
+                    <StackPanel Margin="8">
+                        <TextBlock Text="62 - DeathWait" FontWeight="Medium" Margin="0,0,0,4"/>
+                        <TextBox x:Name="Entry_62" Padding="8,6" BorderThickness="1" BorderBrush="#E0E0E0"/>
+                    </StackPanel>
+                    <StackPanel Margin="8">
+                        <TextBlock Text="92 - Social Actions" FontWeight="Medium" Margin="0,0,0,4"/>
+                        <TextBox x:Name="Entry_92" Padding="8,6" BorderThickness="1" BorderBrush="#E0E0E0"/>
+                    </StackPanel>
+                </UniformGrid>
+            </Border>
+
+            <StackPanel Grid.Row="3" Orientation="Vertical">
+                <Button x:Name="GenerateButton" Content="✨ Gerar PawnAnimData" Width="220" Height="45" 
+                        Background="#2196F3" Foreground="White" 
+                        FontSize="16" FontWeight="SemiBold"
+                        BorderThickness="0" 
+                        HorizontalAlignment="Center"
+                        Cursor="Hand"
+                        Margin="0,0,0,20">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="8"/>
+                        </Style>
+                        <Style TargetType="Button">
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#0D47A1"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+                
+                <Grid Margin="0,0,0,10">
+                    <Border Background="White" CornerRadius="10" BorderBrush="#E0E0E0" BorderThickness="1">
+                        <TextBox x:Name="OutputTextBox" 
+                                AcceptsReturn="True" 
+                                TextWrapping="Wrap" 
+                                VerticalScrollBarVisibility="Auto" 
+                                Height="180"
+                                Padding="15,10"
+                                BorderThickness="0"
+                                Background="Transparent"/>
+                    </Border>
+                    
+                    <!-- Notificação de copiado -->
+                    <TextBlock x:Name="CopiadoTextBlock" 
+                              Text="Copiado para área de transferência!" 
+                              Foreground="White" 
+                              Background="#4CAF50" 
+                              FontWeight="SemiBold"
+                              Padding="10,5"
+                              TextAlignment="Center"
+                              Visibility="Collapsed"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Top"
+                              Margin="0,10,0,0"/>
+                </Grid>
+                
+                <!-- Botão para copiar -->
+                <Button x:Name="CopiarButton" 
+                       Content="📋 Copiar para Área de Transferência" 
+                       Width="250" 
+                       Height="35"
+                       Background="#FF4A9BE8"
+                       Foreground="White"
+                       FontSize="13"
+                       FontWeight="SemiBold"
+                       BorderThickness="0"
+                       HorizontalAlignment="Center"
+                       Cursor="Hand">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="6"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</UserControl> 

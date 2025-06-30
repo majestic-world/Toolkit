@@ -1,0 +1,413 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Threading;
+using System.Xml.Linq;
+using System.Threading.Tasks;
+
+namespace L2Toolkit
+{
+    public partial class PrimeShopGenerator : UserControl
+    {
+        private const string ItemNameFile = "./assets/ItemName_Classic-eu.txt";
+        private const string ConfigXmlFile = "config.xml";
+        private int _lastId = 10000;
+
+        private static readonly Dictionary<string, string> Categories = new Dictionary<string, string>()
+        {
+            { "11", "Equipment" },
+            { "12", "Agathions" },
+            { "13", "VIP" },
+            { "14", "Consumables" },
+            { "15", "Reward Coin" }
+        };
+        
+        private static readonly Dictionary<string, string> FileType = new Dictionary<string, string>()
+        {
+            { "Items", "./assets/EtcItemgrp_Classic.txt" },
+            { "Armor", "./assets/Armorgrp_Classic.txt" },
+            { "Weapon", "./assets/Weapongrp_Classic.txt" }
+        };
+
+        private static readonly Dictionary<string, string> ItemNameCache = new Dictionary<string, string>();
+        private static readonly Dictionary<string, Dictionary<string, Tuple<string, string>>> IconCache = new Dictionary<string, Dictionary<string, Tuple<string, string>>>();
+        private static bool _itemNameCacheLoaded;
+        private static readonly Dictionary<string, bool> IconCacheLoaded = new Dictionary<string, bool>();
+
+        private readonly DispatcherTimer _clienteTimer = new DispatcherTimer();
+        private readonly DispatcherTimer _serverTimer = new DispatcherTimer();
+        private readonly DispatcherTimer _itemsTimer = new DispatcherTimer();
+        private readonly DispatcherTimer _statusTimer = new DispatcherTimer();
+
+        public PrimeShopGenerator()
+        {
+            InitializeComponent();
+
+            LoadXmlSettings();
+            ConfigureComboBoxes();
+            CreateTimers();
+            
+            Task.Run(() => PreCarregarCaches());
+
+            GerarButton.Click += GerarButton_Click;
+            CopiarClienteButton.Click += (s, e) => CopyText(ClientTextBox, ClienteCopiadoTextBlock, _clienteTimer);
+            CopiarServidorButton.Click += (s, e) => CopyText(ServerTextBox, ServidorCopiadoTextBlock, _serverTimer);
+            CopiarItensButton.Click += (s, e) => CopyText(ItemsGeneratedTextBox, ItensCopiadoTextBlock, _itemsTimer);
+        }
+
+        private void LoadXmlSettings()
+        {
+            try
+            {
+                if (!File.Exists(ConfigXmlFile))
+                {
+                    CreateXmlFile();
+                    return;
+                }
+
+                var doc = XDocument.Load(ConfigXmlFile);
+                if (int.TryParse(doc.Descendants("lastId").FirstOrDefault()?.Value, out int id))
+                    _lastId = id;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao carregar o arquivo de configuração: {ex.Message}\nSerão usadas configurações padrão.", 
+                              "Erro", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
+        private void CreateXmlFile()
+        {
+            try
+            {
+                new XDocument(
+                    new XDeclaration("1.0", "utf-8", null),
+                    new XElement("configuration",
+                        new XElement("primeshop",
+                            new XElement("lastId", 10000)
+                        )
+                    )
+                ).Save(ConfigXmlFile);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao criar arquivo XML padrão: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void CreateTimers()
+        {
+            void ConfigTimer(DispatcherTimer timer, UIElement elemento)
+            {
+                timer.Interval = TimeSpan.FromSeconds(3);
+                timer.Tick += (s, e) => { elemento.Visibility = Visibility.Collapsed; timer.Stop(); };
+            }
+
+            ConfigTimer(_clienteTimer, ClienteCopiadoTextBlock);
+            ConfigTimer(_serverTimer, ServidorCopiadoTextBlock);
+            ConfigTimer(_itemsTimer, ItensCopiadoTextBlock);
+
+            _statusTimer.Interval = TimeSpan.FromSeconds(8);
+            _statusTimer.Tick += (s, e) => { NotificacaoBorder.Visibility = Visibility.Collapsed; _statusTimer.Stop(); };
+        }
+
+        private void ConfigureComboBoxes()
+        {
+            CategoryComboBox.ItemsSource = Categories.Select(c => $"{c.Key} - {c.Value}");
+            CategoryComboBox.SelectedIndex = 0;
+
+            TypeComboBox.ItemsSource = FileType.Keys;
+            TypeComboBox.SelectedIndex = 0;
+        }
+
+        private void GerarButton_Click(object sender, RoutedEventArgs e) => GerarItens();
+
+        private void GerarItens()
+        {
+            try
+            {
+                CheckFiles();
+
+                var (category, type, price, quantity, ids) = ValidateInputs();
+                if (ids.Count == 0) return;
+
+                var (productOutput, xmlOutput, nomesOutput) = GenerateOutputs(ids, category, type, price, quantity);
+
+                SaveLastIdInXml();
+
+                ClientTextBox.Text = productOutput.ToString().TrimEnd();
+                ServerTextBox.Text = xmlOutput.ToString().TrimEnd();
+                ItemsGeneratedTextBox.Text = nomesOutput.ToString().TrimEnd();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao gerar itens: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void CheckFiles()
+        {
+            if (!File.Exists(ItemNameFile))
+                SendNotify($"Atenção: Arquivo '{ItemNameFile}' não encontrado! Os nomes dos itens não serão exibidos corretamente.");
+
+            string selectedType = (string)TypeComboBox.SelectedItem;
+            if (selectedType != null && FileType.ContainsKey(selectedType) && !File.Exists(FileType[selectedType]))
+                SendNotify($"Atenção: Arquivo '{FileType[selectedType]}' não encontrado! Os ícones podem não ser exibidos corretamente.");
+        }
+
+        private Tuple<string, string, int, int, List<string>> ValidateInputs()
+        {
+            string category = ((string)CategoryComboBox.SelectedItem).Split('-')[0].Trim();
+            string type = (string)TypeComboBox.SelectedItem;
+            string idsRaw = IdsTextBox.Text.Trim();
+            string priceStr = PriceTextBox.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(idsRaw) || string.IsNullOrWhiteSpace(priceStr))
+            {
+                MessageBox.Show("Preencha os campos de ID e Preço.", "Atenção", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return new Tuple<string, string, int, int, List<string>>(null, null, 0, 0, new List<string>());
+            }
+
+            if (!int.TryParse(priceStr, out int price))
+            {
+                MessageBox.Show("O preço deve ser um número.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                return new Tuple<string, string, int, int, List<string>>(null, null, 0, 0, new List<string>());
+            }
+
+            int quantity;
+            if (!int.TryParse(QuantidadeTextBox.Text.Trim(), out quantity) || quantity < 1)
+            {
+                SendNotify("Quantidade inválida. Usando valor padrão 1.");
+                quantity = 1;
+                QuantidadeTextBox.Text = "1";
+            }
+
+            var ids = idsRaw.Split(',')
+                .Select(id => id.Trim())
+                .Where(id => !string.IsNullOrWhiteSpace(id) && id.All(char.IsDigit))
+                .ToList();
+
+            if (ids.Count == 0)
+            {
+                MessageBox.Show("Insira ao menos um ID válido.", "Atenção", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return new Tuple<string, string, int, int, List<string>>(null, null, 0, 0, new List<string>());
+            }
+
+            return new Tuple<string, string, int, int, List<string>>(category, type, price, quantity, ids);
+        }
+
+        private Tuple<StringBuilder, StringBuilder, StringBuilder> GenerateOutputs(List<string> ids, string category, string type, int price, int quantity)
+        {
+            var productOutput = new StringBuilder();
+            var xmlOutput = new StringBuilder();
+            var outputNames = new StringBuilder();
+
+            foreach (string itemId in ids)
+            {
+                string nome = GetItemName(itemId);
+                var iconInfo = GetIconByType(itemId, type);
+                int shopId = CreateUniqId();
+
+                outputNames.AppendLine($"{shopId} - {nome}");
+
+                productOutput.AppendLine(
+                    $"product_name_begin\tid={shopId}\touter_name=[{nome}]\tdescription=[{nome}]\t" +
+                    $"icon=[{iconInfo.Item1}]\ticon_panel=[{iconInfo.Item2}]\tmainsubject=[]\tproduct_name_end"
+                );
+
+                xmlOutput.AppendLine($"<!-- {nome} -->");
+                xmlOutput.AppendLine(
+                    $"<product id=\"{shopId}\" name=\"{nome}\" category=\"{category}\" price=\"{price}\" " +
+                    $"is_best=\"false\" on_sale=\"true\" sale_start_date=\"1980.01.01 08:00\" sale_end_date=\"2037.06.01 08:00\">"
+                );
+                xmlOutput.AppendLine($"    <component item_id=\"{itemId}\" count=\"{quantity}\" />");
+                xmlOutput.AppendLine("</product>");
+                xmlOutput.AppendLine();
+            }
+
+            return new Tuple<StringBuilder, StringBuilder, StringBuilder>(productOutput, xmlOutput, outputNames);
+        }
+
+        private string GetItemName(string objectId)
+        {
+            try
+            {
+                if (ItemNameCache.TryGetValue(objectId, out string name))
+                {
+                    return name;
+                }
+                
+                if (!File.Exists(ItemNameFile))
+                {
+                    SendNotify($"Arquivo '{ItemNameFile}' não encontrado!");
+                    return $"ID {objectId} sem nome";
+                }
+
+                var line = File.ReadLines(ItemNameFile, Encoding.UTF8)
+                    .FirstOrDefault(l => l.Contains($"id={objectId}"));
+
+                if (line != null)
+                {
+                    var match = Regex.Match(line, @"name=\[(.*?)\]");
+                    name = match.Success ? match.Groups[1].Value : $"ID {objectId} sem nome";
+                    
+                    ItemNameCache[objectId] = name;
+                    return name;
+                }
+                
+                name = $"ID {objectId} sem nome";
+                ItemNameCache[objectId] = name;
+                return name;
+            }
+            catch (Exception ex)
+            {
+                SendNotify($"Erro ao buscar nome do item: {ex.Message}");
+            }
+
+            return $"ID {objectId} sem nome";
+        }
+
+        private Tuple<string, string> GetIconByType(string objectId, string type)
+        {
+            try
+            {
+                if (!FileType.ContainsKey(type) || !File.Exists(FileType[type]))
+                {
+                    if (FileType.ContainsKey(type))
+                        SendNotify($"Arquivo '{FileType[type]}' não encontrado!");
+                    return new Tuple<string, string>("", "None");
+                }
+                
+                if (!IconCache.ContainsKey(type))
+                {
+                    IconCache[type] = new Dictionary<string, Tuple<string, string>>();
+                    IconCacheLoaded[type] = false;
+                }
+                
+                if (IconCache[type].TryGetValue(objectId, out var iconInfo))
+                {
+                    return iconInfo;
+                }
+                
+                string icon = "";
+                string iconPanel = "None";
+                
+                var content = File.ReadAllText(FileType[type], Encoding.UTF8);
+                var item = content.Split(new[] { "item_begin" }, StringSplitOptions.RemoveEmptyEntries)
+                    .FirstOrDefault(i => i.Contains($"object_id={objectId}"));
+
+                if (item != null)
+                {
+                    var fields = item.Trim().Split('\t');
+                    foreach (var field in fields)
+                    {
+                        var match = Regex.Match(field, @"\[\s*([^;\[\]{}]+)\s*\]");
+                        if (!match.Success) continue;
+
+                        if (field.StartsWith("icon="))
+                            icon = match.Groups[1].Value;
+                        else if (field.StartsWith("icon_panel="))
+                            iconPanel = match.Groups[1].Value;
+                    }
+                }
+                
+                var result = new Tuple<string, string>(icon, iconPanel);
+                IconCache[type][objectId] = result;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                SendNotify($"Erro ao buscar ícone: {ex.Message}");
+                return new Tuple<string, string>("", "None");
+            }
+        }
+
+        private int CreateUniqId() => ++_lastId;
+        
+        private void SaveLastIdInXml()
+        {
+            try
+            {
+                if (!File.Exists(ConfigXmlFile)) return;
+
+                var doc = XDocument.Load(ConfigXmlFile);
+                var ultimoIdElement = doc.Descendants("lastId").FirstOrDefault();
+                if (ultimoIdElement != null)
+                {
+                    ultimoIdElement.Value = _lastId.ToString();
+                    doc.Save(ConfigXmlFile);
+                }
+            }
+            catch (Exception ex)
+            {
+                SendNotify($"Erro ao salvar último ID: {ex.Message}");
+            }
+        }
+
+        private void CopyText(TextBox textBox, TextBlock notify, DispatcherTimer timer)
+        {
+            if (string.IsNullOrEmpty(textBox.Text)) return;
+            
+            Clipboard.SetText(textBox.Text);
+            notify.Visibility = Visibility.Visible;
+            timer.Stop();
+            timer.Start();
+        }
+
+        private void SendNotify(string message)
+        {
+            StatusNotificacao.Text = "⚠️ " + message;
+            NotificacaoBorder.Visibility = Visibility.Visible;
+            _statusTimer.Stop();
+            _statusTimer.Start();
+            Console.WriteLine("Notificação: " + message);
+        }
+
+        private void PreCarregarCaches()
+        {
+            try
+            {
+                if (File.Exists(ItemNameFile) && !_itemNameCacheLoaded)
+                {
+                    int count = 0;
+                    foreach (var line in File.ReadLines(ItemNameFile, Encoding.UTF8))
+                    {
+                        var idMatch = Regex.Match(line, @"id=(\d+)");
+                        var nameMatch = Regex.Match(line, @"name=\[(.*?)\]");
+                        
+                        if (idMatch.Success && nameMatch.Success)
+                        {
+                            string objectId = idMatch.Groups[1].Value;
+                            string name = nameMatch.Groups[1].Value;
+                            ItemNameCache[objectId] = name;
+                            count++;
+                        }
+                    }
+                    
+                    _itemNameCacheLoaded = true;
+                    Console.WriteLine($"Cache de nomes de itens carregado: {count} itens");
+                }
+                
+                foreach (var type in FileType.Keys)
+                {
+                    if (File.Exists(FileType[type]) && (!IconCacheLoaded.ContainsKey(type) || !IconCacheLoaded[type]))
+                    {
+                        if (!IconCache.ContainsKey(type))
+                            IconCache[type] = new Dictionary<string, Tuple<string, string>>();
+                            
+                        IconCacheLoaded[type] = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao pré-carregar caches: {ex.Message}");
+            }
+        }
+    }
+} 

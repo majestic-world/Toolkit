@@ -1,0 +1,9 @@
+<Application x:Class="L2Toolkit.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:L2Toolkit"
+             StartupUri="pages/MainWindow.xaml">
+    <Application.Resources>
+         
+    </Application.Resources>
+</Application> 
