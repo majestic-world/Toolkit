@@ -365,7 +365,6 @@ namespace L2Toolkit
             NotificacaoBorder.Visibility = Visibility.Visible;
             _statusTimer.Stop();
             _statusTimer.Start();
-            Console.WriteLine("Notificação: " + message);
         }
 
         private void PreCarregarCaches()
@@ -390,7 +389,6 @@ namespace L2Toolkit
                     }
                     
                     _itemNameCacheLoaded = true;
-                    Console.WriteLine($"Cache de nomes de itens carregado: {count} itens");
                 }
                 
                 foreach (var type in FileType.Keys)
@@ -406,8 +404,8 @@ namespace L2Toolkit
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Erro ao pré-carregar caches: {ex.Message}");
+                // ignored
             }
         }
     }
-} 
+}

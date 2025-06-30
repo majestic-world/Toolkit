@@ -80,7 +80,6 @@ namespace L2Toolkit
                     }
                     
                     cacheLoaded = true;
-                    Console.WriteLine($"Descriptions cache loaded: {descriptionsCache.Count} entries");
                 }
             }
             catch (Exception ex)
