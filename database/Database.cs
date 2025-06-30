@@ -28,7 +28,7 @@ namespace L2Toolkit.database
 
         public string GetValue(string key, string defaultValue = "")
         {
-            return _data[key] ?? defaultValue;
+            return _data.TryGetValue(key, out var value) ? value : defaultValue;
         }
 
         private void Load()
