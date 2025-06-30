@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:L2Toolkit"
         mc:Ignorable="d"
         Icon="/images/favicon.ico"
-        Title="Lineage Toolkit By: MK Dev - v1.3" Height="600" Width="900"
+        Title="Lineage Toolkit By: MK Dev - v1.4" Height="600" Width="900"
         WindowStartupLocation="CenterScreen" ResizeMode="CanResize">
     <Window.Resources>
         <Style x:Key="SidebarButtonStyle" TargetType="Button">
@@ -48,13 +48,14 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel Background="#2D2D30" Grid.Column="0" VerticalAlignment="Stretch">
-            <Button Content="Door Forge" Click="BtnDoor_Click" Style="{StaticResource SidebarButtonStyle}"/>
-            <Button Content="Pawn Data" Click="BtnPawnData_Click" Style="{StaticResource SidebarButtonStyle}"/>
-            <Button Content="Spawn Manager" Click="BtnSpawnManager_Click" Style="{StaticResource SidebarButtonStyle}"/>
+            <Button Content="Gerar Portas" Click="BtnDoor_Click" Style="{StaticResource SidebarButtonStyle}"/>
+            <Button Content="Animações" Click="BtnPawnData_Click" Style="{StaticResource SidebarButtonStyle}"/>
+            <Button Content="Gerenciador de Spawn" Click="BtnSpawnManager_Click" Style="{StaticResource SidebarButtonStyle}"/>
             <Button Content="Prime Shop" Click="BtnPrimeShop_Click" Style="{StaticResource SidebarButtonStyle}"/>
-            <Button Content="Item Description" Click="BtnDescriptionFix_Click" Style="{StaticResource SidebarButtonStyle}"/>
+            <Button Content="Corrigir Descrição" Click="BtnDescriptionFix_Click" Style="{StaticResource SidebarButtonStyle}"/>
+            <Button Content="Missões Diárias" Click="BtnMissions_Click" Style="{StaticResource SidebarButtonStyle}"/>
         </StackPanel>
 
         <ContentControl x:Name="MainContent" Grid.Column="1" />
     </Grid>
-</Window> 
+</Window>

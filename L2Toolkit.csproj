@@ -70,6 +70,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="pages\Missions.xaml" />
     <Page Include="pages\PawnDataControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -86,6 +87,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="database\AppDatabase.cs" />
+    <Compile Include="database\Database.cs" />
     <Compile Include="pages\DoorGenerateControl.xaml.cs">
       <DependentUpon>DoorGenerateControl.xaml</DependentUpon>
     </Compile>
@@ -95,6 +98,9 @@
     <Compile Include="pages\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="pages\Missions.xaml.cs">
+      <DependentUpon>Missions.xaml</DependentUpon>
     </Compile>
     <Compile Include="pages\PawnDataControl.xaml.cs">
       <DependentUpon>PawnDataControl.xaml</DependentUpon>

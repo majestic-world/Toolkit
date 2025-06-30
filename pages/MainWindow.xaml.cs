@@ -37,5 +37,10 @@ namespace L2Toolkit
         {
             MainContent.Content = new DescriptionFix();
         }
+
+        private void BtnMissions_Click(object sender, RoutedEventArgs e)
+        {
+            MainContent.Content = new Missions();
+        }
     }
-} 
+}

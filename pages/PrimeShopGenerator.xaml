@@ -176,18 +176,15 @@
 
                 <Button x:Name="GerarButton" 
                         Grid.Column="1"
-                        Content="✨ GERAR" 
+                        Content="GERAR" 
                         Height="45"
-                        Width="130"
+                        Width="90"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center"
                         Margin="20,0,0,0"
-                        Background="#2196F3" 
-                        Foreground="White" 
+                        Style="{StaticResource PrimaryButton}"
                         FontSize="14" 
-                        FontWeight="Bold"
-                        BorderThickness="0"
-                        Cursor="Hand">
+                        FontWeight="Bold">
                     <Button.Resources>
                         <Style TargetType="Border">
                             <Setter Property="CornerRadius" Value="8"/>
@@ -221,15 +218,11 @@
                                   Grid.Column="0"/>
                         <Button x:Name="CopiarClienteButton" 
                                 Content="📋 Copiar" 
-                                Width="100" 
+                                Width="75" 
                                 Height="30"
-                                Background="#4CAF50" 
-                                Foreground="White"
+                                Style="{StaticResource SecondaryButton}"
                                 FontSize="12" 
-                                FontWeight="SemiBold"
-                                BorderThickness="0"
-                                Grid.Column="1"
-                                Cursor="Hand">
+                                Grid.Column="1">
                             <Button.Resources>
                                 <Style TargetType="Border">
                                     <Setter Property="CornerRadius" Value="6"/>
@@ -269,15 +262,11 @@
                                   Grid.Column="0"/>
                         <Button x:Name="CopiarServidorButton" 
                                 Content="📋 Copiar" 
-                                Width="100" 
+                                Width="75" 
                                 Height="30"
-                                Background="#4CAF50" 
-                                Foreground="White"
+                                Style="{StaticResource SecondaryButton}"
                                 FontSize="12" 
-                                FontWeight="SemiBold"
-                                BorderThickness="0"
-                                Grid.Column="1"
-                                Cursor="Hand">
+                                Grid.Column="1">
                             <Button.Resources>
                                 <Style TargetType="Border">
                                     <Setter Property="CornerRadius" Value="6"/>
@@ -317,15 +306,11 @@
                                   Grid.Column="0"/>
                         <Button x:Name="CopiarItensButton" 
                                 Content="📋 Copiar" 
-                                Width="100" 
+                                Width="75" 
                                 Height="30"
-                                Background="#4CAF50" 
-                                Foreground="White"
+                                Style="{StaticResource SecondaryButton}"
                                 FontSize="12" 
-                                FontWeight="SemiBold"
-                                BorderThickness="0"
-                                Grid.Column="1"
-                                Cursor="Hand">
+                                Grid.Column="1">
                             <Button.Resources>
                                 <Style TargetType="Border">
                                     <Setter Property="CornerRadius" Value="6"/>

@@ -59,19 +59,10 @@
                     Content="✨ Criar Spawns" 
                     Width="160" 
                     Height="40"
-                    Background="#2196F3" 
-                    Foreground="White"
+                    Style="{StaticResource PrimaryButton}"
                     FontSize="14" 
-                    FontWeight="SemiBold"
-                    BorderThickness="0"
-                    Cursor="Hand"
                     HorizontalAlignment="Center"
                     Margin="0,0,0,15">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="8"/>
-                    </Style>
-                </Button.Resources>
             </Button>
 
             <StackPanel Grid.Row="4" Orientation="Vertical" Margin="0,0,0,15">
@@ -89,12 +80,8 @@
                             Content="📋 Copiar" 
                             Width="100" 
                             Height="32"
-                            Background="#4CAF50" 
-                            Foreground="White"
-                            FontSize="12" 
-                            Cursor="Hand"
-                            FontWeight="SemiBold"
-                            BorderThickness="0"
+                            Style="{StaticResource SecondaryButton}"
+                            FontSize="12"
                             Grid.Column="1"
                             Margin="0,0,0,8">
                         <Button.Resources>

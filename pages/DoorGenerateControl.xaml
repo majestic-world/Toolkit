@@ -40,38 +40,20 @@
 
             <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
                 <Button x:Name="ConvertButton" 
-                        Content="🔄 Converter para XML" 
-                        Width="180" 
+                        Content="Criar Porta em XML" 
+                        Width="150" 
                         Height="40"
-                        Background="#2196F3" 
-                        Foreground="White"
                         FontSize="14" 
-                        FontWeight="SemiBold"
-                        BorderThickness="0"
-                        Cursor="Hand"
+                        Style="{StaticResource PrimaryButton}"
                         Margin="0,0,10,0">
-                    <Button.Resources>
-                        <Style TargetType="Border">
-                            <Setter Property="CornerRadius" Value="8"/>
-                        </Style>
-                    </Button.Resources>
                 </Button>
                 
                 <Button x:Name="CopyButton" 
-                        Content="📋 Copiar XML" 
-                        Width="150" 
+                        Content="Copiar Saída" 
+                        Width="110" 
                         Height="40"
-                        Background="#4CAF50" 
-                        Foreground="White"
                         FontSize="14" 
-                        Cursor="Hand"
-                        FontWeight="SemiBold"
-                        BorderThickness="0">
-                    <Button.Resources>
-                        <Style TargetType="Border">
-                            <Setter Property="CornerRadius" Value="8"/>
-                        </Style>
-                    </Button.Resources>
+                        Style="{StaticResource SecondaryButton}">
                 </Button>
             </StackPanel>
 

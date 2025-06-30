@@ -89,27 +89,20 @@
                                  Background="Transparent"
                                  Foreground="#333333"
                                  FontSize="13"
-                                 Height="32"
+                                 Height="40"
                                  IsReadOnly="True"
                                  VerticalContentAlignment="Center"/>
                     </Border>
                     <Button x:Name="SelecionarArquivoButton" 
                             Grid.Column="1"
                             Content="Selecionar Arquivo" 
-                            Height="32"
+                            Height="40"
                             Margin="10,0,0,0"
                             Padding="10,0"
-                            Background="#2196F3" 
-                            Foreground="White" 
+                            Style="{StaticResource PrimaryButton}"
                             FontSize="12" 
-                            FontWeight="Bold"
-                            BorderThickness="0"
-                            Cursor="Hand">
-                        <Button.Resources>
-                            <Style TargetType="Border">
-                                <Setter Property="CornerRadius" Value="8"/>
-                            </Style>
-                        </Button.Resources>
+                            Width="140"
+                            FontWeight="Bold">
                     </Button>
                 </Grid>
             </StackPanel>
@@ -117,25 +110,14 @@
             <!-- Botão Processar -->
             <Button x:Name="ProcessarButton" 
                     Grid.Row="3"
-                    Content="✨ PROCESSAR ARQUIVO" 
+                    Content="PROCESSAR ARQUIVO" 
                     Height="45"
-                    Width="200"
+                    Width="180"
                     Margin="0,0,0,15"
-                    Background="#2196F3" 
-                    Foreground="White" 
-                    FontSize="14" 
+                    FontSize="14"
+                    Style="{StaticResource PrimaryButton}"
                     FontWeight="Bold"
-                    BorderThickness="0"
-                    HorizontalAlignment="Center"
-                    Cursor="Hand">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="8"/>
-                    </Style>
-                </Button.Resources>
-                <Button.Effect>
-                    <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.3" />
-                </Button.Effect>
+                    HorizontalAlignment="Center">
             </Button>
 
             <!-- Informação sobre o arquivo h5_names.txt -->
