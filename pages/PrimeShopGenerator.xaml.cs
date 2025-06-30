@@ -9,14 +9,13 @@ using System.Windows.Controls;
 using System.Windows.Threading;
 using System.Xml.Linq;
 using System.Threading.Tasks;
+using L2Toolkit.database;
 
 namespace L2Toolkit
 {
     public partial class PrimeShopGenerator : UserControl
     {
         private const string ItemNameFile = "./assets/ItemName_Classic-eu.txt";
-        private const string ConfigXmlFile = "config.xml";
-        private int _lastId = 10000;
 
         private static readonly Dictionary<string, string> Categories = new Dictionary<string, string>()
         {
@@ -26,7 +25,7 @@ namespace L2Toolkit
             { "14", "Consumables" },
             { "15", "Reward Coin" }
         };
-        
+
         private static readonly Dictionary<string, string> FileType = new Dictionary<string, string>()
         {
             { "Items", "./assets/EtcItemgrp_Classic.txt" },
@@ -44,15 +43,17 @@ namespace L2Toolkit
         private readonly DispatcherTimer _itemsTimer = new DispatcherTimer();
         private readonly DispatcherTimer _statusTimer = new DispatcherTimer();
 
+        private int _lastId;
+
         public PrimeShopGenerator()
         {
             InitializeComponent();
-
-            LoadXmlSettings();
             ConfigureComboBoxes();
             CreateTimers();
-            
-            Task.Run(() => PreCarregarCaches());
+
+            Task.Run(PreLoadCache);
+
+            _lastId = AppDatabase.GetInstance().GetInt("lastPrimeShopId", 9999);
 
             GerarButton.Click += GerarButton_Click;
             CopiarClienteButton.Click += (s, e) => CopyText(ClientTextBox, ClienteCopiadoTextBlock, _clienteTimer);
@@ -60,52 +61,16 @@ namespace L2Toolkit
             CopiarItensButton.Click += (s, e) => CopyText(ItemsGeneratedTextBox, ItensCopiadoTextBlock, _itemsTimer);
         }
 
-        private void LoadXmlSettings()
-        {
-            try
-            {
-                if (!File.Exists(ConfigXmlFile))
-                {
-                    CreateXmlFile();
-                    return;
-                }
-
-                var doc = XDocument.Load(ConfigXmlFile);
-                if (int.TryParse(doc.Descendants("lastId").FirstOrDefault()?.Value, out int id))
-                    _lastId = id;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Erro ao carregar o arquivo de configuração: {ex.Message}\nSerão usadas configurações padrão.", 
-                              "Erro", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
-        }
-
-        private void CreateXmlFile()
-        {
-            try
-            {
-                new XDocument(
-                    new XDeclaration("1.0", "utf-8", null),
-                    new XElement("configuration",
-                        new XElement("primeshop",
-                            new XElement("lastId", 10000)
-                        )
-                    )
-                ).Save(ConfigXmlFile);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Erro ao criar arquivo XML padrão: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
         private void CreateTimers()
         {
             void ConfigTimer(DispatcherTimer timer, UIElement elemento)
             {
                 timer.Interval = TimeSpan.FromSeconds(3);
-                timer.Tick += (s, e) => { elemento.Visibility = Visibility.Collapsed; timer.Stop(); };
+                timer.Tick += (s, e) =>
+                {
+                    elemento.Visibility = Visibility.Collapsed;
+                    timer.Stop();
+                };
             }
 
             ConfigTimer(_clienteTimer, ClienteCopiadoTextBlock);
@@ -113,7 +78,11 @@ namespace L2Toolkit
             ConfigTimer(_itemsTimer, ItensCopiadoTextBlock);
 
             _statusTimer.Interval = TimeSpan.FromSeconds(8);
-            _statusTimer.Tick += (s, e) => { NotificacaoBorder.Visibility = Visibility.Collapsed; _statusTimer.Stop(); };
+            _statusTimer.Tick += (s, e) =>
+            {
+                NotificacaoBorder.Visibility = Visibility.Collapsed;
+                _statusTimer.Stop();
+            };
         }
 
         private void ConfigureComboBoxes()
@@ -135,11 +104,7 @@ namespace L2Toolkit
 
                 var (category, type, price, quantity, ids) = ValidateInputs();
                 if (ids.Count == 0) return;
-
                 var (productOutput, xmlOutput, nomesOutput) = GenerateOutputs(ids, category, type, price, quantity);
-
-                SaveLastIdInXml();
-
                 ClientTextBox.Text = productOutput.ToString().TrimEnd();
                 ServerTextBox.Text = xmlOutput.ToString().TrimEnd();
                 ItemsGeneratedTextBox.Text = nomesOutput.ToString().TrimEnd();
@@ -230,6 +195,7 @@ namespace L2Toolkit
                 xmlOutput.AppendLine();
             }
 
+            AppDatabase.GetInstance().UpdateValue("lastPrimeShopId", _lastId.ToString());
             return new Tuple<StringBuilder, StringBuilder, StringBuilder>(productOutput, xmlOutput, outputNames);
         }
 
@@ -241,7 +207,7 @@ namespace L2Toolkit
                 {
                     return name;
                 }
-                
+
                 if (!File.Exists(ItemNameFile))
                 {
                     SendNotify($"Arquivo '{ItemNameFile}' não encontrado!");
@@ -255,11 +221,11 @@ namespace L2Toolkit
                 {
                     var match = Regex.Match(line, @"name=\[(.*?)\]");
                     name = match.Success ? match.Groups[1].Value : $"ID {objectId} sem nome";
-                    
+
                     ItemNameCache[objectId] = name;
                     return name;
                 }
-                
+
                 name = $"ID {objectId} sem nome";
                 ItemNameCache[objectId] = name;
                 return name;
@@ -282,21 +248,21 @@ namespace L2Toolkit
                         SendNotify($"Arquivo '{FileType[type]}' não encontrado!");
                     return new Tuple<string, string>("", "None");
                 }
-                
+
                 if (!IconCache.ContainsKey(type))
                 {
                     IconCache[type] = new Dictionary<string, Tuple<string, string>>();
                     IconCacheLoaded[type] = false;
                 }
-                
+
                 if (IconCache[type].TryGetValue(objectId, out var iconInfo))
                 {
                     return iconInfo;
                 }
-                
+
                 string icon = "";
                 string iconPanel = "None";
-                
+
                 var content = File.ReadAllText(FileType[type], Encoding.UTF8);
                 var item = content.Split(new[] { "item_begin" }, StringSplitOptions.RemoveEmptyEntries)
                     .FirstOrDefault(i => i.Contains($"object_id={objectId}"));
@@ -315,7 +281,7 @@ namespace L2Toolkit
                             iconPanel = match.Groups[1].Value;
                     }
                 }
-                
+
                 var result = new Tuple<string, string>(icon, iconPanel);
                 IconCache[type][objectId] = result;
                 return result;
@@ -328,31 +294,11 @@ namespace L2Toolkit
         }
 
         private int CreateUniqId() => ++_lastId;
-        
-        private void SaveLastIdInXml()
-        {
-            try
-            {
-                if (!File.Exists(ConfigXmlFile)) return;
-
-                var doc = XDocument.Load(ConfigXmlFile);
-                var ultimoIdElement = doc.Descendants("lastId").FirstOrDefault();
-                if (ultimoIdElement != null)
-                {
-                    ultimoIdElement.Value = _lastId.ToString();
-                    doc.Save(ConfigXmlFile);
-                }
-            }
-            catch (Exception ex)
-            {
-                SendNotify($"Erro ao salvar último ID: {ex.Message}");
-            }
-        }
 
         private void CopyText(TextBox textBox, TextBlock notify, DispatcherTimer timer)
         {
             if (string.IsNullOrEmpty(textBox.Text)) return;
-            
+
             Clipboard.SetText(textBox.Text);
             notify.Visibility = Visibility.Visible;
             timer.Stop();
@@ -367,7 +313,7 @@ namespace L2Toolkit
             _statusTimer.Start();
         }
 
-        private void PreCarregarCaches()
+        private void PreLoadCache()
         {
             try
             {
@@ -378,7 +324,7 @@ namespace L2Toolkit
                     {
                         var idMatch = Regex.Match(line, @"id=(\d+)");
                         var nameMatch = Regex.Match(line, @"name=\[(.*?)\]");
-                        
+
                         if (idMatch.Success && nameMatch.Success)
                         {
                             string objectId = idMatch.Groups[1].Value;
@@ -387,17 +333,17 @@ namespace L2Toolkit
                             count++;
                         }
                     }
-                    
+
                     _itemNameCacheLoaded = true;
                 }
-                
+
                 foreach (var type in FileType.Keys)
                 {
                     if (File.Exists(FileType[type]) && (!IconCacheLoaded.ContainsKey(type) || !IconCacheLoaded[type]))
                     {
                         if (!IconCache.ContainsKey(type))
                             IconCache[type] = new Dictionary<string, Tuple<string, string>>();
-                            
+
                         IconCacheLoaded[type] = true;
                     }
                 }
