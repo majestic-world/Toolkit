@@ -42,5 +42,10 @@ namespace L2Toolkit
         {
             MainContent.Content = new Missions();
         }
+        
+        private void BtnUpgrade_Click(object sender, RoutedEventArgs e)
+        {
+            MainContent.Content = new UpgradeEquipment();
+        }
     }
 }

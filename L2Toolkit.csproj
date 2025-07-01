@@ -111,8 +111,12 @@
     <Compile Include="pages\SpawnManager.xaml.cs">
       <DependentUpon>SpawnManager.xaml</DependentUpon>
     </Compile>
+    <Page Include="pages\UpgradeEquipment.xaml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="pages\UpgradeEquipment.xaml.cs">
+      <DependentUpon>UpgradeEquipment.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
