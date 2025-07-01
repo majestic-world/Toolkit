@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:L2Toolkit"
         mc:Ignorable="d"
         Icon="/images/favicon.ico"
-        Title="Lineage Toolkit By: MK Dev - v1.4" Height="600" Width="900"
+        Title="Lineage Toolkit By: MK Dev - v1.5" Height="600" Width="900"
         WindowStartupLocation="CenterScreen" ResizeMode="CanResize">
     <Window.Resources>
         <Style x:Key="SidebarButtonStyle" TargetType="Button">

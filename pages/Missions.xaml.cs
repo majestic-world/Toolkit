@@ -48,124 +48,146 @@ namespace L2Toolkit
             RewardOutput.Text = "";
         }
 
-        public class RewardItem
-        {
-            public int Id { get; set; }
-            public int Count { get; set; }
-        }
-
         public class OneDayReward
         {
-            public int Id { get; set; }
+            public string Id { get; set; }
             public string Name { get; set; }
             public string Category { get; set; }
             public string Description { get; set; }
             public string ResetTime { get; set; }
-            public List<RewardItem> RewardItems { get; set; }
-            public int MinLevel { get; set; }
-            public int MaxLevel { get; set; }
+            public string RewardItems { get; set; }
+            public string ConditionsLevel { get; set; }
+
+            public OneDayReward(string id, string name, string category, string description, string resetTime, string rewardItems, string conditionsLevel)
+            {
+                Id = id;
+                Name = name;
+                Category = category;
+                Description = description;
+                RewardItems = rewardItems;
+                ConditionsLevel = conditionsLevel;
+                ResetTime = resetTime;
+                RewardItems = rewardItems;
+                ConditionsLevel = conditionsLevel;
+            }
         }
 
         private void RewardGenerate_Click(object sender, RoutedEventArgs e)
         {
-            var documentFile = RewardContent.Text;
-            if (!File.Exists(documentFile))
-            {
-                MessageBox.Show("O arquivo não foi encontrado", "ERRO", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
-            var xmlContent = RewardContent.Text;
-
-            if (xmlContent == "")
-            {
-                RewardOutput.Text = "Preencha as informações";
-                return;
-            }
-
-            XElement root;
-
             try
             {
-                root = XElement.Load(xmlContent);
+                var documentPath = RewardContent.Text;
+                if (string.IsNullOrEmpty(documentPath))
+                {
+                    throw new Exception("Preencha o caminho do arquivo");
+                }
+
+                if (!File.Exists(documentPath))
+                {
+                    throw new Exception("O arquivo informado não foi encontrado");
+                }
+
+                var xmlRoot = XDocument.Load(documentPath);
+
+                var data = new List<OneDayReward>();
+
+                foreach (var rewardElement in xmlRoot.Descendants("one_day_reward"))
+                {
+                    var id = rewardElement.Element("id")?.Value;
+                    var name = rewardElement.Element("name")?.Value;
+                    var category = rewardElement.Element("category")?.Value;
+                    var resetTime = rewardElement.Element("reset_time")?.Value;
+                    var description = rewardElement.Element("description")?.Value;
+
+                    if (string.IsNullOrEmpty(category))
+                    {
+                        throw new Exception("O campo `category` não esta presente");
+                    }
+
+                    if (id == null || name == null || resetTime == null || description == null)
+                    {
+                        throw new Exception("Verifique os dados do arquivo");
+                    }
+
+                    var listReward = new List<string>();
+                    var rewardItems = rewardElement.Descendants("reward_items");
+
+                    foreach (var rewardItem in rewardItems.Descendants("reward_item"))
+                    {
+                        var rewardId = rewardItem.Attribute("id")?.Value;
+                        var rewardQuantity = rewardItem.Attribute("count")?.Value;
+                        var rewardJoin = $"{{{rewardId};{rewardQuantity}}}";
+                        listReward.Add(rewardJoin);
+                    }
+
+                    var missionReward = string.Join(";", listReward);
+
+                    var conditions = rewardElement.Element("cond")?.Element("and");
+
+                    var minLevel = "0";
+                    var maxLevel = "0";
+
+                    if (conditions != null)
+                    {
+                        foreach (var condition in conditions.Elements("player"))
+                        {
+                            var min = condition.Attribute("minLevel")?.Value;
+                            var max = condition.Attribute("maxLevel")?.Value;
+                            if (min != null) minLevel = min;
+                            if (max != null) maxLevel = max;
+                        }
+                    }
+
+                    var conditionLevel = $"{minLevel};{maxLevel};0";
+
+                    var resetType = "0";
+                    switch (resetTime)
+                    {
+                        case "DAILY":
+                            resetType = "1";
+                            break;
+                        case "WEEKLY":
+                            resetType = "2";
+                            break;
+                        case "MONTHLY":
+                            resetType = "3";
+                            break;
+                        case "SINGLE":
+                            resetType = "4";
+                            break;
+                    }
+
+                    data.Add(new OneDayReward(id, name, category, description, resetType, missionReward, conditionLevel));
+                }
+
+                const string model =
+                    "onedayreward_begin\tid={id}\treward_id={r_id}\treward_name=[{name}]\treward_desc=[{description}]\treward_period=[{reward_period}]" +
+                    "\tclass_filter={-1}\treset_period={reset}\tcondition_count=0\tcondition_level=2\tcan_condition_level={{level}}" +
+                    "\tcan_condition_day={}\tcategory={category}\treward_item={{reward}}\ttargetloc_scale={}\tonedayreward_end";
+
+                var build = new StringBuilder();
+
+                foreach (var rewardData in data)
+                {
+                    var current = model;
+                    current = current.Replace("{id}", rewardData.Id);
+                    current = current.Replace("{r_id}", rewardData.Id);
+                    current = current.Replace("{name}", rewardData.Name);
+                    current = current.Replace("{description}", rewardData.Description);
+                    current = current.Replace("{reward_period}", rewardData.ResetTime);
+                    current = current.Replace("{reset}", rewardData.ResetTime);
+                    current = current.Replace("{level}", rewardData.ConditionsLevel);
+                    current = current.Replace("{category}", rewardData.Category);
+                    current = current.Replace("{reward}", rewardData.RewardItems);
+                    build.AppendLine(current);
+                }
+
+                RewardOutput.Text = build.ToString();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "ERRO", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
             }
-
-            if (root.IsEmpty)
-            {
-                RewardOutput.Text = "O XML informado é inválido";
-                return;
-            }
-
-            var rewards = root
-                .Elements("one_day_reward")
-                .Select(item => new OneDayReward
-                {
-                    Id = (int?)item.Element("id") ?? 0,
-                    Name = (string)item.Element("name") ?? "",
-                    Category = (string)item.Element("category") ?? "",
-                    Description = (string)item.Element("description") ?? "",
-                    ResetTime = (string)item.Element("reset_time") ?? "",
-                    RewardItems = item.Element("reward_items")?.Elements("reward_item").Select(x => new RewardItem { Id = (int?)x.Attribute("id") ?? 0, Count = (int?)x.Attribute("count") ?? 0 }).ToList() ?? new List<RewardItem>(),
-                    MinLevel = item.Element("cond")?.Element("and")?.Elements("player").Where(x => x.Attribute("minLevel") != null).Select(x => (int?)x.Attribute("minLevel")).FirstOrDefault() ?? 0,
-                    MaxLevel = item.Element("cond")?.Element("and")?.Elements("player").Where(x => x.Attribute("maxLevel") != null).Select(x => (int?)x.Attribute("maxLevel")).FirstOrDefault() ?? 0
-                }).ToList();
-
-            var model =
-                "onedayreward_begin\tid={id}\treward_id={r_id}\treward_name=[{name}]\treward_desc=[{description}]\treward_period=[{reward_period}]\tclass_filter={-1}\treset_period={reset}\tcondition_count=0\tcondition_level=2\tcan_condition_level={{level}}\tcan_condition_day={}\tcategory={category}\treward_item={{reward}}\ttargetloc_scale={}\tonedayreward_end\n";
-
-
-            var data = new StringBuilder();
-
-            foreach (var reward in rewards)
-            {
-                var current = model;
-
-                int resetType;
-                switch (reward.ResetTime)
-                {
-                    case "DAILY":
-                        resetType = 1;
-                        break;
-                    case "WEEKLY":
-                        resetType = 2;
-                        break;
-                    case "MONTHLY":
-                        resetType = 3;
-                        break;
-                    case "SINGLE":
-                        resetType = 4;
-                        break;
-                    default:
-                        resetType = 0;
-                        break;
-                }
-
-                current = current.Replace("{id}", reward.Id.ToString());
-                current = current.Replace("{r_id}", reward.Id.ToString());
-                current = current.Replace("{name}", reward.Name);
-                current = current.Replace("{description}", reward.Description);
-                current = current.Replace("{reset}", resetType.ToString());
-                current = current.Replace("{category}", reward.Category);
-                current = current.Replace("{reward_period}", reward.ResetTime);
-                current = current.Replace("{level}", $"{reward.MinLevel};{reward.MaxLevel};0");
-
-                var listReward = new List<string>();
-                foreach (var rewardItem in reward.RewardItems)
-                {
-                    listReward.Add($"{{{rewardItem.Id};{rewardItem.Count}}}");
-                }
-
-                var rewardList = string.Join(";", listReward);
-                current = current.Replace("{reward}", rewardList);
-                data.Append(current);
-            }
-
-            RewardOutput.Text = data.ToString();
         }
     }
 }
