@@ -10,9 +10,11 @@ L2Toolkit/
 │   ├── MainWindow.xaml/.cs    # Janela principal
 │   ├── DescriptionFix.xaml/.cs    # Ferramenta de correção de descrições
 │   ├── DoorGenerateControl.xaml/.cs # Gerador de portas XML
+│   ├── Missions.xaml/.cs      # Gerador de missões diárias (OneDayReward)
 │   ├── PawnDataControl.xaml/.cs     # Gerador de dados de Pawn
 │   ├── PrimeShopGenerator.xaml/.cs  # Gerador de Prime Shop
-│   └── SpawnManager.xaml/.cs        # Gerenciador de Spawns
+│   ├── SpawnManager.xaml/.cs        # Gerenciador de Spawns
+│   └── UpgradeEquipment.xaml/.cs    # Sistema de upgrade de equipamentos
 ├── Properties/                # Arquivos de propriedades do projeto
 ├── images/                    # Ícones e imagens
 ├── bin/                       # Executáveis e assets
@@ -68,10 +70,20 @@ L2Toolkit/
 2. Clique em "✨ PROCESSAR ARQUIVO"
 3. Escolha onde salvar o arquivo modificado
 
+### Missões Diárias
+1. Selecione o arquivo OneDayReward.xml do servidor
+2. Clique em "Gerar Dados"
+3. Copie o resultado gerado para os arquivos do client
+
+### Upgrade Equipment
+1. Selecione o arquivo equipment_upgrade.xml do servidor
+2. Clique em "Gerar Dados"
+3. Copie o resultado gerado para os arquivos do client
+
 ## 📄 Licença
 
 Este projeto foi desenvolvido para a comunidade de desenvolvedores Lineage 2.
 
 ---
 
-**Desenvolvido por MK Dev** - v1.3 
+**Desenvolvido por MK Dev** - v1.5 
