@@ -23,38 +23,11 @@ L2Toolkit/
 └── App.config               # Configuração da aplicação
 ```
 
-## 🚀 Funcionalidades
-
-### 🚪 Door Forge
-- Converte dados de porta do UnrealEd para formato XML
-- Gera automaticamente coordenadas e shapes
-
-### 📊 Pawn Data
-- Gerador de animações para NPCs
-- Suporte a múltiplas animações por entrada
-- Formato compatível com L2J
-
-### 👥 Spawn Manager
-- Gerenciamento de spawns de NPCs
-- Substituição em massa de IDs
-- Processamento de arquivos XML
-
-### 🛒 Prime Shop
-- Gerador de produtos para Prime Shop
-- Suporte a diferentes categorias e tipos
-- Integração com arquivos de dados do cliente
-- Cache de nomes e ícones para performance
-
-### 🔧 Item Description
-- Correção automática de descrições de itens
-- Utiliza arquivo h5_names.txt como referência
-- Preserva formatação original dos arquivos
-
 ## 📋 Requisitos
 
 - .NET Framework 4.8.1
 - Windows 10/11
-- Visual Studio 2019+ (para desenvolvimento)
+- Visual Studio ou Rider (para desenvolvimento)
 
 ## 🔧 Configuração
 
@@ -65,7 +38,7 @@ L2Toolkit/
    - `Weapongrp_Classic.txt`
    - `h5_names.txt`
 
-2. Execute o projeto através do Visual Studio ou use o executável compilado.
+2. Execute o projeto através da IDEA ou use o executável compilado.
 
 ## 📝 Como Usar
 
