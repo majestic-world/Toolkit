@@ -86,4 +86,4 @@ Este projeto foi desenvolvido para a comunidade de desenvolvedores Lineage 2.
 
 ---
 
-**Desenvolvido por MK Dev** - v1.6
+**Desenvolvido por MK Dev**
