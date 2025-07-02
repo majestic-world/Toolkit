@@ -152,7 +152,7 @@ namespace L2Toolkit
                 QuantidadeTextBox.Text = "1";
             }
 
-            var ids = idsRaw.Split(',')
+            var ids = idsRaw.Split(';')
                 .Select(id => id.Trim())
                 .Where(id => !string.IsNullOrWhiteSpace(id) && id.All(char.IsDigit))
                 .ToList();

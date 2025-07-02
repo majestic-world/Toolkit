@@ -52,22 +52,22 @@ L2Toolkit/
 ### Pawn Data
 1. Insira o nome do Pawn
 2. Preencha as animações para cada tipo (separadas por ';' para múltiplas)
-3. Clique em "✨ Gerar PawnAnimData"
+3. Clique em "Gerar PawnAnimData"
 
 ### Prime Shop
-1. Insira os IDs dos itens (separados por vírgula)
+1. Insira os IDs dos itens (separados por ';')
 2. Selecione categoria e tipo
 3. Defina preço e quantidade
-4. Clique em "✨ GERAR"
+4. Clique em "GERAR"
 
 ### Spawn Manager
 1. Insira os IDs dos NPCs (separados por ';')
 2. Cole os dados originais de spawn
-3. Clique em "✨ Criar Spawns"
+3. Clique em "Criar Spawns"
 
 ### Item Description
 1. Selecione o arquivo a ser processado
-2. Clique em "✨ PROCESSAR ARQUIVO"
+2. Clique em "PROCESSAR ARQUIVO"
 3. Escolha onde salvar o arquivo modificado
 
 ### Missões Diárias
@@ -86,4 +86,4 @@ Este projeto foi desenvolvido para a comunidade de desenvolvedores Lineage 2.
 
 ---
 
-**Desenvolvido por MK Dev** - v1.5 
+**Desenvolvido por MK Dev** - v1.6

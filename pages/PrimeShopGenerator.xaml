@@ -62,7 +62,7 @@
                     </Grid.RowDefinitions>
 
                     <TextBlock Grid.Row="0" Grid.Column="0" 
-                               Text="IDs (separados por vírgula):" 
+                               Text="Insira os ID's" 
                                FontSize="14" 
                                FontWeight="SemiBold" 
                                VerticalAlignment="Center"
