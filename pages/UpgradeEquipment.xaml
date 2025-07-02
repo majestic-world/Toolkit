@@ -12,6 +12,8 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
@@ -21,12 +23,16 @@
                        FontWeight="Bold"
                        Margin="0,0,0,20"/>
 
-            <StackPanel Grid.Row="1" Orientation="Vertical" Margin="0,0,0,20">
+            <StackPanel Grid.Row="1" Orientation="Vertical" Margin="0,0,0,6">
                 <TextBlock Text="Selecione o arquivo equipment_upgrade.xml" 
                           FontSize="16" 
                           FontWeight="SemiBold" 
                           Margin="0,0,0,8"/>
-                <Border Background="White" CornerRadius="10" BorderBrush="#E0E0E0" BorderThickness="1">
+                <Border 
+                    Background="White" 
+                    CornerRadius="10" 
+                    BorderBrush="#E0E0E0"
+                    BorderThickness="1">
                     <TextBox x:Name="UpgradeContent" 
                              AcceptsReturn="True" 
                              IsReadOnly="True"
@@ -39,8 +45,31 @@
                              Background="Transparent"/>
                 </Border>
             </StackPanel>
+            
+            <StackPanel Grid.Row="2" HorizontalAlignment="Stretch" Margin="0,0,0,25" Orientation="Vertical">
+                <TextBlock
+                    FontSize="14"
+                    Margin="0 3"
+                    FontWeight="SemiBold"
+                    Text="Selecione a versão"/>
+                <!-- <ComboBox -->
+                <!--     HorizontalAlignment="Stretch" -->
+                <!--     x:Name="SystemVersion" -->
+                <!--     SelectedIndex="0" -->
+                <!--     Padding="8" -->
+                <!--     Style="{DynamicResource StyleComboBox}" -->
+                <!--     BorderThickness="0"> -->
+                <!--     <ComboBoxItem Tag="0" Content="Custom Upgrade"/> -->
+                <!--     <ComboBoxItem Tag="1" Content="Lucera2"/> -->
+                <!-- </ComboBox> -->
+                
+                <ComboBox x:Name="SystemVersion" Cursor="Hand" SelectedIndex="0" Padding="8">
+                    <ComboBoxItem Tag="0" Content="Custom Upgrade"/>
+                    <ComboBoxItem Tag="1" Content="Lucera2"/>
+                </ComboBox>
+            </StackPanel>
 
-            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
+            <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
                 <Button x:Name="UpgradeGenerate" 
                         Content="Gerar Dados" 
                         Width="110" 
@@ -58,8 +87,8 @@
                         FontSize="14">
                 </Button>
             </StackPanel>
-
-            <StackPanel Grid.Row="3" Orientation="Vertical">
+            
+            <StackPanel Grid.Row="4" Orientation="Vertical">
                 <TextBlock Text="Arquivos do client" 
                           FontSize="16" 
                           FontWeight="SemiBold" 
@@ -75,6 +104,17 @@
                              Background="Transparent"
                              IsReadOnly="True"/>
                 </Border>
+            </StackPanel>
+            
+            <StackPanel Grid.Row="5">
+                <TextBlock
+                    Visibility="Collapsed"
+                    x:Name="CopyBlock"
+                    Height="auto"
+                    Margin="0 3"
+                    Foreground="Green"
+                    FontWeight="SemiBold"
+                    Text="✓ Copiado com sucesso!"/>
             </StackPanel>
         </Grid>
     </ScrollViewer>

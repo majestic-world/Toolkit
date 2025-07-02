@@ -97,7 +97,7 @@
                             Margin="0,0,0,15">
                         <ComboBox x:Name="CategoryComboBox" 
                                   Padding="8,6" 
-                                  BorderThickness="0"
+                                  BorderThickness="1"
                                   Background="Transparent"
                                   Foreground="#333333"
                                   FontWeight="Normal"
@@ -120,7 +120,7 @@
                             Margin="0,0,0,15">
                         <ComboBox x:Name="TypeComboBox" 
                                   Padding="8,6" 
-                                  BorderThickness="0"
+                                  BorderThickness="1"
                                   Background="Transparent"
                                   Foreground="#333333"
                                   FontWeight="Normal"
@@ -218,8 +218,8 @@
                                   Grid.Column="0"/>
                         <Button x:Name="CopiarClienteButton" 
                                 Content="📋 Copiar" 
-                                Width="75" 
-                                Height="30"
+                                Width="70" 
+                                Height="24"
                                 Style="{StaticResource SecondaryButton}"
                                 FontSize="12" 
                                 Grid.Column="1">
@@ -262,8 +262,8 @@
                                   Grid.Column="0"/>
                         <Button x:Name="CopiarServidorButton" 
                                 Content="📋 Copiar" 
-                                Width="75" 
-                                Height="30"
+                                Width="70" 
+                                Height="24"
                                 Style="{StaticResource SecondaryButton}"
                                 FontSize="12" 
                                 Grid.Column="1">
@@ -306,8 +306,8 @@
                                   Grid.Column="0"/>
                         <Button x:Name="CopiarItensButton" 
                                 Content="📋 Copiar" 
-                                Width="75" 
-                                Height="30"
+                                Width="70" 
+                                Height="24"
                                 Style="{StaticResource SecondaryButton}"
                                 FontSize="12" 
                                 Grid.Column="1">

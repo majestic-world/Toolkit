@@ -3,10 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:L2Toolkit"
         mc:Ignorable="d"
         Icon="/images/favicon.ico"
-        Title="Lineage Toolkit By: MK Dev - v1.5" Height="600" Width="900"
+        Title="Lineage 2 Toolkit By: MK - v1.6" Height="600" Width="900"
         WindowStartupLocation="CenterScreen" ResizeMode="CanResize">
     <Window.Resources>
         <Style x:Key="SidebarButtonStyle" TargetType="Button">

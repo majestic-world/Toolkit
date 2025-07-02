@@ -21,7 +21,7 @@
                           FontWeight="SemiBold" 
                           Margin="0,0,0,4"/>
                 <TextBox x:Name="PawnNameTextBox"
-                        Padding="8,6"
+                        Padding="8,10"
                         BorderThickness="1"
                         BorderBrush="#E0E0E0"
                         Background="White"/>

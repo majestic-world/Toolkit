@@ -12,6 +12,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
@@ -75,6 +76,17 @@
                              Background="Transparent"
                              IsReadOnly="True"/>
                 </Border>
+            </StackPanel>
+            
+            <StackPanel Grid.Row="4">
+                <TextBlock
+                    Visibility="Collapsed"
+                    x:Name="CopyBlock"
+                    Height="auto"
+                    Margin="0 3"
+                    Foreground="Green"
+                    FontWeight="SemiBold"
+                    Text="✓ Copiado com sucesso!"/>
             </StackPanel>
         </Grid>
     </ScrollViewer>

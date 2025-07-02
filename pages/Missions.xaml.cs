@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -40,12 +41,14 @@ namespace L2Toolkit
             AppDatabase.GetInstance().UpdateValue("lastRewardFile", dialog.FileName);
         }
 
-        private void CopyRewardContent(object sender, RoutedEventArgs e)
+        private async void CopyRewardContent(object sender, RoutedEventArgs e)
         {
             var text = RewardOutput.Text.Trim();
             Clipboard.SetText(text);
-            MessageBox.Show("Os dados foram copiados com sucesso", "Copiado com sucesso!");
+            CopyBlock.Visibility = Visibility.Visible;
             RewardOutput.Text = "";
+            await Task.Delay(3000);
+            CopyBlock.Visibility = Visibility.Collapsed;
         }
 
         public class OneDayReward

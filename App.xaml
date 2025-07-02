@@ -4,6 +4,15 @@
              xmlns:local="clr-namespace:L2Toolkit"
              StartupUri="pages/MainWindow.xaml">
     <Application.Resources>
+        
+        <Style x:Key="StyleComboBox" TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="BorderBrush" Value="Red"/>
+        </Style>
+        
+        
+        
         <Style x:Key="SecondaryButton" TargetType="Button">
             <Setter Property="Background" Value="#2596be"/>
             <Setter Property="Foreground" Value="White"/>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -26,12 +27,14 @@ namespace L2Toolkit
             }
         }
 
-        private void CopyContent(object sender, RoutedEventArgs e)
+        private async void CopyContent(object sender, RoutedEventArgs e)
         {
             var content = UpgradeOutput.Text;
             Clipboard.SetText(content);
-            MessageBox.Show("Os dados foram copiados com sucesso", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+            CopyBlock.Visibility = Visibility.Visible;
             UpgradeOutput.Text = "";
+            await Task.Delay(3000);
+            CopyBlock.Visibility = Visibility.Collapsed;
         }
 
         private class UpgradeData
