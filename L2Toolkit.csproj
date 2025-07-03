@@ -58,6 +58,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DataMap\ItemsNameModel.cs" />
     <Compile Include="DataMap\UpgradeData.cs" />
     <Compile Include="DataMap\UpgradeLucera.cs" />
     <Compile Include="Utilities\Parser.cs" />

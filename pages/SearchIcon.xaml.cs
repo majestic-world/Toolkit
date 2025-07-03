@@ -15,17 +15,45 @@ namespace L2Toolkit.pages
         public SearchIcon()
         {
             InitializeComponent();
+            LoadName();
         }
 
         private readonly Dictionary<string, IconModel> _armor = new Dictionary<string, IconModel>();
         private readonly Dictionary<string, IconModel> _weapon = new Dictionary<string, IconModel>();
         private readonly Dictionary<string, IconModel> _items = new Dictionary<string, IconModel>();
         private readonly Dictionary<string, IconModel> _skills = new Dictionary<string, IconModel>();
+        private readonly Dictionary<string, ItemsNameModel> _name = new Dictionary<string, ItemsNameModel>();
 
         private const string FileArmor = "assets/Armorgrp_Classic.txt";
         private const string FileWeapon = "assets/Weapongrp_Classic.txt";
         private const string FileItens = "assets/EtcItemgrp_Classic.txt";
         private const string FileSkills = "assets/Skillgrp_Classic.txt";
+        private const string FileName = "assets/ItemName_Classic-eu.txt";
+
+        private void LoadName()
+        {
+            try
+            {
+                if (_name.Count != 0 || !File.Exists(FileName)) return;
+                var nameLines = File.ReadAllLines(FileName);
+
+                foreach (var nameLine in nameLines)
+                {
+                    var nameId = Parser.GetValue(nameLine, "id=", "\t");
+                    var name = Parser.GetValue(nameLine, "name=[", "]");
+                    var additionalName = Parser.GetValue(nameLine, "additionalname=[", "]");
+
+                    if (!string.IsNullOrEmpty(nameId) && !string.IsNullOrEmpty(name) && !_name.ContainsKey(nameId))
+                    {
+                        _name.Add(nameId, new ItemsNameModel(name, additionalName));
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
 
         private void Search(string id, Dictionary<string, IconModel> dictionary, string file)
         {
@@ -57,6 +85,25 @@ namespace L2Toolkit.pages
                 dictionary.TryGetValue(id, out var iconModel);
                 IconOutput.Text = iconModel?.Icon ?? "Não encontrado";
                 IconPanelOutput.Text = iconModel?.IconPanel ?? "Não encontrado";
+
+                if (file != FileSkills)
+                {
+                    _name.TryGetValue(id, out var name);
+                    if (!string.IsNullOrEmpty(name?.ItemName))
+                    {
+                        var itemName = name?.ItemName;
+                        var additionalName = name?.AdditionalName;
+                        NameOutput.Text = itemName ?? "";
+                        if (!string.IsNullOrEmpty(additionalName))
+                        {
+                            NameOutput.Text += $" - {additionalName}";
+                        }
+                    }
+                }
+                else
+                {
+                    NameOutput.Text = "";
+                }
             }
             else
             {

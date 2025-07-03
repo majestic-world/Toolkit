@@ -6,19 +6,18 @@
              HorizontalAlignment="Stretch"
              VerticalAlignment="Stretch"
              mc:Ignorable="d">
-    
-    <ScrollViewer HorizontalAlignment="Stretch"
-                  VerticalAlignment="Stretch">
-        
+
+    <ScrollViewer HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+
         <Grid Margin="30">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0" Margin="0 0 0 10">
@@ -43,10 +42,10 @@
                              Height="40"
                              Padding="15,10"
                              BorderThickness="0"
-                             Background="Transparent"/>
+                             Background="Transparent" />
                 </Border>
             </StackPanel>
-            
+
             <StackPanel Grid.Row="2" Orientation="Vertical" HorizontalAlignment="Stretch">
                 <TextBlock FontWeight="SemiBold" Text="Selecione o tipo do item" />
                 <Border Background="White"
@@ -55,14 +54,14 @@
                         BorderBrush="#E0E0E0"
                         BorderThickness="1">
                     <ComboBox x:Name="ItemType" SelectedIndex="0" Padding="10 10">
-                        <ComboBoxItem Content="Weapon"/>
-                        <ComboBoxItem Content="Armor"/>
-                        <ComboBoxItem Content="Items"/>
-                        <ComboBoxItem Content="Skills"/>
+                        <ComboBoxItem Content="Weapon" />
+                        <ComboBoxItem Content="Armor" />
+                        <ComboBoxItem Content="Items" />
+                        <ComboBoxItem Content="Skills" />
                     </ComboBox>
                 </Border>
             </StackPanel>
-            
+
             <StackPanel Grid.Row="3">
                 <Button
                     Style="{StaticResource PrimaryButton}"
@@ -71,9 +70,9 @@
                     Height="40"
                     Click="SearchButton_OnClick"
                     x:Name="SearchButton"
-                    Content="Pesquisar"/>
+                    Content="Pesquisar" />
             </StackPanel>
-            
+
             <StackPanel Grid.Row="4">
                 <TextBlock
                     x:Name="StatusBox"
@@ -82,9 +81,26 @@
                     FontSize="16"
                     Text="Resultado da pesquisa" />
             </StackPanel>
-            
+
             <StackPanel Grid.Row="5">
-                <TextBlock FontWeight="SemiBold" Text="Icon" Margin="0 4"/>
+                <TextBlock FontWeight="SemiBold" Text="Nome" Margin="0 4" />
+                <Border Background="White"
+                        CornerRadius="10"
+                        Margin="0 6"
+                        BorderBrush="#E0E0E0"
+                        BorderThickness="1">
+                    <TextBox x:Name="NameOutput"
+                             PreviewMouseDown="IconOutput_OnPreviewMouseDown"
+                             AcceptsReturn="True"
+                             IsReadOnly="True"
+                             TextWrapping="NoWrap"
+                             VerticalScrollBarVisibility="Disabled"
+                             Height="40"
+                             Padding="15,10"
+                             BorderThickness="0"
+                             Background="Transparent" />
+                </Border>
+                <TextBlock FontWeight="SemiBold" Text="Icon" Margin="0 4" />
                 <Border Background="White"
                         CornerRadius="10"
                         Margin="0 6"
@@ -99,9 +115,9 @@
                              Height="40"
                              Padding="15,10"
                              BorderThickness="0"
-                             Background="Transparent"/>
+                             Background="Transparent" />
                 </Border>
-                <TextBlock FontWeight="SemiBold" Text="Icon Panel" Margin="0 4"/>
+                <TextBlock FontWeight="SemiBold" Text="Icon Panel" Margin="0 4" />
                 <Border Background="White"
                         CornerRadius="10"
                         Margin="0 6"
@@ -116,10 +132,10 @@
                              Height="40"
                              Padding="15,10"
                              BorderThickness="0"
-                             Background="Transparent"/>
+                             Background="Transparent" />
                 </Border>
             </StackPanel>
-            
+
             <StackPanel Grid.Row="6">
                 <TextBlock
                     Visibility="Collapsed"
@@ -128,7 +144,7 @@
                     Margin="0 3"
                     Foreground="Green"
                     FontWeight="SemiBold"
-                    Text="✓ Copiado com sucesso!"/>
+                    Text="✓ Copiado com sucesso!" />
             </StackPanel>
 
         </Grid>
