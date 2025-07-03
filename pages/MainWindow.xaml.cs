@@ -53,5 +53,10 @@ namespace L2Toolkit
         {
             MainContent.Content = new SearchIcon();
         }
+
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            MainContent.Content = new LogParse();
+        }
     }
 }
