@@ -24,7 +24,7 @@ Um conjunto de ferramentas para desenvolvedores de servidores Lineage 2, desenvo
 
 ### Door Forge
 1. Cole os dados da porta do UnrealEd no campo de entrada
-2. Clique em "🔄 Converter para XML"
+2. Clique em "Converter para XML"
 3. Copie o resultado gerado
 
 ### Pawn Data
