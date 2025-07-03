@@ -58,6 +58,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Utilities\Parser.cs" />
     <Page Include="pages\DoorGenerateControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -79,6 +80,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="pages\SearchIcon.xaml" />
     <Page Include="pages\SpawnManager.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -89,6 +91,7 @@
     </Compile>
     <Compile Include="database\AppDatabase.cs" />
     <Compile Include="database\Database.cs" />
+    <Compile Include="DataMap\IconModel.cs" />
     <Compile Include="pages\DoorGenerateControl.xaml.cs">
       <DependentUpon>DoorGenerateControl.xaml</DependentUpon>
     </Compile>
@@ -107,6 +110,9 @@
     </Compile>
     <Compile Include="pages\PrimeShopGenerator.xaml.cs">
       <DependentUpon>PrimeShopGenerator.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="pages\SearchIcon.xaml.cs">
+      <DependentUpon>SearchIcon.xaml</DependentUpon>
     </Compile>
     <Compile Include="pages\SpawnManager.xaml.cs">
       <DependentUpon>SpawnManager.xaml</DependentUpon>

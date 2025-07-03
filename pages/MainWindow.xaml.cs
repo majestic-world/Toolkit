@@ -1,4 +1,5 @@
 using System.Windows;
+using L2Toolkit.pages;
 
 namespace L2Toolkit
 {
@@ -46,6 +47,11 @@ namespace L2Toolkit
         private void BtnUpgrade_Click(object sender, RoutedEventArgs e)
         {
             MainContent.Content = new UpgradeEquipment();
+        }
+        
+        private void BtnSearchIcon_Click(object sender, RoutedEventArgs e)
+        {
+            MainContent.Content = new SearchIcon();
         }
     }
 }

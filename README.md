@@ -15,6 +15,7 @@ L2Toolkit/
 │   ├── PrimeShopGenerator.xaml/.cs  # Gerador de Prime Shop
 │   ├── SpawnManager.xaml/.cs        # Gerenciador de Spawns
 │   └── UpgradeEquipment.xaml/.cs    # Sistema de upgrade de equipamentos
+│   └── SearchIcon.xaml/.cs    # Pesquisar ícone de items/skills
 ├── Properties/                # Arquivos de propriedades do projeto
 ├── images/                    # Ícones e imagens
 ├── bin/                       # Executáveis e assets
@@ -38,7 +39,8 @@ L2Toolkit/
    - `EtcItemgrp_Classic.txt`
    - `Armorgrp_Classic.txt`
    - `Weapongrp_Classic.txt`
-   - `h5_names.txt`
+   - `assets/Skillgrp_Classic.txt`
+   - `assets/h5_names.txt`
 
 2. Execute o projeto através da IDEA ou use o executável compilado.
 
@@ -79,6 +81,11 @@ L2Toolkit/
 1. Selecione o arquivo equipment_upgrade.xml do servidor
 2. Clique em "Gerar Dados"
 3. Copie o resultado gerado para os arquivos do client
+
+### Pesquisa por Ícone
+1. Selecione o tipo de item
+2. Insira o Id do item/Skill
+3. Clique em "Pesquisar"
 
 ## 📄 Licença
 

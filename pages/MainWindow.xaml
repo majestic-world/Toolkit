@@ -54,6 +54,7 @@
             <Button Content="Corrigir Descrição" Click="BtnDescriptionFix_Click" Style="{StaticResource SidebarButtonStyle}"/>
             <Button Content="Missões Diárias" Click="BtnMissions_Click" Style="{StaticResource SidebarButtonStyle}"/>
             <Button Content="Upgrade Equipment" Click="BtnUpgrade_Click" Style="{StaticResource SidebarButtonStyle}"/>
+            <Button Content="Pesquisar Ícone" Click="BtnSearchIcon_Click" Style="{StaticResource SidebarButtonStyle}"/>
         </StackPanel>
 
         <ContentControl x:Name="MainContent" Grid.Column="1" />
