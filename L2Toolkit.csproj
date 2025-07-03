@@ -58,6 +58,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DataMap\UpgradeData.cs" />
+    <Compile Include="DataMap\UpgradeLucera.cs" />
     <Compile Include="Utilities\Parser.cs" />
     <Page Include="pages\DoorGenerateControl.xaml">
       <SubType>Designer</SubType>
