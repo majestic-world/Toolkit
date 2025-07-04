@@ -63,6 +63,11 @@ Um conjunto de ferramentas para desenvolvedores de servidores Lineage 2, desenvo
 2. Insira o Id do item/Skill
 3. Clique em "Pesquisar"
 
+### Separador de Logs
+1. Selecione o arquivo de log
+2. Insira o nome/id do jogador
+3. Opcional: adicione o evento de pesquisa
+
 ## 📄 Licença
 
 Este projeto foi desenvolvido para a comunidade de desenvolvedores Lineage 2.
