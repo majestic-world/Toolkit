@@ -11,7 +11,7 @@ using System.Xml.Linq;
 using System.Threading.Tasks;
 using L2Toolkit.database;
 
-namespace L2Toolkit
+namespace L2Toolkit.pages
 {
     public partial class PrimeShopGenerator : UserControl
     {

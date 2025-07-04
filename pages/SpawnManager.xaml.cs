@@ -1,12 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace L2Toolkit
+namespace L2Toolkit.pages
 {
     public partial class SpawnManager : UserControl
     {

@@ -11,7 +11,7 @@ using L2Toolkit.database;
 using L2Toolkit.DataMap;
 using Microsoft.Win32;
 
-namespace L2Toolkit
+namespace L2Toolkit.pages
 {
     public partial class UpgradeEquipment : UserControl
     {

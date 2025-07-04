@@ -18,11 +18,11 @@ namespace L2Toolkit.pages
             LoadName();
         }
 
-        private readonly Dictionary<string, IconModel> _armor = new Dictionary<string, IconModel>();
-        private readonly Dictionary<string, IconModel> _weapon = new Dictionary<string, IconModel>();
-        private readonly Dictionary<string, IconModel> _items = new Dictionary<string, IconModel>();
-        private readonly Dictionary<string, IconModel> _skills = new Dictionary<string, IconModel>();
-        private readonly Dictionary<string, ItemsNameModel> _name = new Dictionary<string, ItemsNameModel>();
+        private readonly Dictionary<string, IconModel> _armor = new();
+        private readonly Dictionary<string, IconModel> _weapon = new();
+        private readonly Dictionary<string, IconModel> _items = new();
+        private readonly Dictionary<string, IconModel> _skills = new();
+        private readonly Dictionary<string, ItemsNameModel> _name = new();
 
         private const string FileArmor = "assets/Armorgrp_Classic.txt";
         private const string FileWeapon = "assets/Weapongrp_Classic.txt";

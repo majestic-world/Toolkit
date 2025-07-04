@@ -9,7 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Threading;
 using Microsoft.Win32;
 
-namespace L2Toolkit
+namespace L2Toolkit.pages
 {
     public partial class DescriptionFix : UserControl
     {

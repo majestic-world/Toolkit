@@ -6,11 +6,11 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
 
-namespace L2Toolkit
+namespace L2Toolkit.pages
 {
     public partial class PawnDataControl : UserControl
     {
-        private readonly DispatcherTimer _dispatcherTimer = new DispatcherTimer();
+        private readonly DispatcherTimer _dispatcherTimer = new();
 
         public PawnDataControl()
         {

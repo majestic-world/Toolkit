@@ -1,14 +1,8 @@
 ﻿namespace L2Toolkit.DataMap
 {
-    public class ItemsNameModel
+    public class ItemsNameModel(string itemName, string additionalName)
     {
-        public string ItemName { get; set; }
-        public string AdditionalName { get; set; }
-
-        public ItemsNameModel(string itemName, string additionalName)
-        {
-            ItemName = itemName;
-            AdditionalName = additionalName;
-        }
+        public string ItemName { get; set; } = itemName;
+        public string AdditionalName { get; set; } = additionalName;
     }
 }

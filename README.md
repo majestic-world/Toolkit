@@ -4,7 +4,7 @@ Um conjunto de ferramentas para desenvolvedores de servidores Lineage 2, desenvo
 
 ## 📋 Requisitos
 
-- .NET Framework 4.8.1
+- DotNet 8.0
 - Windows 10/11
 - Visual Studio ou Rider (para desenvolvimento)
 

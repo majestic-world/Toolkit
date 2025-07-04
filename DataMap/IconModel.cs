@@ -1,16 +1,9 @@
 ﻿namespace L2Toolkit.DataMap
 {
-    public class IconModel
+    public class IconModel(string id, string icon, string iconPanel)
     {
-        public string Id { get; set; }
-        public string Icon { get; set; }
-        public string IconPanel { get; set; }
-
-        public IconModel(string id, string icon, string iconPanel)
-        {
-            Id = id;
-            Icon = icon;
-            IconPanel = iconPanel;
-        }
+        public string Id { get; set; } = id;
+        public string Icon { get; set; } = icon;
+        public string IconPanel { get; set; } = iconPanel;
     }
 }

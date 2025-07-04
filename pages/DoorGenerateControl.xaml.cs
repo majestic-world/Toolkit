@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Text.RegularExpressions;
 
-namespace L2Toolkit
+namespace L2Toolkit.pages
 {
     public partial class DoorGenerateControl : UserControl
     {

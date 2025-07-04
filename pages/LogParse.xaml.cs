@@ -8,124 +8,120 @@ using System.Windows.Input;
 using L2Toolkit.database;
 using Microsoft.Win32;
 
-namespace L2Toolkit.pages
+namespace L2Toolkit.pages;
+
+public partial class LogParse : UserControl
 {
-    public partial class LogParse : UserControl
+    public LogParse()
     {
-        public LogParse()
+        InitializeComponent();
+
+        var lastLogFile = AppDatabase.GetInstance().GetValue("lastLogFile");
+        if (!string.IsNullOrEmpty(lastLogFile))
         {
-            InitializeComponent();
-            var lastLogFile = AppDatabase.GetInstance().GetValue("lastLogFile");
-            if (lastLogFile != null)
-            {
-                LogFile.Text = lastLogFile;
-            }
+            LogFile.Text = lastLogFile;
         }
+    }
 
-        private void LogFile_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
+    private void LogFile_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
+    {
+        var initialDir = string.IsNullOrEmpty(LogFile.Text)
+            ? string.Empty
+            : Path.GetDirectoryName(LogFile.Text) ?? string.Empty;
+
+        var dialog = new OpenFileDialog
         {
+            Multiselect = false,
+            CheckFileExists = true,
+            CheckPathExists = true,
+            Filter = "Log files (*.log)|*.log",
+            InitialDirectory = initialDir
+        };
 
-            var initialDir = string.IsNullOrEmpty(LogFile.Text) ? string.Empty : LogFile.Text;
-            
-            var dialog = new OpenFileDialog
+        if (dialog.ShowDialog() == true)
+        {
+            LogFile.Text = dialog.FileName;
+            AppDatabase.GetInstance().UpdateValue("lastLogFile", dialog.FileName);
+        }
+    }
+
+    private void RewardGenerate_OnClick(object sender, RoutedEventArgs e)
+    {
+        ButtonGenerate.Content = "Gerando...";
+
+        try
+        {
+            var name = PlayerName.Text;
+            var fileLog = LogFile.Text;
+            var optionalEvent = SearchEvent.Text;
+
+            if (string.IsNullOrWhiteSpace(name))
             {
-                Multiselect = false,
-                CheckFileExists = true,
-                CheckPathExists = true,
-                Filter = "Log files (*.log)|*.log",
-                InitialDirectory = Path.GetDirectoryName(LogFile.Text) ?? string.Empty
+                throw new Exception("Preencha o nome do jogador");
+            }
+
+            if (!File.Exists(fileLog))
+            {
+                throw new Exception("O arquivo de log não foi encontrado");
+            }
+
+            var encoding = Encoding.GetEncoding(1252);
+            var matchedLines = new List<string>();
+
+            foreach (var line in File.ReadLines(fileLog, encoding))
+            {
+                if (line.Contains(name, StringComparison.OrdinalIgnoreCase))
+                {
+                    if (!string.IsNullOrEmpty(optionalEvent))
+                    {
+                        if (line.Contains(optionalEvent, StringComparison.OrdinalIgnoreCase))
+                        {
+                            matchedLines.Add(line);
+                        }
+                    }
+                    else
+                    {
+                        matchedLines.Add(line);
+                    }
+                }
+            }
+
+            if (matchedLines.Count == 0)
+            {
+                throw new Exception("Nenhuma log foi encontrada");
+            }
+
+            var fileName = $"Log_{PlayerName.Text}";
+
+            var saveDialog = new SaveFileDialog
+            {
+                Title = "Salvar arquivo",
+                FileName = fileName,
+                Filter = "Arquivos (*.txt)|*.txt"
             };
 
-            if (dialog.ShowDialog() == true)
+            if (saveDialog.ShowDialog() == true)
             {
-                LogFile.Text = dialog.FileName;
-                AppDatabase.GetInstance().UpdateValue("lastLogFile", dialog.FileName);
+                File.WriteAllLines(saveDialog.FileName, matchedLines, encoding);
+
+                MessageBox.Show(
+                    "Arquivo salvo com sucesso!",
+                    "Sucesso",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
             }
         }
-
-        private void RewardGenerate_OnClick(object sender, RoutedEventArgs e)
+        catch (Exception ex)
         {
-            ButtonGenerate.Content = "Gerando...";
-
-            try
-            {
-                var name = PlayerName.Text;
-                var fileLog = LogFile.Text;
-                var optionalEvent = SearchEvent.Text;
-
-                if (string.IsNullOrEmpty(name))
-                {
-                    throw new Exception("Preencha o nome do jogador");
-                }
-
-                if (!File.Exists(fileLog))
-                {
-                    throw new Exception("O arquivo de log não foi encontrado");
-                }
-
-                Encoding encoding = Encoding.GetEncoding(1252);
-                var matchedLines = new List<string>();
-
-                using (var reader = new StreamReader(fileLog, encoding))
-                {
-                    string line;
-                    while ((line = reader.ReadLine()) != null)
-                    {
-                        if (line.IndexOf(name, StringComparison.OrdinalIgnoreCase) >= 0)
-                        {
-                            if (!string.IsNullOrEmpty(optionalEvent))
-                            {
-                                if (line.IndexOf(optionalEvent, StringComparison.OrdinalIgnoreCase) >= 0)
-                                {
-                                    matchedLines.Add(line);
-                                }
-                            }
-                            else
-                            {
-                                matchedLines.Add(line);   
-                            }
-                        }
-                    }
-                }
-
-                if (matchedLines.Count == 0)
-                {
-                    throw new Exception("Nenhuma log foi encontrada");
-                }
-
-                // Só aqui mostramos o SaveFileDialog
-                var fileName = $"Log_{PlayerName.Text}";
-                var saveDialog = new SaveFileDialog
-                {
-                    Title = "Salvar arquivo",
-                    FileName = fileName,
-                    Filter = "Arquivos (*.txt)|*.txt",
-                };
-
-                if (saveDialog.ShowDialog() == true)
-                {
-                    using (var writer = new StreamWriter(saveDialog.FileName, false, encoding))
-                    {
-                        foreach (var line in matchedLines)
-                        {
-                            writer.WriteLine(line);
-                        }
-                    }
-
-                    MessageBox.Show("Arquivo salvo com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            finally
-            {
-                ButtonGenerate.Content = "Gerar Dados";
-                GC.Collect();
-            }
+            MessageBox.Show(
+                ex.Message,
+                "Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
         }
-        
-        
+        finally
+        {
+            ButtonGenerate.Content = "Gerar Dados";
+        }
     }
 }
