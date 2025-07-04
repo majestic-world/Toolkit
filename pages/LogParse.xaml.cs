@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -17,6 +19,13 @@ public partial class LogParse : UserControl
         InitializeComponent();
 
         var lastLogFile = AppDatabase.GetInstance().GetValue("lastLogFile");
+        var lastOutputDir = AppDatabase.GetInstance().GetValue("lastOutputDir");
+
+        if (!string.IsNullOrEmpty(lastOutputDir))
+        {
+            OutputDir.Text = lastOutputDir;
+        }
+
         if (!string.IsNullOrEmpty(lastLogFile))
         {
             LogFile.Text = lastLogFile;
@@ -45,71 +54,92 @@ public partial class LogParse : UserControl
         }
     }
 
-    private void RewardGenerate_OnClick(object sender, RoutedEventArgs e)
+    private bool ContainsValue(string text, string value)
     {
-        ButtonGenerate.Content = "Gerando...";
+        return text.Contains(value, StringComparison.OrdinalIgnoreCase);
+    }
 
+    private ConcurrentQueue<string> ProcessLog(
+        string fileLog,
+        string name,
+        string optionalEvent,
+        Encoding encoding)
+    {
+        var matchedLines = new ConcurrentQueue<string>();
+
+        var lines = File.ReadLines(fileLog, encoding);
+
+        Parallel.ForEach(lines, line =>
+        {
+            if (ContainsValue(line, name))
+            {
+                if (string.IsNullOrEmpty(optionalEvent) || ContainsValue(line, optionalEvent))
+                {
+                    matchedLines.Enqueue(line);
+                }
+            }
+        });
+
+        return matchedLines;
+    }
+
+    private async void RewardGenerate_OnClick(object sender, RoutedEventArgs e)
+    {
         try
         {
+            // pegar dados da UI aqui!
             var name = PlayerName.Text;
             var fileLog = LogFile.Text;
             var optionalEvent = SearchEvent.Text;
+            var outputDir = OutputDir.Text;
 
-            if (string.IsNullOrWhiteSpace(name))
+            if (string.IsNullOrEmpty(name))
             {
-                throw new Exception("Preencha o nome do jogador");
-            }
-
-            if (!File.Exists(fileLog))
-            {
-                throw new Exception("O arquivo de log não foi encontrado");
+                throw new Exception("Insira a key de pesquisa");
             }
 
             var encoding = Encoding.GetEncoding(1252);
-            var matchedLines = new List<string>();
+            var fileName = $"Log-{name}";
 
-            foreach (var line in File.ReadLines(fileLog, encoding))
+            if (string.IsNullOrEmpty(outputDir))
             {
-                if (line.Contains(name, StringComparison.OrdinalIgnoreCase))
-                {
-                    if (!string.IsNullOrEmpty(optionalEvent))
-                    {
-                        if (line.Contains(optionalEvent, StringComparison.OrdinalIgnoreCase))
-                        {
-                            matchedLines.Add(line);
-                        }
-                    }
-                    else
-                    {
-                        matchedLines.Add(line);
-                    }
-                }
+                throw new Exception("Preencha a pasta de saída");
             }
+
+            if (string.IsNullOrEmpty(fileLog))
+            {
+                throw new Exception("Selecione o arquivo de log");
+            }
+            
+            ButtonGenerate.Content = "Processando...";
+
+            var matchedLines = await Task.Run(() =>
+                ProcessLog(fileLog, name, optionalEvent, encoding));
 
             if (matchedLines.Count == 0)
             {
-                throw new Exception("Nenhuma log foi encontrada");
-            }
-
-            var fileName = $"Log_{PlayerName.Text}";
-
-            var saveDialog = new SaveFileDialog
-            {
-                Title = "Salvar arquivo",
-                FileName = fileName,
-                Filter = "Arquivos (*.txt)|*.txt"
-            };
-
-            if (saveDialog.ShowDialog() == true)
-            {
-                File.WriteAllLines(saveDialog.FileName, matchedLines, encoding);
-
                 MessageBox.Show(
-                    "Arquivo salvo com sucesso!",
-                    "Sucesso",
+                    "Nenhuma log foi encontrada",
+                    "Error",
                     MessageBoxButton.OK,
-                    MessageBoxImage.Information);
+                    MessageBoxImage.Error);
+                return;
             }
+
+            if (!string.IsNullOrEmpty(optionalEvent))
+            {
+                fileName += $"-{optionalEvent}";
+            }
+            
+            var date = DateTime.Now;
+            var dateString = date.ToString("dd-MM-yyyy");
+            
+            fileName += $"-{dateString}.log";
+            
+            var saveFileDir = Path.Combine(outputDir, fileName);
+
+            await File.WriteAllLinesAsync(saveFileDir, matchedLines, encoding);
+            MessageBox.Show("Arquivo salvo com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
         }
         catch (Exception ex)
         {
@@ -122,6 +152,16 @@ public partial class LogParse : UserControl
         finally
         {
             ButtonGenerate.Content = "Gerar Dados";
+        }
+    }
+
+    private void OutputDir_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
+    {
+        var dialog = new OpenFolderDialog();
+        if (dialog.ShowDialog() == true)
+        {
+            OutputDir.Text = dialog.FolderName;
+            AppDatabase.GetInstance().UpdateValue("lastOutputDir", dialog.FolderName);
         }
     }
 }

@@ -14,6 +14,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
@@ -43,7 +44,27 @@
                     </Border>
                 </StackPanel>
                 
-                <StackPanel Grid.Row="2" Orientation="Vertical" Margin="0 0 0 10">
+                <StackPanel Grid.Row="2" Orientation="Vertical" Margin="0,0,0,10">
+                    <TextBlock Text="Selecione a pasta de sáida"
+                               FontSize="16"
+                               FontWeight="SemiBold"
+                               Margin="0,0,0,8" />
+                    <Border Background="White" CornerRadius="10" BorderBrush="#E0E0E0" BorderThickness="1">
+                        <TextBox x:Name="OutputDir"
+                                 AcceptsReturn="True"
+                                 IsReadOnly="True"
+                                 PreviewMouseDown="OutputDir_OnPreviewMouseDown"
+                                 TextWrapping="NoWrap"
+                                 VerticalScrollBarVisibility="Disabled"
+                                 Height="40"
+                                 Cursor="Hand"
+                                 Padding="15,10"
+                                 BorderThickness="0"
+                                 Background="Transparent" />
+                    </Border>
+                </StackPanel>
+                
+                <StackPanel Grid.Row="3" Orientation="Vertical" Margin="0 0 0 10">
                     <TextBlock Text="Insira a Key"
                                FontSize="16"
                                FontWeight="SemiBold"
@@ -61,7 +82,7 @@
                     </Border>
                 </StackPanel>
                 
-                <StackPanel Grid.Row="3" Orientation="Vertical" Margin="0 0 0 10">
+                <StackPanel Grid.Row="4" Orientation="Vertical" Margin="0 0 0 10">
                     <TextBlock Text="Evento (Opcional)"
                                FontSize="16"
                                FontWeight="SemiBold"
@@ -79,7 +100,7 @@
                     </Border>
                 </StackPanel>
 
-                <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
+                <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
                     <Button Content="Gerar Dados"
                             Width="110"
                             x:Name="ButtonGenerate"

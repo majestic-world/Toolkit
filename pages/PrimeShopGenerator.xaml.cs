@@ -17,7 +17,7 @@ namespace L2Toolkit.pages
     {
         private const string ItemNameFile = "./assets/ItemName_Classic-eu.txt";
 
-        private static readonly Dictionary<string, string> Categories = new Dictionary<string, string>()
+        private static readonly Dictionary<string, string> Categories = new()
         {
             { "11", "Equipment" },
             { "12", "Agathions" },
@@ -26,22 +26,22 @@ namespace L2Toolkit.pages
             { "15", "Reward Coin" }
         };
 
-        private static readonly Dictionary<string, string> FileType = new Dictionary<string, string>()
+        private static readonly Dictionary<string, string> FileType = new()
         {
             { "Items", "./assets/EtcItemgrp_Classic.txt" },
             { "Armor", "./assets/Armorgrp_Classic.txt" },
             { "Weapon", "./assets/Weapongrp_Classic.txt" }
         };
 
-        private static readonly Dictionary<string, string> ItemNameCache = new Dictionary<string, string>();
-        private static readonly Dictionary<string, Dictionary<string, Tuple<string, string>>> IconCache = new Dictionary<string, Dictionary<string, Tuple<string, string>>>();
+        private static readonly Dictionary<string, string> ItemNameCache = new();
+        private static readonly Dictionary<string, Dictionary<string, Tuple<string, string>>> IconCache = new();
         private static bool _itemNameCacheLoaded;
-        private static readonly Dictionary<string, bool> IconCacheLoaded = new Dictionary<string, bool>();
+        private static readonly Dictionary<string, bool> IconCacheLoaded = new();
 
-        private readonly DispatcherTimer _clienteTimer = new DispatcherTimer();
-        private readonly DispatcherTimer _serverTimer = new DispatcherTimer();
-        private readonly DispatcherTimer _itemsTimer = new DispatcherTimer();
-        private readonly DispatcherTimer _statusTimer = new DispatcherTimer();
+        private readonly DispatcherTimer _clienteTimer = new();
+        private readonly DispatcherTimer _serverTimer = new();
+        private readonly DispatcherTimer _itemsTimer = new();
+        private readonly DispatcherTimer _statusTimer = new();
 
         private int _lastId;
 
@@ -94,9 +94,9 @@ namespace L2Toolkit.pages
             TypeComboBox.SelectedIndex = 0;
         }
 
-        private void GerarButton_Click(object sender, RoutedEventArgs e) => GerarItens();
+        private void GerarButton_Click(object sender, RoutedEventArgs e) => GenerateItems();
 
-        private void GerarItens()
+        private void GenerateItems()
         {
             try
             {
@@ -127,10 +127,10 @@ namespace L2Toolkit.pages
 
         private Tuple<string, string, int, int, List<string>> ValidateInputs()
         {
-            string category = ((string)CategoryComboBox.SelectedItem).Split('-')[0].Trim();
-            string type = (string)TypeComboBox.SelectedItem;
-            string idsRaw = IdsTextBox.Text.Trim();
-            string priceStr = PriceTextBox.Text.Trim();
+            var category = ((string)CategoryComboBox.SelectedItem).Split('-')[0].Trim();
+            var type = (string)TypeComboBox.SelectedItem;
+            var idsRaw = IdsTextBox.Text.Trim();
+            var priceStr = PriceTextBox.Text.Trim();
 
             if (string.IsNullOrWhiteSpace(idsRaw) || string.IsNullOrWhiteSpace(priceStr))
             {
@@ -144,8 +144,7 @@ namespace L2Toolkit.pages
                 return new Tuple<string, string, int, int, List<string>>(null, null, 0, 0, new List<string>());
             }
 
-            int quantity;
-            if (!int.TryParse(QuantidadeTextBox.Text.Trim(), out quantity) || quantity < 1)
+            if (!int.TryParse(QuantidadeTextBox.Text.Trim(), out var quantity) || quantity < 1)
             {
                 SendNotify("Quantidade inválida. Usando valor padrão 1.");
                 quantity = 1;
@@ -319,7 +318,6 @@ namespace L2Toolkit.pages
             {
                 if (File.Exists(ItemNameFile) && !_itemNameCacheLoaded)
                 {
-                    int count = 0;
                     foreach (var line in File.ReadLines(ItemNameFile, Encoding.UTF8))
                     {
                         var idMatch = Regex.Match(line, @"id=(\d+)");
@@ -330,7 +328,6 @@ namespace L2Toolkit.pages
                             string objectId = idMatch.Groups[1].Value;
                             string name = nameMatch.Groups[1].Value;
                             ItemNameCache[objectId] = name;
-                            count++;
                         }
                     }
 
@@ -339,13 +336,11 @@ namespace L2Toolkit.pages
 
                 foreach (var type in FileType.Keys)
                 {
-                    if (File.Exists(FileType[type]) && (!IconCacheLoaded.ContainsKey(type) || !IconCacheLoaded[type]))
-                    {
-                        if (!IconCache.ContainsKey(type))
-                            IconCache[type] = new Dictionary<string, Tuple<string, string>>();
+                    if (!File.Exists(FileType[type]) || (IconCacheLoaded.ContainsKey(type) && IconCacheLoaded[type])) continue;
+                    if (!IconCache.ContainsKey(type))
+                        IconCache[type] = new Dictionary<string, Tuple<string, string>>();
 
-                        IconCacheLoaded[type] = true;
-                    }
+                    IconCacheLoaded[type] = true;
                 }
             }
             catch (Exception ex)

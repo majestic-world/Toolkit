@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -18,11 +19,11 @@ namespace L2Toolkit.pages
             LoadName();
         }
 
-        private readonly Dictionary<string, IconModel> _armor = new();
-        private readonly Dictionary<string, IconModel> _weapon = new();
-        private readonly Dictionary<string, IconModel> _items = new();
-        private readonly Dictionary<string, IconModel> _skills = new();
-        private readonly Dictionary<string, ItemsNameModel> _name = new();
+        private readonly ConcurrentDictionary<string, IconModel> _armor = new();
+        private readonly ConcurrentDictionary<string, IconModel> _weapon = new();
+        private readonly ConcurrentDictionary<string, IconModel> _items = new();
+        private readonly ConcurrentDictionary<string, IconModel> _skills = new();
+        private readonly ConcurrentDictionary<string, ItemsNameModel> _name = new();
 
         private const string FileArmor = "assets/Armorgrp_Classic.txt";
         private const string FileWeapon = "assets/Weapongrp_Classic.txt";
@@ -35,19 +36,14 @@ namespace L2Toolkit.pages
             try
             {
                 if (_name.Count != 0 || !File.Exists(FileName)) return;
-                var nameLines = File.ReadAllLines(FileName);
-
-                foreach (var nameLine in nameLines)
+                var nameLines = File.ReadLines(FileName);
+                Parallel.ForEach(nameLines, nameLine =>
                 {
                     var nameId = Parser.GetValue(nameLine, "id=", "\t");
                     var name = Parser.GetValue(nameLine, "name=[", "]");
                     var additionalName = Parser.GetValue(nameLine, "additionalname=[", "]");
-
-                    if (!string.IsNullOrEmpty(nameId) && !string.IsNullOrEmpty(name) && !_name.ContainsKey(nameId))
-                    {
-                        _name.Add(nameId, new ItemsNameModel(name, additionalName));
-                    }
-                }
+                    _name.TryAdd(nameId, new ItemsNameModel(name, additionalName));
+                });
             }
             catch (Exception e)
             {
@@ -55,7 +51,7 @@ namespace L2Toolkit.pages
             }
         }
 
-        private void Search(string id, Dictionary<string, IconModel> dictionary, string file)
+        private void Search(string id, ConcurrentDictionary<string, IconModel> dictionary, string file)
         {
             if (dictionary.Count == 0)
             {
@@ -65,17 +61,16 @@ namespace L2Toolkit.pages
                 }
 
                 StatusBox.Text = "Carregando informações...";
-                var lines = File.ReadAllLines(file);
-                foreach (var line in lines)
+
+                var lines = File.ReadLines(file);
+
+                Parallel.ForEach(lines, line =>
                 {
                     var itemId = Parser.GetValue(line, file == FileSkills ? "skill_id=" : "object_id=", "\t");
                     var icon = Parser.GetValue(line, file == FileSkills ? "icon=[" : "icon={[", "]");
                     var iconPanel = Parser.GetValue(line, "icon_panel=[", "]");
-                    if (!dictionary.ContainsKey(itemId))
-                    {
-                        dictionary.Add(itemId, new IconModel(itemId, icon, iconPanel));
-                    }
-                }
+                    dictionary.TryAdd(itemId, new IconModel(itemId, icon, iconPanel));
+                });
             }
 
             StatusBox.Text = "Resultado da pesquisa";
