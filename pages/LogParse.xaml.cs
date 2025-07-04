@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Windows;
@@ -23,6 +24,9 @@ namespace L2Toolkit.pages
 
         private void LogFile_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
+
+            var initialDir = string.IsNullOrEmpty(LogFile.Text) ? string.Empty : LogFile.Text;
+            
             var dialog = new OpenFileDialog
             {
                 Multiselect = false,
@@ -47,6 +51,7 @@ namespace L2Toolkit.pages
             {
                 var name = PlayerName.Text;
                 var fileLog = LogFile.Text;
+                var optionalEvent = SearchEvent.Text;
 
                 if (string.IsNullOrEmpty(name))
                 {
@@ -58,8 +63,38 @@ namespace L2Toolkit.pages
                     throw new Exception("O arquivo de log não foi encontrado");
                 }
 
-                var fileName = $"Log_{PlayerName.Text}";
+                Encoding encoding = Encoding.GetEncoding(1252);
+                var matchedLines = new List<string>();
 
+                using (var reader = new StreamReader(fileLog, encoding))
+                {
+                    string line;
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        if (line.IndexOf(name, StringComparison.OrdinalIgnoreCase) >= 0)
+                        {
+                            if (!string.IsNullOrEmpty(optionalEvent))
+                            {
+                                if (line.IndexOf(optionalEvent, StringComparison.OrdinalIgnoreCase) >= 0)
+                                {
+                                    matchedLines.Add(line);
+                                }
+                            }
+                            else
+                            {
+                                matchedLines.Add(line);   
+                            }
+                        }
+                    }
+                }
+
+                if (matchedLines.Count == 0)
+                {
+                    throw new Exception("Nenhuma log foi encontrada");
+                }
+
+                // Só aqui mostramos o SaveFileDialog
+                var fileName = $"Log_{PlayerName.Text}";
                 var saveDialog = new SaveFileDialog
                 {
                     Title = "Salvar arquivo",
@@ -69,28 +104,15 @@ namespace L2Toolkit.pages
 
                 if (saveDialog.ShowDialog() == true)
                 {
-                    Encoding encoding = Encoding.GetEncoding(1252);
-
-                    using (var reader = new StreamReader(fileLog))
                     using (var writer = new StreamWriter(saveDialog.FileName, false, encoding))
                     {
-                        string line;
-                        bool found = false;
-
-                        while ((line = reader.ReadLine()) != null)
+                        foreach (var line in matchedLines)
                         {
-                            if (line.IndexOf(name, StringComparison.OrdinalIgnoreCase) >= 0)
-                            {
-                                writer.WriteLine(line);
-                                found = true;
-                            }
-                        }
-
-                        if (!found)
-                        {
-                            throw new Exception("Nenhuma log foi encontrada");
+                            writer.WriteLine(line);
                         }
                     }
+
+                    MessageBox.Show("Arquivo salvo com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
             catch (Exception ex)
@@ -100,7 +122,10 @@ namespace L2Toolkit.pages
             finally
             {
                 ButtonGenerate.Content = "Gerar Dados";
+                GC.Collect();
             }
         }
+        
+        
     }
 }

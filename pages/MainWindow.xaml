@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Icon="/images/favicon.ico"
-        Title="Lineage 2 Toolkit By: MK - v1.6" Height="600" Width="900"
+        Title="Lineage 2 Toolkit By: MK - v1.7" Height="700" Width="1200"
         WindowStartupLocation="CenterScreen" ResizeMode="CanResize">
     <Window.Resources>
         <Style x:Key="SidebarButtonStyle" TargetType="Button">

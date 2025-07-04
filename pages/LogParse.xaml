@@ -44,7 +44,7 @@
                 </StackPanel>
                 
                 <StackPanel Grid.Row="2" Orientation="Vertical" Margin="0 0 0 10">
-                    <TextBlock Text="Nome do Player"
+                    <TextBlock Text="Insira a Key"
                                FontSize="16"
                                FontWeight="SemiBold"
                                Margin="0,0,0,8" />
@@ -60,8 +60,26 @@
                                  IsReadOnly="False" />
                     </Border>
                 </StackPanel>
+                
+                <StackPanel Grid.Row="3" Orientation="Vertical" Margin="0 0 0 10">
+                    <TextBlock Text="Evento (Opcional)"
+                               FontSize="16"
+                               FontWeight="SemiBold"
+                               Margin="0,0,0,8" />
+                    <Border Background="White" CornerRadius="10" BorderBrush="#E0E0E0" BorderThickness="1">
+                        <TextBox x:Name="SearchEvent"
+                                 AcceptsReturn="True"
+                                 TextWrapping="Wrap"
+                                 VerticalScrollBarVisibility="Auto"
+                                 Height="40"
+                                 Padding="15,10"
+                                 BorderThickness="0"
+                                 Background="Transparent"
+                                 IsReadOnly="False" />
+                    </Border>
+                </StackPanel>
 
-                <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
+                <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
                     <Button Content="Gerar Dados"
                             Width="110"
                             x:Name="ButtonGenerate"
