@@ -5,7 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              Height="Auto" Width="Auto"
-             Background="#F5F5F5">
+             Background="White">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid Margin="30">
             <Grid.RowDefinitions>
@@ -31,7 +31,8 @@
                 <Border 
                     Background="White" 
                     CornerRadius="10" 
-                    BorderBrush="#E0E0E0"
+                    SnapsToDevicePixels="True"
+                    BorderBrush="#350B0B17"
                     BorderThickness="1">
                     <TextBox x:Name="UpgradeContent" 
                              AcceptsReturn="True" 
@@ -63,7 +64,10 @@
                 <!--     <ComboBoxItem Tag="1" Content="Lucera2"/> -->
                 <!-- </ComboBox> -->
                 
-                <ComboBox x:Name="SystemVersion" Cursor="Hand" SelectedIndex="0" Padding="8">
+                <ComboBox 
+                    x:Name="SystemVersion" 
+                    SelectedIndex="0" 
+                    Style="{DynamicResource ModernComboBoxStyle}">
                     <ComboBoxItem Tag="0" Content="Custom Upgrade"/>
                     <ComboBoxItem Tag="1" Content="Lucera2"/>
                 </ComboBox>
@@ -93,12 +97,12 @@
                           FontSize="16" 
                           FontWeight="SemiBold" 
                           Margin="0,0,0,8"/>
-                <Border Background="White" CornerRadius="10" BorderBrush="#E0E0E0" BorderThickness="1">
+                <Border Background="White" SnapsToDevicePixels="True" CornerRadius="10" BorderBrush="#350B0B17" BorderThickness="1">
                     <TextBox x:Name="UpgradeOutput" 
                              AcceptsReturn="True" 
                              TextWrapping="Wrap" 
                              VerticalScrollBarVisibility="Auto" 
-                             Height="350"
+                             Height="290"
                              Padding="15,10"
                              BorderThickness="0"
                              Background="Transparent"

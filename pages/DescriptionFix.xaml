@@ -5,7 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              Height="Auto" Width="Auto"
-             Background="#F5F5F5">
+             Background="White">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid Margin="30">
             <Grid.RowDefinitions>
@@ -81,7 +81,8 @@
                     <Border Grid.Column="0"
                             Background="White" 
                             CornerRadius="8" 
-                            BorderBrush="#E0E0E0" 
+                            SnapsToDevicePixels="True"
+                            BorderBrush="#350B0B17" 
                             BorderThickness="1">
                         <TextBox x:Name="ArquivoSelecionadoTextBox" 
                                  Padding="10,8" 

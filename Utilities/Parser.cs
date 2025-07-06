@@ -2,7 +2,7 @@
 
 namespace L2Toolkit.Utilities
 {
-    public class Parser
+    public static class Parser
     {
         public static string GetValue(string text, string start, string end)
         {

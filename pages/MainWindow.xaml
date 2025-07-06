@@ -6,58 +6,208 @@
         mc:Ignorable="d"
         Icon="/images/favicon.ico"
         Title="Lineage 2 Toolkit By: MK - v2.2" Height="700" Width="1200"
-        WindowStartupLocation="CenterScreen" ResizeMode="CanResize">
+        WindowStartupLocation="CenterScreen" ResizeMode="CanResize"
+        Background="#1E1E1E">
+    
     <Window.Resources>
+        <!-- Cores do tema -->
+        <SolidColorBrush x:Key="PrimaryColor" Color="#404040"/>
+        <SolidColorBrush x:Key="AccentColor" Color="#5B9BD5"/>
+        <SolidColorBrush x:Key="HoverColor" Color="#4A90D9"/>
+        <SolidColorBrush x:Key="ActiveColor" Color="#3A7BD5"/>
+        <SolidColorBrush x:Key="SidebarColor" Color="#323232"/>
+        <SolidColorBrush x:Key="TextColor" Color="#E8E8E8"/>
+        <SolidColorBrush x:Key="SubTextColor" Color="#B8B8B8"/>
+        
+        <!-- Estilo para os botões do menu lateral -->
         <Style x:Key="SidebarButtonStyle" TargetType="Button">
-            <Setter Property="Margin" Value="6"/>
             <Setter Property="Height" Value="40"/>
+            <Setter Property="Margin" Value="8,4"/>
+            <Setter Property="Padding" Value="16,0"/>
             <Setter Property="FontSize" Value="14"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Background" Value="#3C3F41"/>
-            <Setter Property="BorderBrush" Value="#5A5D5F"/>
-            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Foreground" Value="{StaticResource TextColor}"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="6">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                          VerticalAlignment="Center"
-                                          Margin="5,0,5,0"/>
+                        <Border x:Name="border" 
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="1"
+                                Margin="0">
+                            <Grid>
+                                <Rectangle x:Name="activeIndicator" 
+                                          Fill="{StaticResource AccentColor}"
+                                          Width="4"
+                                          HorizontalAlignment="Left"
+                                          VerticalAlignment="Stretch"
+                                          RadiusX="2"
+                                          RadiusY="2"
+                                          Margin="0,8"
+                                          Opacity="0"/>
+                                <ContentPresenter x:Name="contentPresenter"
+                                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                VerticalAlignment="Center"
+                                                Margin="{TemplateBinding Padding}"/>
+                            </Grid>
                         </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#404040"/>
+                                <Setter TargetName="activeIndicator" Property="Opacity" Value="0.8"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#4A4A4A"/>
+                                <Setter TargetName="activeIndicator" Property="Opacity" Value="1"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#505355"/>
-                    <Setter Property="BorderBrush" Value="#7A7D7F"/>
-                </Trigger>
-            </Style.Triggers>
+        </Style>
+
+        <!-- Estilo para ícones -->
+        <Style x:Key="MenuIconStyle" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Foreground" Value="{StaticResource AccentColor}"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,0,12,0"/>
+        </Style>
+
+        <!-- Estilo para o título da sidebar -->
+        <Style x:Key="SidebarTitleStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource TextColor}"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="16,16,16,8"/>
+        </Style>
+
+        <!-- Estilo para subtítulo -->
+        <Style x:Key="SidebarSubtitleStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource SubTextColor}"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Margin" Value="16,0,16,24"/>
         </Style>
     </Window.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="280"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <StackPanel Background="#2D2D30" Grid.Column="0" VerticalAlignment="Stretch">
-            <Button Content="Gerar Portas" Click="BtnDoor_Click" Style="{StaticResource SidebarButtonStyle}"/>
-            <Button Content="Animações" Click="BtnPawnData_Click" Style="{StaticResource SidebarButtonStyle}"/>
-            <Button Content="Gerenciador de Spawn" Click="BtnSpawnManager_Click" Style="{StaticResource SidebarButtonStyle}"/>
-            <Button Content="Prime Shop" Click="BtnPrimeShop_Click" Style="{StaticResource SidebarButtonStyle}"/>
-            <Button Content="Corrigir Descrição" Click="BtnDescriptionFix_Click" Style="{StaticResource SidebarButtonStyle}"/>
-            <Button Content="Missões Diárias" Click="BtnMissions_Click" Style="{StaticResource SidebarButtonStyle}"/>
-            <Button Content="Upgrade Equipment" Click="BtnUpgrade_Click" Style="{StaticResource SidebarButtonStyle}"/>
-            <Button Content="Pesquisar Ícone" Click="BtnSearchIcon_Click" Style="{StaticResource SidebarButtonStyle}"/>
-            <Button Content="Separar Logs" Click="ButtonBase_OnClick" Style="{StaticResource SidebarButtonStyle}"/>
-        </StackPanel>
+        <!-- Sidebar -->
+        <Border Grid.Column="0" Background="{StaticResource SidebarColor}">
+            <Border.Effect>
+                <DropShadowEffect Color="Black" Direction="0" ShadowDepth="2" Opacity="0.3" BlurRadius="8"/>
+            </Border.Effect>
+            
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <StackPanel>
+                    
+                    <!-- Separador -->
+                    <Rectangle Height="1" 
+                             Fill="#2D3748" 
+                             Margin="16,0,16,16"/>
 
-        <ContentControl x:Name="MainContent" Grid.Column="1" />
+                    <!-- Menu Items -->
+                    <TextBlock Text="FERRAMENTAS" 
+                             Foreground="{StaticResource SubTextColor}"
+                             FontSize="11"
+                             FontWeight="Bold"
+                             Margin="24,0,16,8"/>
+
+                    <Button Click="BtnDoor_Click" Style="{StaticResource SidebarButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE8B7;" Style="{StaticResource MenuIconStyle}"/>
+                            <TextBlock Text="Gerar Portas"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Click="BtnPawnData_Click" Style="{StaticResource SidebarButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE91B;" Style="{StaticResource MenuIconStyle}"/>
+                            <TextBlock Text="Animações"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Click="BtnSpawnManager_Click" Style="{StaticResource SidebarButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE8B8;" Style="{StaticResource MenuIconStyle}"/>
+                            <TextBlock Text="Gerenciador de Spawn"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Click="BtnPrimeShop_Click" Style="{StaticResource SidebarButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE719;" Style="{StaticResource MenuIconStyle}"/>
+                            <TextBlock Text="Prime Shop"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Click="BtnDescriptionFix_Click" Style="{StaticResource SidebarButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE70F;" Style="{StaticResource MenuIconStyle}"/>
+                            <TextBlock Text="Corrigir Descrição"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Click="BtnMissions_Click" Style="{StaticResource SidebarButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE8FD;" Style="{StaticResource MenuIconStyle}"/>
+                            <TextBlock Text="Missões Diárias"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Click="BtnUpgrade_Click" Style="{StaticResource SidebarButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE8BA;" Style="{StaticResource MenuIconStyle}"/>
+                            <TextBlock Text="Upgrade Equipment"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- Separador -->
+                    <Rectangle Height="1" 
+                             Fill="#404040" 
+                             Margin="16,16,16,8"/>
+
+                    <TextBlock Text="UTILITÁRIOS" 
+                             Foreground="{StaticResource SubTextColor}"
+                             FontSize="11"
+                             FontWeight="Bold"
+                             Margin="24,0,16,8"/>
+
+                    <Button Click="BtnSearchIcon_Click" Style="{StaticResource SidebarButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE721;" Style="{StaticResource MenuIconStyle}"/>
+                            <TextBlock Text="Pesquisar Ícone"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Click="ButtonBase_OnClick" Style="{StaticResource SidebarButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE8D7;" Style="{StaticResource MenuIconStyle}"/>
+                            <TextBlock Text="Separar Logs"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+
+        <!-- Área de conteúdo principal -->
+        <Grid Grid.Column="1" Background="#F0F0F0">
+            <Border Background="White" 
+                    Margin="0">
+                <Border.Effect>
+                    <DropShadowEffect Color="Black" Direction="180" ShadowDepth="1" Opacity="0.15" BlurRadius="10"/>
+                </Border.Effect>
+                
+                <ContentControl x:Name="MainContent" Padding="10"/>
+            </Border>
+        </Grid>
     </Grid>
 </Window>

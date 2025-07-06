@@ -5,7 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              Height="Auto" Width="Auto"
-             Background="#F5F5F5">
+             Background="White">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid Margin="30">
             <Grid.RowDefinitions>
@@ -26,7 +26,7 @@
                           FontSize="16" 
                           FontWeight="SemiBold" 
                           Margin="0,0,0,8"/>
-                <Border Background="White" CornerRadius="10" BorderBrush="#E0E0E0" BorderThickness="1">
+                <Border Background="White" CornerRadius="10" SnapsToDevicePixels="True" BorderBrush="#350B0B17" BorderThickness="1">
                     <TextBox x:Name="InputTextBox" 
                              AcceptsReturn="True" 
                              TextWrapping="Wrap" 
@@ -62,7 +62,7 @@
                           FontSize="16" 
                           FontWeight="SemiBold" 
                           Margin="0,0,0,8"/>
-                <Border Background="White" CornerRadius="10" BorderBrush="#E0E0E0" BorderThickness="1">
+                <Border Background="White" SnapsToDevicePixels="True" CornerRadius="10" BorderBrush="#350B0B17" BorderThickness="1">
                     <TextBox x:Name="OutputTextBox" 
                              AcceptsReturn="True" 
                              TextWrapping="Wrap" 

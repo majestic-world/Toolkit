@@ -3,16 +3,14 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace L2Toolkit.pages
 {
-    public partial class SpawnManager : UserControl
+    public partial class SpawnManager
     {
         public SpawnManager()
         {
             InitializeComponent();
-
             CreateSpawnsButton.Click += CreateSpawnsButton_Click;
             CopyResultButton.Click += CopyResultButton_Click;
         }
@@ -24,26 +22,32 @@ namespace L2Toolkit.pages
 
         private async void CopyResultButton_Click(object sender, RoutedEventArgs e)
         {
-            Clipboard.SetText(ResultTextBox.Text);
-            CopyBlock.Visibility = Visibility.Visible;
-            ResultTextBox.Text = "";
-            await Task.Delay(3000);
-            CopyBlock.Visibility = Visibility.Collapsed;
-            //23563;22239;23561;23448;29339;23544;23541
+            try
+            {
+                Clipboard.SetText(ResultTextBox.Text);
+                CopyBlock.Visibility = Visibility.Visible;
+                ResultTextBox.Text = "";
+                await Task.Delay(3000);
+                CopyBlock.Visibility = Visibility.Collapsed;
+            }
+            catch (Exception)
+            {
+                //ignore
+            }
         }
 
         private void ProcessSpawns()
         {
             try
             {
-                string idsText = NPCIdsTextBox.Text.Trim();
+                var idsText = NpcIdsTextBox.Text.Trim();
                 if (string.IsNullOrEmpty(idsText))
                 {
                     MessageBox.Show("Por favor, insira os IDs dos NPCs.", "Entrada inválida", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
-                string[] npcIds = idsText.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                var npcIds = idsText.Split([';'], StringSplitOptions.RemoveEmptyEntries);
 
                 if (npcIds.Length == 0)
                 {
@@ -51,15 +55,15 @@ namespace L2Toolkit.pages
                     return;
                 }
 
-                string originalSpawns = OriginalSpawnTextBox.Text;
+                var originalSpawns = OriginalSpawnTextBox.Text;
                 if (string.IsNullOrEmpty(originalSpawns))
                 {
                     MessageBox.Show("Por favor, insira os dados originais de spawn.", "Entrada inválida", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
-                int idIndex = 0;
-                string processedContent = ProcessNpcLines(originalSpawns, npcIds, ref idIndex);
+                var idIndex = 0;
+                var processedContent = ProcessNpcLines(originalSpawns, npcIds, ref idIndex);
 
                 ResultTextBox.Text = processedContent;
             }
@@ -71,23 +75,21 @@ namespace L2Toolkit.pages
 
         private string ProcessNpcLines(string content, string[] npcIds, ref int idIndex)
         {
-            StringBuilder result = new StringBuilder();
+            var result = new StringBuilder();
 
-            string[] lines = content.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
+            var lines = content.Split(["\r\n", "\n"], StringSplitOptions.None);
 
-            foreach (string line in lines)
+            foreach (var line in lines)
             {
-                string trimmedLine = line.Trim();
+                var trimmedLine = line.Trim();
 
-                if (trimmedLine.Contains("<npc id="))
-                {
-                    int currentIndex = idIndex;
-                    string newLine = Regex.Replace(line.Trim(), "id=\"([^\"]+)\"", match => $"id=\"{npcIds[currentIndex]}\"");
+                if (!trimmedLine.Contains("<npc id=")) continue;
+                var currentIndex = idIndex;
+                var newLine = Regex.Replace(line.Trim(), "id=\"([^\"]+)\"", _ => $"id=\"{npcIds[currentIndex]}\"");
 
-                    result.AppendLine(newLine);
+                result.AppendLine(newLine);
 
-                    idIndex = (idIndex + 1) % npcIds.Length;
-                }
+                idIndex = (idIndex + 1) % npcIds.Length;
             }
 
             return result.ToString().TrimEnd();
