@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -110,7 +111,7 @@ namespace L2Toolkit.pages
                 arrayData.Add(new UpgradeLucera(upgradeId, upgradeItem, materialItems, commission, resultItem));
             }
             
-            const string model = "upgradesystem_begin\tupgrade_id={id}\tupgrade_item={{required}}\tmaterial_items={{{materials}}}\tcommission={commission}\tresult_item={{result}}\tapplycountry={all}\tupgradesystem_end";
+            const string model = "upgradesystem_begin\tupgrade_id={id}\tupgrade_item={{required}}\tmaterial_items={{materials}}\tcommission={commission}\tresult_item={{result}}\tapplycountry={all}\tupgradesystem_end";
 
             var build = new StringBuilder();
             
@@ -119,7 +120,12 @@ namespace L2Toolkit.pages
                 var current = model;
                 current = current.Replace("{id}", data.UpgradeId);
                 current = current.Replace("{required}", data.UpgradeItem);
-                current = current.Replace("{materials}", data.Materials);
+                
+                var splitMaterials = data.Materials.Split(',');
+                var listForJoinMaterials = splitMaterials.Select(material => $"{{{material}}}").ToList();
+                var listMaterials = string.Join(";", listForJoinMaterials);
+                
+                current = current.Replace("{materials}", listMaterials);
                 current = current.Replace("{commission}", data.Commission);
                 current = current.Replace("{result}", data.ResultItem);
                 build.AppendLine(current);
