@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -65,36 +65,38 @@ public partial class LogParse : UserControl
         string optionalEvent,
         Encoding encoding)
     {
-        var matchedLines = new ConcurrentQueue<string>();
+        var playerLogs = new ConcurrentQueue<string>();
 
         var lines = File.ReadLines(fileLog, encoding);
 
         Parallel.ForEach(lines, line =>
         {
-            if (ContainsValue(line, name))
+            const string pattern = @"\[\d{2}\.\d{2}\.\d{2} \d{2}:\d{2}:\d{2}\]\s*";
+            var withoutDate = Regex.Replace(line, pattern, string.Empty);
+            var parse = withoutDate.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+            if (parse.Length < 2)
+                return;
+
+            var eventName = parse[0];
+            var playerKey = parse[1];
+
+            if (!ContainsValue(playerKey, name))
+                return;
+
+            if (string.IsNullOrEmpty(optionalEvent) || ContainsValue(eventName, optionalEvent))
             {
-                if (!string.IsNullOrEmpty(optionalEvent))
-                {
-                    if (ContainsValue(line, optionalEvent))
-                    {
-                        matchedLines.Enqueue(line);
-                    }
-                }
-                else
-                {
-                    matchedLines.Enqueue(line);
-                }
+                playerLogs.Enqueue(line);
             }
         });
 
-        return matchedLines;
+        return playerLogs;
     }
 
     private async void RewardGenerate_OnClick(object sender, RoutedEventArgs e)
     {
         try
         {
-            // pegar dados da UI aqui!
             var name = PlayerName.Text;
             var fileLog = LogFile.Text;
             var optionalEvent = SearchEvent.Text;
@@ -117,7 +119,7 @@ public partial class LogParse : UserControl
             {
                 throw new Exception("Selecione o arquivo de log");
             }
-            
+
             ButtonGenerate.Content = "Processando...";
 
             var matchedLines = await Task.Run(() =>
@@ -137,12 +139,12 @@ public partial class LogParse : UserControl
             {
                 fileName += $"-{optionalEvent}";
             }
-            
+
             var date = DateTime.Now;
             var dateString = date.ToString("dd-MM-yyyy");
-            
+
             fileName += $"-{dateString}.log";
-            
+
             var saveFileDir = Path.Combine(outputDir, fileName);
 
             await File.WriteAllLinesAsync(saveFileDir, matchedLines, encoding);
