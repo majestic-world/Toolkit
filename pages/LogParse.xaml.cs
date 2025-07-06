@@ -73,7 +73,14 @@ public partial class LogParse : UserControl
         {
             if (ContainsValue(line, name))
             {
-                if (string.IsNullOrEmpty(optionalEvent) || ContainsValue(line, optionalEvent))
+                if (!string.IsNullOrEmpty(optionalEvent))
+                {
+                    if (ContainsValue(line, optionalEvent))
+                    {
+                        matchedLines.Enqueue(line);
+                    }
+                }
+                else
                 {
                     matchedLines.Enqueue(line);
                 }
