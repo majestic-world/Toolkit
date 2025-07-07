@@ -15,11 +15,16 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <TextBlock Grid.Row="0" 
-                       Text="Gerador de portas em XML" 
-                       FontSize="20" 
-                       FontWeight="Bold"
-                       Margin="0,0,0,20"/>
+            <StackPanel Grid.Row="0" Margin="0 0 0 16">
+                <TextBlock Text="Gerador de portas" 
+                           FontSize="32" 
+                           FontWeight="Light"
+                           Foreground="#1F2937"
+                           Margin="0,0,0,2"/>
+                <TextBlock Text="Converte dados do UnrealEd em XML" 
+                           FontSize="16" 
+                           Foreground="#6B7280"/>
+            </StackPanel>
 
             <StackPanel Grid.Row="1" Orientation="Vertical" Margin="0,0,0,20">
                 <TextBlock Text="Cole o conteúdo do modelo da porta abaixo:" 

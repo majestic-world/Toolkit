@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Icon="/images/favicon.ico"
-        Title="Lineage 2 Toolkit By: MK - v2.2" Height="700" Width="1200"
+        Title="Lineage 2 Toolkit By: MK - v2.3" Height="735" Width="1200"
         WindowStartupLocation="CenterScreen" ResizeMode="CanResize"
         Background="#1E1E1E">
     
@@ -170,16 +170,11 @@
                         </StackPanel>
                     </Button>
 
-                    <!-- Separador -->
-                    <Rectangle Height="1" 
-                             Fill="#404040" 
-                             Margin="16,16,16,8"/>
-
                     <TextBlock Text="UTILITÁRIOS" 
                              Foreground="{StaticResource SubTextColor}"
                              FontSize="11"
                              FontWeight="Bold"
-                             Margin="24,0,16,8"/>
+                             Margin="24,10,16,8"/>
 
                     <Button Click="BtnSearchIcon_Click" Style="{StaticResource SidebarButtonStyle}">
                         <StackPanel Orientation="Horizontal">

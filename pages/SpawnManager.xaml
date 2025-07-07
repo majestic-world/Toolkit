@@ -17,11 +17,16 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <TextBlock Grid.Row="0" 
-                       Text="Gerenciador de Spawns" 
-                       FontSize="20" 
-                       FontWeight="Bold"
-                       Margin="0,0,0,20"/>
+            <StackPanel Grid.Row="0" Margin="0 0 0 16">
+                <TextBlock Text="Criação de lista de Spawn" 
+                           FontSize="32" 
+                           FontWeight="Light"
+                           Foreground="#1F2937"
+                           Margin="0,0,0,2"/>
+                <TextBlock Text="Use dados do terminar para criar XML" 
+                           FontSize="16" 
+                           Foreground="#6B7280"/>
+            </StackPanel>
 
             <StackPanel Grid.Row="1" Orientation="Vertical" Margin="0,0,0,15">
                 <TextBlock Text="IDs dos NPCs (separados por ponto e vírgula):" 

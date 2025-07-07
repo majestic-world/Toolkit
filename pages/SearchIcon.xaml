@@ -24,11 +24,15 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <StackPanel Grid.Row="0" Margin="0 0 0 10">
-                <TextBlock
-                    FontWeight="SemiBold"
-                    FontSize="16"
-                    Text="Pesquisar de Ícone" />
+            <StackPanel Grid.Row="0" Margin="0 0 0 16">
+                <TextBlock Text="Pesquisa por ícone" 
+                           FontSize="32" 
+                           FontWeight="Light"
+                           Foreground="#1F2937"
+                           Margin="0,0,0,2"/>
+                <TextBlock Text="Pesquisa do ícone do item pelo Id" 
+                           FontSize="16" 
+                           Foreground="#6B7280"/>
             </StackPanel>
 
             <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Stretch">
