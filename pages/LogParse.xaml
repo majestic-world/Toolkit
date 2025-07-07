@@ -15,14 +15,20 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <TextBlock Grid.Row="0"
-                           Text="Separar logs por nome"
-                           FontSize="20"
-                           FontWeight="Bold"
-                           Margin="0,0,0,20" />
+                <StackPanel Grid.Row="0" Margin="0 0 0 16">
+                    <TextBlock Text="Separador de Logs" 
+                               FontSize="32" 
+                               FontWeight="Light"
+                               Foreground="#1F2937"
+                               Margin="0,0,0,2"/>
+                    <TextBlock Text="Ideal para melhor analise de dados" 
+                               FontSize="16" 
+                               Foreground="#6B7280"/>
+                </StackPanel>
 
                 <StackPanel Grid.Row="1" Orientation="Vertical" Margin="0,0,0,10">
                     <TextBlock Text="Selecione o arquivo de log"
@@ -99,8 +105,28 @@
                                  IsReadOnly="False" />
                     </Border>
                 </StackPanel>
+                
+                <StackPanel Grid.Row="5" Orientation="Vertical" Margin="0 0 0 10">
+                    <TextBlock Text="Logs de processamento"
+                               FontSize="16"
+                               FontWeight="SemiBold"
+                               Margin="0,0,0,8" />
+                    <Border Background="White" CornerRadius="10" BorderBrush="#E0E0E0" BorderThickness="1">
+                        <TextBox x:Name="LogContent"
+                                 AcceptsReturn="True"
+                                 TextWrapping="Wrap"
+                                 FontSize="16"
+                                 Foreground="#515151"
+                                 VerticalScrollBarVisibility="Auto"
+                                 Height="125"
+                                 Padding="15,10"
+                                 BorderThickness="0"
+                                 Background="Transparent"
+                                 IsReadOnly="True" />
+                    </Border>
+                </StackPanel>
 
-                <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
+                <StackPanel Grid.Row="6" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
                     <Button Content="Gerar Dados"
                             Width="110"
                             x:Name="ButtonGenerate"

@@ -1,19 +1,24 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using L2Toolkit.database;
 using Microsoft.Win32;
 
 namespace L2Toolkit.pages;
 
-public partial class LogParse : UserControl
+public partial class LogParse
 {
+    private readonly Queue<string> _logQueue = new();
+    private readonly object _logLock = new();
+    private int _totalLogs;
+
     public LogParse()
     {
         InitializeComponent();
@@ -29,6 +34,18 @@ public partial class LogParse : UserControl
         if (!string.IsNullOrEmpty(lastLogFile))
         {
             LogFile.Text = lastLogFile;
+        }
+    }
+
+    private void AddLog(string log)
+    {
+        lock (_logLock)
+        {
+            _logQueue.Enqueue($"[{DateTime.Now:HH:mm:ss}] {log}");
+            if (_logQueue.Count > 100)
+                _logQueue.Dequeue();
+
+            LogContent.Text = string.Join("\n", _logQueue);
         }
     }
 
@@ -68,12 +85,16 @@ public partial class LogParse : UserControl
         var playerLogs = new ConcurrentQueue<string>();
 
         var lines = File.ReadLines(fileLog, encoding);
+        
+        const string pattern = @"\[\d{2}\.\d{2}\.\d{2} \d{2}:\d{2}:\d{2}\]\s*";
+        var regex = new Regex(pattern, RegexOptions.Compiled);
 
         Parallel.ForEach(lines, line =>
         {
-            const string pattern = @"\[\d{2}\.\d{2}\.\d{2} \d{2}:\d{2}:\d{2}\]\s*";
-            var withoutDate = Regex.Replace(line, pattern, string.Empty);
+            var withoutDate = regex.Replace(line, string.Empty);
             var parse = withoutDate.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            
+            Interlocked.Increment(ref _totalLogs);
 
             if (parse.Length < 2)
                 return;
@@ -120,6 +141,8 @@ public partial class LogParse : UserControl
                 throw new Exception("Selecione o arquivo de log");
             }
 
+            _logQueue.Clear();
+            AddLog("Iniciando o processo...");
             ButtonGenerate.Content = "Processando...";
 
             var matchedLines = await Task.Run(() =>
@@ -127,13 +150,16 @@ public partial class LogParse : UserControl
 
             if (matchedLines.Count == 0)
             {
-                MessageBox.Show(
-                    "Nenhuma log foi encontrada",
-                    "Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                AddLog($"Total de logs: {_totalLogs:N0}");
+                AddLog($"Nenhum log encontrado para a key {name}");
+                _totalLogs = 0;
                 return;
             }
+
+            AddLog($"Logs encontrados: {matchedLines.Count:N0}");
+            AddLog($"Total de logs: {_totalLogs:N0}");
+            
+            _totalLogs = 0;
 
             if (!string.IsNullOrEmpty(optionalEvent))
             {
@@ -141,14 +167,17 @@ public partial class LogParse : UserControl
             }
 
             var date = DateTime.Now;
-            var dateString = date.ToString("dd-MM-yyyy");
+            var dateString = date.ToString("dd-MM");
 
             fileName += $"-{dateString}.log";
+
+            fileName = fileName.ToLower();
 
             var saveFileDir = Path.Combine(outputDir, fileName);
 
             await File.WriteAllLinesAsync(saveFileDir, matchedLines, encoding);
-            MessageBox.Show("Arquivo salvo com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            AddLog($"Pronto, o arquivo {fileName} foi criado com sucesso");
         }
         catch (Exception ex)
         {
