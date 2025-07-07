@@ -173,7 +173,7 @@
                     <Button Click="ButtonSkills_OnClick" Style="{StaticResource SidebarButtonStyle}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="&#xE8B1;" Style="{StaticResource MenuIconStyle}"/>
-                            <TextBlock Text="Modificar Skills"/>
+                            <TextBlock Text="Enchant Skill (GF)"/>
                         </StackPanel>
                     </Button>
 

@@ -16,7 +16,7 @@ public class GlobalLogs
         lock (_locker)
         {
             _logQueue.Enqueue($"[{DateTime.Now:hh:mm:ss}] {log}");
-            if (_logQueue.Count > 50)
+            if (_logQueue.Count > 120)
                 _logQueue.Dequeue();
 
             UpdateTextBlock();
