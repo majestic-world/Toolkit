@@ -1,0 +1,100 @@
+﻿<UserControl x:Class="L2Toolkit.pages.SkillsModify"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             Height="Auto" Width="Auto"
+             Background="White">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="30">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+            <StackPanel Grid.Row="0" Margin="0 0 0 16">
+                <TextBlock Text="Modificar Skills" 
+                           FontSize="32" 
+                           FontWeight="Light"
+                           Foreground="#1F2937"
+                           Margin="0,0,0,2"/>
+                <TextBlock Text="..." 
+                           FontSize="16" 
+                           Foreground="#6B7280"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="1" Orientation="Vertical" Margin="0,0,0,20">
+                <TextBlock Text="Selecione a pasta de skills" 
+                          FontSize="16" 
+                          FontWeight="SemiBold" 
+                          Margin="0,0,0,8"/>
+                <Border Background="White" CornerRadius="10" BorderBrush="#E0E0E0" BorderThickness="1">
+                    <TextBox x:Name="FolderSkills" 
+                             AcceptsReturn="True" 
+                             IsReadOnly="True"
+                             TextWrapping="NoWrap" 
+                             PreviewMouseDown="RewardContent_OnPreviewMouseDown"
+                             VerticalScrollBarVisibility="Disabled" 
+                             Height="40"
+                             Cursor="Hand"
+                             Padding="15,10"
+                             BorderThickness="0"
+                             Background="Transparent"/>
+                </Border>
+            </StackPanel>
+
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
+                <Button x:Name="RewardGenerate" 
+                        Content="Gerar Dados" 
+                        Width="110" 
+                        Click="RewardGenerate_OnClick"
+                        Height="40"
+                        FontSize="14" 
+                        Style="{StaticResource PrimaryButton}"
+                        Margin="0,0,10,0">
+                </Button>
+                
+                <Button x:Name="RewardCopy" 
+                        Content="Copiar Dados" 
+                        Width="110" 
+                        Height="40"
+                        Style="{StaticResource SecondaryButton}"
+                        FontSize="14">
+                </Button>
+            </StackPanel>
+
+            <StackPanel Grid.Row="3" Orientation="Vertical">
+                <TextBlock Text="Dados de processamento" 
+                          FontSize="16" 
+                          FontWeight="SemiBold" 
+                          Margin="0,0,0,8"/>
+                <Border Background="White" CornerRadius="10" BorderBrush="#E0E0E0" BorderThickness="1">
+                    <TextBox x:Name="LogContent" 
+                             AcceptsReturn="True" 
+                             TextWrapping="Wrap" 
+                             VerticalScrollBarVisibility="Auto" 
+                             Height="320"
+                             Padding="15,10"
+                             BorderThickness="0"
+                             Background="Transparent"
+                             IsReadOnly="True"/>
+                </Border>
+            </StackPanel>
+            
+            <StackPanel Grid.Row="4">
+                <TextBlock
+                    Visibility="Collapsed"
+                    x:Name="CopyBlock"
+                    Height="auto"
+                    Margin="0 3"
+                    Foreground="Green"
+                    FontWeight="SemiBold"
+                    Text="✓ Copiado com sucesso!"/>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</UserControl> 
