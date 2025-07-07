@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -176,8 +177,16 @@ public partial class LogParse
             var saveFileDir = Path.Combine(outputDir, fileName);
 
             await File.WriteAllLinesAsync(saveFileDir, matchedLines, encoding);
-
             AddLog($"Pronto, o arquivo {fileName} foi criado com sucesso");
+            
+            if (File.Exists(saveFileDir))
+            {
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = saveFileDir,
+                    UseShellExecute = true
+                });
+            }
         }
         catch (Exception ex)
         {

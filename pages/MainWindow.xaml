@@ -169,6 +169,13 @@
                             <TextBlock Text="Upgrade Equipment"/>
                         </StackPanel>
                     </Button>
+                    
+                    <Button Click="ButtonSkills_OnClick" Style="{StaticResource SidebarButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE8B1;" Style="{StaticResource MenuIconStyle}"/>
+                            <TextBlock Text="Modificar Skills"/>
+                        </StackPanel>
+                    </Button>
 
                     <TextBlock Text="UTILITÁRIOS" 
                              Foreground="{StaticResource SubTextColor}"
@@ -185,7 +192,7 @@
 
                     <Button Click="ButtonBase_OnClick" Style="{StaticResource SidebarButtonStyle}">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="&#xE8D7;" Style="{StaticResource MenuIconStyle}"/>
+                            <TextBlock Text="&#xE9F3;" Style="{StaticResource MenuIconStyle}"/>
                             <TextBlock Text="Separar Logs"/>
                         </StackPanel>
                     </Button>

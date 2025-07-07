@@ -58,5 +58,10 @@ namespace L2Toolkit
         {
             MainContent.Content = new LogParse();
         }
+
+        private void ButtonSkills_OnClick(object sender, RoutedEventArgs e)
+        {
+            MainContent.Content = new SkillsModify();
+        }
     }
 }
