@@ -18,7 +18,7 @@
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0" Margin="0 0 0 16">
-                <TextBlock Text="Enchant Skill GF"
+                <TextBlock Text="Enchant Skill Giran Forge"
                            FontSize="32"
                            FontWeight="Light"
                            Foreground="#1F2937"

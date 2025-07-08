@@ -137,7 +137,7 @@
                                     CornerRadius="6"
                                     Background="White">
                                 <ComboBox
-                                    SelectedIndex="3"
+                                    SelectedIndex="0"
                                     x:Name="TypeProcess"
                                     Style="{DynamicResource ModernComboBoxStyle}">
                                     <ComboBoxItem>Skills</ComboBoxItem>
