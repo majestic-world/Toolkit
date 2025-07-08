@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Icon="/images/favicon.ico"
-        Title="Lineage 2 Toolkit By: MK - v2.3" Height="735" Width="1200"
+        Title="Lineage 2 Toolkit By: MK - v2.4" Height="735" Width="1200"
         WindowStartupLocation="CenterScreen" ResizeMode="CanResize"
         Background="#1E1E1E">
     
@@ -167,6 +167,13 @@
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="&#xE8BA;" Style="{StaticResource MenuIconStyle}"/>
                             <TextBlock Text="Upgrade Equipment"/>
+                        </StackPanel>
+                    </Button>
+                    
+                    <Button Click="ButtonLiveMode_OnClick" Style="{StaticResource SidebarButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE7F1;" Style="{StaticResource MenuIconStyle}"/>
+                            <TextBlock Text="Modo Live Data (166)"/>
                         </StackPanel>
                     </Button>
                     

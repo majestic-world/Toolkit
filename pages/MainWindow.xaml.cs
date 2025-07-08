@@ -63,5 +63,10 @@ namespace L2Toolkit
         {
             MainContent.Content = new SkillsModify();
         }
+
+        private void ButtonLiveMode_OnClick(object sender, RoutedEventArgs e)
+        {
+            MainContent.Content = new LiveData();
+        }
     }
 }
