@@ -1,8 +1,3 @@
----
-title: L2Toolkit
-description: Conjunto de ferramentas para desenvolvedores de servidores Lineage 2
----
-
 # L2Toolkit
 
 Um conjunto de ferramentas para desenvolvedores de servidores Lineage 2, desenvolvido em C# com WPF.
