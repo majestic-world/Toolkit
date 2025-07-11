@@ -64,6 +64,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
@@ -200,6 +201,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="16" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
                 <!-- Cliente -->
@@ -286,8 +288,50 @@
                                Visibility="Collapsed" />
                 </StackPanel>
 
-                <!-- Logs -->
+               
                 <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3">
+                    <Grid Margin="0,0,0,15">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Dados XML"
+                                   FontSize="16"
+                                   FontWeight="Medium"
+                                   Foreground="{StaticResource TextPrimary}"
+                                   VerticalAlignment="Center" />
+                        <Button x:Name="CopyXml"
+                                Grid.Column="1"
+                                Content="Copiar"
+                                Style="{StaticResource CleanCopyButtonStyle}" />
+                    </Grid>
+                    <Border Background="{StaticResource BackgroundGray}"
+                            BorderBrush="{StaticResource BorderColor}"
+                            BorderThickness="1"
+                            Margin="0,0,0,20"
+                            CornerRadius="6">
+                        <TextBox x:Name="XmlData"
+                                 AcceptsReturn="True"
+                                 TextWrapping="Wrap"
+                                 VerticalScrollBarVisibility="Auto"
+                                 Height="200"
+                                 FontFamily="Consolas"
+                                 FontSize="12"
+                                 Padding="16"
+                                 BorderThickness="0"
+                                 Background="Transparent"
+                                 IsReadOnly="True" />
+                    </Border>
+                    <TextBlock x:Name="XmlCopied"
+                               Text="✓ Copiado!"
+                               Foreground="{StaticResource SuccessColor}"
+                               FontSize="12"
+                               Margin="0,4,0,0"
+                               Visibility="Collapsed" />
+                </StackPanel>
+                
+                <!-- Logs -->
+                <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3">
                     <Grid Margin="0,0,0,8">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
@@ -326,6 +370,7 @@
                                Margin="0,4,0,0"
                                Visibility="Collapsed" />
                 </StackPanel>
+                
             </Grid>
         </Grid>
     </ScrollViewer>

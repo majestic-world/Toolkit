@@ -6,7 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Xml.Linq;
 using L2Toolkit.database;
+using L2Toolkit.DataMap;
+using L2Toolkit.ProcessData;
 using L2Toolkit.Utilities;
 using Microsoft.Win32;
 
@@ -20,6 +23,7 @@ public partial class LiveData
     private const string WeaponsGrp = "Weapongrp.txt";
     private const string ArmorGrp = "Armorgrp.txt";
     private const string ItemsGrp = "EtcItemgrp.txt";
+    private const string ItemStatus = "ItemStatData.txt";
 
     private const string InvalidData = "Dados de parse inválidos!";
 
@@ -27,6 +31,7 @@ public partial class LiveData
     private readonly GlobalLogs _log = new();
 
     private readonly ConcurrentDictionary<string, string> _itemsName = new();
+    private readonly ConcurrentDictionary<string, ItemStatus> _itemsStatus = new();
 
     public LiveData()
     {
@@ -38,6 +43,43 @@ public partial class LiveData
             ClientFolder.Text = lastLiveFolder;
         }
     }
+
+
+    private async Task CreateStatusData()
+    {
+        if (string.IsNullOrEmpty(_folderPath))
+            throw new NullReferenceException(InvalidData);
+
+        var pathFile = Path.Combine(_folderPath, ItemStatus);
+        if (!File.Exists(pathFile))
+            throw new FileNotFoundException($"O arquivo {pathFile} não foi localizado.");
+
+        _log.AddLog("Recuperando status do equipamento...");
+
+        using var render = new StreamReader(pathFile);
+        while (!render.EndOfStream)
+        {
+            var line = await render.ReadLineAsync();
+            if (line == null) continue;
+
+            var id = Parser.GetValue(line, "object_id=", "\t");
+
+            var parse = line.Split("\t");
+
+            var pDefense = parse[2].Replace("pDefense=", string.Empty);
+            var mDefense = parse[3].Replace("mDefense=", string.Empty);
+            var pAttack = parse[4].Replace("pAttack=", string.Empty);
+            var mAttack = parse[5].Replace("mAttack=", string.Empty);
+            
+            _itemsStatus.TryAdd(id, new ItemStatus(id, pDefense, mDefense, pAttack, mAttack));
+        }
+
+        if (!_itemsStatus.IsEmpty)
+        {
+            _log.AddLog($"Pronto, status recuperado, total de {_itemsStatus.Count:N0}");
+        }
+    }
+
 
     private void ClientFolder_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
     {
@@ -314,6 +356,124 @@ public partial class LiveData
 
     #region ProcessArmors
 
+    private async Task ProcessXmlArmors(List<string> recoveryArmors)
+    {
+        if (_itemsStatus.IsEmpty)
+        {
+            _log.AddLog("Carregando status de itens");
+            await CreateStatusData();
+        }
+        
+        var root = new XElement("list");
+        
+        foreach (var armor in recoveryArmors)
+        {
+            var crystal = Parser.GetValue(armor, "crystal_type=", "\t");
+            var body = Parser.GetValue(armor, "body_part=", "\t");
+            var id = Parser.GetValue(armor, "object_id=", "\t");
+            
+            
+            var armorType = Parser.GetValue(armor, "armor_type=", "\t").ToUpper();
+            var (crystalType, crystalCout) = XmlDataParse.GetCrystal(crystal);
+            var icon = Parser.GetValue(armor, "icon={[", "];");
+            var bodyPart = XmlDataParse.GetPartyBody(body);
+            var weight = Parser.GetValue(armor, "weight=", "\t");
+            
+            _itemsName.TryGetValue(id, out var name);
+            var itemName = "";
+            if (!string.IsNullOrEmpty(name))
+            {
+                itemName = Parser.GetValue(name, "name=[", "]");
+            }
+            
+            var armorElement = new XElement("armor");
+            
+            armorElement.Add(new XAttribute("id", id));
+            armorElement.Add(new XAttribute("name", itemName));
+
+            if (!string.IsNullOrEmpty(crystalCout))
+            {
+                armorElement.Add(new XElement("set",
+                    new XAttribute("name", "crystal_count"),
+                    new XAttribute("value", crystalCout)
+                ));
+            }
+            
+            armorElement.Add(new XElement("set",
+                new XAttribute("name", "crystal_type"),
+                new XAttribute("value", crystalType)
+            ));
+
+            armorElement.Add(new XElement("set",
+                new XAttribute("name", "crystallizable"),
+                new XAttribute("value", "true")
+            ));
+            
+            armorElement.Add(new XElement("set",
+                new XAttribute("name", "icon"),
+                new XAttribute("value", icon)
+            ));
+            
+            armorElement.Add(new XElement("set",
+                new XAttribute("name", "price"),
+                new XAttribute("value", "35000000")
+            ));
+            
+            armorElement.Add(new XElement("set",
+                new XAttribute("name", "type"),
+                new XAttribute("value", armorType)
+            ));  
+            
+            armorElement.Add(new XElement("set",
+                new XAttribute("name", "weight"),
+                new XAttribute("value", weight)
+            ));
+            
+            
+            var splitSlot = bodyPart.Split(';');
+            var equip = new XElement("equip");
+            foreach (var slot in splitSlot)
+            {
+                equip.Add(new XElement("slot", new XAttribute("id", slot)));   
+            }
+            
+            armorElement.Add(equip);
+
+            var forData = new XElement("for");
+            
+            _itemsStatus.TryGetValue(id, out var status);
+            if (status?.PDefense != "0" && !string.IsNullOrEmpty(status?.PDefense))
+            {
+                forData.Add(new XElement("add", 
+                    new XAttribute("stat", "pDef"), 
+                    new XAttribute("order", "0x10"),
+                    new XAttribute("value", status.PDefense)));
+            }
+            
+            if (status?.MDefense != "0" && !string.IsNullOrEmpty(status?.MDefense))
+            {
+                forData.Add(new XElement("add", 
+                    new XAttribute("stat", "mDef"), 
+                    new XAttribute("order", "0x10"),
+                    new XAttribute("value", status.MDefense)));
+            }
+            
+            var enchantData = XmlDataParse.GetEnchantData(body);
+            if (enchantData != null)
+            {
+                forData.Add(enchantData);
+            }
+            
+            armorElement.Add(forData);
+
+            root.Add(armorElement);
+            
+            Console.WriteLine(weight);
+        }
+        
+        XmlData.Text =  root.ToString();
+    }
+
     private async Task ProcessArmors(string ids)
     {
         if (_itemsName.IsEmpty)
@@ -343,6 +503,8 @@ public partial class LiveData
         var successId = 0;
         var successName = 0;
 
+        var recoveryArmors = new List<string>();
+
         using var render = new StreamReader(armorFile);
         while (!render.EndOfStream)
         {
@@ -356,6 +518,7 @@ public partial class LiveData
 
             successId++;
             itemGrpBuild.AppendLine(line);
+            recoveryArmors.Add(line);
             _itemsName.TryGetValue(id, out var name);
             if (!string.IsNullOrEmpty(name))
             {
@@ -375,6 +538,10 @@ public partial class LiveData
 
         _log.AddLog($"Dados GRP recuperados: {successId}");
         _log.AddLog($"Dados de nomes recuperados: {successName}");
+        _log.AddLog("Gerando xml das armaduras...");
+
+        await ProcessXmlArmors(recoveryArmors);
+
         _log.AddLog("Pronto, os dados foram processados!");
 
         itemGrpBuild.Clear();
