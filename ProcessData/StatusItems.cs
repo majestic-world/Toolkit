@@ -3,14 +3,13 @@ using L2Toolkit.DataMap;
 
 namespace L2Toolkit.ProcessData;
 
-public class StatusItems
+public static class StatusItems
 {
     public static CompleteStatusItems GetStausByLine(string line)
     {
         var parts = line.Split('\t');
         var data = new Dictionary<string, string>();
         
-        // Parse cada parte da linha
         foreach (var part in parts)
         {
             if (!part.Contains('=')) continue;

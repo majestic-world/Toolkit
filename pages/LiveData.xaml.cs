@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Xml.Linq;
 using L2Toolkit.database;
@@ -31,7 +32,7 @@ public partial class LiveData
     private readonly GlobalLogs _log = new();
 
     private readonly ConcurrentDictionary<string, string> _itemsName = new();
-    private readonly ConcurrentDictionary<string, ItemStatus> _itemsStatus = new();
+    private readonly ConcurrentDictionary<string, CompleteStatusItems> _itemsStatus = new();
 
     public LiveData()
     {
@@ -61,17 +62,11 @@ public partial class LiveData
         {
             var line = await render.ReadLineAsync();
             if (line == null) continue;
-
-            var id = Parser.GetValue(line, "object_id=", "\t");
-
-            var parse = line.Split("\t");
-
-            var pDefense = parse[2].Replace("pDefense=", string.Empty);
-            var mDefense = parse[3].Replace("mDefense=", string.Empty);
-            var pAttack = parse[4].Replace("pAttack=", string.Empty);
-            var mAttack = parse[5].Replace("mAttack=", string.Empty);
-            
-            _itemsStatus.TryAdd(id, new ItemStatus(id, pDefense, mDefense, pAttack, mAttack));
+            var status = StatusItems.GetStausByLine(line);
+            if (status.Id != "0")
+            {
+                _itemsStatus.TryAdd(status.Id, status);   
+            }
         }
 
         if (!_itemsStatus.IsEmpty)
@@ -467,8 +462,6 @@ public partial class LiveData
             armorElement.Add(forData);
 
             root.Add(armorElement);
-            
-            Console.WriteLine(weight);
         }
         
         XmlData.Text =  root.ToString();
@@ -638,6 +631,7 @@ public partial class LiveData
 
             ClientTextBox.Text = "";
             NameData.Text = "";
+            XmlData.Text = "";
 
             _folderPath = folder;
 
@@ -685,5 +679,35 @@ public partial class LiveData
         NameCopyContent.Visibility = Visibility.Visible;
         await Task.Delay(3000);
         NameCopyContent.Visibility = Visibility.Collapsed;
+    }
+
+    private void TypeProcess_OnDropDownClosed(object sender, EventArgs e)
+    {
+        var textBox = TypeProcess.Text;
+        if (!string.IsNullOrEmpty(textBox) && textBox == "Armor")
+        {
+            StackPanelXml.Visibility =  Visibility.Visible;
+        }
+        else
+        {
+            StackPanelXml.Visibility =  Visibility.Collapsed;
+        }
+    }
+
+    private async void CopyXml_OnClick(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            var text = XmlData.Text;
+            if (string.IsNullOrEmpty(text)) return;
+            Clipboard.SetText(text);
+            XmlCopied.Visibility = Visibility.Visible;
+            await Task.Delay(3000);
+            XmlCopied.Visibility = Visibility.Collapsed;
+        }
+        catch (Exception)
+        {
+            //ignore
+        }
     }
 }

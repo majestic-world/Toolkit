@@ -138,7 +138,8 @@
                                     CornerRadius="6"
                                     Background="White">
                                 <ComboBox
-                                    SelectedIndex="0"
+                                    DropDownClosed="TypeProcess_OnDropDownClosed"
+                                    SelectedIndex="2"
                                     x:Name="TypeProcess"
                                     Style="{DynamicResource ModernComboBoxStyle}">
                                     <ComboBoxItem>Skills</ComboBoxItem>
@@ -165,6 +166,7 @@
                                 Padding="1"
                                 BorderBrush="{DynamicResource TextBoxBorder}">
                                 <TextBox x:Name="ProcessClientId"
+                                         Text="13436"
                                          BorderThickness="0"
                                          Style="{StaticResource CleanTextBoxStyle}" />
                             </Border>
@@ -287,9 +289,8 @@
                                Margin="0,4,0,0"
                                Visibility="Collapsed" />
                 </StackPanel>
-
                
-                <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3">
+                <StackPanel Margin="0 0 0 10" x:Name="StackPanelXml" Visibility="Visible" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3">
                     <Grid Margin="0,0,0,15">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
@@ -301,6 +302,7 @@
                                    Foreground="{StaticResource TextPrimary}"
                                    VerticalAlignment="Center" />
                         <Button x:Name="CopyXml"
+                                Click="CopyXml_OnClick"
                                 Grid.Column="1"
                                 Content="Copiar"
                                 Style="{StaticResource CleanCopyButtonStyle}" />
@@ -308,7 +310,7 @@
                     <Border Background="{StaticResource BackgroundGray}"
                             BorderBrush="{StaticResource BorderColor}"
                             BorderThickness="1"
-                            Margin="0,0,0,20"
+                            Margin="0,0,0,6"
                             CornerRadius="6">
                         <TextBox x:Name="XmlData"
                                  AcceptsReturn="True"
@@ -326,7 +328,6 @@
                                Text="✓ Copiado!"
                                Foreground="{StaticResource SuccessColor}"
                                FontSize="12"
-                               Margin="0,4,0,0"
                                Visibility="Collapsed" />
                 </StackPanel>
                 

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Icon="/images/favicon.ico"
-        Title="Lineage 2 Toolkit By: MK - v2.4" Height="735" Width="1200"
+        Title="Lineage 2 Toolkit By: MK - v2.5" Height="735" Width="1200"
         WindowStartupLocation="CenterScreen" ResizeMode="CanResize"
         Background="#1E1E1E">
     

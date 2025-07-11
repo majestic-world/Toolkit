@@ -2,7 +2,7 @@
 
 namespace L2Toolkit.ProcessData;
 
-public class XmlDataParse
+public static class XmlDataParse
 {
     public static (string type, string crystal) GetCrystal(string crystal)
     {
