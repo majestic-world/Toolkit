@@ -386,7 +386,7 @@
                                Visibility="Collapsed" />
                 </StackPanel>
 
-                <StackPanel Margin="0 0 0 10" x:Name="StackPanelXml" Visibility="Visible" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3">
+                <StackPanel Margin="0 0 0 10" x:Name="StackPanelXml" Visibility="Collapsed" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3">
                     <Grid Margin="0,0,0,15">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
