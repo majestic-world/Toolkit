@@ -133,6 +133,19 @@
         </div>
     </div>
 
+    <!-- Update Banner -->
+    <div class="bg-gradient-to-r from-blue-600 to-purple-700 text-white py-3 text-center relative">
+        <div class="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-700 opacity-90"></div>
+        <div class="relative z-10">
+            <span class="text-sm font-medium">
+                <i class="fas fa-star mr-2"></i>
+                <strong>NOVA ATUALIZAÇÃO:</strong> Live Data agora gera XML automático para equipamentos!
+                <i class="fas fa-arrow-right ml-2"></i>
+                <a href="#live-data" class="text-white hover:text-yellow-300 transition-colors font-semibold">Ver detalhes</a>
+            </span>
+        </div>
+    </div>
+
     <!-- Hero Section -->
     <section id="inicio" class="relative bg-gradient-to-br from-gray-700 via-gray-800 to-gray-900 text-white py-24 overflow-hidden">
         <div class="absolute inset-0 bg-black bg-opacity-20"></div>
@@ -266,6 +279,11 @@
                                         <i class="fas fa-file-alt mr-3 text-gray-500"></i>
                                         <code class="bg-gray-100 px-2 py-1 rounded text-sm font-mono">h5_names.txt</code>
                                     </li>
+                                    <li class="flex items-center">
+                                        <i class="fas fa-chart-bar mr-3 text-orange-500"></i>
+                                        <code class="bg-orange-100 px-2 py-1 rounded text-sm font-mono">ItemStatData.txt</code>
+                                        <span class="text-xs bg-orange-500 text-white px-2 py-1 rounded-full ml-2">Necessário para XML</span>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -374,11 +392,12 @@
                         </div>
                         <h3 class="text-xl font-semibold text-gray-800">Live Data (166)</h3>
                     </div>
-                    <p class="text-gray-600 mb-6 leading-relaxed">Obtém arquivos .dat Live para uso no Classic com processamento otimizado.</p>
+                    <p class="text-gray-600 mb-6 leading-relaxed">Obtém arquivos .dat Live para uso no Classic com processamento otimizado e geração de XML.</p>
                     <div class="bg-gradient-to-r from-gray-50 to-gray-100 p-4 rounded-xl text-sm border-l-4 border-gray-300 mb-4">
                         <strong class="text-gray-800">Processa:</strong><br>
                         <span class="text-gray-700">
-                            Skills, Armas, Armaduras, Itens
+                            Skills, Armas, Armaduras, Itens<br>
+                            <span class="text-xs bg-blue-500 text-white px-2 py-1 rounded-full">NOVO</span> <strong>Geração de XML para equipamentos</strong>
                         </span>
                     </div>
                     <a href="#live-data" class="inline-flex items-center text-gray-600 hover:text-gray-800 font-medium transition-colors group">
@@ -464,8 +483,8 @@
                         Live Data <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">(166)</span>
                     </h2>
                     <p class="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-                        Sistema avançado para obter arquivos .dat Live e convertê-los para uso no Classic. 
-                        Ideal para sincronizar skills, armas, armaduras e itens entre diferentes versões do Lineage 2.
+                        Sistema avançado para obter arquivos .dat Live e convertê-los para uso no Classic com geração automática de XML. 
+                        Ideal para sincronizar skills, armas, armaduras e itens entre diferentes versões do Lineage 2, incluindo conversão automática de grades S+ para S.
                     </p>
                 </div>
 
@@ -521,6 +540,13 @@
                                     <p class="text-sm text-gray-400">Dados de itens diversos</p>
                                 </div>
                             </div>
+                            <div class="bg-black bg-opacity-20 p-4 rounded-xl flex items-center">
+                                <i class="fas fa-chart-bar mr-4 text-orange-400"></i>
+                                <div>
+                                    <code class="text-orange-300 font-mono">ItemStatData.txt</code>
+                                    <p class="text-sm text-gray-400">Dados de status dos equipamentos - <strong>Necessário para XML</strong></p>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -538,15 +564,58 @@
                             </div>
                             <div class="bg-gradient-to-r from-gray-500 bg-opacity-20 to-gray-600 bg-opacity-20 p-4 rounded-xl border-l-4 border-gray-400">
                                 <h4 class="font-semibold text-gray-300 mb-2">Weapons</h4>
-                                <p class="text-sm text-gray-300">Processa armas com stats, grades e características</p>
+                                <p class="text-sm text-gray-300">Processa armas com stats, grades e características <strong>+ Geração de XML</strong></p>
                             </div>
                             <div class="bg-gradient-to-r from-gray-500 bg-opacity-20 to-gray-600 bg-opacity-20 p-4 rounded-xl border-l-4 border-gray-400">
                                 <h4 class="font-semibold text-gray-300 mb-2">Armor</h4>
-                                <p class="text-sm text-gray-300">Processa armaduras com defesas e set effects</p>
+                                <p class="text-sm text-gray-300">Processa armaduras com defesas e set effects <strong>+ Geração de XML</strong></p>
                             </div>
                             <div class="bg-gradient-to-r from-gray-500 bg-opacity-20 to-gray-600 bg-opacity-20 p-4 rounded-xl border-l-4 border-gray-400">
                                 <h4 class="font-semibold text-gray-300 mb-2">Items</h4>
                                 <p class="text-sm text-gray-300">Processa itens diversos como consumíveis e materiais</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- New Features Section -->
+                <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl p-8 mb-12">
+                    <h3 class="text-3xl font-semibold mb-8 text-center">
+                        <i class="fas fa-cog mr-3 text-blue-400"></i>
+                        Opções de Configuração
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="bg-black bg-opacity-20 p-6 rounded-xl border border-blue-400 border-opacity-30">
+                            <h4 class="font-semibold text-blue-300 mb-4 flex items-center">
+                                <i class="fas fa-exchange-alt mr-3"></i>
+                                Conversão S+ → S
+                            </h4>
+                            <p class="text-gray-300 mb-4">
+                                Converte automaticamente grades avançadas para grade S compatível com Classic:
+                            </p>
+                            <ul class="text-sm text-gray-300 space-y-2">
+                                <li><span class="text-orange-300">S80</span> → <span class="text-green-300">S</span></li>
+                                <li><span class="text-orange-300">R95</span> → <span class="text-green-300">S</span></li>
+                                <li><span class="text-orange-300">R99</span> → <span class="text-green-300">S</span></li>
+                                <li><span class="text-orange-300">R110</span> → <span class="text-green-300">S</span></li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-black bg-opacity-20 p-6 rounded-xl border border-purple-400 border-opacity-30">
+                            <h4 class="font-semibold text-purple-300 mb-4 flex items-center">
+                                <i class="fas fa-sparkles mr-3"></i>
+                                Brilho do Enchant
+                            </h4>
+                            <p class="text-gray-300 mb-4">
+                                Habilita o efeito visual de brilho no enchant para armaduras:
+                            </p>
+                            <div class="bg-gray-800 bg-opacity-50 p-3 rounded-lg">
+                                <code class="text-purple-300 text-sm">
+                                    full_armor_enchant_effect_type=-1<br>
+                                    ↓<br>
+                                    full_armor_enchant_effect_type=1
+                                </code>
                             </div>
                         </div>
                     </div>
@@ -559,7 +628,7 @@
                         Como Usar o Live Data
                     </h3>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
                         <!-- Step 1 -->
                         <div class="text-center group">
                             <div class="bg-gradient-to-br from-green-500 to-green-600 text-white rounded-2xl w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110">
@@ -589,11 +658,20 @@
 
                         <!-- Step 4 -->
                         <div class="text-center group">
-                            <div class="bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-2xl w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110">
+                            <div class="bg-gradient-to-br from-pink-500 to-pink-600 text-white rounded-2xl w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110">
                                 <span class="font-bold text-xl">4</span>
                             </div>
+                            <h4 class="font-semibold mb-3 text-white">Configurar Opções</h4>
+                            <p class="text-gray-300 text-sm leading-relaxed">Configure a conversão S+ e o brilho do enchant para equipamentos</p>
+                        </div>
+
+                        <!-- Step 5 -->
+                        <div class="text-center group">
+                            <div class="bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-2xl w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110">
+                                <span class="font-bold text-xl">5</span>
+                            </div>
                             <h4 class="font-semibold mb-3 text-white">Gerar Dados</h4>
-                            <p class="text-gray-300 text-sm leading-relaxed">Clique em "Gerar" para processar e obter os dados convertidos</p>
+                            <p class="text-gray-300 text-sm leading-relaxed">Clique em "Gerar" para processar e obter os dados convertidos + XML</p>
                         </div>
                     </div>
                 </div>
@@ -654,9 +732,34 @@
                                     facilitando a identificação e uso no jogo.
                                 </p>
                             </div>
+                            <div class="bg-black bg-opacity-40 p-6 rounded-xl border-l-4 border-purple-400">
+                                <h4 class="font-semibold text-purple-400 mb-3 flex items-center">
+                                    <i class="fas fa-code mr-2"></i>
+                                    Dados XML <span class="text-xs bg-purple-500 px-2 py-1 rounded-full ml-2">NOVO</span>
+                                </h4>
+                                <p class="text-sm text-white leading-relaxed">
+                                    Arquivo XML completo para armas e armaduras com todos os stats, propriedades e enchantments 
+                                    prontos para uso no servidor.
+                                </p>
+                            </div>
                         </div>
                         
-                        <div class="mt-6 p-4 bg-yellow-500 bg-opacity-20 rounded-xl border border-yellow-400 border-opacity-30">
+                        <div class="mt-6 p-4 bg-blue-500 bg-opacity-20 rounded-xl border border-blue-400 border-opacity-30">
+                            <div class="flex items-start">
+                                <i class="fas fa-star text-blue-400 mr-3 mt-1"></i>
+                                <div>
+                                    <h5 class="font-semibold text-blue-300 mb-1">Novas Funcionalidades <span class="text-xs bg-blue-500 px-2 py-1 rounded-full">ATUALIZAÇÃO</span></h5>
+                                    <ul class="text-sm text-blue-100 space-y-1">
+                                        <li><strong>Conversão S+ → S:</strong> Converte automaticamente S80, R95, R99, R110 para grade S</li>
+                                        <li><strong>Brilho do Enchant:</strong> Habilita efeito de brilho no enchant (GPR) para armaduras</li>
+                                        <li><strong>Geração de XML:</strong> Cria arquivos XML completos com todos os stats dos equipamentos</li>
+                                        <li><strong>ItemStatData.txt:</strong> Novo arquivo necessário para processamento de status</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 p-4 bg-yellow-500 bg-opacity-20 rounded-xl border border-yellow-400 border-opacity-30">
                             <div class="flex items-start">
                                 <i class="fas fa-lightbulb text-yellow-400 mr-3 mt-1"></i>
                                 <div>
@@ -886,6 +989,65 @@ public void RegisterBlock(TextBox block)</code></pre>
         </div>
     </section>
 
+    <!-- Changelog Section -->
+    <section class="bg-gradient-to-br from-blue-800 to-purple-900 text-white py-16 relative overflow-hidden">
+        <div class="absolute inset-0 bg-black bg-opacity-20"></div>
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-4xl font-bold mb-8">
+                    <i class="fas fa-rocket mr-3"></i>
+                    Changelog - Live Data XML
+                </h2>
+                <p class="text-xl text-blue-200 mb-12">
+                    Veja as últimas melhorias implementadas no módulo Live Data
+                </p>
+                
+                <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl p-8 shadow-2xl">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="text-center">
+                            <div class="bg-green-500 bg-opacity-20 rounded-xl p-6 mb-4">
+                                <i class="fas fa-plus-circle text-3xl text-green-400 mb-4"></i>
+                                <h3 class="font-semibold text-green-300 mb-2">Adicionado</h3>
+                                <ul class="text-sm text-white space-y-1">
+                                    <li>Geração de XML automática</li>
+                                    <li>Arquivo ItemStatData.txt</li>
+                                    <li>Conversão S+ → S</li>
+                                    <li>Brilho do enchant</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <div class="bg-blue-500 bg-opacity-20 rounded-xl p-6 mb-4">
+                                <i class="fas fa-cog text-3xl text-blue-400 mb-4"></i>
+                                <h3 class="font-semibold text-blue-300 mb-2">Melhorado</h3>
+                                <ul class="text-sm text-white space-y-1">
+                                    <li>Interface com checkboxes</li>
+                                    <li>Processamento de armas</li>
+                                    <li>Processamento de armaduras</li>
+                                    <li>Sistema de logs</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <div class="bg-purple-500 bg-opacity-20 rounded-xl p-6 mb-4">
+                                <i class="fas fa-magic text-3xl text-purple-400 mb-4"></i>
+                                <h3 class="font-semibold text-purple-300 mb-2">Automático</h3>
+                                <ul class="text-sm text-white space-y-1">
+                                    <li>Conversão de grades</li>
+                                    <li>Geração de stats</li>
+                                    <li>Configuração de enchant</li>
+                                    <li>Formatação XML</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer class="bg-dark text-white py-12">
         <div class="container mx-auto px-4">
@@ -917,11 +1079,16 @@ public void RegisterBlock(TextBox block)</code></pre>
                         <li><strong>Versão:</strong> 2.0.0.0</li>
                         <li><strong>Empresa:</strong> Majestic World Studio</li>
                         <li><strong>Licença:</strong> Open Source</li>
+                        <li><strong>Última Atualização:</strong> Live Data XML</li>
                     </ul>
                 </div>
             </div>
             <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
                 <p>&copy; 2025 Majestic World Studio. Desenvolvido para a comunidade Lineage 2.</p>
+                <p class="mt-2 text-sm">
+                    <i class="fas fa-heart text-red-400 mr-1"></i>
+                    Agradecimentos especiais à comunidade L2 pelo feedback e sugestões de melhorias
+                </p>
             </div>
         </div>
     </footer>
