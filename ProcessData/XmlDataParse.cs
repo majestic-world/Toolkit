@@ -4,6 +4,42 @@ namespace L2Toolkit.ProcessData;
 
 public static class XmlDataParse
 {
+
+    public static string GetWeaponType(string type)
+    {
+        return type switch
+        {
+            "twohandsword" => "BIGSWORD",
+            "bow" => "BOW",
+            "staff" => "BLUNT",
+            "dual" => "DUAL",
+            "sword" => "SWORD",
+            "buster" => "BLUNT",
+            "dagger" => "DAGGER",
+            "dualfist" => "DUALFIST",
+            "pole" => "POLE",
+            "blunt" => "BLUNT",
+            "twohandblunt" => "BLUNT",
+            "twohandstaff" => "BIGBLUNT",
+            "dualdagger" => "DUALDAGGER",
+            "twohandcrossbow" => "CROSSBOW",
+            "dualblunt" => "DUAL",
+            "fist" => "NONE",
+            _ => type
+        };
+    }
+
+    public static string GetWeaponSlot(string type)
+    {
+        return type switch
+        {
+            "lrhand" => "LEFT_RIGHT_HAND",
+            "rhand1" => "RIGHT_HAND",
+            "rhand" => "LEFT_HAND",
+            _ => type
+        };
+    }
+    
     public static (string type, string crystal) GetCrystal(string crystal)
     {
         return crystal switch
@@ -15,7 +51,26 @@ public static class XmlDataParse
             "a" => ("A", "1464"),
             "s" => ("S", "2440"),
             "s80" => ("S80", "2440"),
-            _ => ("", "")
+            _ => (crystal.ToUpper(), "2440")
+        };
+    }
+    
+    public static (string type, string crystal) GetCrystalWithConversion(string crystal)
+    {
+        return crystal switch
+        {
+            "none" => ("NONE", ""),
+            "d" => ("D", ""),
+            "c" => ("C", ""),
+            "b" => ("B", "1157"),
+            "a" => ("A", "1464"),
+            "s" => ("S", "2440"),
+            "s80" => ("S", "2440"),
+            "l" => ("S", "2440"),
+            "r95" => ("S", "2440"),
+            "r99" => ("S", "2440"),
+            "r110" => ("S", "2440"),
+            _ => (crystal.ToUpper(), "2440")
         };
     }
 

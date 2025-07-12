@@ -80,16 +80,14 @@
                            Foreground="{StaticResource TextSecondary}" />
 
                 <!-- Notificação clean -->
-                <Border x:Name="NotificacaoBorder"
-                        Background="#FEF3C7"
+                <Border Background="#FEF3C7"
                         BorderBrush="{StaticResource ErrorColor}"
                         BorderThickness="1"
                         CornerRadius="6"
                         Margin="0,20,0,0"
                         Padding="12"
                         Visibility="Collapsed">
-                    <TextBlock x:Name="StatusNotificacao"
-                               Foreground="#92400E"
+                    <TextBlock Foreground="#92400E"
                                TextWrapping="Wrap"
                                FontSize="14" />
                 </Border>
@@ -139,7 +137,7 @@
                                     Background="White">
                                 <ComboBox
                                     DropDownClosed="TypeProcess_OnDropDownClosed"
-                                    SelectedIndex="2"
+                                    SelectedIndex="0"
                                     x:Name="TypeProcess"
                                     Style="{DynamicResource ModernComboBoxStyle}">
                                     <ComboBoxItem>Skills</ComboBoxItem>
@@ -166,12 +164,109 @@
                                 Padding="1"
                                 BorderBrush="{DynamicResource TextBoxBorder}">
                                 <TextBox x:Name="ProcessClientId"
-                                         Text="13436"
                                          BorderThickness="0"
                                          Style="{StaticResource CleanTextBoxStyle}" />
                             </Border>
                         </StackPanel>
                     </Grid>
+
+                    <!-- Checkboxes -->
+                    <StackPanel Margin="0,0,0,16">
+                        <CheckBox x:Name="ConvertSPlusCheckBox"
+                                  Visibility="Collapsed"
+                                  Content="Converter S+ em S?"
+                                  FontSize="14"
+                                  Foreground="{StaticResource TextPrimary}"
+                                  Margin="0,0,0,8"
+                                  IsChecked="True">
+                            <CheckBox.Resources>
+                                <Style TargetType="CheckBox">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="CheckBox">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Border x:Name="CheckBorder"
+                                                            Width="18"
+                                                            Height="18"
+                                                            Background="White"
+                                                            SnapsToDevicePixels="True"
+                                                            BorderBrush="{StaticResource TextSecondary}"
+                                                            BorderThickness="1"
+                                                            CornerRadius="3"
+                                                            Margin="0,0,8,0">
+                                                        <Path x:Name="CheckMark"
+                                                              Data="M 3,6 L 7,10 L 14,3"
+                                                              Stroke="{StaticResource PrimaryColor}"
+                                                              StrokeThickness="2"
+                                                              Visibility="Collapsed"
+                                                              HorizontalAlignment="Center"
+                                                              VerticalAlignment="Center" />
+                                                    </Border>
+                                                    <ContentPresenter VerticalAlignment="Center" />
+                                                </StackPanel>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsChecked" Value="True">
+                                                        <Setter TargetName="CheckMark" Property="Visibility" Value="Visible" />
+                                                        <Setter TargetName="CheckBorder" Property="BorderBrush" Value="{StaticResource PrimaryColor}" />
+                                                    </Trigger>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter TargetName="CheckBorder" Property="BorderBrush" Value="{StaticResource PrimaryColor}" />
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </CheckBox.Resources>
+                        </CheckBox>
+
+                        <CheckBox x:Name="EnableEnchantGlowCheckBox"
+                                  Visibility="Collapsed"
+                                  Content="Habilitar brilho no enchant?"
+                                  FontSize="14"
+                                  Foreground="{StaticResource TextPrimary}"
+                                  IsChecked="True">
+                            <CheckBox.Resources>
+                                <Style TargetType="CheckBox">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="CheckBox">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Border x:Name="CheckBorder"
+                                                            Width="18"
+                                                            Height="18"
+                                                            Background="White"
+                                                            SnapsToDevicePixels="True"
+                                                            BorderBrush="{StaticResource TextSecondary}"
+                                                            BorderThickness="1"
+                                                            CornerRadius="3"
+                                                            Margin="0,0,8,0">
+                                                        <Path x:Name="CheckMark"
+                                                              Data="M 3,6 L 7,10 L 14,3"
+                                                              Stroke="{StaticResource PrimaryColor}"
+                                                              StrokeThickness="2"
+                                                              Visibility="Collapsed"
+                                                              HorizontalAlignment="Center"
+                                                              VerticalAlignment="Center" />
+                                                    </Border>
+                                                    <ContentPresenter VerticalAlignment="Center" />
+                                                </StackPanel>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsChecked" Value="True">
+                                                        <Setter TargetName="CheckMark" Property="Visibility" Value="Visible" />
+                                                        <Setter TargetName="CheckBorder" Property="BorderBrush" Value="{StaticResource PrimaryColor}" />
+                                                    </Trigger>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter TargetName="CheckBorder" Property="BorderBrush" Value="{StaticResource PrimaryColor}" />
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </CheckBox.Resources>
+                        </CheckBox>
+                    </StackPanel>
 
                     <!-- Botão gerar clean -->
                     <Button x:Name="GerarButton"
@@ -189,6 +284,7 @@
                             </Style>
                         </Button.Resources>
                     </Button>
+
                 </StackPanel>
             </Border>
 
@@ -289,7 +385,7 @@
                                Margin="0,4,0,0"
                                Visibility="Collapsed" />
                 </StackPanel>
-               
+
                 <StackPanel Margin="0 0 0 10" x:Name="StackPanelXml" Visibility="Visible" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3">
                     <Grid Margin="0,0,0,15">
                         <Grid.ColumnDefinitions>
@@ -312,11 +408,12 @@
                             BorderThickness="1"
                             Margin="0,0,0,6"
                             CornerRadius="6">
+                        <!-- 200 -->
                         <TextBox x:Name="XmlData"
                                  AcceptsReturn="True"
                                  TextWrapping="Wrap"
                                  VerticalScrollBarVisibility="Auto"
-                                 Height="200"
+                                 Height="300"
                                  FontFamily="Consolas"
                                  FontSize="12"
                                  Padding="16"
@@ -330,7 +427,7 @@
                                FontSize="12"
                                Visibility="Collapsed" />
                 </StackPanel>
-                
+
                 <!-- Logs -->
                 <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3">
                     <Grid Margin="0,0,0,8">
@@ -371,7 +468,7 @@
                                Margin="0,4,0,0"
                                Visibility="Collapsed" />
                 </StackPanel>
-                
+
             </Grid>
         </Grid>
     </ScrollViewer>

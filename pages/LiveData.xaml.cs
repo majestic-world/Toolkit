@@ -65,7 +65,7 @@ public partial class LiveData
             var status = StatusItems.GetStausByLine(line);
             if (status.Id != "0")
             {
-                _itemsStatus.TryAdd(status.Id, status);   
+                _itemsStatus.TryAdd(status.Id, status);
             }
         }
 
@@ -277,6 +277,18 @@ public partial class LiveData
             _itemsName.TryAdd(id, line);
         }
     }
+    
+    private string ConvertCrystalTypeInLine(string line)
+    {
+        var crystalTypesToConvert = new[] { "s80", "l", "r95", "r99", "r110" };
+    
+        foreach (var crystalType in crystalTypesToConvert)
+        {
+            line = line.Replace($"crystal_type={crystalType}", "crystal_type=s");
+        }
+    
+        return line;
+    }
 
     #region ProcessWeapons
 
@@ -309,6 +321,10 @@ public partial class LiveData
         var successId = 0;
         var successName = 0;
 
+        var listAdded = new List<string>();
+
+        var convertGrade = ConvertSPlusCheckBox.IsChecked;
+
         using var render = new StreamReader(weaponFile);
         while (!render.EndOfStream)
         {
@@ -320,8 +336,14 @@ public partial class LiveData
 
             if (!hashSet.Contains(id)) continue;
 
+            if (convertGrade == true)
+            {
+                line = ConvertCrystalTypeInLine(line);
+            }
+
             successId++;
             itemGrpBuild.AppendLine(line);
+            listAdded.Add(line);
             _itemsName.TryGetValue(id, out var name);
             if (!string.IsNullOrEmpty(name))
             {
@@ -336,18 +358,242 @@ public partial class LiveData
             return;
         }
 
-        Dispatcher.Invoke(() => ClientTextBox.Text = itemGrpBuild.ToString());
-        Dispatcher.Invoke(() => NameData.Text = itemNameBuild.ToString());
+        if (_itemsStatus.IsEmpty)
+        {
+            _log.AddLog("Carregando status das armas...");
+            await CreateStatusData();
+            _log.AddLog($"Status das armas carregadas,  {_itemsName.Count:N0} items");
+        }
 
         _log.AddLog($"Dados GRP recuperados: {successId}");
         _log.AddLog($"Dados de nomes recuperados: {successName}");
         _log.AddLog("Pronto, os dados foram processados!");
+
+        _log.AddLog("Criando XML das armas...");
+
+        var root = new XElement("list");
+
+        var xmlRoot = new List<XElement>();
+        
+        foreach (var added in listAdded)
+        {
+            var data = RecoveryData.GetWeaponsData(added);
+            if (data.ObjectId == "0") continue;
+
+            _itemsName.TryGetValue(data.ObjectId, out var name);
+            var weaponName = "";
+            var adittionalName = "";
+            if (!string.IsNullOrEmpty(name))
+            {
+                weaponName = Parser.GetValue(name, "name=[", "]");
+                adittionalName = Parser.GetValue(name, "additionalname=[", "]");
+            }
+
+            var element = new XElement("weapon", new XAttribute("id", data.ObjectId), new XAttribute("name", weaponName));
+            if (!string.IsNullOrEmpty(adittionalName))
+            {
+                element.Add(new XAttribute("add_name", adittionalName));
+            }
+
+            var isShield = data.WeaponType == "fist";
+
+            var (crystalType, crystalCount) = XmlDataParse.GetCrystal(data.CrystalType);
+
+            if (!string.IsNullOrEmpty(crystalCount))
+            {
+                element.Add(new XElement("set",
+                    new XAttribute("name", "crystal_count"),
+                    new XAttribute("value", crystalCount)
+                ));
+            }
+
+            element.Add(new XElement("set",
+                new XAttribute("name", "crystal_type"),
+                new XAttribute("value", crystalType)
+            ));
+
+            element.Add(new XElement("set",
+                new XAttribute("name", "crystallizable"),
+                new XAttribute("value", data.Crystallizable == "0" ? "false" : "true")
+            ));
+
+            element.Add(new XElement("set",
+                new XAttribute("name", "icon"),
+                new XAttribute("value", data.Icon)
+            ));
+
+            element.Add(new XElement("set",
+                new XAttribute("name", "price"),
+                new XAttribute("value", "48800000")
+            ));
+
+
+            element.Add(new XElement("set",
+                new XAttribute("name", "rnd_dam"),
+                new XAttribute("value", data.RandomDamage)
+            ));
+
+            element.Add(new XElement("set",
+                new XAttribute("name", "soulshots"),
+                new XAttribute("value", data.SoulshotCount)
+            ));
+
+            element.Add(new XElement("set",
+                new XAttribute("name", "spiritshots"),
+                new XAttribute("value", data.SpiritshotCount)
+            ));
+
+            if (!isShield)
+            {
+                element.Add(new XElement("set",
+                    new XAttribute("name", "ensoul_slots"),
+                    new XAttribute("value", "0")
+                ));
+
+                element.Add(new XElement("set",
+                    new XAttribute("name", "ensoul_bm_slots"),
+                    new XAttribute("value", "0")
+                ));
+            }
+
+            element.Add(new XElement("set",
+                new XAttribute("name", "type"),
+                new XAttribute("value", XmlDataParse.GetWeaponType(data.WeaponType))
+            ));
+
+            element.Add(new XElement("set",
+                new XAttribute("name", "weight"),
+                new XAttribute("value", data.Weight)
+            ));
+
+            var equip = new XElement("equip");
+            equip.Add(new XElement("slot", new XAttribute("id", XmlDataParse.GetWeaponSlot(data.BodyPart))));
+
+            element.Add(equip);
+
+            _itemsStatus.TryGetValue(data.ObjectId, out var status);
+
+            var forElement = new XElement("for");
+
+            if (data.WeaponType != "fist")
+            {
+                forElement.Add(new XElement("add",
+                    new XAttribute("stat", "pAtk"),
+                    new XAttribute("order", "0x10"),
+                    new XAttribute("value", status?.PAttack ?? "0")
+                ));
+
+                forElement.Add(new XElement("add",
+                    new XAttribute("stat", "mAtk"),
+                    new XAttribute("order", "0x10"),
+                    new XAttribute("value", status?.MAttack ?? "0")
+                ));
+
+                forElement.Add(new XElement("set",
+                    new XAttribute("stat", "atkBaseSpeed"),
+                    new XAttribute("order", "0x08"),
+                    new XAttribute("value", status?.PAttackSpeed ?? "0")
+                ));
+
+                if (status?.PHit != "0.0")
+                {
+                    forElement.Add(new XElement("add",
+                        new XAttribute("stat", "accCombat"),
+                        new XAttribute("order", "0x10"),
+                        new XAttribute("value", AccCombate(status?.PHit))
+                    ));
+                }
+            }
+            else
+            {
+                forElement.Add(new XElement("add",
+                    new XAttribute("stat", "sDef"),
+                    new XAttribute("order", "0x10"),
+                    new XAttribute("value", status?.ShieldDefense ?? "0")
+                ));
+
+                forElement.Add(new XElement("add",
+                    new XAttribute("stat", "rShld"),
+                    new XAttribute("order", "0x10"),
+                    new XAttribute("value", status?.ShieldDefenseRate ?? "0")
+                ));
+
+                forElement.Add(new XElement("add",
+                    new XAttribute("stat", "rEvas"),
+                    new XAttribute("order", "0x10"),
+                    new XAttribute("value", "-8.0000")
+                ));
+            }
+
+            if (status?.PCritical != "0.0")
+            {
+                forElement.Add(new XElement("set",
+                    new XAttribute("stat", "baseCrit"),
+                    new XAttribute("order", "0x08"),
+                    new XAttribute("value", status?.PCritical.Replace(".", string.Empty) ?? "0"))
+                );
+            }
+
+            if (data.WeaponType != "fist")
+            {
+                forElement.Add(new XElement("enchant",
+                    new XAttribute("stat", "pAtk"),
+                    new XAttribute("order", "0x0C"),
+                    new XAttribute("value", "0")
+                ));
+
+                forElement.Add(new XElement("enchant",
+                    new XAttribute("stat", "mAtk"),
+                    new XAttribute("order", "0x0C"),
+                    new XAttribute("value", "0")
+                ));
+            }
+            else
+            {
+                forElement.Add(new XElement("enchant",
+                    new XAttribute("stat", "sDef"),
+                    new XAttribute("order", "0x0C"),
+                    new XAttribute("value", "0")
+                ));
+            }
+
+            element.Add(forElement);
+
+            xmlRoot.Add(element);
+            root.Add(element);
+        }
+
+        Dispatcher.Invoke(() => ClientTextBox.Text = itemGrpBuild.ToString());
+        Dispatcher.Invoke(() => NameData.Text = itemNameBuild.ToString());
+
+        var build = new StringBuilder();
+
+        foreach (var data in xmlRoot)
+        {
+            build.AppendLine(data.ToString());
+        }
+        
+        Dispatcher.Invoke(() => XmlData.Text = build.ToString());
 
         itemGrpBuild.Clear();
         itemNameBuild.Clear();
     }
 
     #endregion
+
+    private string AccCombate(string PHit)
+    {
+        if (string.IsNullOrEmpty(PHit))
+            return "0.0000";
+
+        if (decimal.TryParse(PHit, System.Globalization.NumberStyles.Float,
+                System.Globalization.CultureInfo.InvariantCulture, out decimal value))
+        {
+            return value.ToString("0.0000", System.Globalization.CultureInfo.InvariantCulture);
+        }
+
+        return "0.0000";
+    }
 
     #region ProcessArmors
 
@@ -358,31 +604,31 @@ public partial class LiveData
             _log.AddLog("Carregando status de itens");
             await CreateStatusData();
         }
-        
-        var root = new XElement("list");
-        
+
+        var root = new List<XElement>();
+
         foreach (var armor in recoveryArmors)
         {
             var crystal = Parser.GetValue(armor, "crystal_type=", "\t");
             var body = Parser.GetValue(armor, "body_part=", "\t");
             var id = Parser.GetValue(armor, "object_id=", "\t");
-            
-            
+
+
             var armorType = Parser.GetValue(armor, "armor_type=", "\t").ToUpper();
             var (crystalType, crystalCout) = XmlDataParse.GetCrystal(crystal);
             var icon = Parser.GetValue(armor, "icon={[", "];");
             var bodyPart = XmlDataParse.GetPartyBody(body);
             var weight = Parser.GetValue(armor, "weight=", "\t");
-            
+
             _itemsName.TryGetValue(id, out var name);
             var itemName = "";
             if (!string.IsNullOrEmpty(name))
             {
                 itemName = Parser.GetValue(name, "name=[", "]");
             }
-            
+
             var armorElement = new XElement("armor");
-            
+
             armorElement.Add(new XAttribute("id", id));
             armorElement.Add(new XAttribute("name", itemName));
 
@@ -393,7 +639,7 @@ public partial class LiveData
                     new XAttribute("value", crystalCout)
                 ));
             }
-            
+
             armorElement.Add(new XElement("set",
                 new XAttribute("name", "crystal_type"),
                 new XAttribute("value", crystalType)
@@ -403,68 +649,75 @@ public partial class LiveData
                 new XAttribute("name", "crystallizable"),
                 new XAttribute("value", "true")
             ));
-            
+
             armorElement.Add(new XElement("set",
                 new XAttribute("name", "icon"),
                 new XAttribute("value", icon)
             ));
-            
+
             armorElement.Add(new XElement("set",
                 new XAttribute("name", "price"),
                 new XAttribute("value", "35000000")
             ));
-            
+
             armorElement.Add(new XElement("set",
                 new XAttribute("name", "type"),
                 new XAttribute("value", armorType)
-            ));  
-            
+            ));
+
             armorElement.Add(new XElement("set",
                 new XAttribute("name", "weight"),
                 new XAttribute("value", weight)
             ));
-            
-            
+
+
             var splitSlot = bodyPart.Split(';');
             var equip = new XElement("equip");
             foreach (var slot in splitSlot)
             {
-                equip.Add(new XElement("slot", new XAttribute("id", slot)));   
+                equip.Add(new XElement("slot", new XAttribute("id", slot)));
             }
-            
+
             armorElement.Add(equip);
 
             var forData = new XElement("for");
-            
+
             _itemsStatus.TryGetValue(id, out var status);
             if (status?.PDefense != "0" && !string.IsNullOrEmpty(status?.PDefense))
             {
-                forData.Add(new XElement("add", 
-                    new XAttribute("stat", "pDef"), 
+                forData.Add(new XElement("add",
+                    new XAttribute("stat", "pDef"),
                     new XAttribute("order", "0x10"),
                     new XAttribute("value", status.PDefense)));
             }
-            
+
             if (status?.MDefense != "0" && !string.IsNullOrEmpty(status?.MDefense))
             {
-                forData.Add(new XElement("add", 
-                    new XAttribute("stat", "mDef"), 
+                forData.Add(new XElement("add",
+                    new XAttribute("stat", "mDef"),
                     new XAttribute("order", "0x10"),
                     new XAttribute("value", status.MDefense)));
             }
-            
+
             var enchantData = XmlDataParse.GetEnchantData(body);
             if (enchantData != null)
             {
                 forData.Add(enchantData);
             }
-            
+
             armorElement.Add(forData);
 
             root.Add(armorElement);
         }
         
-        XmlData.Text =  root.ToString();
+        var build = new StringBuilder();
+
+        foreach (var data in root)
+        {
+            build.AppendLine(data.ToString());
+        }
+
+        XmlData.Text = build.ToString();
     }
 
     private async Task ProcessArmors(string ids)
@@ -496,6 +749,9 @@ public partial class LiveData
         var successId = 0;
         var successName = 0;
 
+        var convertGrade = ConvertSPlusCheckBox.IsChecked;
+        var enableEnchantGlow = EnableEnchantGlowCheckBox.IsChecked;
+        
         var recoveryArmors = new List<string>();
 
         using var render = new StreamReader(armorFile);
@@ -508,6 +764,16 @@ public partial class LiveData
             var id = parse[2].Replace("object_id=", string.Empty);
 
             if (!hashSet.Contains(id)) continue;
+
+            if (convertGrade == true)
+            {
+                line = ConvertCrystalTypeInLine(line);
+            }
+
+            if (enableEnchantGlow == true)
+            {
+                line = line.Replace("full_armor_enchant_effect_type=-1", "full_armor_enchant_effect_type=1");
+            }
 
             successId++;
             itemGrpBuild.AppendLine(line);
@@ -684,14 +950,25 @@ public partial class LiveData
     private void TypeProcess_OnDropDownClosed(object sender, EventArgs e)
     {
         var textBox = TypeProcess.Text;
-        if (!string.IsNullOrEmpty(textBox) && textBox == "Armor")
+        if (string.IsNullOrEmpty(textBox)) return;
+
+        switch (textBox)
         {
-            StackPanelXml.Visibility =  Visibility.Visible;
+            case "Armor":
+                StackPanelXml.Visibility = Visibility.Visible;
+                ConvertSPlusCheckBox.Visibility = Visibility.Visible;
+                EnableEnchantGlowCheckBox.Visibility = Visibility.Visible;
+                return;
+            case "Weapons":
+                StackPanelXml.Visibility = Visibility.Visible;
+                ConvertSPlusCheckBox.Visibility = Visibility.Visible;
+                EnableEnchantGlowCheckBox.Visibility = Visibility.Collapsed;
+                return;
         }
-        else
-        {
-            StackPanelXml.Visibility =  Visibility.Collapsed;
-        }
+
+        StackPanelXml.Visibility = Visibility.Collapsed;
+        ConvertSPlusCheckBox.Visibility = Visibility.Collapsed;
+        EnableEnchantGlowCheckBox.Visibility = Visibility.Collapsed;
     }
 
     private async void CopyXml_OnClick(object sender, RoutedEventArgs e)
