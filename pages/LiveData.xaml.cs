@@ -277,16 +277,16 @@ public partial class LiveData
             _itemsName.TryAdd(id, line);
         }
     }
-    
+
     private string ConvertCrystalTypeInLine(string line)
     {
         var crystalTypesToConvert = new[] { "s80", "l", "r95", "r99", "r110" };
-    
+
         foreach (var crystalType in crystalTypesToConvert)
         {
             line = line.Replace($"crystal_type={crystalType}", "crystal_type=s");
         }
-    
+
         return line;
     }
 
@@ -374,7 +374,7 @@ public partial class LiveData
         var root = new XElement("list");
 
         var xmlRoot = new List<XElement>();
-        
+
         foreach (var added in listAdded)
         {
             var data = RecoveryData.GetWeaponsData(added);
@@ -572,7 +572,7 @@ public partial class LiveData
         {
             build.AppendLine(data.ToString());
         }
-        
+
         Dispatcher.Invoke(() => XmlData.Text = build.ToString());
 
         itemGrpBuild.Clear();
@@ -709,7 +709,7 @@ public partial class LiveData
 
             root.Add(armorElement);
         }
-        
+
         var build = new StringBuilder();
 
         foreach (var data in root)
@@ -751,7 +751,7 @@ public partial class LiveData
 
         var convertGrade = ConvertSPlusCheckBox.IsChecked;
         var enableEnchantGlow = EnableEnchantGlowCheckBox.IsChecked;
-        
+
         var recoveryArmors = new List<string>();
 
         using var render = new StreamReader(armorFile);
@@ -840,6 +840,8 @@ public partial class LiveData
         var successId = 0;
         var successName = 0;
 
+        var listAdded = new List<string>();
+
         using var render = new StreamReader(itemsFile);
         while (!render.EndOfStream)
         {
@@ -850,6 +852,8 @@ public partial class LiveData
             var id = parse[2].Replace("object_id=", string.Empty);
 
             if (!hashSet.Contains(id)) continue;
+
+            listAdded.Add(line);
 
             successId++;
             itemGrpBuild.AppendLine(line);
@@ -867,15 +871,98 @@ public partial class LiveData
             return;
         }
 
-        Dispatcher.Invoke(() => ClientTextBox.Text = itemGrpBuild.ToString());
-        Dispatcher.Invoke(() => NameData.Text = itemNameBuild.ToString());
-
         _log.AddLog($"Dados GRP recuperados: {successId}");
         _log.AddLog($"Dados de nomes recuperados: {successName}");
         _log.AddLog("Pronto, os dados foram processados!");
 
+
+        var elements = new List<XElement>();
+
+        foreach (var added in listAdded)
+        {
+            var id = Parser.GetValue(added, "object_id=", "\t");
+            var weight = Parser.GetValue(added, "weight=", "\t");
+            var materialType = Parser.GetValue(added, "material_type=", "\t");
+            var icon = Parser.GetValue(added, "icon={[", "]");
+
+            _itemsName.TryGetValue(id, out var nameLine);
+            var name = "";
+            if (nameLine != null)
+            {
+                name = Parser.GetValue(nameLine, "name=[", "]");
+            }
+
+            var isStackable = added.Contains("consume_type_stackable") || added.Contains("consume_type_asset");
+
+            var element = new XElement("etcitem", new XAttribute("id", id), new XAttribute("name", name));
+
+            element.Add(new XElement("set",
+                new XAttribute("name", "class"),
+                new XAttribute("value", "OTHER")
+            ));
+            
+            element.Add(new XElement("set",
+                new XAttribute("name", "crystal_type"),
+                new XAttribute("value", "NONE")
+            ));
+            
+            element.Add(new XElement("set",
+                new XAttribute("name", "type"),
+                new XAttribute("value", MaterialType.GetMaterialType(materialType))
+            ));
+            
+            element.Add(new XElement("set",
+                new XAttribute("name", "weight"),
+                new XAttribute("value", weight)
+            ));
+            
+            element.Add(new XElement("set",
+                new XAttribute("name", "icon"),
+                new XAttribute("value", icon)
+            ));
+
+            element.Add(new XElement("set",
+                new XAttribute("name", "stackable"),
+                new XAttribute("value", isStackable)
+            ));
+            
+            element.Add(new XElement("set",
+                new XAttribute("name", "destroyable"),
+                new XAttribute("value", "true")
+            ));
+            
+            element.Add(new XElement("set",
+                new XAttribute("name", "tradeable"),
+                new XAttribute("value", "true")
+            ));
+            
+            element.Add(new XElement("set",
+                new XAttribute("name", "dropable"),
+                new XAttribute("value", "true")
+            ));
+            
+            element.Add(new XElement("set",
+                new XAttribute("name", "sellable"),
+                new XAttribute("value", "true")
+            ));
+            
+            elements.Add(element);
+        }
+
+        var build = new StringBuilder();
+
+        foreach (var el in elements)
+        {
+            build.AppendLine(el.ToString());
+        }
+
+        Dispatcher.Invoke(() => ClientTextBox.Text = itemGrpBuild.ToString());
+        Dispatcher.Invoke(() => NameData.Text = itemNameBuild.ToString());
+        Dispatcher.Invoke(() => XmlData.Text = build.ToString());
+
         itemGrpBuild.Clear();
         itemNameBuild.Clear();
+        build.Clear();
     }
 
     #endregion
@@ -958,6 +1045,11 @@ public partial class LiveData
                 StackPanelXml.Visibility = Visibility.Visible;
                 ConvertSPlusCheckBox.Visibility = Visibility.Visible;
                 EnableEnchantGlowCheckBox.Visibility = Visibility.Visible;
+                return;
+            case "Items":
+                StackPanelXml.Visibility = Visibility.Visible;
+                ConvertSPlusCheckBox.Visibility = Visibility.Collapsed;
+                EnableEnchantGlowCheckBox.Visibility = Visibility.Collapsed;
                 return;
             case "Weapons":
                 StackPanelXml.Visibility = Visibility.Visible;
