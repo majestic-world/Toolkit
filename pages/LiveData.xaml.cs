@@ -399,6 +399,14 @@ public partial class LiveData
 
             var (crystalType, crystalCount) = XmlDataParse.GetCrystal(data.CrystalType);
 
+            if (data.WeaponType == "bow")
+            {
+                element.Add(new XElement("set",
+                    new XAttribute("name", "atk_reuse"),
+                    new XAttribute("value", "1500")
+                ));
+            }
+
             if (!string.IsNullOrEmpty(crystalCount))
             {
                 element.Add(new XElement("set",
