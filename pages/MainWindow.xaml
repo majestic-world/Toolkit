@@ -177,6 +177,13 @@
                         </StackPanel>
                     </Button>
                     
+                    <Button Click="ButtonCreateMultisell_OnClick" Style="{StaticResource SidebarButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE719;" Style="{StaticResource MenuIconStyle}"/>
+                            <TextBlock Text="Criar Multisell"/>
+                        </StackPanel>
+                    </Button>
+                    
                     <Button Click="ButtonSkills_OnClick" Style="{StaticResource SidebarButtonStyle}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="&#xE8B1;" Style="{StaticResource MenuIconStyle}"/>

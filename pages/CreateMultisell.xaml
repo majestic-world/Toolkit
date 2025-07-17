@@ -1,0 +1,254 @@
+﻿<UserControl x:Class="L2Toolkit.pages.CreateMultisell"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             Height="Auto" Width="Auto"
+             Background="White">
+
+    <UserControl.Resources>
+        <!-- Cores clean -->
+        <SolidColorBrush x:Key="PrimaryColor" Color="#5B9BD5"/>
+        <SolidColorBrush x:Key="BorderColor" Color="#E5E7EB"/>
+        <SolidColorBrush x:Key="TextPrimary" Color="#1F2937"/>
+        <SolidColorBrush x:Key="TextSecondary" Color="#6B7280"/>
+        <SolidColorBrush x:Key="TextBoxBorder" Color="#350B0B17"/>
+        <SolidColorBrush x:Key="BackgroundGray" Color="#F9FAFB"/>
+        <SolidColorBrush x:Key="SuccessColor" Color="#10B981"/>
+        <SolidColorBrush x:Key="ErrorColor" Color="#EF4444"/>
+
+        <!-- Estilo clean para TextBox -->
+        <Style x:Key="CleanTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+        </Style>
+
+        <!-- Estilo clean para botão copy -->
+        <Style x:Key="CleanCopyButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource TextSecondary}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderColor}"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{StaticResource BackgroundGray}"/>
+                                <Setter Property="BorderBrush" Value="{StaticResource PrimaryColor}"/>
+                                <Setter Property="Foreground" Value="{StaticResource PrimaryColor}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" 
+                  HorizontalScrollBarVisibility="Disabled">
+        <Grid Margin="30">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header minimalista -->
+            <StackPanel Grid.Row="0" Margin="0,0,0,32">
+                <TextBlock Text="Gerador de Multisell" 
+                         FontSize="32" 
+                         FontWeight="Light"
+                         Foreground="{StaticResource TextPrimary}"
+                         Margin="0,0,0,8"/>
+                <TextBlock Text="Crie bases para multisell de vendas" 
+                         FontSize="16" 
+                         Foreground="{StaticResource TextSecondary}"/>
+                
+                <!-- Notificação clean -->
+                <Border x:Name="NotificacaoBorder" 
+                       Background="#FEF3C7" 
+                       BorderBrush="{StaticResource ErrorColor}" 
+                       BorderThickness="1" 
+                       CornerRadius="6"
+                       Margin="0,20,0,0"
+                       Padding="12"
+                       Visibility="Collapsed">
+                    <TextBlock x:Name="StatusNotificacao"
+                             Foreground="#92400E"
+                             TextWrapping="Wrap"
+                             FontSize="14"/>
+                </Border>
+            </StackPanel>
+
+            <!-- Formulário clean -->
+            <Border Grid.Row="1" 
+                    Background="White"
+                    BorderBrush="{StaticResource BorderColor}"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Padding="24"
+                    Margin="0,0,0,32">
+                <StackPanel>
+                    <!-- IDs dos Itens -->
+                    <StackPanel Margin="0,0,0,16">
+                        <TextBlock Text="Insira os ID's" 
+                                 FontSize="14" 
+                                 FontWeight="Medium"
+                                 Foreground="{StaticResource TextPrimary}"
+                                 Margin="0,0,0,6"/>
+                        <Border 
+                            SnapsToDevicePixels="True"
+                            CornerRadius="6"
+                            BorderThickness="1"
+                            Padding="1"
+                            BorderBrush="{DynamicResource TextBoxBorder}">
+                            <TextBox x:Name="ProductionId"
+                                     BorderThickness="0"
+                                   Style="{StaticResource CleanTextBoxStyle}"/>
+                        </Border>
+                    </StackPanel>
+                    
+                    <StackPanel Margin="0,0,0,16">
+                        <TextBlock Text="Insira os ID's dos materiais" 
+                                   FontSize="14" 
+                                   FontWeight="Medium"
+                                   Foreground="{StaticResource TextPrimary}"
+                                   Margin="0,0,0,6"/>
+                        <Border 
+                            SnapsToDevicePixels="True"
+                            CornerRadius="6"
+                            BorderThickness="1"
+                            Padding="1"
+                            BorderBrush="{DynamicResource TextBoxBorder}">
+                            <TextBox x:Name="MaterialId"
+                                     BorderThickness="0"
+                                     Style="{StaticResource CleanTextBoxStyle}"/>
+                        </Border>
+                    </StackPanel>
+
+                    <!-- Botão gerar clean -->
+                    <Button x:Name="GenerateData" 
+                            Content="Gerar" 
+                            Height="48"
+                            Click="GenerateData_OnClick"
+                            Style="{StaticResource PrimaryButton}"
+                            FontSize="16" 
+                            FontWeight="Medium"
+                            HorizontalAlignment="Center"
+                            MinWidth="120">
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="6"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+                </StackPanel>
+            </Border>
+
+            <!-- Resultados clean -->
+            <Grid Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="16"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Cliente -->
+                <StackPanel Grid.Row="0">
+                    <Grid Margin="0,0,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Dados de Multisell" 
+                                  FontSize="16" 
+                                  FontWeight="Medium"
+                                  Foreground="{StaticResource TextPrimary}"
+                                  VerticalAlignment="Center"/>
+                        <Button x:Name="CopiarClienteButton" 
+                                Grid.Column="1"
+                                Content="Copiar" 
+                                Style="{StaticResource CleanCopyButtonStyle}"/>
+                    </Grid>
+                    <Border Background="{StaticResource BackgroundGray}" 
+                            BorderBrush="{StaticResource BorderColor}"
+                            BorderThickness="1"
+                            CornerRadius="6">
+                        <TextBox x:Name="XmlData" 
+                                 AcceptsReturn="True" 
+                                 TextWrapping="Wrap" 
+                                 VerticalScrollBarVisibility="Auto" 
+                                 Height="200"
+                                 FontFamily="Consolas"
+                                 FontSize="12"
+                                 Padding="16"
+                                 BorderThickness="0"
+                                 Background="Transparent"
+                                 IsReadOnly="True"/>
+                    </Border>
+                    <TextBlock x:Name="ClienteCopiadoTextBlock" 
+                               Text="✓ Copiado!" 
+                               Foreground="{StaticResource SuccessColor}"
+                               FontSize="12"
+                               Margin="0,4,0,0" 
+                               Visibility="Collapsed"/>
+                </StackPanel>
+
+                <!-- Logs -->
+                <StackPanel Grid.Row="2">
+                    <Grid Margin="0,0,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Logs" 
+                                  FontSize="16" 
+                                  FontWeight="Medium"
+                                  Foreground="{StaticResource TextPrimary}"
+                                  VerticalAlignment="Center"/>
+                        <Button x:Name="CopiarItensButton" 
+                                Grid.Column="1"
+                                Content="Copiar" 
+                                Style="{StaticResource CleanCopyButtonStyle}"/>
+                    </Grid>
+                    <Border Background="{StaticResource BackgroundGray}" 
+                            BorderBrush="{StaticResource BorderColor}"
+                            BorderThickness="1"
+                            CornerRadius="6">
+                        <TextBox x:Name="BoxLog" 
+                                 AcceptsReturn="True" 
+                                 TextWrapping="Wrap" 
+                                 VerticalScrollBarVisibility="Auto" 
+                                 Height="140"
+                                 FontFamily="Consolas"
+                                 FontSize="12"
+                                 Padding="16"
+                                 BorderThickness="0"
+                                 Background="Transparent"
+                                 IsReadOnly="True"/>
+                    </Border>
+                    <TextBlock x:Name="CopyContentLog" 
+                               Text="✓ Copiado!" 
+                               Foreground="{StaticResource SuccessColor}"
+                               FontSize="12"
+                               Margin="0,4,0,0" 
+                               Visibility="Collapsed"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

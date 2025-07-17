@@ -68,5 +68,10 @@ namespace L2Toolkit
         {
             MainContent.Content = new LiveData();
         }
+
+        private void ButtonCreateMultisell_OnClick(object sender, RoutedEventArgs e)
+        {
+            MainContent.Content = new CreateMultisell();
+        }
     }
 }
