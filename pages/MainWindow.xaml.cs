@@ -73,5 +73,10 @@ namespace L2Toolkit
         {
             MainContent.Content = new CreateMultisell();
         }
+
+        private void ButtonUpgradeNormalSystem_OnClick(object sender, RoutedEventArgs e)
+        {
+            MainContent.Content = new UpgradeNormalSystem();
+        }
     }
 }
