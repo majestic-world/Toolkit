@@ -43,12 +43,12 @@ namespace L2Toolkit
         {
             MainContent.Content = new Missions();
         }
-        
+
         private void BtnUpgrade_Click(object sender, RoutedEventArgs e)
         {
             MainContent.Content = new UpgradeEquipment();
         }
-        
+
         private void BtnSearchIcon_Click(object sender, RoutedEventArgs e)
         {
             MainContent.Content = new SearchIcon();
@@ -77,6 +77,11 @@ namespace L2Toolkit
         private void ButtonUpgradeNormalSystem_OnClick(object sender, RoutedEventArgs e)
         {
             MainContent.Content = new UpgradeNormalSystem();
+        }
+
+        private void ButtonMobius_OnClick(object sender, RoutedEventArgs e)
+        {
+            MainContent.Content = new Commission();
         }
     }
 }

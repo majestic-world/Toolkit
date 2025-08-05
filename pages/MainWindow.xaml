@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Icon="/images/favicon.ico"
-        Title="Lineage 2 Toolkit By: MK - v2.6" Height="800" Width="1200"
+        Title="Lineage 2 Toolkit By: MK - v2.7" Height="800" Width="1200"
         WindowStartupLocation="CenterScreen" ResizeMode="CanResize"
         Background="#1E1E1E">
     
@@ -191,7 +191,14 @@
                         </StackPanel>
                     </Button>
                     
-                    <Button Click="ButtonSkills_OnClick" Style="{StaticResource SidebarButtonStyle}">
+                    <Button Click="ButtonMobius_OnClick" Style="{StaticResource SidebarButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE7C5;" Style="{StaticResource MenuIconStyle}"/>
+                            <TextBlock Text="Mobius Commission"/>
+                        </StackPanel>
+                    </Button>
+                    
+                    <Button Visibility="Collapsed" Click="ButtonSkills_OnClick" Style="{StaticResource SidebarButtonStyle}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="&#xE8B1;" Style="{StaticResource MenuIconStyle}"/>
                             <TextBlock Text="Enchant Skill (GF)"/>
