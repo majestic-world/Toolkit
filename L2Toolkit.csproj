@@ -4,7 +4,7 @@
     <OutputType>WinExe</OutputType>
     <UseWPF>true</UseWPF>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
-    <ApplicationIcon>images\favicon.ico</ApplicationIcon>
+    <ApplicationIcon>images\favicon2.ico</ApplicationIcon>
 
     <!-- Informações do executável -->
     <Company>Majestic World Studio</Company>
