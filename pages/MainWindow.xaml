@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         WindowState="Maximized"
-        Title="Lineage 2 Toolkit By: MK - v2.7" Height="800" Width="1200"
+        Title="Lineage 2 Toolkit By: MK - v2.8" Height="800" Width="1200"
         WindowStartupLocation="CenterScreen" ResizeMode="CanResize"
         Background="#1E1E1E">
     
@@ -181,6 +181,13 @@
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="&#xE7F1;" Style="{StaticResource MenuIconStyle}"/>
                             <TextBlock Text="Modo Live Data (166)"/>
+                        </StackPanel>
+                    </Button>
+                    
+                    <Button Click="SkinBuilder_OnClick" Name="SkinBuilder" Style="{StaticResource SidebarButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xF17F;" Style="{StaticResource MenuIconStyle}"/>
+                            <TextBlock Text="Skin Builder"/>
                         </StackPanel>
                     </Button>
                     

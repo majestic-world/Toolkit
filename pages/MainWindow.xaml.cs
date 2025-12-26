@@ -83,5 +83,10 @@ namespace L2Toolkit
         {
             MainContent.Content = new Commission();
         }
+
+        private void SkinBuilder_OnClick(object sender, RoutedEventArgs e)
+        {
+            MainContent.Content = new SkinBuilder();
+        }
     }
 }
