@@ -2,7 +2,7 @@
 
 **Ferramentas profissionais para desenvolvedores de servidores Lineage 2**
 
-[![.NET 9.0](https://img.shields.io/badge/.NET-9.0-blue.svg)](https://dotnet.microsoft.com/download/dotnet/8.0)
+[![.NET 10.0](https://img.shields.io/badge/.NET-10.0-blue.svg)](https://dotnet.microsoft.com/download/dotnet/10.0)
 [![Windows](https://img.shields.io/badge/Windows-10%2F11-blue.svg)](https://www.microsoft.com/windows)
 [![WPF](https://img.shields.io/badge/WPF-Modern%20UI-blue.svg)](https://docs.microsoft.com/dotnet/desktop/wpf/)
 
@@ -22,7 +22,7 @@ Acesse a documentação completa para guias detalhados, tutoriais e exemplos de 
 ## 🚀 Início Rápido
 
 ### Requisitos
-- .NET 9.0.*
+- .NET 10
 - Windows 10/11
 - Visual Studio ou Rider (para desenvolvimento)
 
