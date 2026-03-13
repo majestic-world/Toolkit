@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         WindowState="Normal"
         Title="L2 Toolkit"
-        Height="800" Width="1200"
+        Height="850" Width="1200"
         WindowStartupLocation="CenterScreen"
         CanResize="True"
         Background="#2C2C2C"
@@ -220,6 +220,13 @@
                                 <TextBlock Text="Gerar Portas"/>
                             </StackPanel>
                         </Button>
+                        
+                        <Button Theme="{StaticResource SidebarButtonStyle}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xE72C;" FontFamily="Segoe MDL2 Assets" FontSize="16" Foreground="#5B9BD5" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                                <TextBlock Text="Converter Geodata"/>
+                            </StackPanel>
+                        </Button>
 
                         <Button Click="BtnPawnData_Click" Theme="{StaticResource SidebarButtonStyle}">
                             <StackPanel Orientation="Horizontal">
@@ -259,7 +266,7 @@
                         <Button Click="BtnUpgrade_Click" Theme="{StaticResource SidebarButtonStyle}">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="&#xE8BA;" FontFamily="Segoe MDL2 Assets" FontSize="16" Foreground="#5B9BD5" VerticalAlignment="Center" Margin="0,0,12,0"/>
-                                <TextBlock Text="Upgrade Equipment"/>
+                                <TextBlock Text="Upgrade System"/>
                             </StackPanel>
                         </Button>
 
@@ -294,7 +301,7 @@
                         <Button Click="ButtonMobius_OnClick" Theme="{StaticResource SidebarButtonStyle}">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="&#xE7C5;" FontFamily="Segoe MDL2 Assets" FontSize="16" Foreground="#5B9BD5" VerticalAlignment="Center" Margin="0,0,12,0"/>
-                                <TextBlock Text="Mobius Commission"/>
+                                <TextBlock Text="Commission Tag"/>
                             </StackPanel>
                         </Button>
 
