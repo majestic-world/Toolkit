@@ -4,17 +4,26 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using MsBox.Avalonia;
+using Avalonia.Threading;
 
 namespace L2Toolkit.pages
 {
     public partial class SpawnManager : UserControl
     {
+        private readonly DispatcherTimer _statusTimer = new();
+
         public SpawnManager()
         {
             InitializeComponent();
             CreateSpawnsButton.Click += CreateSpawnsButton_Click;
             CopyResultButton.Click += CopyResultButton_Click;
+
+            _statusTimer.Interval = TimeSpan.FromSeconds(8);
+            _statusTimer.Tick += (s, e) =>
+            {
+                NotificacaoBorder.IsVisible = false;
+                _statusTimer.Stop();
+            };
         }
 
         private void CreateSpawnsButton_Click(object sender, RoutedEventArgs e)
@@ -39,14 +48,14 @@ namespace L2Toolkit.pages
             }
         }
 
-        private async void ProcessSpawns()
+        private void ProcessSpawns()
         {
             try
             {
                 var idsText = NpcIdsTextBox.Text?.Trim() ?? string.Empty;
                 if (string.IsNullOrEmpty(idsText))
                 {
-                    await MessageBoxManager.GetMessageBoxStandard("Entrada inválida", "Por favor, insira os IDs dos NPCs.").ShowWindowAsync();
+                    SendNotify("Por favor, insira os IDs dos NPCs.");
                     return;
                 }
 
@@ -54,14 +63,14 @@ namespace L2Toolkit.pages
 
                 if (npcIds.Length == 0)
                 {
-                    await MessageBoxManager.GetMessageBoxStandard("Entrada inválida", "Nenhum ID válido encontrado.").ShowWindowAsync();
+                    SendNotify("Nenhum ID válido encontrado.");
                     return;
                 }
 
                 var originalSpawns = OriginalSpawnTextBox.Text;
                 if (string.IsNullOrEmpty(originalSpawns))
                 {
-                    await MessageBoxManager.GetMessageBoxStandard("Entrada inválida", "Por favor, insira os dados originais de spawn.").ShowWindowAsync();
+                    SendNotify("Por favor, insira os dados originais de spawn.");
                     return;
                 }
 
@@ -72,8 +81,19 @@ namespace L2Toolkit.pages
             }
             catch (Exception ex)
             {
-                await MessageBoxManager.GetMessageBoxStandard("Erro", $"Ocorreu um erro ao processar os spawns: {ex.Message}").ShowWindowAsync();
+                SendNotify($"Ocorreu um erro ao processar os spawns: {ex.Message}");
             }
+        }
+
+        private void SendNotify(string message)
+        {
+            Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                StatusNotificacao.Text = message;
+                NotificacaoBorder.IsVisible = true;
+                _statusTimer.Stop();
+                _statusTimer.Start();
+            });
         }
 
         private string ProcessNpcLines(string content, string[] npcIds, ref int idIndex)

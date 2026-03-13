@@ -13,7 +13,6 @@ using Avalonia.Interactivity;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using L2Toolkit.database;
-using MsBox.Avalonia;
 
 namespace L2Toolkit.pages;
 
@@ -123,7 +122,7 @@ public partial class PrimeShopGenerator : UserControl
         }
         catch (Exception ex)
         {
-            await MessageBoxManager.GetMessageBoxStandard("Erro", $"Erro ao gerar itens: {ex.Message}").ShowWindowAsync();
+            SendNotify($"Erro ao gerar itens: {ex.Message}");
         }
     }
 
@@ -146,13 +145,13 @@ public partial class PrimeShopGenerator : UserControl
 
         if (string.IsNullOrWhiteSpace(idsRaw) || string.IsNullOrWhiteSpace(priceStr))
         {
-            _ = MessageBoxManager.GetMessageBoxStandard("Atenção", "Preencha os campos de ID e Preço.").ShowWindowAsync();
+            SendNotify("Preencha os campos de ID e Preço.");
             return new InputData(null, null, 0, 0, []);
         }
 
         if (!int.TryParse(priceStr, out int price))
         {
-            _ = MessageBoxManager.GetMessageBoxStandard("Erro", "O preço deve ser um número.").ShowWindowAsync();
+            SendNotify("O preço deve ser um número.");
             return new InputData(null, null, 0, 0, []);
         }
 
@@ -169,7 +168,7 @@ public partial class PrimeShopGenerator : UserControl
 
         if (ids.Count == 0)
         {
-            _ = MessageBoxManager.GetMessageBoxStandard("Atenção", "Insira ao menos um ID válido.").ShowWindowAsync();
+            SendNotify("Insira ao menos um ID válido.");
             return new InputData(null, null, 0, 0, []);
         }
 
@@ -340,7 +339,7 @@ public partial class PrimeShopGenerator : UserControl
     {
         Dispatcher.UIThread.InvokeAsync(() =>
         {
-            StatusNotificacao.Text = "⚠️ " + message;
+            StatusNotificacao.Text = message;
             NotificacaoBorder.IsVisible = true;
             _statusTimer.Stop();
             _statusTimer.Start();

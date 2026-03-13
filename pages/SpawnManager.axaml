@@ -81,7 +81,7 @@
         <StackPanel>
 
             <!-- ── Page Header ──────────────────────────────────────── -->
-            <StackPanel Margin="32,28,32,24" Spacing="3">
+            <StackPanel Margin="32,28,32,16" Spacing="3">
                 <TextBlock Text="Gerenciador de Spawn"
                            FontSize="22"
                            FontWeight="SemiBold"
@@ -90,6 +90,32 @@
                            FontSize="13"
                            Foreground="#E8E8E8"/>
             </StackPanel>
+
+            <!-- ── Banner de notificação (condicional) ───────────────── -->
+            <Border x:Name="NotificacaoBorder"
+                    Margin="32,0,32,16"
+                    Background="#1F1A0A"
+                    BorderBrush="#5C4A00"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Padding="14,10"
+                    IsVisible="False">
+                <Grid ColumnDefinitions="Auto,*">
+                    <TextBlock Grid.Column="0"
+                               Text="&#xE7BA;"
+                               FontFamily="Segoe MDL2 Assets"
+                               FontSize="14"
+                               Foreground="#D4A017"
+                               VerticalAlignment="Center"
+                               Margin="0,0,10,0"/>
+                    <TextBlock Grid.Column="1"
+                               x:Name="StatusNotificacao"
+                               Foreground="#D4A017"
+                               TextWrapping="Wrap"
+                               FontSize="13"
+                               VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
 
             <!-- ── Painel 01: IDs dos NPCs ───────────────────────────── -->
             <Border Margin="32,0"
