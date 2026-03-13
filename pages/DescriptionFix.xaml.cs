@@ -65,13 +65,13 @@ namespace L2Toolkit.pages
             {
                 if (string.IsNullOrEmpty(selectedFile))
                 {
-                    ShowNotification("Select a file to process.");
+                    ShowNotification("Selecione um arquivo para processar.");
                     return;
                 }
 
                 if (!File.Exists(selectedFile))
                 {
-                    ShowNotification("The selected file no longer exists.");
+                    ShowNotification("O arquivo selecionado não existe mais.");
                     return;
                 }
 
@@ -122,17 +122,17 @@ namespace L2Toolkit.pages
                     if (file != null)
                     {
                         File.WriteAllLines(file.Path.LocalPath, output, encoding);
-                        ShowSuccess($"Replaced {replacedCount} descriptions. File saved successfully.");
+                        ShowSuccess($"{replacedCount} descrições substituídas. Arquivo salvo com sucesso.");
                     }
                 }
                 else
                 {
-                    ShowNotification("No descriptions were replaced. Check if IDs match.");
+                    ShowNotification("Nenhuma descrição foi substituída. Verifique se os IDs correspondem.");
                 }
             }
             catch (Exception ex)
             {
-                ShowNotification("Error: " + ex.Message);
+                ShowNotification("Erro: " + ex.Message);
             }
         }
 

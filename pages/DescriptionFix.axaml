@@ -111,18 +111,21 @@
                     CornerRadius="6"
                     Padding="14,10"
                     IsVisible="False">
-                <StackPanel Orientation="Horizontal" Spacing="10">
-                    <TextBlock Text="&#xE73E;"
+                <Grid ColumnDefinitions="Auto,*">
+                    <TextBlock Grid.Column="0"
+                               Text="&#xE73E;"
                                FontFamily="Segoe MDL2 Assets"
                                FontSize="14"
                                Foreground="#52C97A"
-                               VerticalAlignment="Center"/>
-                    <TextBlock x:Name="SucessoNotificacao"
+                               VerticalAlignment="Center"
+                               Margin="0,0,10,0"/>
+                    <TextBlock Grid.Column="1"
+                               x:Name="SucessoNotificacao"
                                Foreground="#52C97A"
                                TextWrapping="Wrap"
                                FontSize="13"
                                VerticalAlignment="Center"/>
-                </StackPanel>
+                </Grid>
             </Border>
 
             <!-- ── Painel 01: Arquivo de entrada ────────────────────── -->
