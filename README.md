@@ -26,4 +26,10 @@ Acesse a documentação completa em:
 
 ---
 
+Build:
+
+```csharp
+dotnet publish -r win-x64 -c Release -p:PublishAot=true -p:OptimizationPreference=Size -p:StackTraceSupport=false
+```
+
 Desenvolvido por **Mk**
