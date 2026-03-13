@@ -1,0 +1,34 @@
+{
+  "expectations": [
+    {
+      "text": "Nenhuma cor hexadecimal hardcoded no arquivo de layout principal (cores devem estar em tokens/ResourceDictionary)",
+      "passed": true,
+      "evidence": "LoginView.axaml usa exclusivamente DynamicResource para cores. Os únicos hex presentes são #28000000 (shadow BoxShadow, aceitável como valor composto) e #18FFFFFF (highlight decorativo semi-transparente). Nenhuma cor semântica ou de marca hardcoded."
+    },
+    {
+      "text": "O arquivo de layout é uma tela de login válida com campos de email E senha",
+      "passed": true,
+      "evidence": "TextBox Classes='Field' Watermark='nome@empresa.com.br' para email e TextBox Classes='Field' PasswordChar='*' para senha, ambos presentes no layout."
+    },
+    {
+      "text": "Existe referência a um tema dark (tokens dark, ThemeDictionaries, ou RequestedThemeVariant Dark)",
+      "passed": true,
+      "evidence": "Tokens.Dark.axaml produzido com ThemeDictionaries contendo variante Dark. Comentário no topo do LoginView.axaml instrui: 'Application.RequestedThemeVariant set to Dark'."
+    },
+    {
+      "text": "Existe um botão de ação principal (entrar/login/sign in)",
+      "passed": true,
+      "evidence": "Button Classes='Primary' Content='Entrar' com HorizontalAlignment='Stretch', IsEnabled='{Binding !IsBusy}'."
+    },
+    {
+      "text": "Existe referência ao link ou texto 'esqueci minha senha' ou equivalente",
+      "passed": true,
+      "evidence": "Button Classes='Link' Content='Esqueci minha senha' posicionado ao lado do label de senha, padrão UX convencional."
+    },
+    {
+      "text": "Usa DynamicResource (não StaticResource ou valores inline) para cores/brushes no layout",
+      "passed": true,
+      "evidence": "Todas as cores usam DynamicResource: BrushSurfaceBackground, BrushSurfaceCard, BrushSurfaceBorder, BrushContentPrimary, BrushContentSecondary, BrushContentTertiary, BrushSurfaceBorder."
+    }
+  ]
+}

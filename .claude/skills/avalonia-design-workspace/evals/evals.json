@@ -1,0 +1,23 @@
+{
+  "skill_name": "avalonia-design",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "Quero criar uma tela de login para um sistema ERP empresarial com tema dark. Precisa ter campos de email e senha, um botão de entrar e link 'esqueci minha senha'.",
+      "expected_output": "AXAML completo de uma tela de login dark, com campos estilizados, botão primário, link de recuperação, uso de DynamicResource para cores e tokens de design definidos.",
+      "files": []
+    },
+    {
+      "id": 1,
+      "prompt": "Crie um dashboard Avalonia com 4 cards de métricas (usuários, receita, pedidos, tickets abertos) e uma tabela de atividades recentes com colunas nome, status e data. Tema light.",
+      "expected_output": "AXAML de dashboard light com 4 KPI cards em grid, DataGrid estilizado, tokens de design, sem cores hardcoded.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Preciso de uma página de Settings com seções: Perfil (nome, email), Aparência (toggle dark mode), e Zona de Perigo (botão deletar conta). Layout enterprise, clean.",
+      "expected_output": "AXAML de página de configurações com seções bem separadas, campos de input estilizados, toggle switch, botão de perigo com cor semântica, tokens de design.",
+      "files": []
+    }
+  ]
+}

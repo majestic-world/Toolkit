@@ -1,0 +1,29 @@
+{
+  "expectations": [
+    {
+      "text": "Existem exatamente 4 cards de métricas/KPI distintos (usuários, receita, pedidos, tickets)",
+      "passed": true,
+      "evidence": "Grid ColumnDefinitions='*,*,*,*' com 4 Border cards: Total Users, Revenue, Orders, Open Tickets. Todos com valores e indicadores de delta."
+    },
+    {
+      "text": "Existe um DataGrid ou tabela com ao menos 3 colunas (nome, status, data)",
+      "passed": true,
+      "evidence": "DataGrid com 3 colunas: Name (template com avatar+email), Status (template com badge colorido via binding), Date (text column)."
+    },
+    {
+      "text": "Nenhuma cor hexadecimal hardcoded no layout principal",
+      "passed": false,
+      "evidence": "Background='#F5F6FA' no UserControl. UserControl.Resources contém styles com #FFFFFF, #8A94A6, #1A1D23, #22C55E, #EF4444. No DataGrid.Styles: #F0F2F5, #3D4452, #EEF2FF, #6366F1, #F97316. Múltiplas cores hardcoded diretamente no arquivo."
+    },
+    {
+      "text": "Usa DynamicResource para cores/brushes nos componentes",
+      "passed": false,
+      "evidence": "Usa StaticResource para estilos locais com hex hardcoded. AlternatingRowBackground='#FAFBFC', HorizontalGridLinesBrush='#F0F2F5' diretamente no DataGrid. Nenhum DynamicResource para cores."
+    },
+    {
+      "text": "Tema light referenciado (tokens light ou ausência de dark como padrão)",
+      "passed": true,
+      "evidence": "O design é claramente light (fundo #F5F6FA branco, cards brancos), embora sem sistema de tokens formal para suporte a tema."
+    }
+  ]
+}

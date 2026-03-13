@@ -1,0 +1,334 @@
+<!-- Views/DashboardView.axaml -->
+<!--
+  Light-theme dashboard with:
+    - 4 KPI metric cards (Usuários, Receita, Pedidos, Tickets Abertos)
+    - Recent activities table with columns: Nome, Status, Data
+
+  Prerequisites in App.axaml:
+    <ResourceDictionary.MergedDictionaries>
+      <ResourceInclude Source="avares://YourApp/Resources/Tokens.Light.axaml"/>
+    </ResourceDictionary.MergedDictionaries>
+    <StyleInclude Source="avares://YourApp/Styles/Controls.axaml"/>
+
+  No hardcoded hex values in this file — all colors via DynamicResource.
+-->
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:YourApp.ViewModels"
+             x:Class="YourApp.Views.DashboardView"
+             x:DataType="vm:DashboardViewModel"
+             Background="{DynamicResource BrushSurfaceBackground}">
+
+  <ScrollViewer VerticalScrollBarVisibility="Auto"
+                HorizontalScrollBarVisibility="Disabled">
+
+    <StackPanel Spacing="{DynamicResource SpacingXXL_d}"
+                Margin="{DynamicResource SpacingXXL}">
+
+      <!-- ══════════════════════════════════════════════════════
+           PAGE HEADER
+      ══════════════════════════════════════════════════════ -->
+      <Grid ColumnDefinitions="*,Auto" VerticalAlignment="Center">
+
+        <StackPanel Grid.Column="0" Spacing="{DynamicResource SpacingXS_d}">
+          <TextBlock Text="Dashboard"
+                     FontFamily="{DynamicResource FontDefault}"
+                     FontSize="{DynamicResource FontSizeHeading}"
+                     FontWeight="SemiBold"
+                     Foreground="{DynamicResource BrushContentPrimary}"/>
+          <TextBlock Text="Bem-vindo de volta. Aqui está o que está acontecendo hoje."
+                     FontFamily="{DynamicResource FontDefault}"
+                     FontSize="{DynamicResource FontSizeBody}"
+                     Foreground="{DynamicResource BrushContentSecondary}"/>
+        </StackPanel>
+
+        <!-- Top-right action button -->
+        <Button Grid.Column="1"
+                Classes="Primary"
+                VerticalAlignment="Bottom">
+          <StackPanel Orientation="Horizontal" Spacing="{DynamicResource SpacingS_d}">
+            <PathIcon Width="14" Height="14"
+                      Data="M12 5V19M5 12H19"
+                      Foreground="{DynamicResource BrushAccentForeground}"/>
+            <TextBlock Text="Exportar relatório"
+                       FontFamily="{DynamicResource FontDefault}"
+                       FontSize="{DynamicResource FontSizeBody}"/>
+          </StackPanel>
+        </Button>
+
+      </Grid>
+
+      <!-- ══════════════════════════════════════════════════════
+           KPI METRIC CARDS — 4 columns, uniform grid
+      ══════════════════════════════════════════════════════ -->
+      <UniformGrid Columns="4" Gap="16">
+
+        <!-- Card 1: Usuários Totais -->
+        <Border Classes="KpiCard">
+          <StackPanel Spacing="{DynamicResource SpacingXS_d}">
+            <!-- Icon + label row -->
+            <Grid ColumnDefinitions="*,Auto">
+              <TextBlock Grid.Column="0"
+                         Text="USUÁRIOS TOTAIS"
+                         FontFamily="{DynamicResource FontDefault}"
+                         FontSize="{DynamicResource FontSizeSmall}"
+                         FontWeight="Medium"
+                         Foreground="{DynamicResource BrushContentSecondary}"
+                         VerticalAlignment="Center"/>
+              <!-- User icon -->
+              <Border Grid.Column="1"
+                      Width="32" Height="32"
+                      CornerRadius="{DynamicResource RadiusM}"
+                      Background="{DynamicResource BrushAccentSubtle}">
+                <PathIcon Width="16" Height="16"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center"
+                          Foreground="{DynamicResource BrushAccentPrimary}"
+                          Data="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12ZM12 14C7.58172 14 4 17.5817 4 22H20C20 17.5817 16.4183 14 12 14Z"/>
+              </Border>
+            </Grid>
+
+            <!-- Metric value -->
+            <TextBlock Text="{Binding TotalUsers}"
+                       FontFamily="{DynamicResource FontDefault}"
+                       FontSize="{DynamicResource FontSizeDisplay}"
+                       FontWeight="Bold"
+                       Foreground="{DynamicResource BrushContentPrimary}"
+                       Margin="0,4,0,0"/>
+
+            <!-- Trend -->
+            <StackPanel Orientation="Horizontal" Spacing="{DynamicResource SpacingXXS_d}">
+              <PathIcon Width="12" Height="12"
+                        Foreground="{DynamicResource BrushColorSuccess}"
+                        Data="M5 15L12 8L19 15"/>
+              <TextBlock Text="{Binding TotalUsersTrend}"
+                         FontFamily="{DynamicResource FontDefault}"
+                         FontSize="{DynamicResource FontSizeSmall}"
+                         Foreground="{DynamicResource BrushColorSuccess}"/>
+            </StackPanel>
+          </StackPanel>
+        </Border>
+
+        <!-- Card 2: Receita -->
+        <Border Classes="KpiCard">
+          <StackPanel Spacing="{DynamicResource SpacingXS_d}">
+            <Grid ColumnDefinitions="*,Auto">
+              <TextBlock Grid.Column="0"
+                         Text="RECEITA"
+                         FontFamily="{DynamicResource FontDefault}"
+                         FontSize="{DynamicResource FontSizeSmall}"
+                         FontWeight="Medium"
+                         Foreground="{DynamicResource BrushContentSecondary}"
+                         VerticalAlignment="Center"/>
+              <!-- Currency icon -->
+              <Border Grid.Column="1"
+                      Width="32" Height="32"
+                      CornerRadius="{DynamicResource RadiusM}"
+                      Background="{DynamicResource BrushColorSuccessBg}">
+                <PathIcon Width="16" Height="16"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center"
+                          Foreground="{DynamicResource BrushColorSuccess}"
+                          Data="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM13 17H11V15H13V17ZM13 13H11V7H13V13Z"/>
+              </Border>
+            </Grid>
+
+            <TextBlock Text="{Binding TotalRevenue}"
+                       FontFamily="{DynamicResource FontDefault}"
+                       FontSize="{DynamicResource FontSizeDisplay}"
+                       FontWeight="Bold"
+                       Foreground="{DynamicResource BrushContentPrimary}"
+                       Margin="0,4,0,0"/>
+
+            <StackPanel Orientation="Horizontal" Spacing="{DynamicResource SpacingXXS_d}">
+              <PathIcon Width="12" Height="12"
+                        Foreground="{DynamicResource BrushColorSuccess}"
+                        Data="M5 15L12 8L19 15"/>
+              <TextBlock Text="{Binding TotalRevenueTrend}"
+                         FontFamily="{DynamicResource FontDefault}"
+                         FontSize="{DynamicResource FontSizeSmall}"
+                         Foreground="{DynamicResource BrushColorSuccess}"/>
+            </StackPanel>
+          </StackPanel>
+        </Border>
+
+        <!-- Card 3: Pedidos -->
+        <Border Classes="KpiCard">
+          <StackPanel Spacing="{DynamicResource SpacingXS_d}">
+            <Grid ColumnDefinitions="*,Auto">
+              <TextBlock Grid.Column="0"
+                         Text="PEDIDOS"
+                         FontFamily="{DynamicResource FontDefault}"
+                         FontSize="{DynamicResource FontSizeSmall}"
+                         FontWeight="Medium"
+                         Foreground="{DynamicResource BrushContentSecondary}"
+                         VerticalAlignment="Center"/>
+              <!-- Box/order icon -->
+              <Border Grid.Column="1"
+                      Width="32" Height="32"
+                      CornerRadius="{DynamicResource RadiusM}"
+                      Background="{DynamicResource BrushColorWarningBg}">
+                <PathIcon Width="16" Height="16"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center"
+                          Foreground="{DynamicResource BrushColorWarning}"
+                          Data="M20 7L12 3L4 7M20 7L12 11M20 7V17L12 21M12 11L4 7M12 11V21M4 7V17L12 21"/>
+              </Border>
+            </Grid>
+
+            <TextBlock Text="{Binding TotalOrders}"
+                       FontFamily="{DynamicResource FontDefault}"
+                       FontSize="{DynamicResource FontSizeDisplay}"
+                       FontWeight="Bold"
+                       Foreground="{DynamicResource BrushContentPrimary}"
+                       Margin="0,4,0,0"/>
+
+            <StackPanel Orientation="Horizontal" Spacing="{DynamicResource SpacingXXS_d}">
+              <PathIcon Width="12" Height="12"
+                        Foreground="{DynamicResource BrushColorWarning}"
+                        Data="M5 9L12 16L19 9"/>
+              <TextBlock Text="{Binding TotalOrdersTrend}"
+                         FontFamily="{DynamicResource FontDefault}"
+                         FontSize="{DynamicResource FontSizeSmall}"
+                         Foreground="{DynamicResource BrushColorWarning}"/>
+            </StackPanel>
+          </StackPanel>
+        </Border>
+
+        <!-- Card 4: Tickets Abertos -->
+        <Border Classes="KpiCard">
+          <StackPanel Spacing="{DynamicResource SpacingXS_d}">
+            <Grid ColumnDefinitions="*,Auto">
+              <TextBlock Grid.Column="0"
+                         Text="TICKETS ABERTOS"
+                         FontFamily="{DynamicResource FontDefault}"
+                         FontSize="{DynamicResource FontSizeSmall}"
+                         FontWeight="Medium"
+                         Foreground="{DynamicResource BrushContentSecondary}"
+                         VerticalAlignment="Center"/>
+              <!-- Ticket / support icon -->
+              <Border Grid.Column="1"
+                      Width="32" Height="32"
+                      CornerRadius="{DynamicResource RadiusM}"
+                      Background="{DynamicResource BrushColorDangerBg}">
+                <PathIcon Width="16" Height="16"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center"
+                          Foreground="{DynamicResource BrushColorDanger}"
+                          Data="M8.228 9C8.699 7.858 10.42 7 12 7C13.657 7 15 7.895 15 9C15 9.991 14.061 10.85 12.728 11.424C12.268 11.621 12 12.049 12 12.5V13M12 16H12.01M21 12C21 16.971 16.971 21 12 21C7.029 21 3 16.971 3 12C3 7.029 7.029 3 12 3C16.971 3 21 7.029 21 12Z"/>
+              </Border>
+            </Grid>
+
+            <TextBlock Text="{Binding OpenTickets}"
+                       FontFamily="{DynamicResource FontDefault}"
+                       FontSize="{DynamicResource FontSizeDisplay}"
+                       FontWeight="Bold"
+                       Foreground="{DynamicResource BrushContentPrimary}"
+                       Margin="0,4,0,0"/>
+
+            <StackPanel Orientation="Horizontal" Spacing="{DynamicResource SpacingXXS_d}">
+              <PathIcon Width="12" Height="12"
+                        Foreground="{DynamicResource BrushColorDanger}"
+                        Data="M5 9L12 16L19 9"/>
+              <TextBlock Text="{Binding OpenTicketsTrend}"
+                         FontFamily="{DynamicResource FontDefault}"
+                         FontSize="{DynamicResource FontSizeSmall}"
+                         Foreground="{DynamicResource BrushColorDanger}"/>
+            </StackPanel>
+          </StackPanel>
+        </Border>
+
+      </UniformGrid>
+
+      <!-- ══════════════════════════════════════════════════════
+           RECENT ACTIVITIES TABLE
+      ══════════════════════════════════════════════════════ -->
+      <StackPanel Spacing="{DynamicResource SpacingL_d}">
+
+        <!-- Section header -->
+        <Grid ColumnDefinitions="*,Auto" VerticalAlignment="Center">
+          <StackPanel Grid.Column="0" Spacing="{DynamicResource SpacingXXS_d}">
+            <TextBlock Text="Atividades Recentes"
+                       FontFamily="{DynamicResource FontDefault}"
+                       FontSize="{DynamicResource FontSizeSubtitle}"
+                       FontWeight="SemiBold"
+                       Foreground="{DynamicResource BrushContentPrimary}"/>
+            <TextBlock Text="Últimas interações registradas no sistema."
+                       FontFamily="{DynamicResource FontDefault}"
+                       FontSize="{DynamicResource FontSizeSmall}"
+                       Foreground="{DynamicResource BrushContentSecondary}"/>
+          </StackPanel>
+
+          <Button Grid.Column="1"
+                  Classes="Ghost"
+                  VerticalAlignment="Center">
+            <TextBlock Text="Ver todos"
+                       FontFamily="{DynamicResource FontDefault}"
+                       FontSize="{DynamicResource FontSizeBody}"/>
+          </Button>
+        </Grid>
+
+        <!-- DataGrid wrapped in a card border -->
+        <Border Classes="SectionCard">
+          <DataGrid ItemsSource="{Binding RecentActivities}"
+                    AutoGenerateColumns="False"
+                    IsReadOnly="True"
+                    GridLinesVisibility="Horizontal"
+                    BorderThickness="0"
+                    Background="{DynamicResource BrushSurfaceCard}"
+                    CanUserResizeColumns="True"
+                    CanUserSortColumns="True"
+                    HeadersVisibility="Column"
+                    SelectionMode="Single">
+
+            <DataGrid.Columns>
+
+              <!-- Nome -->
+              <DataGridTextColumn Header="Nome"
+                                  Binding="{Binding Name}"
+                                  Width="*"
+                                  FontFamily="{DynamicResource FontDefault}"/>
+
+              <!-- Status — template column for badge rendering -->
+              <DataGridTemplateColumn Header="Status" Width="148" CanUserSort="True"
+                                     SortMemberPath="Status">
+                <DataGridTemplateColumn.CellTemplate>
+                  <DataTemplate>
+                    <ContentPresenter Margin="16,8">
+                      <!--
+                        In a real app use a DataTemplateSelector or a converter
+                        to pick the badge class. Shown here with a single
+                        binding-driven TextBlock; badge style applied in code-behind
+                        or via a converter on the Border's Classes.
+
+                        Simplified fallback: plain text with semantic color via
+                        a value converter. For demo we use a TextBlock.
+                      -->
+                      <TextBlock Text="{Binding Status}"
+                                 FontFamily="{DynamicResource FontDefault}"
+                                 FontSize="{DynamicResource FontSizeSmall}"
+                                 FontWeight="Medium"
+                                 Foreground="{DynamicResource BrushContentPrimary}"
+                                 VerticalAlignment="Center"/>
+                    </ContentPresenter>
+                  </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+              </DataGridTemplateColumn>
+
+              <!-- Data -->
+              <DataGridTextColumn Header="Data"
+                                  Binding="{Binding Date}"
+                                  Width="148"
+                                  FontFamily="{DynamicResource FontDefault}"/>
+
+            </DataGrid.Columns>
+
+          </DataGrid>
+        </Border>
+
+      </StackPanel>
+
+    </StackPanel>
+  </ScrollViewer>
+
+</UserControl>

@@ -1,0 +1,89 @@
+<UserControl x:Class="L2Toolkit.pages.Missions"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="White">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="30">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Margin="0 0 0 16">
+                <TextBlock Text="Missões diárias (OneDayReward)"
+                           FontSize="32"
+                           FontWeight="Light"
+                           Foreground="#1F2937"
+                           Margin="0,0,0,2"/>
+                <TextBlock Text="Gere dados para o cliente"
+                           FontSize="16"
+                           Foreground="#6B7280"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="1" Orientation="Vertical" Margin="0,0,0,20">
+                <TextBlock Text="Selecione o arquivo OneDayReward.xml"
+                          FontSize="16"
+                          FontWeight="SemiBold"
+                          Margin="0,0,0,8"/>
+                <Border Background="White" CornerRadius="10" BorderBrush="#E0E0E0" BorderThickness="1">
+                    <TextBox x:Name="RewardContent"
+                             AcceptsReturn="True"
+                             IsReadOnly="True"
+                             TextWrapping="NoWrap"
+                             Height="40"
+                             Cursor="Hand"
+                             Padding="15,10"
+                             BorderThickness="0"
+                             Background="Transparent"/>
+                </Border>
+            </StackPanel>
+
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
+                <Button x:Name="RewardGenerate"
+                        Content="Gerar Dados"
+                        Width="110"
+                        Height="40"
+                        FontSize="14"
+                        Theme="{StaticResource PrimaryButton}"
+                        Margin="0,0,10,0"/>
+
+                <Button x:Name="RewardCopy"
+                        Content="Copiar Dados"
+                        Width="110"
+                        Height="40"
+                        Theme="{StaticResource SecondaryButton}"
+                        FontSize="14"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="3" Orientation="Vertical">
+                <TextBlock Text="Arquivos do client"
+                          FontSize="16"
+                          FontWeight="SemiBold"
+                          Margin="0,0,0,8"/>
+                <Border Background="White" CornerRadius="10" BorderBrush="#E0E0E0" BorderThickness="1">
+                    <TextBox x:Name="RewardOutput"
+                             AcceptsReturn="True"
+                             TextWrapping="Wrap"
+                             Height="320"
+                             Padding="15,10"
+                             BorderThickness="0"
+                             Background="Transparent"
+                             IsReadOnly="True"/>
+                </Border>
+            </StackPanel>
+
+            <StackPanel Grid.Row="4">
+                <TextBlock
+                    IsVisible="False"
+                    x:Name="CopyBlock"
+                    Margin="0 3"
+                    Foreground="Green"
+                    FontWeight="SemiBold"
+                    Text="✓ Copiado com sucesso!"/>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

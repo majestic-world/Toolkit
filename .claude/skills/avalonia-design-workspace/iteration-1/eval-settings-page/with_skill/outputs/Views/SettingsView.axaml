@@ -1,0 +1,227 @@
+<!-- Views/SettingsView.axaml -->
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:UnrealTools.ViewModels"
+             x:Class="UnrealTools.Views.SettingsView"
+             x:DataType="vm:SettingsViewModel"
+             Background="{DynamicResource BrushSurfaceBackground}"
+             FontFamily="{DynamicResource FontDefault}">
+
+  <!--
+    Settings page — three sections:
+      1. Perfil     — nome (first + last) + email fields
+      2. Aparência  — dark mode toggle
+      3. Zona de Perigo — delete account (danger)
+
+    All colors via DynamicResource. MaxWidth="720" centres content on wide screens.
+    Scrollable so the page works on any window height.
+  -->
+
+  <ScrollViewer VerticalScrollBarVisibility="Auto"
+                HorizontalScrollBarVisibility="Disabled">
+
+    <StackPanel MaxWidth="720"
+                HorizontalAlignment="Left"
+                Spacing="{DynamicResource SpacingXXL}"
+                Margin="{DynamicResource SpacingXXL}">
+
+      <!-- ======================================================
+           PAGE HEADER
+      ====================================================== -->
+      <StackPanel Spacing="4">
+        <TextBlock Text="Configurações"
+                   FontSize="{DynamicResource FontSizeHeading}"
+                   FontWeight="SemiBold"
+                   Foreground="{DynamicResource BrushContentPrimary}"/>
+        <TextBlock Text="Gerencie suas preferências e informações de conta."
+                   FontSize="{DynamicResource FontSizeBody}"
+                   Foreground="{DynamicResource BrushContentSecondary}"/>
+      </StackPanel>
+
+      <!-- ======================================================
+           SECTION 1 — PERFIL
+      ====================================================== -->
+      <Border Background="{DynamicResource BrushSurfaceCard}"
+              BorderBrush="{DynamicResource BrushSurfaceBorder}"
+              BorderThickness="1"
+              CornerRadius="{DynamicResource RadiusL}">
+        <StackPanel>
+
+          <!-- Section header -->
+          <Border Padding="20,16"
+                  BorderBrush="{DynamicResource BrushSurfaceBorder}"
+                  BorderThickness="0,0,0,1">
+            <StackPanel Spacing="2">
+              <TextBlock Text="Perfil"
+                         FontSize="{DynamicResource FontSizeSubtitle}"
+                         FontWeight="SemiBold"
+                         Foreground="{DynamicResource BrushContentPrimary}"/>
+              <TextBlock Text="Seu nome e endereço de e-mail visíveis para outros membros."
+                         FontSize="{DynamicResource FontSizeSmall}"
+                         Foreground="{DynamicResource BrushContentSecondary}"/>
+            </StackPanel>
+          </Border>
+
+          <!-- Fields -->
+          <StackPanel Spacing="{DynamicResource SpacingL}" Padding="20,20,20,4">
+
+            <!-- Nome: first + last side by side -->
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="16">
+              <StackPanel Grid.Column="0" Spacing="4">
+                <TextBlock Text="Nome"
+                           FontSize="{DynamicResource FontSizeBody}"
+                           FontWeight="Medium"
+                           Foreground="{DynamicResource BrushContentSecondary}"/>
+                <TextBox Classes="Field"
+                         Watermark="João"
+                         Text="{Binding FirstName}"/>
+              </StackPanel>
+              <StackPanel Grid.Column="1" Spacing="4">
+                <TextBlock Text="Sobrenome"
+                           FontSize="{DynamicResource FontSizeBody}"
+                           FontWeight="Medium"
+                           Foreground="{DynamicResource BrushContentSecondary}"/>
+                <TextBox Classes="Field"
+                         Watermark="Silva"
+                         Text="{Binding LastName}"/>
+              </StackPanel>
+            </Grid>
+
+            <!-- E-mail full width -->
+            <StackPanel Spacing="4">
+              <TextBlock Text="E-mail"
+                         FontSize="{DynamicResource FontSizeBody}"
+                         FontWeight="Medium"
+                         Foreground="{DynamicResource BrushContentSecondary}"/>
+              <TextBox Classes="Field"
+                       Watermark="nome@empresa.com"
+                       Text="{Binding Email}"/>
+            </StackPanel>
+
+          </StackPanel>
+
+          <!-- Footer actions -->
+          <Border Padding="20,12"
+                  BorderBrush="{DynamicResource BrushSurfaceBorder}"
+                  BorderThickness="0,1,0,0"
+                  Margin="0,16,0,0">
+            <StackPanel Orientation="Horizontal"
+                        Spacing="8"
+                        HorizontalAlignment="Right">
+              <Button Content="Descartar"
+                      Classes="Ghost"
+                      Command="{Binding DiscardProfileCommand}"/>
+              <Button Content="Salvar alterações"
+                      Classes="Primary"
+                      Command="{Binding SaveProfileCommand}"/>
+            </StackPanel>
+          </Border>
+
+        </StackPanel>
+      </Border>
+
+      <!-- ======================================================
+           SECTION 2 — APARÊNCIA
+      ====================================================== -->
+      <Border Background="{DynamicResource BrushSurfaceCard}"
+              BorderBrush="{DynamicResource BrushSurfaceBorder}"
+              BorderThickness="1"
+              CornerRadius="{DynamicResource RadiusL}">
+        <StackPanel>
+
+          <!-- Section header -->
+          <Border Padding="20,16"
+                  BorderBrush="{DynamicResource BrushSurfaceBorder}"
+                  BorderThickness="0,0,0,1">
+            <StackPanel Spacing="2">
+              <TextBlock Text="Aparência"
+                         FontSize="{DynamicResource FontSizeSubtitle}"
+                         FontWeight="SemiBold"
+                         Foreground="{DynamicResource BrushContentPrimary}"/>
+              <TextBlock Text="Personalize a aparência visual da interface."
+                         FontSize="{DynamicResource FontSizeSmall}"
+                         Foreground="{DynamicResource BrushContentSecondary}"/>
+            </StackPanel>
+          </Border>
+
+          <!-- Dark mode row -->
+          <Grid ColumnDefinitions="*,Auto"
+                Padding="20,16">
+            <StackPanel Grid.Column="0" Spacing="2" VerticalAlignment="Center">
+              <TextBlock Text="Modo escuro"
+                         FontSize="{DynamicResource FontSizeBody}"
+                         FontWeight="Medium"
+                         Foreground="{DynamicResource BrushContentPrimary}"/>
+              <TextBlock Text="Alterna entre interface clara e escura."
+                         FontSize="{DynamicResource FontSizeSmall}"
+                         Foreground="{DynamicResource BrushContentSecondary}"/>
+            </StackPanel>
+            <ToggleSwitch Grid.Column="1"
+                          IsChecked="{Binding IsDarkMode}"
+                          OnContent=""
+                          OffContent=""
+                          VerticalAlignment="Center"
+                          Foreground="{DynamicResource BrushContentPrimary}"/>
+          </Grid>
+
+        </StackPanel>
+      </Border>
+
+      <!-- ======================================================
+           SECTION 3 — ZONA DE PERIGO
+      ====================================================== -->
+      <Border Background="{DynamicResource BrushColorDangerBg}"
+              BorderBrush="{DynamicResource BrushColorDangerBorder}"
+              BorderThickness="1"
+              CornerRadius="{DynamicResource RadiusL}">
+        <StackPanel>
+
+          <!-- Section header -->
+          <Border Padding="20,16"
+                  BorderBrush="{DynamicResource BrushColorDangerBorder}"
+                  BorderThickness="0,0,0,1"
+                  Background="{DynamicResource BrushColorDangerSurface}"
+                  CornerRadius="8,8,0,0">
+            <StackPanel Spacing="2">
+              <TextBlock Text="Zona de Perigo"
+                         FontSize="{DynamicResource FontSizeSubtitle}"
+                         FontWeight="SemiBold"
+                         Foreground="{DynamicResource BrushColorDanger}"/>
+              <TextBlock Text="Ações irreversíveis. Prossiga com cautela."
+                         FontSize="{DynamicResource FontSizeSmall}"
+                         Foreground="{DynamicResource BrushColorDanger}"
+                         Opacity="0.75"/>
+            </StackPanel>
+          </Border>
+
+          <!-- Delete account row -->
+          <Grid ColumnDefinitions="*,Auto"
+                Padding="20,16">
+            <StackPanel Grid.Column="0" Spacing="2" VerticalAlignment="Center">
+              <TextBlock Text="Deletar conta"
+                         FontSize="{DynamicResource FontSizeBody}"
+                         FontWeight="Medium"
+                         Foreground="{DynamicResource BrushContentPrimary}"/>
+              <TextBlock Text="Remove permanentemente sua conta e todos os dados associados. Esta ação não pode ser desfeita."
+                         FontSize="{DynamicResource FontSizeSmall}"
+                         Foreground="{DynamicResource BrushContentSecondary}"
+                         TextWrapping="Wrap"
+                         MaxWidth="460"/>
+            </StackPanel>
+            <Button Grid.Column="1"
+                    Content="Deletar conta"
+                    Classes="Danger"
+                    VerticalAlignment="Center"
+                    Command="{Binding DeleteAccountCommand}"/>
+          </Grid>
+
+        </StackPanel>
+      </Border>
+
+      <!-- Bottom breathing room -->
+      <Border Height="{DynamicResource SpacingXXL}"/>
+
+    </StackPanel>
+  </ScrollViewer>
+
+</UserControl>

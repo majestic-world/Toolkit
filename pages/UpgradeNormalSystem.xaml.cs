@@ -1,14 +1,14 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
 using System.Xml.Linq;
+using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.Platform.Storage;
 using L2Toolkit.database;
-using Microsoft.Win32;
+using MsBox.Avalonia;
 
 namespace L2Toolkit.pages;
 
@@ -24,20 +24,27 @@ public partial class UpgradeNormalSystem : UserControl
         }
     }
 
-    private void UpgradeContent_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
+    private async void UpgradeContent_OnPreviewMouseDown(object sender, PointerPressedEventArgs e)
     {
-        var fileDialog = new OpenFileDialog
+        var topLevel = TopLevel.GetTopLevel(this);
+        var files = await topLevel!.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
             Title = "Selecione o arquivo",
-            Filter = "Arquivos XML (*.xml)|*.xml|Todos os arquivos (*.*)|*.*"
-        };
+            AllowMultiple = false,
+            FileTypeFilter = new[]
+            {
+                new FilePickerFileType("Arquivos XML") { Patterns = new[] { "*.xml" } },
+                new FilePickerFileType("Todos os arquivos") { Patterns = new[] { "*" } }
+            }
+        });
 
-        if (fileDialog.ShowDialog() != true) return;
-        AppDatabase.GetInstance().UpdateValue("lastUpgradeNormalFile", fileDialog.FileName);
-        UpgradeContent.Text = fileDialog.FileName;
+        if (files.Count == 0) return;
+        var path = files[0].Path.LocalPath;
+        AppDatabase.GetInstance().UpdateValue("lastUpgradeNormalFile", path);
+        UpgradeContent.Text = path;
     }
 
-    private void UpgradeGenerate_OnClick(object sender, RoutedEventArgs e)
+    private async void UpgradeGenerate_OnClick(object sender, RoutedEventArgs e)
     {
         try
         {
@@ -138,7 +145,7 @@ public partial class UpgradeNormalSystem : UserControl
         }
         catch (Exception ex)
         {
-            MessageBox.Show(ex.Message, "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            await MessageBoxManager.GetMessageBoxStandard("Erro", ex.Message).ShowWindowAsync();
         }
     }
 
@@ -147,12 +154,13 @@ public partial class UpgradeNormalSystem : UserControl
         try
         {
             var copyText = UpgradeOutput.Text;
-            Clipboard.SetText(copyText);
-            CopyBlock.Visibility = Visibility.Visible;
+            var topLevel = TopLevel.GetTopLevel(this);
+            await topLevel!.Clipboard!.SetTextAsync(copyText);
+            CopyBlock.IsVisible = true;
             await Task.Delay(3000);
-            CopyBlock.Visibility = Visibility.Collapsed;
+            CopyBlock.IsVisible = false;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             //ignore
         }

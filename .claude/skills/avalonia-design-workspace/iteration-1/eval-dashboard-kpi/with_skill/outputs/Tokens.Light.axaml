@@ -1,0 +1,115 @@
+<!-- Resources/Tokens.Light.axaml -->
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <!-- ============================================================
+       LIGHT THEME DESIGN TOKENS
+       All layout files must reference these via DynamicResource.
+       No hex values should appear outside this file.
+  ============================================================ -->
+
+  <!-- Surfaces -->
+  <Color x:Key="SurfaceBackground">#F5F5F5</Color>
+  <Color x:Key="SurfaceCard">#FFFFFF</Color>
+  <Color x:Key="SurfaceElevated">#FAFAFA</Color>
+  <Color x:Key="SurfaceBorder">#E0E0E0</Color>
+  <Color x:Key="SurfaceBorderSubtle">#F0F0F0</Color>
+
+  <!-- Content -->
+  <Color x:Key="ContentPrimary">#1A1A1A</Color>
+  <Color x:Key="ContentSecondary">#6B7280</Color>
+  <Color x:Key="ContentTertiary">#9CA3AF</Color>
+  <Color x:Key="ContentDisabled">#BDBDBD</Color>
+  <Color x:Key="ContentInverse">#FFFFFF</Color>
+
+  <!-- Accent — corporate blue -->
+  <Color x:Key="AccentPrimary">#0F7EC8</Color>
+  <Color x:Key="AccentHover">#0D6BAD</Color>
+  <Color x:Key="AccentPressed">#0A5A92</Color>
+  <Color x:Key="AccentSubtle">#E8F4FD</Color>
+  <Color x:Key="AccentForeground">#FFFFFF</Color>
+
+  <!-- Semantic — success -->
+  <Color x:Key="ColorSuccess">#2E7D32</Color>
+  <Color x:Key="ColorSuccessBg">#E8F5E9</Color>
+
+  <!-- Semantic — warning -->
+  <Color x:Key="ColorWarning">#E65100</Color>
+  <Color x:Key="ColorWarningBg">#FFF3E0</Color>
+
+  <!-- Semantic — danger -->
+  <Color x:Key="ColorDanger">#C62828</Color>
+  <Color x:Key="ColorDangerBg">#FFEBEE</Color>
+
+  <!-- ============================================================
+       BRUSHES — always use these in controls and layouts
+  ============================================================ -->
+  <SolidColorBrush x:Key="BrushSurfaceBackground"  Color="{DynamicResource SurfaceBackground}"/>
+  <SolidColorBrush x:Key="BrushSurfaceCard"        Color="{DynamicResource SurfaceCard}"/>
+  <SolidColorBrush x:Key="BrushSurfaceElevated"    Color="{DynamicResource SurfaceElevated}"/>
+  <SolidColorBrush x:Key="BrushSurfaceBorder"      Color="{DynamicResource SurfaceBorder}"/>
+  <SolidColorBrush x:Key="BrushSurfaceBorderSubtle" Color="{DynamicResource SurfaceBorderSubtle}"/>
+
+  <SolidColorBrush x:Key="BrushContentPrimary"     Color="{DynamicResource ContentPrimary}"/>
+  <SolidColorBrush x:Key="BrushContentSecondary"   Color="{DynamicResource ContentSecondary}"/>
+  <SolidColorBrush x:Key="BrushContentTertiary"    Color="{DynamicResource ContentTertiary}"/>
+  <SolidColorBrush x:Key="BrushContentDisabled"    Color="{DynamicResource ContentDisabled}"/>
+  <SolidColorBrush x:Key="BrushContentInverse"     Color="{DynamicResource ContentInverse}"/>
+
+  <SolidColorBrush x:Key="BrushAccentPrimary"      Color="{DynamicResource AccentPrimary}"/>
+  <SolidColorBrush x:Key="BrushAccentHover"        Color="{DynamicResource AccentHover}"/>
+  <SolidColorBrush x:Key="BrushAccentPressed"      Color="{DynamicResource AccentPressed}"/>
+  <SolidColorBrush x:Key="BrushAccentSubtle"       Color="{DynamicResource AccentSubtle}"/>
+  <SolidColorBrush x:Key="BrushAccentForeground"   Color="{DynamicResource AccentForeground}"/>
+
+  <SolidColorBrush x:Key="BrushColorSuccess"       Color="{DynamicResource ColorSuccess}"/>
+  <SolidColorBrush x:Key="BrushColorSuccessBg"     Color="{DynamicResource ColorSuccessBg}"/>
+  <SolidColorBrush x:Key="BrushColorWarning"       Color="{DynamicResource ColorWarning}"/>
+  <SolidColorBrush x:Key="BrushColorWarningBg"     Color="{DynamicResource ColorWarningBg}"/>
+  <SolidColorBrush x:Key="BrushColorDanger"        Color="{DynamicResource ColorDanger}"/>
+  <SolidColorBrush x:Key="BrushColorDangerBg"      Color="{DynamicResource ColorDangerBg}"/>
+
+  <!-- ============================================================
+       TYPOGRAPHY
+  ============================================================ -->
+  <FontFamily x:Key="FontDefault">Inter,Segoe UI,system-ui,sans-serif</FontFamily>
+
+  <x:Double x:Key="FontSizeSmall">12</x:Double>
+  <x:Double x:Key="FontSizeBody">14</x:Double>
+  <x:Double x:Key="FontSizeSubtitle">16</x:Double>
+  <x:Double x:Key="FontSizeTitle">20</x:Double>
+  <x:Double x:Key="FontSizeHeading">24</x:Double>
+  <x:Double x:Key="FontSizeDisplay">32</x:Double>
+
+  <!-- ============================================================
+       SPACING — 4px grid
+  ============================================================ -->
+  <Thickness x:Key="SpacingXXS">2</Thickness>
+  <Thickness x:Key="SpacingXS">4</Thickness>
+  <Thickness x:Key="SpacingS">8</Thickness>
+  <Thickness x:Key="SpacingM">12</Thickness>
+  <Thickness x:Key="SpacingL">16</Thickness>
+  <Thickness x:Key="SpacingXL">24</Thickness>
+  <Thickness x:Key="SpacingXXL">32</Thickness>
+  <Thickness x:Key="SpacingXXXL">48</Thickness>
+
+  <!-- Scalar spacing for StackPanel Spacing / Grid Gap properties -->
+  <x:Double x:Key="SpacingXXS_d">2</x:Double>
+  <x:Double x:Key="SpacingXS_d">4</x:Double>
+  <x:Double x:Key="SpacingS_d">8</x:Double>
+  <x:Double x:Key="SpacingM_d">12</x:Double>
+  <x:Double x:Key="SpacingL_d">16</x:Double>
+  <x:Double x:Key="SpacingXL_d">24</x:Double>
+  <x:Double x:Key="SpacingXXL_d">32</x:Double>
+
+  <!-- ============================================================
+       SHAPE
+  ============================================================ -->
+  <CornerRadius x:Key="RadiusXS">2</CornerRadius>
+  <CornerRadius x:Key="RadiusS">4</CornerRadius>
+  <CornerRadius x:Key="RadiusM">6</CornerRadius>
+  <CornerRadius x:Key="RadiusL">8</CornerRadius>
+  <CornerRadius x:Key="RadiusXL">12</CornerRadius>
+  <CornerRadius x:Key="RadiusFull">9999</CornerRadius>
+
+</ResourceDictionary>

@@ -1,0 +1,427 @@
+<UserControl x:Class="L2Toolkit.pages.PawnDataControl"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="#3D3D3D">
+
+    <UserControl.Resources>
+        <ControlTheme x:Key="GhostButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#B0B0B0"/>
+            <Setter Property="BorderBrush" Value="#484848"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border x:Name="PART_Border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="6"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Content="{TemplateBinding Content}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+            <Style Selector="^:pointerover /template/ Border#PART_Border">
+                <Setter Property="Background" Value="#2E2E2E"/>
+                <Setter Property="BorderBrush" Value="#646464"/>
+            </Style>
+            <Style Selector="^:pressed /template/ Border#PART_Border">
+                <Setter Property="Background" Value="#242424"/>
+            </Style>
+        </ControlTheme>
+    </UserControl.Resources>
+
+    <UserControl.Styles>
+
+        <!-- Form TextBox: dark input field -->
+        <Style Selector="TextBox.FormField">
+            <Setter Property="Background" Value="#2A2A2A"/>
+            <Setter Property="Foreground" Value="#D4D4D4"/>
+            <Setter Property="CaretBrush" Value="#5B9BD5"/>
+            <Setter Property="SelectionBrush" Value="#1E3A5A"/>
+            <Setter Property="BorderBrush" Value="#3C3C3C"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="Padding" Value="10,7"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+        <Style Selector="TextBox.FormField:focus /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="#5B9BD5"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+        <Style Selector="TextBox.FormField /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="#2A2A2A"/>
+            <Setter Property="CornerRadius" Value="5"/>
+        </Style>
+        <Style Selector="TextBox.FormField:pointerover /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="#505050"/>
+        </Style>
+
+        <!-- Code output TextBox -->
+        <Style Selector="TextBox.Code /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="#2A2A2A"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        <Style Selector="TextBox.Code:focus /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="#2A2A2A"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        <Style Selector="TextBox.Code:pointerover /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="#2A2A2A"/>
+        </Style>
+
+    </UserControl.Styles>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+
+            <!-- ── Page Header ──────────────────────────────────────── -->
+            <StackPanel Margin="32,28,32,24" Spacing="3">
+                <TextBlock Text="Animações de NPC"
+                           FontSize="22"
+                           FontWeight="SemiBold"
+                           Foreground="#E8E8E8"/>
+                <TextBlock Text="Gerador de PawnAnimData.dat para Lineage II"
+                           FontSize="13"
+                           Foreground="#636363"/>
+            </StackPanel>
+
+            <!-- ── Painel 01: Nome do Pawn ───────────────────────────── -->
+            <Border Margin="32,0"
+                    CornerRadius="8"
+                    Background="#212121"
+                    BorderBrush="#343434"
+                    BorderThickness="1"
+                    ClipToBounds="True">
+                <Grid ColumnDefinitions="4,*">
+                    <Border Grid.Column="0" Background="#5B9BD5"/>
+                    <StackPanel Grid.Column="1">
+
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="20,14,20,14"
+                                    Spacing="14"
+                                    VerticalAlignment="Center">
+                            <TextBlock Text="01"
+                                       FontSize="24"
+                                       FontWeight="Bold"
+                                       Foreground="#4A88B8"
+                                       VerticalAlignment="Center"/>
+                            <Border Width="1" Height="18" Background="#484848" VerticalAlignment="Center"/>
+                            <TextBlock Text="NOME DO PAWN"
+                                       FontSize="11"
+                                       FontWeight="Bold"
+                                       Foreground="#9A9A9A"
+                                       LetterSpacing="1.5"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <Border Height="1" Background="#2A2A2A"/>
+
+                        <TextBox x:Name="PawnNameTextBox"
+                                 Classes="FormField"
+                                 Margin="20,16,20,20"
+                                 Watermark="ex: mon_Goblin_m00"/>
+
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- ── Painel 02: Entradas de Animação ─────────────────── -->
+            <Border Margin="32,16"
+                    CornerRadius="8"
+                    Background="#212121"
+                    BorderBrush="#343434"
+                    BorderThickness="1"
+                    ClipToBounds="True">
+                <Grid ColumnDefinitions="4,*">
+                    <Border Grid.Column="0" Background="#5B9BD5"/>
+                    <StackPanel Grid.Column="1">
+
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="20,14,20,14"
+                                    Spacing="14"
+                                    VerticalAlignment="Center">
+                            <TextBlock Text="02"
+                                       FontSize="24"
+                                       FontWeight="Bold"
+                                       Foreground="#4A88B8"
+                                       VerticalAlignment="Center"/>
+                            <Border Width="1" Height="18" Background="#484848" VerticalAlignment="Center"/>
+                            <TextBlock Text="ENTRADAS DE ANIMAÇÃO"
+                                       FontSize="11"
+                                       FontWeight="Bold"
+                                       Foreground="#9A9A9A"
+                                       LetterSpacing="1.5"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <Border Height="1" Background="#2A2A2A"/>
+
+                        <!-- Animation fields grid -->
+                        <Grid Margin="20,16,20,20"
+                              ColumnDefinitions="*,16,*"
+                              RowDefinitions="Auto,8,Auto,8,Auto,8,Auto,8,Auto,8,Auto,8,Auto,8,Auto,8,Auto,8,Auto,8,Auto">
+
+                            <!-- Row 0 -->
+                            <StackPanel Grid.Column="0" Grid.Row="0" Spacing="4">
+                                <TextBlock Text="1 — Walk" FontSize="12" Foreground="#9A9A9A" FontWeight="Medium"/>
+                                <TextBox x:Name="Entry_1" Classes="FormField"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2" Grid.Row="0" Spacing="4">
+                                <TextBlock Text="2 — Run" FontSize="12" Foreground="#9A9A9A" FontWeight="Medium"/>
+                                <TextBox x:Name="Entry_2" Classes="FormField"/>
+                            </StackPanel>
+
+                            <!-- Row 2 -->
+                            <StackPanel Grid.Column="0" Grid.Row="2" Spacing="4">
+                                <TextBlock Text="8 — AtkWait" FontSize="12" Foreground="#9A9A9A" FontWeight="Medium"/>
+                                <TextBox x:Name="Entry_8" Classes="FormField"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2" Grid.Row="2" Spacing="4">
+                                <TextBlock Text="9 — AtkWait" FontSize="12" Foreground="#9A9A9A" FontWeight="Medium"/>
+                                <TextBox x:Name="Entry_9" Classes="FormField"/>
+                            </StackPanel>
+
+                            <!-- Subtle group separator -->
+                            <Border Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="3"
+                                    Height="1" Background="#2E2E2E" Margin="0,4"/>
+
+                            <!-- Row 4 -->
+                            <StackPanel Grid.Column="0" Grid.Row="4" Spacing="4">
+                                <TextBlock Text="20 — Attack 01" FontSize="12" Foreground="#9A9A9A" FontWeight="Medium"/>
+                                <TextBox x:Name="Entry_20" Classes="FormField"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2" Grid.Row="4" Spacing="4">
+                                <TextBlock Text="21 — Attack 02" FontSize="12" Foreground="#9A9A9A" FontWeight="Medium"/>
+                                <TextBox x:Name="Entry_21" Classes="FormField"/>
+                            </StackPanel>
+
+                            <!-- Row 6 -->
+                            <StackPanel Grid.Column="0" Grid.Row="6" Spacing="4">
+                                <TextBlock Text="22 — Attack 03" FontSize="12" Foreground="#9A9A9A" FontWeight="Medium"/>
+                                <TextBox x:Name="Entry_22" Classes="FormField"/>
+                            </StackPanel>
+
+                            <!-- Subtle group separator -->
+                            <Border Grid.Column="0" Grid.Row="8" Grid.ColumnSpan="3"
+                                    Height="1" Background="#2E2E2E" Margin="0,4"/>
+
+                            <!-- Row 8 -->
+                            <StackPanel Grid.Column="0" Grid.Row="8" Spacing="4">
+                                <TextBlock Text="28 — Special Attack 01" FontSize="12" Foreground="#9A9A9A" FontWeight="Medium"/>
+                                <TextBox x:Name="Entry_28" Classes="FormField"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2" Grid.Row="8" Spacing="4">
+                                <TextBlock Text="29 — Special Attack 02" FontSize="12" Foreground="#9A9A9A" FontWeight="Medium"/>
+                                <TextBox x:Name="Entry_29" Classes="FormField"/>
+                            </StackPanel>
+
+                            <!-- Row 10 -->
+                            <StackPanel Grid.Column="0" Grid.Row="10" Spacing="4">
+                                <TextBlock Text="30 — Special Attack 03" FontSize="12" Foreground="#9A9A9A" FontWeight="Medium"/>
+                                <TextBox x:Name="Entry_30" Classes="FormField"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2" Grid.Row="10" Spacing="4">
+                                <TextBlock Text="31 — Special Attack 04" FontSize="12" Foreground="#9A9A9A" FontWeight="Medium"/>
+                                <TextBox x:Name="Entry_31" Classes="FormField"/>
+                            </StackPanel>
+
+                            <!-- Row 12 -->
+                            <StackPanel Grid.Column="0" Grid.Row="12" Spacing="4">
+                                <TextBlock Text="32 — Special Attack 05" FontSize="12" Foreground="#9A9A9A" FontWeight="Medium"/>
+                                <TextBox x:Name="Entry_32" Classes="FormField"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2" Grid.Row="12" Spacing="4">
+                                <TextBlock Text="33 — Special Attack 06" FontSize="12" Foreground="#9A9A9A" FontWeight="Medium"/>
+                                <TextBox x:Name="Entry_33" Classes="FormField"/>
+                            </StackPanel>
+
+                            <!-- Row 14 -->
+                            <StackPanel Grid.Column="0" Grid.Row="14" Spacing="4">
+                                <TextBlock Text="34 — Special Attack 07" FontSize="12" Foreground="#9A9A9A" FontWeight="Medium"/>
+                                <TextBox x:Name="Entry_34" Classes="FormField"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2" Grid.Row="14" Spacing="4">
+                                <TextBlock Text="35 — Special Attack 08" FontSize="12" Foreground="#9A9A9A" FontWeight="Medium"/>
+                                <TextBox x:Name="Entry_35" Classes="FormField"/>
+                            </StackPanel>
+
+                            <!-- Row 16 -->
+                            <StackPanel Grid.Column="0" Grid.Row="16" Spacing="4">
+                                <TextBlock Text="36 — Special Attack 09" FontSize="12" Foreground="#9A9A9A" FontWeight="Medium"/>
+                                <TextBox x:Name="Entry_36" Classes="FormField"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2" Grid.Row="16" Spacing="4">
+                                <TextBlock Text="37 — Special Attack 10" FontSize="12" Foreground="#9A9A9A" FontWeight="Medium"/>
+                                <TextBox x:Name="Entry_37" Classes="FormField"/>
+                            </StackPanel>
+
+                            <!-- Subtle group separator -->
+                            <Border Grid.Column="0" Grid.Row="18" Grid.ColumnSpan="3"
+                                    Height="1" Background="#2E2E2E" Margin="0,4"/>
+
+                            <!-- Row 18 -->
+                            <StackPanel Grid.Column="0" Grid.Row="18" Spacing="4">
+                                <TextBlock Text="60 — Death / Exit" FontSize="12" Foreground="#9A9A9A" FontWeight="Medium"/>
+                                <TextBox x:Name="Entry_60" Classes="FormField"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2" Grid.Row="18" Spacing="4">
+                                <TextBlock Text="62 — DeathWait" FontSize="12" Foreground="#9A9A9A" FontWeight="Medium"/>
+                                <TextBox x:Name="Entry_62" Classes="FormField"/>
+                            </StackPanel>
+
+                            <!-- Row 20 -->
+                            <StackPanel Grid.Column="0" Grid.Row="20" Spacing="4">
+                                <TextBlock Text="92 — Social Actions" FontSize="12" Foreground="#9A9A9A" FontWeight="Medium"/>
+                                <TextBox x:Name="Entry_92" Classes="FormField"/>
+                            </StackPanel>
+
+                        </Grid>
+
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- ── Ação: Gerar (separador de pipeline) ──────────────── -->
+            <Grid Margin="32,4" ColumnDefinitions="*,Auto,*">
+                <Border Grid.Column="0"
+                        Height="1"
+                        Background="#3C3C3C"
+                        VerticalAlignment="Center"/>
+                <Button Grid.Column="1"
+                        x:Name="GenerateButton"
+                        Height="40"
+                        Padding="28,0"
+                        Margin="20,0"
+                        Theme="{StaticResource SecondaryButton}">
+                    <StackPanel Orientation="Horizontal" Spacing="9">
+                        <TextBlock Text="&#xE72D;"
+                                   FontFamily="Segoe MDL2 Assets"
+                                   FontSize="13"
+                                   VerticalAlignment="Center"/>
+                        <TextBlock Text="Gerar PawnAnimData"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <Border Grid.Column="2"
+                        Height="1"
+                        Background="#3C3C3C"
+                        VerticalAlignment="Center"/>
+            </Grid>
+
+            <!-- ── Painel 03: Saída ──────────────────────────────────── -->
+            <Border Margin="32,0,32,32"
+                    CornerRadius="8"
+                    Background="#212121"
+                    BorderBrush="#343434"
+                    BorderThickness="1"
+                    ClipToBounds="True">
+                <Grid ColumnDefinitions="4,*">
+                    <Border Grid.Column="0" Background="#5B9BD5"/>
+                    <StackPanel Grid.Column="1">
+
+                        <Grid ColumnDefinitions="Auto,Auto,*,Auto,Auto"
+                              Margin="20,0"
+                              Height="52">
+
+                            <TextBlock Grid.Column="0"
+                                       Text="03"
+                                       FontSize="24"
+                                       FontWeight="Bold"
+                                       Foreground="#4A88B8"
+                                       VerticalAlignment="Center"/>
+
+                            <Border Grid.Column="1"
+                                    Width="1" Height="18"
+                                    Background="#484848"
+                                    VerticalAlignment="Center"
+                                    Margin="14,0"/>
+
+                            <TextBlock Grid.Column="2"
+                                       Text="SAÍDA GERADA"
+                                       FontSize="11"
+                                       FontWeight="Bold"
+                                       Foreground="#9A9A9A"
+                                       LetterSpacing="1.5"
+                                       VerticalAlignment="Center"/>
+
+                            <!-- Badge "Copiado!" -->
+                            <Border Grid.Column="3"
+                                    x:Name="CopiadoTextBlock"
+                                    IsVisible="False"
+                                    Background="#142B1A"
+                                    BorderBrush="#245230"
+                                    BorderThickness="1"
+                                    CornerRadius="5"
+                                    Padding="10,4"
+                                    VerticalAlignment="Center"
+                                    Margin="0,0,10,0">
+                                <StackPanel Orientation="Horizontal" Spacing="5">
+                                    <TextBlock Text="&#xE73E;"
+                                               FontFamily="Segoe MDL2 Assets"
+                                               FontSize="10"
+                                               Foreground="#52C97A"
+                                               VerticalAlignment="Center"/>
+                                    <TextBlock Text="Copiado!"
+                                               FontSize="11"
+                                               FontWeight="Medium"
+                                               Foreground="#52C97A"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Copy button -->
+                            <Button Grid.Column="4"
+                                    x:Name="CopiarButton"
+                                    Height="30"
+                                    Padding="14,0"
+                                    VerticalAlignment="Center"
+                                    Theme="{StaticResource GhostButton}">
+                                <StackPanel Orientation="Horizontal" Spacing="7">
+                                    <TextBlock Text="&#xE8C8;"
+                                               FontFamily="Segoe MDL2 Assets"
+                                               FontSize="12"
+                                               VerticalAlignment="Center"/>
+                                    <TextBlock Text="Copiar"
+                                               FontSize="12"
+                                               FontWeight="Medium"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+
+                        </Grid>
+
+                        <Border Height="1" Background="#2A2A2A"/>
+
+                        <TextBox x:Name="OutputTextBox"
+                                 Classes="Code"
+                                 AcceptsReturn="True"
+                                 TextWrapping="Wrap"
+                                 Height="160"
+                                 Padding="20,14"
+                                 BorderThickness="0"
+                                 Background="#2A2A2A"
+                                 Foreground="#9CDCFE"
+                                 CaretBrush="#5B9BD5"
+                                 SelectionBrush="#1E3A5A"
+                                 FontFamily="Consolas,Courier New,monospace"
+                                 FontSize="12"
+                                 IsReadOnly="True"
+                                 Watermark="A saída gerada aparecerá aqui..."/>
+
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

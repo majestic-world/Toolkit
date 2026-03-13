@@ -1,0 +1,147 @@
+<!-- Styles/Controls.axaml -->
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <!-- ============================================================
+       CONTROL THEMES — shared across the application.
+       All color references use DynamicResource so light/dark
+       switching works at runtime without touching these styles.
+  ============================================================ -->
+
+  <!-- ── Primary Button ─────────────────────────────────────── -->
+  <Style Selector="Button.Primary">
+    <Setter Property="Background"      Value="{DynamicResource BrushAccentPrimary}"/>
+    <Setter Property="Foreground"      Value="{DynamicResource BrushAccentForeground}"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="CornerRadius"    Value="{DynamicResource RadiusM}"/>
+    <Setter Property="Padding"         Value="16,9"/>
+    <Setter Property="FontSize"        Value="{DynamicResource FontSizeBody}"/>
+    <Setter Property="FontWeight"      Value="Medium"/>
+    <Setter Property="Cursor"          Value="Hand"/>
+  </Style>
+  <Style Selector="Button.Primary:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource BrushAccentHover}"/>
+  </Style>
+  <Style Selector="Button.Primary:pressed /template/ ContentPresenter">
+    <Setter Property="Background"      Value="{DynamicResource BrushAccentPressed}"/>
+    <Setter Property="RenderTransform" Value="scale(0.98)"/>
+  </Style>
+  <Style Selector="Button.Primary:disabled">
+    <Setter Property="Opacity" Value="0.4"/>
+    <Setter Property="Cursor"  Value="Arrow"/>
+  </Style>
+
+  <!-- ── Ghost Button ───────────────────────────────────────── -->
+  <Style Selector="Button.Ghost">
+    <Setter Property="Background"      Value="Transparent"/>
+    <Setter Property="Foreground"      Value="{DynamicResource BrushContentSecondary}"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="CornerRadius"    Value="{DynamicResource RadiusM}"/>
+    <Setter Property="Padding"         Value="12,8"/>
+    <Setter Property="FontSize"        Value="{DynamicResource FontSizeBody}"/>
+    <Setter Property="Cursor"          Value="Hand"/>
+  </Style>
+  <Style Selector="Button.Ghost:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource BrushSurfaceBorder}"/>
+    <Setter Property="TextElement.Foreground" Value="{DynamicResource BrushContentPrimary}"/>
+  </Style>
+
+  <!-- ── KPI Card (metric card) — applied via Style class ───── -->
+  <!--
+    Usage:
+      <Border Classes="KpiCard"> ... </Border>
+    Defined here as a Style on Border with class selector.
+  -->
+  <Style Selector="Border.KpiCard">
+    <Setter Property="Background"      Value="{DynamicResource BrushSurfaceCard}"/>
+    <Setter Property="BorderBrush"     Value="{DynamicResource BrushSurfaceBorder}"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="CornerRadius"    Value="{DynamicResource RadiusL}"/>
+    <Setter Property="Padding"         Value="20"/>
+  </Style>
+
+  <!-- ── DataGrid header ────────────────────────────────────── -->
+  <Style Selector="DataGridColumnHeader">
+    <Setter Property="Background"  Value="{DynamicResource BrushSurfaceBackground}"/>
+    <Setter Property="Foreground"  Value="{DynamicResource BrushContentSecondary}"/>
+    <Setter Property="FontSize"    Value="{DynamicResource FontSizeSmall}"/>
+    <Setter Property="FontWeight"  Value="Medium"/>
+    <Setter Property="Padding"     Value="16,10"/>
+  </Style>
+
+  <!-- DataGrid row hover highlight -->
+  <Style Selector="DataGridRow:pointerover /template/ Rectangle#BackgroundRectangle">
+    <Setter Property="Fill"    Value="{DynamicResource BrushAccentSubtle}"/>
+    <Setter Property="Opacity" Value="1"/>
+  </Style>
+
+  <!-- DataGrid cell text -->
+  <Style Selector="DataGridCell">
+    <Setter Property="Foreground" Value="{DynamicResource BrushContentPrimary}"/>
+    <Setter Property="FontSize"   Value="{DynamicResource FontSizeBody}"/>
+    <Setter Property="Padding"    Value="16,10"/>
+  </Style>
+
+  <!-- DataGrid cell focus border — remove the default blue outline -->
+  <Style Selector="DataGridCell:current /template/ Rectangle#FocusVisual">
+    <Setter Property="IsVisible" Value="False"/>
+  </Style>
+
+  <!-- ── Status badge classes ───────────────────────────────── -->
+  <!--
+    Use these on Border elements wrapping a TextBlock.
+    <Border Classes="BadgeSuccess"><TextBlock .../></Border>
+  -->
+  <Style Selector="Border.BadgeSuccess">
+    <Setter Property="Background"    Value="{DynamicResource BrushColorSuccessBg}"/>
+    <Setter Property="CornerRadius"  Value="{DynamicResource RadiusFull}"/>
+    <Setter Property="Padding"       Value="8,3"/>
+  </Style>
+  <Style Selector="Border.BadgeSuccess TextBlock">
+    <Setter Property="Foreground"  Value="{DynamicResource BrushColorSuccess}"/>
+    <Setter Property="FontSize"    Value="{DynamicResource FontSizeSmall}"/>
+    <Setter Property="FontWeight"  Value="Medium"/>
+  </Style>
+
+  <Style Selector="Border.BadgeWarning">
+    <Setter Property="Background"   Value="{DynamicResource BrushColorWarningBg}"/>
+    <Setter Property="CornerRadius" Value="{DynamicResource RadiusFull}"/>
+    <Setter Property="Padding"      Value="8,3"/>
+  </Style>
+  <Style Selector="Border.BadgeWarning TextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource BrushColorWarning}"/>
+    <Setter Property="FontSize"   Value="{DynamicResource FontSizeSmall}"/>
+    <Setter Property="FontWeight" Value="Medium"/>
+  </Style>
+
+  <Style Selector="Border.BadgeDanger">
+    <Setter Property="Background"   Value="{DynamicResource BrushColorDangerBg}"/>
+    <Setter Property="CornerRadius" Value="{DynamicResource RadiusFull}"/>
+    <Setter Property="Padding"      Value="8,3"/>
+  </Style>
+  <Style Selector="Border.BadgeDanger TextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource BrushColorDanger}"/>
+    <Setter Property="FontSize"   Value="{DynamicResource FontSizeSmall}"/>
+    <Setter Property="FontWeight" Value="Medium"/>
+  </Style>
+
+  <Style Selector="Border.BadgeNeutral">
+    <Setter Property="Background"   Value="{DynamicResource BrushSurfaceBorder}"/>
+    <Setter Property="CornerRadius" Value="{DynamicResource RadiusFull}"/>
+    <Setter Property="Padding"      Value="8,3"/>
+  </Style>
+  <Style Selector="Border.BadgeNeutral TextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource BrushContentSecondary}"/>
+    <Setter Property="FontSize"   Value="{DynamicResource FontSizeSmall}"/>
+    <Setter Property="FontWeight" Value="Medium"/>
+  </Style>
+
+  <!-- ── Section card (content panels) ─────────────────────── -->
+  <Style Selector="Border.SectionCard">
+    <Setter Property="Background"      Value="{DynamicResource BrushSurfaceCard}"/>
+    <Setter Property="BorderBrush"     Value="{DynamicResource BrushSurfaceBorder}"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="CornerRadius"    Value="{DynamicResource RadiusL}"/>
+  </Style>
+
+</Styles>

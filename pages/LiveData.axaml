@@ -1,0 +1,323 @@
+<UserControl x:Class="L2Toolkit.pages.LiveData"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="White">
+
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="PrimaryColor" Color="#5B9BD5" />
+        <SolidColorBrush x:Key="BorderColor" Color="#E5E7EB" />
+        <SolidColorBrush x:Key="TextPrimary" Color="#1F2937" />
+        <SolidColorBrush x:Key="TextSecondary" Color="#6B7280" />
+        <SolidColorBrush x:Key="TextBoxBorder" Color="#350B0B17" />
+        <SolidColorBrush x:Key="BackgroundGray" Color="#F9FAFB" />
+        <SolidColorBrush x:Key="SuccessColor" Color="#10B981" />
+        <SolidColorBrush x:Key="ErrorColor" Color="#EF4444" />
+
+        <ControlTheme x:Key="CleanCopyButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource TextSecondary}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderColor}"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border x:Name="PART_Border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="4"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+            <Style Selector="^:pointerover /template/ Border#PART_Border">
+                <Setter Property="Background" Value="{StaticResource BackgroundGray}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource PrimaryColor}"/>
+            </Style>
+        </ControlTheme>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Grid Margin="30">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Margin="0,0,0,32">
+                <TextBlock Text="Obter arquivos .dat Live para uso no Classic"
+                           FontSize="32"
+                           FontWeight="Light"
+                           Foreground="{StaticResource TextPrimary}"
+                           Margin="0,0,0,8" />
+                <TextBlock Text="Ideal para skills, armas, armaduras e itens"
+                           FontSize="16"
+                           Foreground="{StaticResource TextSecondary}" />
+            </StackPanel>
+
+            <Border Grid.Row="1"
+                    Background="White"
+                    BorderBrush="{StaticResource BorderColor}"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Padding="24"
+                    Margin="0,0,0,32">
+                <StackPanel>
+                    <StackPanel Margin="0,0,0,16">
+                        <TextBlock Text="Selecione a pasta com os .dat em txt"
+                                   FontSize="14"
+                                   FontWeight="Medium"
+                                   Foreground="{StaticResource TextPrimary}"
+                                   Margin="0,0,0,6" />
+                        <Border CornerRadius="6" BorderThickness="1" Padding="1"
+                                BorderBrush="{StaticResource TextBoxBorder}">
+                            <TextBox x:Name="ClientFolder"
+                                     IsReadOnly="True"
+                                     PointerPressed="ClientFolder_OnPreviewMouseDown"
+                                     BorderThickness="0"
+                                     Padding="10"/>
+                        </Border>
+                    </StackPanel>
+
+                    <Grid Margin="0,0,0,16">
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Selecione o tipo de processamento"
+                                       FontSize="14"
+                                       FontWeight="Medium"
+                                       Foreground="{StaticResource TextPrimary}"
+                                       Margin="0,0,0,6" />
+                            <ComboBox SelectionChanged="TypeProcess_OnDropDownClosed"
+                                      SelectedIndex="0"
+                                      x:Name="TypeProcess">
+                                <ComboBoxItem>Skills</ComboBoxItem>
+                                <ComboBoxItem>Weapons</ComboBoxItem>
+                                <ComboBoxItem>Armor</ComboBoxItem>
+                                <ComboBoxItem>Items</ComboBoxItem>
+                            </ComboBox>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Margin="0,0,0,16">
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Insira os Id dos itens"
+                                       FontSize="14"
+                                       FontWeight="Medium"
+                                       Foreground="{StaticResource TextPrimary}"
+                                       Margin="0,0,0,6" />
+                            <Border CornerRadius="6" BorderThickness="1" Padding="1"
+                                    BorderBrush="{StaticResource TextBoxBorder}">
+                                <TextBox x:Name="ProcessClientId" BorderThickness="0" Padding="10"/>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+
+                    <StackPanel Margin="0,0,0,16">
+                        <CheckBox x:Name="ConvertSPlusCheckBox"
+                                  IsVisible="False"
+                                  Content="Converter S+ em S?"
+                                  FontSize="14"
+                                  Foreground="{StaticResource TextPrimary}"
+                                  Margin="0,0,0,8"
+                                  IsChecked="True"/>
+
+                        <CheckBox x:Name="EnableEnchantGlowCheckBox"
+                                  IsVisible="False"
+                                  Content="Habilitar brilho no enchant?"
+                                  FontSize="14"
+                                  Foreground="{StaticResource TextPrimary}"
+                                  IsChecked="True"/>
+                    </StackPanel>
+
+                    <Button x:Name="GerarButton"
+                            Content="Gerar"
+                            Height="48"
+                            Click="GerarButton_OnClick"
+                            Theme="{StaticResource PrimaryButton}"
+                            FontSize="16"
+                            FontWeight="Medium"
+                            HorizontalAlignment="Center"
+                            MinWidth="120"/>
+                </StackPanel>
+            </Border>
+
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="16" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="16" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Column="0" Grid.Row="0">
+                    <Grid Margin="0,0,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Dados GRP"
+                                   FontSize="16"
+                                   FontWeight="Medium"
+                                   Foreground="{StaticResource TextPrimary}"
+                                   VerticalAlignment="Center" />
+                        <Button x:Name="CopiarClienteButton"
+                                Grid.Column="1"
+                                Click="CopiarClienteButton_OnClick"
+                                Content="Copiar"
+                                Theme="{StaticResource CleanCopyButtonStyle}" />
+                    </Grid>
+                    <Border Background="{StaticResource BackgroundGray}"
+                            BorderBrush="{StaticResource BorderColor}"
+                            BorderThickness="1"
+                            CornerRadius="6">
+                        <TextBox x:Name="ClientTextBox"
+                                 AcceptsReturn="True"
+                                 TextWrapping="Wrap"
+                                 Height="200"
+                                 FontFamily="Consolas"
+                                 FontSize="12"
+                                 Padding="16"
+                                 BorderThickness="0"
+                                 Background="Transparent"
+                                 IsReadOnly="True" />
+                    </Border>
+                    <TextBlock x:Name="GrpCopyData"
+                               Text="✓ Copiado!"
+                               Foreground="{StaticResource SuccessColor}"
+                               FontSize="12"
+                               Margin="0,4,0,0"
+                               IsVisible="False" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Grid.Row="0">
+                    <Grid Margin="0,0,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Nomes"
+                                   FontSize="16"
+                                   FontWeight="Medium"
+                                   Foreground="{StaticResource TextPrimary}"
+                                   VerticalAlignment="Center" />
+                        <Button x:Name="CopiarServidorButton"
+                                Grid.Column="1"
+                                Click="CopiarServidorButton_OnClick"
+                                Content="Copiar"
+                                Theme="{StaticResource CleanCopyButtonStyle}" />
+                    </Grid>
+                    <Border Background="{StaticResource BackgroundGray}"
+                            BorderBrush="{StaticResource BorderColor}"
+                            BorderThickness="1"
+                            CornerRadius="6">
+                        <TextBox x:Name="NameData"
+                                 AcceptsReturn="True"
+                                 TextWrapping="Wrap"
+                                 Height="200"
+                                 FontFamily="Consolas"
+                                 FontSize="12"
+                                 Padding="16"
+                                 BorderThickness="0"
+                                 Background="Transparent"
+                                 IsReadOnly="True" />
+                    </Border>
+                    <TextBlock x:Name="NameCopyContent"
+                               Text="✓ Copiado!"
+                               Foreground="{StaticResource SuccessColor}"
+                               FontSize="12"
+                               Margin="0,4,0,0"
+                               IsVisible="False" />
+                </StackPanel>
+
+                <StackPanel Margin="0 0 0 10" x:Name="StackPanelXml" IsVisible="False" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3">
+                    <Grid Margin="0,0,0,15">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Dados XML"
+                                   FontSize="16"
+                                   FontWeight="Medium"
+                                   Foreground="{StaticResource TextPrimary}"
+                                   VerticalAlignment="Center" />
+                        <Button x:Name="CopyXml"
+                                Click="CopyXml_OnClick"
+                                Grid.Column="1"
+                                Content="Copiar"
+                                Theme="{StaticResource CleanCopyButtonStyle}" />
+                    </Grid>
+                    <Border Background="{StaticResource BackgroundGray}"
+                            BorderBrush="{StaticResource BorderColor}"
+                            BorderThickness="1"
+                            Margin="0,0,0,6"
+                            CornerRadius="6">
+                        <TextBox x:Name="XmlData"
+                                 AcceptsReturn="True"
+                                 TextWrapping="Wrap"
+                                 Height="300"
+                                 FontFamily="Consolas"
+                                 FontSize="12"
+                                 Padding="16"
+                                 BorderThickness="0"
+                                 Background="Transparent"
+                                 IsReadOnly="True" />
+                    </Border>
+                    <TextBlock x:Name="XmlCopied"
+                               Text="✓ Copiado!"
+                               Foreground="{StaticResource SuccessColor}"
+                               FontSize="12"
+                               IsVisible="False" />
+                </StackPanel>
+
+                <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3">
+                    <Grid Margin="0,0,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Logs"
+                                   FontSize="16"
+                                   FontWeight="Medium"
+                                   Foreground="{StaticResource TextPrimary}"
+                                   VerticalAlignment="Center" />
+                        <Button x:Name="CopiarItensButton"
+                                Grid.Column="1"
+                                Content="Copiar"
+                                Theme="{StaticResource CleanCopyButtonStyle}" />
+                    </Grid>
+                    <Border Background="{StaticResource BackgroundGray}"
+                            BorderBrush="{StaticResource BorderColor}"
+                            BorderThickness="1"
+                            CornerRadius="6">
+                        <TextBox x:Name="LogContent"
+                                 AcceptsReturn="True"
+                                 TextWrapping="Wrap"
+                                 Height="140"
+                                 FontFamily="Consolas"
+                                 FontSize="12"
+                                 Padding="16"
+                                 BorderThickness="0"
+                                 Background="Transparent"
+                                 IsReadOnly="True" />
+                    </Border>
+                    <TextBlock x:Name="ItensCopiadoTextBlock"
+                               Text="✓ Copiado!"
+                               Foreground="{StaticResource SuccessColor}"
+                               FontSize="12"
+                               Margin="0,4,0,0"
+                               IsVisible="False" />
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

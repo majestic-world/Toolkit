@@ -4,10 +4,10 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Threading;
-using Microsoft.Win32;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Platform.Storage;
+using Avalonia.Threading;
 
 namespace L2Toolkit.pages
 {
@@ -15,47 +15,47 @@ namespace L2Toolkit.pages
     {
         private static readonly Dictionary<string, string> descriptionsCache = new Dictionary<string, string>();
         private static bool cacheLoaded = false;
-        
+
         private string selectedFile = null;
-        
+
         private readonly DispatcherTimer statusTimer = new DispatcherTimer();
         private readonly DispatcherTimer successTimer = new DispatcherTimer();
-        
+
         public DescriptionFix()
         {
             InitializeComponent();
-            
+
             ConfigureTimers();
-            
+
             Task.Run(() => LoadCache());
-            
+
             SelecionarArquivoButton.Click += SelectFileButton_Click;
             ProcessarButton.Click += ProcessButton_Click;
         }
-        
+
         private void ConfigureTimers()
         {
             statusTimer.Interval = TimeSpan.FromSeconds(8);
-            statusTimer.Tick += (s, e) => { NotificacaoBorder.Visibility = Visibility.Collapsed; statusTimer.Stop(); };
-            
+            statusTimer.Tick += (s, e) => { NotificacaoBorder.IsVisible = false; statusTimer.Stop(); };
+
             successTimer.Interval = TimeSpan.FromSeconds(5);
-            successTimer.Tick += (s, e) => { SucessoBorder.Visibility = Visibility.Collapsed; successTimer.Stop(); };
+            successTimer.Tick += (s, e) => { SucessoBorder.IsVisible = false; successTimer.Stop(); };
         }
-        
+
         private void LoadCache()
         {
             try
             {
                 string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
                 string filePath = Path.Combine(baseDirectory, "assets/h5_names.txt");
-                
+
                 if (!File.Exists(filePath))
                 {
-                    Dispatcher.Invoke(() => 
+                    Dispatcher.UIThread.Invoke(() =>
                         ShowNotification($"File '{filePath}' not found! Replacement cannot be performed."));
                     return;
                 }
-                
+
                 lock (descriptionsCache)
                 {
                     descriptionsCache.Clear();
@@ -63,48 +63,54 @@ namespace L2Toolkit.pages
                     {
                         if (string.IsNullOrWhiteSpace(line))
                             continue;
-                        
+
                         var idMatch = Regex.Match(line, @"\bid=(\d+)\b");
                         if (!idMatch.Success)
                             continue;
-                            
+
                         string id = idMatch.Groups[1].Value;
-                        
+
                         var descMatch = Regex.Match(line, @"description=\[(.*?)\]", RegexOptions.Singleline);
                         if (!descMatch.Success)
                             continue;
-                            
+
                         string description = descMatch.Groups[1].Value;
-                        
+
                         descriptionsCache[id] = description;
                     }
-                    
+
                     cacheLoaded = true;
                 }
             }
             catch (Exception ex)
             {
-                Dispatcher.Invoke(() => 
+                Dispatcher.UIThread.Invoke(() =>
                     ShowNotification($"Error loading descriptions file: {ex.Message}"));
             }
         }
-        
-        private void SelectFileButton_Click(object sender, RoutedEventArgs e)
+
+        private async void SelectFileButton_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog
+            var topLevel = TopLevel.GetTopLevel(this);
+            var files = await topLevel!.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
             {
-                Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*",
-                Title = "Select file to modify descriptions"
-            };
-            
-            if (openFileDialog.ShowDialog() == true)
+                Title = "Select file to modify descriptions",
+                AllowMultiple = false,
+                FileTypeFilter = new[]
+                {
+                    new FilePickerFileType("Text files") { Patterns = new[] { "*.txt" } },
+                    new FilePickerFileType("All files") { Patterns = new[] { "*" } }
+                }
+            });
+
+            if (files.Count > 0)
             {
-                selectedFile = openFileDialog.FileName;
+                selectedFile = files[0].Path.LocalPath;
                 ArquivoSelecionadoTextBox.Text = selectedFile;
             }
         }
-        
-        private void ProcessButton_Click(object sender, RoutedEventArgs e)
+
+        private async void ProcessButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -113,30 +119,30 @@ namespace L2Toolkit.pages
                     ShowNotification("Select a file to process.");
                     return;
                 }
-                
+
                 if (!File.Exists(selectedFile))
                 {
                     ShowNotification("The selected file no longer exists.");
                     return;
                 }
-                
+
                 if (!cacheLoaded)
                 {
-                    Task.Run(() => LoadCache()).Wait();
-                    
+                    await Task.Run(() => LoadCache());
+
                     if (!cacheLoaded)
                     {
                         ShowNotification("Could not load descriptions. Check if 'h5_names.txt' exists.");
                         return;
                     }
                 }
-                
+
                 Encoding encoding = Encoding.GetEncoding(1252);
-                
+
                 string[] lines = File.ReadAllLines(selectedFile, encoding);
                 var output = new List<string>();
                 int replacedCount = 0;
-                
+
                 foreach (var line in lines)
                 {
                     var idMatch = Regex.Match(line, @"\bid=(\d+)\b");
@@ -145,38 +151,39 @@ namespace L2Toolkit.pages
                         output.Add(line);
                         continue;
                     }
-                    
+
                     string id = idMatch.Groups[1].Value;
                     if (!descriptionsCache.TryGetValue(id, out var newDescription))
                     {
                         output.Add(line);
                         continue;
                     }
-                    
+
                     string newLine = Regex.Replace(
                         line,
                         @"(description=\[)([^\]]*)(\])",
                         m => $"{m.Groups[1].Value}{newDescription}{m.Groups[3].Value}",
                         RegexOptions.Singleline
                     );
-                    
+
                     output.Add(newLine);
                     replacedCount++;
                 }
-                
+
                 if (replacedCount > 0)
                 {
-                    var saveDialog = new SaveFileDialog
+                    var topLevel = TopLevel.GetTopLevel(this);
+                    var file = await topLevel!.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
                     {
-                        FileName = Path.GetFileNameWithoutExtension(selectedFile) + "_modified",
-                        DefaultExt = ".txt",
-                        Filter = "TXT File (*.txt)|*.txt",
-                        InitialDirectory = Path.GetDirectoryName(selectedFile)
-                    };
-                    
-                    if (saveDialog.ShowDialog() == true)
+                        Title = "Save modified file",
+                        DefaultExtension = ".txt",
+                        SuggestedFileName = Path.GetFileNameWithoutExtension(selectedFile) + "_modified",
+                        FileTypeChoices = new[] { new FilePickerFileType("TXT File") { Patterns = new[] { "*.txt" } } }
+                    });
+
+                    if (file != null)
                     {
-                        File.WriteAllLines(saveDialog.FileName, output, encoding);
+                        File.WriteAllLines(file.Path.LocalPath, output, encoding);
                         ShowSuccess($"Replaced {replacedCount} descriptions. File saved successfully.");
                     }
                 }
@@ -190,21 +197,21 @@ namespace L2Toolkit.pages
                 ShowNotification("Error: " + ex.Message);
             }
         }
-        
+
         private void ShowNotification(string message)
         {
             statusTimer.Stop();
             StatusNotificacao.Text = message;
-            NotificacaoBorder.Visibility = Visibility.Visible;
+            NotificacaoBorder.IsVisible = true;
             statusTimer.Start();
         }
-        
+
         private void ShowSuccess(string message)
         {
             successTimer.Stop();
             SucessoNotificacao.Text = message;
-            SucessoBorder.Visibility = Visibility.Visible;
+            SucessoBorder.IsVisible = true;
             successTimer.Start();
         }
     }
-} 
+}

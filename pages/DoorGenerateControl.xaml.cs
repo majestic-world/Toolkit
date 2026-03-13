@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Controls;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
 
 namespace L2Toolkit.pages
 {
@@ -11,7 +12,7 @@ namespace L2Toolkit.pages
         public DoorGenerateControl()
         {
             InitializeComponent();
-            
+
             ConvertButton.Click += ConvertButton_Click;
             CopyButton.Click += CopyButton_Click;
         }
@@ -23,14 +24,15 @@ namespace L2Toolkit.pages
             OutputTextBox.Text = xmlOutput;
         }
 
-        private void CopyButton_Click(object sender, RoutedEventArgs e)
+        private async void CopyButton_Click(object sender, RoutedEventArgs e)
         {
-            string content = OutputTextBox.Text.Trim();
-            if (!string.IsNullOrEmpty(content))
-            {
-                Clipboard.SetText(content);
-                MessageBox.Show("XML copiado para a área de transferência!", "Copiado", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
+            var content = OutputTextBox.Text?.Trim();
+            if (string.IsNullOrEmpty(content)) return;
+            var topLevel = TopLevel.GetTopLevel(this);
+            await topLevel!.Clipboard!.SetTextAsync(content);
+            CopyNotification.IsVisible = true;
+            await Task.Delay(2500);
+            CopyNotification.IsVisible = false;
         }
 
         private string ConvertToXml(string text)
@@ -49,24 +51,24 @@ namespace L2Toolkit.pages
 
                 string doorId = idMatch.Groups[1].Value;
                 string meshName = meshMatch.Groups[1].Value;
-                
+
                 double baseX = double.Parse(basePosMatch.Groups[1].Value, System.Globalization.CultureInfo.InvariantCulture);
                 double baseY = double.Parse(basePosMatch.Groups[2].Value, System.Globalization.CultureInfo.InvariantCulture);
                 double baseZ = double.Parse(basePosMatch.Groups[3].Value, System.Globalization.CultureInfo.InvariantCulture);
-                
+
                 int minZ = -10170;
                 int maxZ = (int)baseZ;
 
                 List<(int x, int y)> vertices = new List<(int x, int y)>();
-                
+
                 for (int i = 0; i < 4; i++)
                 {
                     double deltaX = double.Parse(rangeDeltaMatches[i].Groups[1].Value, System.Globalization.CultureInfo.InvariantCulture);
                     double deltaY = double.Parse(rangeDeltaMatches[i].Groups[2].Value, System.Globalization.CultureInfo.InvariantCulture);
-                    
+
                     int absX = (int)Math.Round(baseX + deltaX);
                     int absY = (int)Math.Round(baseY + deltaY);
-                    
+
                     vertices.Add((absX, absY));
                 }
 
@@ -97,4 +99,4 @@ namespace L2Toolkit.pages
             }
         }
     }
-} 
+}

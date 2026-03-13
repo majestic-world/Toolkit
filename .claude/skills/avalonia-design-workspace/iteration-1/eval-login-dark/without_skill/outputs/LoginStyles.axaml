@@ -1,0 +1,159 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- ================================================================
+         Design Tokens (expressed as static resources)
+         ================================================================ -->
+    <Styles.Resources>
+        <!-- Surface colours -->
+        <Color x:Key="ColorBackground">#0F1117</Color>
+        <Color x:Key="ColorSurfaceLow">#0A0D14</Color>
+        <Color x:Key="ColorSurface">#13161F</Color>
+        <Color x:Key="ColorSurfaceRaised">#1A1E2A</Color>
+        <Color x:Key="ColorBorder">#232840</Color>
+        <Color x:Key="ColorBorderFocused">#4F8EF7</Color>
+
+        <!-- Text colours -->
+        <Color x:Key="ColorTextPrimary">#E8ECF4</Color>
+        <Color x:Key="ColorTextSecondary">#5A6478</Color>
+        <Color x:Key="ColorTextMuted">#3E4A60</Color>
+
+        <!-- Brand accent -->
+        <Color x:Key="ColorAccent">#4F8EF7</Color>
+        <Color x:Key="ColorAccentHover">#6BA3FA</Color>
+        <Color x:Key="ColorAccentPressed">#3A75E0</Color>
+
+        <!-- Solid brushes -->
+        <SolidColorBrush x:Key="BrushBackground" Color="{StaticResource ColorBackground}" />
+        <SolidColorBrush x:Key="BrushSurface" Color="{StaticResource ColorSurface}" />
+        <SolidColorBrush x:Key="BrushSurfaceRaised" Color="{StaticResource ColorSurfaceRaised}" />
+        <SolidColorBrush x:Key="BrushBorder" Color="{StaticResource ColorBorder}" />
+        <SolidColorBrush x:Key="BrushBorderFocused" Color="{StaticResource ColorBorderFocused}" />
+        <SolidColorBrush x:Key="BrushTextPrimary" Color="{StaticResource ColorTextPrimary}" />
+        <SolidColorBrush x:Key="BrushTextSecondary" Color="{StaticResource ColorTextSecondary}" />
+        <SolidColorBrush x:Key="BrushTextMuted" Color="{StaticResource ColorTextMuted}" />
+        <SolidColorBrush x:Key="BrushAccent" Color="{StaticResource ColorAccent}" />
+        <SolidColorBrush x:Key="BrushAccentHover" Color="{StaticResource ColorAccentHover}" />
+        <SolidColorBrush x:Key="BrushAccentPressed" Color="{StaticResource ColorAccentPressed}" />
+    </Styles.Resources>
+
+    <!-- ================================================================
+         Field label
+         ================================================================ -->
+    <Style Selector="TextBlock.FieldLabel">
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="FontWeight" Value="Medium" />
+        <Setter Property="Foreground" Value="{StaticResource BrushTextSecondary}" />
+        <Setter Property="LetterSpacing" Value="0.4" />
+    </Style>
+
+    <!-- ================================================================
+         Login text field
+         ================================================================ -->
+    <Style Selector="TextBox.LoginField">
+        <Setter Property="Height" Value="44" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="Foreground" Value="{StaticResource BrushTextPrimary}" />
+        <Setter Property="Background" Value="{StaticResource BrushSurfaceRaised}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BrushBorder}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="Padding" Value="12,0" />
+        <Setter Property="SelectionBrush" Value="#334F8EF7" />
+        <Setter Property="CaretBrush" Value="{StaticResource BrushAccent}" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border Name="PART_BorderElement"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}">
+                    <Panel>
+                        <ScrollViewer Name="PART_ContentHost"
+                                      HorizontalScrollBarVisibility="Hidden"
+                                      VerticalScrollBarVisibility="Hidden"
+                                      Margin="{TemplateBinding Padding}" />
+                        <TextBlock Name="PART_Watermark"
+                                   Text="{TemplateBinding Watermark}"
+                                   Foreground="#3E4A60"
+                                   FontSize="{TemplateBinding FontSize}"
+                                   Margin="{TemplateBinding Padding}"
+                                   VerticalAlignment="Center"
+                                   IsHitTestVisible="False" />
+                    </Panel>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+
+    <Style Selector="TextBox.LoginField:focus /template/ Border#PART_BorderElement">
+        <Setter Property="BorderBrush" Value="{StaticResource BrushBorderFocused}" />
+        <Setter Property="Background" Value="#1E2233" />
+    </Style>
+
+    <Style Selector="TextBox.LoginField:pointerover /template/ Border#PART_BorderElement">
+        <Setter Property="BorderBrush" Value="#2E3650" />
+    </Style>
+
+    <!-- Hide watermark when text box has content or focus -->
+    <Style Selector="TextBox.LoginField:not(:empty) /template/ TextBlock#PART_Watermark">
+        <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="TextBox.LoginField:focus /template/ TextBlock#PART_Watermark">
+        <Setter Property="IsVisible" Value="False" />
+    </Style>
+
+    <!-- ================================================================
+         Primary (accent) button — Login button
+         ================================================================ -->
+    <Style Selector="Button.PrimaryButton">
+        <Setter Property="Height" Value="46" />
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="#FFFFFF" />
+        <Setter Property="Background" Value="{StaticResource BrushAccent}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Transitions">
+            <Transitions>
+                <BrushTransition Property="Background" Duration="0:0:0.15" />
+            </Transitions>
+        </Setter>
+    </Style>
+
+    <Style Selector="Button.PrimaryButton:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="{StaticResource BrushAccentHover}" />
+    </Style>
+
+    <Style Selector="Button.PrimaryButton:pressed /template/ ContentPresenter">
+        <Setter Property="Background" Value="{StaticResource BrushAccentPressed}" />
+    </Style>
+
+    <!-- ================================================================
+         Link button — "Esqueci minha senha"
+         ================================================================ -->
+    <Style Selector="Button.LinkButton">
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="Foreground" Value="{StaticResource BrushAccent}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Transitions">
+            <Transitions>
+                <BrushTransition Property="Foreground" Duration="0:0:0.1" />
+            </Transitions>
+        </Setter>
+    </Style>
+
+    <Style Selector="Button.LinkButton:pointerover /template/ ContentPresenter">
+        <Setter Property="TextDecorations" Value="Underline" />
+        <Setter Property="Foreground" Value="{StaticResource BrushAccentHover}" />
+    </Style>
+
+    <Style Selector="Button.LinkButton:pressed /template/ ContentPresenter">
+        <Setter Property="Foreground" Value="{StaticResource BrushAccentPressed}" />
+    </Style>
+
+</Styles>

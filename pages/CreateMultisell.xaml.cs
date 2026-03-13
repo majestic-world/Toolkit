@@ -1,15 +1,14 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
 using System.Xml.Linq;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
 using L2Toolkit.Parse;
 using L2Toolkit.Utilities;
+using MsBox.Avalonia;
 
 namespace L2Toolkit.pages;
 
@@ -51,7 +50,7 @@ public partial class CreateMultisell : UserControl
 
             if (string.IsNullOrWhiteSpace(productionId) || string.IsNullOrWhiteSpace(materialId))
             {
-                MessageBox.Show("Digite o Id e material", "ERRO", MessageBoxButton.OK, MessageBoxImage.Error);
+                await MessageBoxManager.GetMessageBoxStandard("ERRO", "Digite o Id e material").ShowWindowAsync();
                 return;
             }
 
@@ -106,8 +105,6 @@ public partial class CreateMultisell : UserControl
             );
 
             XmlData.Text = document.ToString();
-            
-            Console.WriteLine(XmlData);
         }
         catch (Exception ex)
         {

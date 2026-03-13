@@ -1,0 +1,94 @@
+<UserControl x:Class="L2Toolkit.pages.UpgradeNormalSystem"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="White">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="30">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Margin="0 0 0 16">
+                <TextBlock Text="Upgrade Equipment"
+                           FontSize="32"
+                           FontWeight="Light"
+                           Foreground="#1F2937"
+                           Margin="0,0,0,2"/>
+                <TextBlock Text="Gere os dados do cliente pelo XML"
+                           FontSize="16"
+                           Foreground="#6B7280"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="1" Orientation="Vertical" Margin="0,0,0,6">
+                <TextBlock Text="Selecione o arquivo upgrade_normal_system.xml"
+                          FontSize="16"
+                          FontWeight="SemiBold"
+                          Margin="0,0,0,8"/>
+                <Border Background="White" CornerRadius="10" Margin="0 0 0 10"
+                        BorderBrush="#350B0B17" BorderThickness="1">
+                    <TextBox x:Name="UpgradeContent"
+                             PointerPressed="UpgradeContent_OnPreviewMouseDown"
+                             AcceptsReturn="True"
+                             IsReadOnly="True"
+                             TextWrapping="NoWrap"
+                             Height="40"
+                             Cursor="Hand"
+                             Padding="15,10"
+                             BorderThickness="0"
+                             Background="Transparent"/>
+                </Border>
+            </StackPanel>
+
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
+                <Button x:Name="UpgradeGenerate"
+                        Click="UpgradeGenerate_OnClick"
+                        Content="Gerar Dados"
+                        Width="110"
+                        Height="40"
+                        FontSize="14"
+                        Theme="{StaticResource PrimaryButton}"
+                        Margin="0,0,10,0"/>
+
+                <Button x:Name="UpgradeCopy"
+                        Click="UpgradeCopy_OnClick"
+                        Content="Copiar Dados"
+                        Width="110"
+                        Height="40"
+                        Theme="{StaticResource SecondaryButton}"
+                        FontSize="14"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="4" Orientation="Vertical">
+                <TextBlock Text="Arquivos do client"
+                          FontSize="16"
+                          FontWeight="SemiBold"
+                          Margin="0,0,0,8"/>
+                <Border Background="White" CornerRadius="10" BorderBrush="#350B0B17" BorderThickness="1">
+                    <TextBox x:Name="UpgradeOutput"
+                             AcceptsReturn="True"
+                             TextWrapping="Wrap"
+                             Height="290"
+                             Padding="15,10"
+                             BorderThickness="0"
+                             Background="Transparent"
+                             IsReadOnly="True"/>
+                </Border>
+            </StackPanel>
+
+            <StackPanel Grid.Row="5">
+                <TextBlock
+                    IsVisible="False"
+                    x:Name="CopyBlock"
+                    Margin="0 3"
+                    Foreground="Green"
+                    FontWeight="SemiBold"
+                    Text="✓ Copiado com sucesso!"/>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

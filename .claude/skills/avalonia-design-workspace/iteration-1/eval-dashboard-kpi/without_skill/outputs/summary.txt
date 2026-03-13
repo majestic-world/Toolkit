@@ -1,0 +1,56 @@
+Dashboard KPI - Avalonia UI Implementation Summary
+====================================================
+
+Files produced
+--------------
+1. DashboardView.axaml       — Main view (AXAML markup)
+2. DashboardView.axaml.cs    — Code-behind (partial class, wires sample data)
+3. ActivityItem.cs           — Model + sample data for the DataGrid
+
+Visual structure
+----------------
+Root layout: ScrollViewer > StackPanel (vertical, 28 px gap)
+
+  [Page header]
+    Title "Dashboard" + subtitle text
+
+  [KPI Cards row]
+    Grid with 4 equal columns (* * * *), no vertical scroll
+    Card 1 — Total Users   : 24,521  | +12.5%  | indigo icon badge
+    Card 2 — Revenue       : $184,320| +8.2%   | green  icon badge
+    Card 3 — Orders        : 3,847   | -3.1%   | orange icon badge
+    Card 4 — Open Tickets  : 142     | +5.4%   | red    icon badge
+
+    Each card is a white rounded Border (radius 12, soft shadow)
+    containing: label row (title + coloured icon), large value, delta pill.
+    Positive deltas are green (#22C55E); negative/bad deltas are red (#EF4444).
+
+  [Recent Activities table]
+    White rounded card wrapping a DataGrid (3 columns):
+      - Name   (*)    — avatar initials circle + name + email sub-line
+      - Status (160)  — colour-coded pill badge per status value
+      - Date   (180)  — plain text, muted colour
+
+    Status colour mapping:
+      Completed  → green   (#F0FDF4 / #16A34A)
+      Processing → indigo  (#EEF2FF / #4338CA)
+      Pending    → orange  (#FFF7ED / #C2410C)
+      Cancelled  → red     (#FFF1F2 / #BE123C)
+      On Hold    → violet  (#F5F3FF / #7C3AED)
+
+Theme
+-----
+Light-only. Background #F5F6FA (page), #FFFFFF (cards/table).
+No RequestedThemeVariant attribute is set on the UserControl itself;
+set Light on the Application or parent Window in App.axaml / MainWindow.axaml.
+
+Integration notes
+-----------------
+- Namespace assumed: UnrealTools.Views (view) / UnrealTools.Models (model).
+  Adjust x:Class and namespace declarations to match your project.
+- ActivityItem.cs uses C# 12 collection expression syntax (requires .NET 8+;
+  project targets .NET 10 so this is fine).
+- The DataGrid requires the Avalonia.Controls.DataGrid NuGet package if not
+  already referenced (included in Avalonia 11 meta-package by default).
+- For production use, replace ActivityItem.GetSampleData() with a proper
+  ViewModel / IObservable binding and set x:DataType accordingly.

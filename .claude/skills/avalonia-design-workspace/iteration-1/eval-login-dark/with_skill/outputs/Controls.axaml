@@ -1,0 +1,124 @@
+<!-- Styles/Controls.axaml -->
+<!--
+  Reusable ControlTheme definitions for the ERP login screen.
+  Include this file in App.axaml via:
+    <StyleInclude Source="avares://YourApp/Styles/Controls.axaml"/>
+  Tokens.Dark.axaml must be merged before this file.
+-->
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <!-- ════════════════════════════════════════════════════════════════════
+       PRIMARY BUTTON
+       Full-width capable; used for the main "Entrar" action.
+       ════════════════════════════════════════════════════════════════════ -->
+  <Style Selector="Button.Primary">
+    <Setter Property="Background"      Value="{DynamicResource BrushAccentPrimary}"/>
+    <Setter Property="Foreground"      Value="{DynamicResource BrushAccentForeground}"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="CornerRadius"    Value="{DynamicResource RadiusM}"/>
+    <Setter Property="Padding"         Value="16,10"/>
+    <Setter Property="FontSize"        Value="{DynamicResource FontSizeBody}"/>
+    <Setter Property="FontWeight"      Value="Medium"/>
+    <Setter Property="Cursor"          Value="Hand"/>
+    <Setter Property="Transitions">
+      <Transitions>
+        <BrushTransition Property="Background" Duration="0:0:0.12"/>
+        <DoubleTransition Property="Opacity"   Duration="0:0:0.12"/>
+      </Transitions>
+    </Setter>
+  </Style>
+
+  <Style Selector="Button.Primary /template/ ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource BrushAccentPrimary}"/>
+    <Setter Property="CornerRadius" Value="{DynamicResource RadiusM}"/>
+    <Setter Property="Transitions">
+      <Transitions>
+        <BrushTransition Property="Background" Duration="0:0:0.12"/>
+      </Transitions>
+    </Setter>
+  </Style>
+
+  <Style Selector="Button.Primary:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource BrushAccentHover}"/>
+  </Style>
+
+  <Style Selector="Button.Primary:pressed /template/ ContentPresenter">
+    <Setter Property="Background"       Value="{DynamicResource BrushAccentPressed}"/>
+    <Setter Property="RenderTransform"  Value="scale(0.98)"/>
+  </Style>
+
+  <Style Selector="Button.Primary:disabled">
+    <Setter Property="Opacity" Value="0.4"/>
+    <Setter Property="Cursor"  Value="Arrow"/>
+  </Style>
+
+  <!-- ════════════════════════════════════════════════════════════════════
+       LINK BUTTON
+       Transparent background; used for "Esqueci minha senha".
+       ════════════════════════════════════════════════════════════════════ -->
+  <Style Selector="Button.Link">
+    <Setter Property="Background"      Value="Transparent"/>
+    <Setter Property="Foreground"      Value="{DynamicResource BrushAccentPrimary}"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="CornerRadius"    Value="{DynamicResource RadiusS}"/>
+    <Setter Property="Padding"         Value="0"/>
+    <Setter Property="FontSize"        Value="{DynamicResource FontSizeBody}"/>
+    <Setter Property="Cursor"          Value="Hand"/>
+    <Setter Property="Transitions">
+      <Transitions>
+        <DoubleTransition Property="Opacity" Duration="0:0:0.12"/>
+      </Transitions>
+    </Setter>
+  </Style>
+
+  <Style Selector="Button.Link /template/ ContentPresenter">
+    <Setter Property="Background" Value="Transparent"/>
+  </Style>
+
+  <Style Selector="Button.Link:pointerover">
+    <Setter Property="Opacity" Value="0.75"/>
+  </Style>
+
+  <Style Selector="Button.Link:pressed">
+    <Setter Property="Opacity" Value="0.55"/>
+  </Style>
+
+  <Style Selector="Button.Link:disabled">
+    <Setter Property="Opacity" Value="0.35"/>
+    <Setter Property="Cursor"  Value="Arrow"/>
+  </Style>
+
+  <!-- ════════════════════════════════════════════════════════════════════
+       DEFAULT TEXT BOX
+       Standard single-line text input with focus ring.
+       ════════════════════════════════════════════════════════════════════ -->
+  <Style Selector="TextBox.Field">
+    <Setter Property="Background"      Value="{DynamicResource BrushSurfaceElevated}"/>
+    <Setter Property="Foreground"      Value="{DynamicResource BrushContentPrimary}"/>
+    <Setter Property="BorderBrush"     Value="{DynamicResource BrushSurfaceBorder}"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="CornerRadius"    Value="{DynamicResource RadiusS}"/>
+    <Setter Property="Padding"         Value="12,10"/>
+    <Setter Property="FontSize"        Value="{DynamicResource FontSizeBody}"/>
+    <Setter Property="MinHeight"       Value="40"/>
+    <Setter Property="Transitions">
+      <Transitions>
+        <BrushTransition Property="BorderBrush" Duration="0:0:0.12"/>
+      </Transitions>
+    </Setter>
+  </Style>
+
+  <Style Selector="TextBox.Field:focus">
+    <Setter Property="BorderBrush" Value="{DynamicResource BrushAccentPrimary}"/>
+  </Style>
+
+  <Style Selector="TextBox.Field:pointerover">
+    <Setter Property="BorderBrush" Value="{DynamicResource BrushContentTertiary}"/>
+  </Style>
+
+  <Style Selector="TextBox.Field:disabled">
+    <Setter Property="Opacity" Value="0.45"/>
+  </Style>
+
+</Styles>

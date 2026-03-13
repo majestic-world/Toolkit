@@ -1,21 +1,23 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
 using System.Xml.Linq;
+using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.Platform.Storage;
 using L2Toolkit.database;
 using L2Toolkit.DataMap;
 using L2Toolkit.Utilities;
-using Microsoft.Win32;
+using MsBox.Avalonia;
 
 namespace L2Toolkit.pages;
 
-public partial class SkillsModify
+public partial class SkillsModify : UserControl
 {
     private readonly GlobalLogs _log = new();
     private readonly ConcurrentDictionary<string, Skills> _skillsMap = new();
@@ -31,11 +33,12 @@ public partial class SkillsModify
         }
     }
 
-    private void RewardContent_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
+    private async void RewardContent_OnPreviewMouseDown(object? sender, PointerPressedEventArgs e)
     {
-        var dialog = new OpenFolderDialog();
-        if (dialog.ShowDialog() != true) return;
-        var folderPath = dialog.FolderName;
+        var topLevel = TopLevel.GetTopLevel(this);
+        var folders = await topLevel!.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions());
+        if (folders.Count == 0) return;
+        var folderPath = folders[0].Path.LocalPath;
         FolderSkills.Text = folderPath;
         AppDatabase.GetInstance().UpdateValue("lastSkillFolder", folderPath);
     }
@@ -77,7 +80,7 @@ public partial class SkillsModify
         };
         return chance;
     }
-    
+
     private static (long exp, long sp) GetExpSp(int level)
     {
         var result = level switch
@@ -198,7 +201,7 @@ public partial class SkillsModify
                     new XAttribute("id", skill.Id),
                     new XAttribute("name", skill.Name)
                 );
-                
+
                 var groupedRoutes = skill.Enchants
                     .Where(enchantData => !string.IsNullOrEmpty(enchantData.Level))
                     .GroupBy(enchantData => enchantData.Id);
@@ -215,9 +218,8 @@ public partial class SkillsModify
 
                         for (var skillLevel = 1; skillLevel <= int.Parse(enchant.Level); skillLevel++)
                         {
-                            
                             var (exp, sp) = GetExpSp(skillLevel);
-                            
+
                             var enchantElement = new XElement("enchant",
                                 new XAttribute("level", skillLevel),
                                 new XAttribute("skillLvl", initialLevel),
@@ -259,7 +261,25 @@ public partial class SkillsModify
         }
         catch (Exception ex)
         {
-            MessageBox.Show(ex.Message);
+            await MessageBoxManager.GetMessageBoxStandard("Erro", ex.Message).ShowWindowAsync();
+        }
+    }
+
+    private async void RewardCopy_OnClick(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            var text = LogContent.Text;
+            if (string.IsNullOrEmpty(text)) return;
+            var topLevel = TopLevel.GetTopLevel(this);
+            await topLevel!.Clipboard!.SetTextAsync(text);
+            CopyBlock.IsVisible = true;
+            await Task.Delay(3000);
+            CopyBlock.IsVisible = false;
+        }
+        catch (Exception)
+        {
+            //ignore
         }
     }
 }

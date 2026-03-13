@@ -1,0 +1,67 @@
+DASHBOARD AVALONIA — RESUMO DE ENTREGA
+======================================
+
+Tarefa
+------
+Dashboard Avalonia com 4 cards de métricas e tabela de atividades recentes.
+Tema: Light. Colunas da tabela: Nome, Status, Data.
+
+Arquivos produzidos
+-------------------
+1. Tokens.Light.axaml
+   Dicionário de recursos completo para o tema claro.
+   Define todas as cores (Color), pincéis (SolidColorBrush), tipografia,
+   espaçamento (Thickness + Double para Spacing=), raios de borda.
+   Nenhum hex é usado fora deste arquivo.
+
+2. Controls.axaml
+   Estilos de controles compartilhados via class selectors (Avalonia 11 style):
+   - Button.Primary — botão de ação principal com hover/pressed/disabled
+   - Button.Ghost   — botão secundário transparente
+   - Border.KpiCard — estilo de card de métrica
+   - Border.SectionCard — painel de seção com borda
+   - DataGridColumnHeader — cabeçalho com fundo neutro e texto secundário
+   - DataGridRow:pointerover — realce de linha com AccentSubtle
+   - DataGridCell — padding e cor de texto consistentes
+   - Border.BadgeSuccess / BadgeWarning / BadgeDanger / BadgeNeutral
+     (pílulas de status reutilizáveis)
+
+3. DashboardView.axaml
+   UserControl com x:DataType="vm:DashboardViewModel" (compiled bindings).
+   Layout:
+   - Cabeçalho de página com título, subtítulo e botão "Exportar relatório"
+   - UniformGrid Columns=4 com 4 KPI cards:
+       * Usuários Totais  — ícone azul accent, tendência positiva (verde)
+       * Receita          — ícone verde success, tendência positiva
+       * Pedidos          — ícone laranja warning, tendência negativa
+       * Tickets Abertos  — ícone vermelho danger, tendência negativa
+     Cada card: label maiúsculo, valor grande (FontSizeDisplay/32), linha de tendência
+     com seta PathIcon e cor semântica.
+   - Seção "Atividades Recentes" com DataGrid:
+       Colunas: Nome (Width=*), Status (148px, DataGridTemplateColumn), Data (148px)
+       IsReadOnly, GridLinesVisibility=Horizontal, CanUserSort, envolvido em Border.SectionCard
+
+Princípios aplicados
+--------------------
+- Nenhum valor hex hardcoded em Controls.axaml ou DashboardView.axaml.
+  Todas as cores via DynamicResource.
+- Grade de 4px: todos os espaçamentos são múltiplos de 4 (4, 8, 12, 16, 24, 32).
+- No máximo 2 matizes de destaque por view (AccentPrimary + semantic colors por card).
+- Estados interativos (:pointerover, :pressed, :disabled) em todos os botões.
+- x:DataType declarado para bindings compilados.
+- Separação clara de tokens (Tokens.Light.axaml), estilos (Controls.axaml) e layout (DashboardView.axaml).
+
+Bindings esperados no ViewModel
+--------------------------------
+  TotalUsers        : string  ex. "12.480"
+  TotalUsersTrend   : string  ex. "+5,3% vs. mês anterior"
+  TotalRevenue      : string  ex. "R$ 124.580"
+  TotalRevenueTrend : string  ex. "+8,2% vs. mês anterior"
+  TotalOrders       : string  ex. "3.241"
+  TotalOrdersTrend  : string  ex. "-2,1% vs. mês anterior"
+  OpenTickets       : string  ex. "47"
+  OpenTicketsTrend  : string  ex. "+12 esta semana"
+  RecentActivities  : IEnumerable<ActivityItem>
+    ActivityItem.Name   : string
+    ActivityItem.Status : string
+    ActivityItem.Date   : string

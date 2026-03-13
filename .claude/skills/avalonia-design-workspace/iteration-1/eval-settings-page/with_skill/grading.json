@@ -1,0 +1,34 @@
+{
+  "expectations": [
+    {
+      "text": "Existem 3 seções distintas: Perfil, Aparência e Zona de Perigo",
+      "passed": true,
+      "evidence": "Três Border cards claramente separados com headers: 'Perfil', 'Aparência', 'Zona de Perigo'. Cada seção tem header próprio, separador visual e conteúdo específico."
+    },
+    {
+      "text": "A seção Perfil contém campos para nome e email",
+      "passed": true,
+      "evidence": "Seção Perfil tem Grid com dois TextBox (Nome e Sobrenome lado a lado) mais TextBox separado para E-mail. Todos com Watermark e bindings."
+    },
+    {
+      "text": "Existe um ToggleSwitch ou CheckBox para dark mode na seção Aparência",
+      "passed": true,
+      "evidence": "ToggleSwitch IsChecked='{Binding IsDarkMode}' OnContent='' OffContent='' na seção Aparência, com label 'Modo escuro' e descrição."
+    },
+    {
+      "text": "Existe um botão de deletar conta na seção Zona de Perigo com cor semântica de erro/perigo",
+      "passed": true,
+      "evidence": "Button Classes='Danger' Content='Deletar conta' na seção Zona de Perigo. Card da seção usa BrushColorDangerBg, BrushColorDangerBorder, BrushColorDangerSurface — todos tokens semânticos de perigo."
+    },
+    {
+      "text": "Nenhuma cor hexadecimal hardcoded no layout principal (exceto zona de perigo que pode ter cor de erro explícita)",
+      "passed": true,
+      "evidence": "SettingsView.axaml não contém nenhum valor hex. Mesmo a seção Zona de Perigo usa DynamicResource (BrushColorDanger, BrushColorDangerBg, BrushColorDangerBorder, BrushColorDangerSurface) definidos nos tokens."
+    },
+    {
+      "text": "Usa DynamicResource para cores e tokens de design",
+      "passed": true,
+      "evidence": "DynamicResource usado para BrushSurfaceBackground, BrushSurfaceCard, BrushSurfaceBorder, BrushContentPrimary, BrushContentSecondary, FontDefault, FontSizeHeading, FontSizeBody, FontSizeSmall, FontSizeSubtitle, RadiusL, SpacingXXL, SpacingL — cobertura completa do sistema de tokens."
+    }
+  ]
+}

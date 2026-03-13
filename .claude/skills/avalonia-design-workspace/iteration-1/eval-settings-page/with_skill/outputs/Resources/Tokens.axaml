@@ -1,0 +1,132 @@
+<!-- Resources/Tokens.axaml -->
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <ResourceDictionary.ThemeDictionaries>
+
+    <!-- ===== LIGHT ===== -->
+    <ResourceDictionary x:Key="Light">
+
+      <!-- Surfaces -->
+      <Color x:Key="SurfaceBackground">#F5F5F5</Color>
+      <Color x:Key="SurfaceCard">#FFFFFF</Color>
+      <Color x:Key="SurfaceElevated">#FAFAFA</Color>
+      <Color x:Key="SurfaceBorder">#E0E0E0</Color>
+      <Color x:Key="SurfaceBorderSubtle">#F0F0F0</Color>
+
+      <!-- Content -->
+      <Color x:Key="ContentPrimary">#1A1A1A</Color>
+      <Color x:Key="ContentSecondary">#6B7280</Color>
+      <Color x:Key="ContentTertiary">#9CA3AF</Color>
+      <Color x:Key="ContentDisabled">#BDBDBD</Color>
+      <Color x:Key="ContentInverse">#FFFFFF</Color>
+
+      <!-- Accent -->
+      <Color x:Key="AccentPrimary">#0F7EC8</Color>
+      <Color x:Key="AccentHover">#0D6BAD</Color>
+      <Color x:Key="AccentPressed">#0A5A92</Color>
+      <Color x:Key="AccentSubtle">#E8F4FD</Color>
+      <Color x:Key="AccentForeground">#FFFFFF</Color>
+
+      <!-- Semantic -->
+      <Color x:Key="ColorSuccess">#2E7D32</Color>
+      <Color x:Key="ColorSuccessBg">#E8F5E9</Color>
+      <Color x:Key="ColorWarning">#E65100</Color>
+      <Color x:Key="ColorWarningBg">#FFF3E0</Color>
+      <Color x:Key="ColorDanger">#C62828</Color>
+      <Color x:Key="ColorDangerBg">#FFEBEE</Color>
+      <Color x:Key="ColorDangerBorder">#FFCDD2</Color>
+      <Color x:Key="ColorDangerSurface">#FFF8F8</Color>
+      <Color x:Key="ColorDangerHover">#B71C1C</Color>
+
+    </ResourceDictionary>
+
+    <!-- ===== DARK ===== -->
+    <ResourceDictionary x:Key="Dark">
+
+      <!-- Surfaces -->
+      <Color x:Key="SurfaceBackground">#111827</Color>
+      <Color x:Key="SurfaceCard">#1F2937</Color>
+      <Color x:Key="SurfaceElevated">#263041</Color>
+      <Color x:Key="SurfaceBorder">#374151</Color>
+      <Color x:Key="SurfaceBorderSubtle">#2D3748</Color>
+
+      <!-- Content -->
+      <Color x:Key="ContentPrimary">#F9FAFB</Color>
+      <Color x:Key="ContentSecondary">#9CA3AF</Color>
+      <Color x:Key="ContentTertiary">#6B7280</Color>
+      <Color x:Key="ContentDisabled">#4B5563</Color>
+      <Color x:Key="ContentInverse">#111827</Color>
+
+      <!-- Accent -->
+      <Color x:Key="AccentPrimary">#3B9EDD</Color>
+      <Color x:Key="AccentHover">#5AAFE3</Color>
+      <Color x:Key="AccentPressed">#2A8EC8</Color>
+      <Color x:Key="AccentSubtle">#1A3A52</Color>
+      <Color x:Key="AccentForeground">#FFFFFF</Color>
+
+      <!-- Semantic -->
+      <Color x:Key="ColorSuccess">#4CAF50</Color>
+      <Color x:Key="ColorSuccessBg">#1A3320</Color>
+      <Color x:Key="ColorWarning">#FB8C00</Color>
+      <Color x:Key="ColorWarningBg">#3D2800</Color>
+      <Color x:Key="ColorDanger">#EF5350</Color>
+      <Color x:Key="ColorDangerBg">#3D1A1A</Color>
+      <Color x:Key="ColorDangerBorder">#6B2020</Color>
+      <Color x:Key="ColorDangerSurface">#2A1515</Color>
+      <Color x:Key="ColorDangerHover">#E53935</Color>
+
+    </ResourceDictionary>
+
+  </ResourceDictionary.ThemeDictionaries>
+
+  <!-- ===== BRUSHES (DynamicResource picks the active theme variant) ===== -->
+  <SolidColorBrush x:Key="BrushSurfaceBackground"  Color="{DynamicResource SurfaceBackground}"/>
+  <SolidColorBrush x:Key="BrushSurfaceCard"        Color="{DynamicResource SurfaceCard}"/>
+  <SolidColorBrush x:Key="BrushSurfaceElevated"    Color="{DynamicResource SurfaceElevated}"/>
+  <SolidColorBrush x:Key="BrushSurfaceBorder"      Color="{DynamicResource SurfaceBorder}"/>
+  <SolidColorBrush x:Key="BrushSurfaceBorderSubtle" Color="{DynamicResource SurfaceBorderSubtle}"/>
+
+  <SolidColorBrush x:Key="BrushContentPrimary"     Color="{DynamicResource ContentPrimary}"/>
+  <SolidColorBrush x:Key="BrushContentSecondary"   Color="{DynamicResource ContentSecondary}"/>
+  <SolidColorBrush x:Key="BrushContentTertiary"    Color="{DynamicResource ContentTertiary}"/>
+  <SolidColorBrush x:Key="BrushContentDisabled"    Color="{DynamicResource ContentDisabled}"/>
+
+  <SolidColorBrush x:Key="BrushAccentPrimary"      Color="{DynamicResource AccentPrimary}"/>
+  <SolidColorBrush x:Key="BrushAccentHover"        Color="{DynamicResource AccentHover}"/>
+  <SolidColorBrush x:Key="BrushAccentPressed"      Color="{DynamicResource AccentPressed}"/>
+  <SolidColorBrush x:Key="BrushAccentSubtle"       Color="{DynamicResource AccentSubtle}"/>
+  <SolidColorBrush x:Key="BrushAccentForeground"   Color="{DynamicResource AccentForeground}"/>
+
+  <SolidColorBrush x:Key="BrushColorDanger"        Color="{DynamicResource ColorDanger}"/>
+  <SolidColorBrush x:Key="BrushColorDangerBg"      Color="{DynamicResource ColorDangerBg}"/>
+  <SolidColorBrush x:Key="BrushColorDangerBorder"  Color="{DynamicResource ColorDangerBorder}"/>
+  <SolidColorBrush x:Key="BrushColorDangerSurface" Color="{DynamicResource ColorDangerSurface}"/>
+  <SolidColorBrush x:Key="BrushColorDangerHover"   Color="{DynamicResource ColorDangerHover}"/>
+
+  <!-- ===== TYPOGRAPHY ===== -->
+  <FontFamily x:Key="FontDefault">Inter,Segoe UI,system-ui,sans-serif</FontFamily>
+  <x:Double x:Key="FontSizeSmall">12</x:Double>
+  <x:Double x:Key="FontSizeBody">14</x:Double>
+  <x:Double x:Key="FontSizeSubtitle">16</x:Double>
+  <x:Double x:Key="FontSizeTitle">20</x:Double>
+  <x:Double x:Key="FontSizeHeading">24</x:Double>
+
+  <!-- ===== SPACING (4px grid) ===== -->
+  <Thickness x:Key="SpacingXS">4</Thickness>
+  <Thickness x:Key="SpacingS">8</Thickness>
+  <Thickness x:Key="SpacingM">12</Thickness>
+  <Thickness x:Key="SpacingL">16</Thickness>
+  <Thickness x:Key="SpacingXL">24</Thickness>
+  <Thickness x:Key="SpacingXXL">32</Thickness>
+  <Thickness x:Key="SpacingXXXL">48</Thickness>
+
+  <!-- ===== SHAPE ===== -->
+  <CornerRadius x:Key="RadiusXS">2</CornerRadius>
+  <CornerRadius x:Key="RadiusS">4</CornerRadius>
+  <CornerRadius x:Key="RadiusM">6</CornerRadius>
+  <CornerRadius x:Key="RadiusL">8</CornerRadius>
+  <CornerRadius x:Key="RadiusXL">12</CornerRadius>
+  <CornerRadius x:Key="RadiusFull">9999</CornerRadius>
+
+</ResourceDictionary>

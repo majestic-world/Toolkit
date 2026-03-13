@@ -1,0 +1,29 @@
+{
+  "expectations": [
+    {
+      "text": "Existem exatamente 4 cards de métricas/KPI distintos (usuários, receita, pedidos, tickets)",
+      "passed": true,
+      "evidence": "UniformGrid Columns='4' contém exatamente 4 Border Classes='KpiCard': Usuários Totais, Receita, Pedidos, Tickets Abertos. Cada card tem ícone PathIcon, valor de métrica e indicador de tendência."
+    },
+    {
+      "text": "Existe um DataGrid ou tabela com ao menos 3 colunas (nome, status, data)",
+      "passed": true,
+      "evidence": "DataGrid com 3 colunas: DataGridTextColumn Header='Nome' Width='*', DataGridTemplateColumn Header='Status' Width='148', DataGridTextColumn Header='Data' Width='148'."
+    },
+    {
+      "text": "Nenhuma cor hexadecimal hardcoded no layout principal",
+      "passed": true,
+      "evidence": "DashboardView.axaml não contém nenhum valor hex. Todos os atributos de cor usam DynamicResource (BrushContentPrimary, BrushContentSecondary, BrushAccentPrimary, BrushColorSuccess, BrushColorWarning, BrushColorDanger, etc.)."
+    },
+    {
+      "text": "Usa DynamicResource para cores/brushes nos componentes",
+      "passed": true,
+      "evidence": "Uso extensivo de DynamicResource em todo o arquivo. Background, Foreground, PathIcon colors, todos via DynamicResource."
+    },
+    {
+      "text": "Tema light referenciado (tokens light ou ausência de dark como padrão)",
+      "passed": true,
+      "evidence": "Tokens.Light.axaml produzido separadamente. Comentário no topo do arquivo instrui incluir Tokens.Light.axaml em App.axaml."
+    }
+  ]
+}

@@ -1,18 +1,20 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
 using System.Xml.Linq;
+using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.Platform.Storage;
 using L2Toolkit.database;
 using L2Toolkit.Utilities;
-using Microsoft.Win32;
+using MsBox.Avalonia;
 
 namespace L2Toolkit.pages;
 
-public partial class Commission
+public partial class Commission : UserControl
 {
     private readonly GlobalLogs _logs = new();
     private readonly ConcurrentDictionary<string, string> _dictionary = new();
@@ -35,24 +37,25 @@ public partial class Commission
         }
     }
 
-    private void ProductionId_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
+    private async void ProductionId_OnPreviewMouseDown(object? sender, PointerPressedEventArgs e)
     {
-        var dialog = new OpenFolderDialog();
-        if (dialog.ShowDialog() != true) return;
-        var message = dialog.FolderName;
+        var topLevel = TopLevel.GetTopLevel(this);
+        var folders = await topLevel!.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions());
+        if (folders.Count == 0) return;
+        var message = folders[0].Path.LocalPath;
         MobiusFolder.Text = message;
         AppDatabase.GetInstance().UpdateValue("MobiusFolder", message);
     }
 
-    private void MaterialId_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
+    private async void MaterialId_OnPreviewMouseDown(object? sender, PointerPressedEventArgs e)
     {
-        var dialog = new OpenFolderDialog();
-        if (dialog.ShowDialog() != true) return;
-        var message = dialog.FolderName;
+        var topLevel = TopLevel.GetTopLevel(this);
+        var folders = await topLevel!.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions());
+        if (folders.Count == 0) return;
+        var message = folders[0].Path.LocalPath;
         LuceraFolder.Text = message;
         AppDatabase.GetInstance().UpdateValue("LuceraFolder", message);
     }
-
 
     private Task LoadMobiusItems()
     {
@@ -104,7 +107,7 @@ public partial class Commission
             var document = XDocument.Load(xmlFile);
             var elements = document.Root?.Elements();
             if (elements == null) continue;
-            
+
             foreach (var element in elements)
             {
                 var id = element.Attribute("id")?.Value;
@@ -127,7 +130,7 @@ public partial class Commission
                 document.Save(xmlFile);
             }
         }
-        
+
         _logs.AddLog($"Atualização concluída, {modify:N0} modificados");
     }
 
@@ -145,7 +148,7 @@ public partial class Commission
         }
         catch (Exception ex)
         {
-            MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            await MessageBoxManager.GetMessageBoxStandard("Error", ex.Message).ShowWindowAsync();
         }
     }
 }

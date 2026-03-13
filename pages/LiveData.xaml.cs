@@ -1,22 +1,24 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
 using System.Xml.Linq;
+using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.Platform.Storage;
+using Avalonia.Threading;
 using L2Toolkit.database;
 using L2Toolkit.DataMap;
 using L2Toolkit.ProcessData;
 using L2Toolkit.Utilities;
-using Microsoft.Win32;
+using MsBox.Avalonia;
 
 namespace L2Toolkit.pages;
 
-public partial class LiveData
+public partial class LiveData : UserControl
 {
     private const string SkillGrp = "Skillgrp.txt";
     private const string SkillName = "SkillName-eu.txt";
@@ -44,7 +46,6 @@ public partial class LiveData
             ClientFolder.Text = lastLiveFolder;
         }
     }
-
 
     private async Task CreateStatusData()
     {
@@ -75,13 +76,14 @@ public partial class LiveData
         }
     }
 
-
-    private void ClientFolder_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
+    private async void ClientFolder_OnPreviewMouseDown(object sender, PointerPressedEventArgs e)
     {
-        var dialog = new OpenFolderDialog();
-        if (dialog.ShowDialog() != true) return;
-        ClientFolder.Text = dialog.FolderName;
-        AppDatabase.GetInstance().UpdateValue("lastLiveFolder", dialog.FolderName);
+        var topLevel = TopLevel.GetTopLevel(this);
+        var folders = await topLevel!.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions());
+        if (folders.Count == 0) return;
+        var path = folders[0].Path.LocalPath;
+        ClientFolder.Text = path;
+        AppDatabase.GetInstance().UpdateValue("lastLiveFolder", path);
     }
 
     #region DataSkillParse
@@ -175,8 +177,8 @@ public partial class LiveData
             }
         }
 
-        Dispatcher.Invoke(() => ClientTextBox.Text = buildGrp.ToString());
-        Dispatcher.Invoke(() => NameData.Text = buildNames.ToString());
+        Dispatcher.UIThread.Invoke(() => ClientTextBox.Text = buildGrp.ToString());
+        Dispatcher.UIThread.Invoke(() => NameData.Text = buildNames.ToString());
 
         if (buildGrp.Length == 0 && buildNames.Length == 0)
         {
@@ -213,7 +215,6 @@ public partial class LiveData
     }
 
     #endregion
-
 
     #region DataItemParse
 
@@ -435,7 +436,6 @@ public partial class LiveData
                 new XAttribute("value", "48800000")
             ));
 
-
             element.Add(new XElement("set",
                 new XAttribute("name", "rnd_dam"),
                 new XAttribute("value", data.RandomDamage)
@@ -571,8 +571,8 @@ public partial class LiveData
             root.Add(element);
         }
 
-        Dispatcher.Invoke(() => ClientTextBox.Text = itemGrpBuild.ToString());
-        Dispatcher.Invoke(() => NameData.Text = itemNameBuild.ToString());
+        Dispatcher.UIThread.Invoke(() => ClientTextBox.Text = itemGrpBuild.ToString());
+        Dispatcher.UIThread.Invoke(() => NameData.Text = itemNameBuild.ToString());
 
         var build = new StringBuilder();
 
@@ -581,7 +581,7 @@ public partial class LiveData
             build.AppendLine(data.ToString());
         }
 
-        Dispatcher.Invoke(() => XmlData.Text = build.ToString());
+        Dispatcher.UIThread.Invoke(() => XmlData.Text = build.ToString());
 
         itemGrpBuild.Clear();
         itemNameBuild.Clear();
@@ -620,7 +620,6 @@ public partial class LiveData
             var crystal = Parser.GetValue(armor, "crystal_type=", "\t");
             var body = Parser.GetValue(armor, "body_part=", "\t");
             var id = Parser.GetValue(armor, "object_id=", "\t");
-
 
             var armorType = Parser.GetValue(armor, "armor_type=", "\t").ToUpper();
             var (crystalType, crystalCout) = XmlDataParse.GetCrystal(crystal);
@@ -677,7 +676,6 @@ public partial class LiveData
                 new XAttribute("name", "weight"),
                 new XAttribute("value", weight)
             ));
-
 
             var splitSlot = bodyPart.Split(';');
             var equip = new XElement("equip");
@@ -800,8 +798,8 @@ public partial class LiveData
             return;
         }
 
-        Dispatcher.Invoke(() => ClientTextBox.Text = itemGrpBuild.ToString());
-        Dispatcher.Invoke(() => NameData.Text = itemNameBuild.ToString());
+        Dispatcher.UIThread.Invoke(() => ClientTextBox.Text = itemGrpBuild.ToString());
+        Dispatcher.UIThread.Invoke(() => NameData.Text = itemNameBuild.ToString());
 
         _log.AddLog($"Dados GRP recuperados: {successId}");
         _log.AddLog($"Dados de nomes recuperados: {successName}");
@@ -883,7 +881,6 @@ public partial class LiveData
         _log.AddLog($"Dados de nomes recuperados: {successName}");
         _log.AddLog("Pronto, os dados foram processados!");
 
-
         var elements = new List<XElement>();
 
         foreach (var added in listAdded)
@@ -904,56 +901,17 @@ public partial class LiveData
 
             var element = new XElement("etcitem", new XAttribute("id", id), new XAttribute("name", name));
 
-            element.Add(new XElement("set",
-                new XAttribute("name", "class"),
-                new XAttribute("value", "OTHER")
-            ));
-            
-            element.Add(new XElement("set",
-                new XAttribute("name", "crystal_type"),
-                new XAttribute("value", "NONE")
-            ));
-            
-            element.Add(new XElement("set",
-                new XAttribute("name", "type"),
-                new XAttribute("value", MaterialType.GetMaterialType(materialType))
-            ));
-            
-            element.Add(new XElement("set",
-                new XAttribute("name", "weight"),
-                new XAttribute("value", weight)
-            ));
-            
-            element.Add(new XElement("set",
-                new XAttribute("name", "icon"),
-                new XAttribute("value", icon)
-            ));
+            element.Add(new XElement("set", new XAttribute("name", "class"), new XAttribute("value", "OTHER")));
+            element.Add(new XElement("set", new XAttribute("name", "crystal_type"), new XAttribute("value", "NONE")));
+            element.Add(new XElement("set", new XAttribute("name", "type"), new XAttribute("value", MaterialType.GetMaterialType(materialType))));
+            element.Add(new XElement("set", new XAttribute("name", "weight"), new XAttribute("value", weight)));
+            element.Add(new XElement("set", new XAttribute("name", "icon"), new XAttribute("value", icon)));
+            element.Add(new XElement("set", new XAttribute("name", "stackable"), new XAttribute("value", isStackable)));
+            element.Add(new XElement("set", new XAttribute("name", "destroyable"), new XAttribute("value", "true")));
+            element.Add(new XElement("set", new XAttribute("name", "tradeable"), new XAttribute("value", "true")));
+            element.Add(new XElement("set", new XAttribute("name", "dropable"), new XAttribute("value", "true")));
+            element.Add(new XElement("set", new XAttribute("name", "sellable"), new XAttribute("value", "true")));
 
-            element.Add(new XElement("set",
-                new XAttribute("name", "stackable"),
-                new XAttribute("value", isStackable)
-            ));
-            
-            element.Add(new XElement("set",
-                new XAttribute("name", "destroyable"),
-                new XAttribute("value", "true")
-            ));
-            
-            element.Add(new XElement("set",
-                new XAttribute("name", "tradeable"),
-                new XAttribute("value", "true")
-            ));
-            
-            element.Add(new XElement("set",
-                new XAttribute("name", "dropable"),
-                new XAttribute("value", "true")
-            ));
-            
-            element.Add(new XElement("set",
-                new XAttribute("name", "sellable"),
-                new XAttribute("value", "true")
-            ));
-            
             elements.Add(element);
         }
 
@@ -964,9 +922,9 @@ public partial class LiveData
             build.AppendLine(el.ToString());
         }
 
-        Dispatcher.Invoke(() => ClientTextBox.Text = itemGrpBuild.ToString());
-        Dispatcher.Invoke(() => NameData.Text = itemNameBuild.ToString());
-        Dispatcher.Invoke(() => XmlData.Text = build.ToString());
+        Dispatcher.UIThread.Invoke(() => ClientTextBox.Text = itemGrpBuild.ToString());
+        Dispatcher.UIThread.Invoke(() => NameData.Text = itemNameBuild.ToString());
+        Dispatcher.UIThread.Invoke(() => XmlData.Text = build.ToString());
 
         itemGrpBuild.Clear();
         itemNameBuild.Clear();
@@ -980,7 +938,7 @@ public partial class LiveData
         try
         {
             var folder = ClientFolder.Text;
-            var type = TypeProcess.Text;
+            var type = ((ComboBoxItem)TypeProcess.SelectedItem)?.Content?.ToString();
             var ids = ProcessClientId.Text;
 
             if (string.IsNullOrEmpty(folder) || string.IsNullOrEmpty(type) || string.IsNullOrEmpty(ids))
@@ -1018,7 +976,7 @@ public partial class LiveData
         }
         catch (Exception ex)
         {
-            MessageBox.Show(ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+            await MessageBoxManager.GetMessageBoxStandard("ERROR", ex.Message).ShowWindowAsync();
         }
     }
 
@@ -1026,49 +984,51 @@ public partial class LiveData
     {
         var text = ClientTextBox.Text;
         if (string.IsNullOrEmpty(text)) return;
-        Clipboard.SetText(text);
-        GrpCopyData.Visibility = Visibility.Visible;
+        var topLevel = TopLevel.GetTopLevel(this);
+        await topLevel!.Clipboard!.SetTextAsync(text);
+        GrpCopyData.IsVisible = true;
         await Task.Delay(3000);
-        GrpCopyData.Visibility = Visibility.Collapsed;
+        GrpCopyData.IsVisible = false;
     }
 
     private async void CopiarServidorButton_OnClick(object sender, RoutedEventArgs e)
     {
         var text = NameData.Text;
         if (string.IsNullOrEmpty(text)) return;
-        Clipboard.SetText(text);
-        NameCopyContent.Visibility = Visibility.Visible;
+        var topLevel = TopLevel.GetTopLevel(this);
+        await topLevel!.Clipboard!.SetTextAsync(text);
+        NameCopyContent.IsVisible = true;
         await Task.Delay(3000);
-        NameCopyContent.Visibility = Visibility.Collapsed;
+        NameCopyContent.IsVisible = false;
     }
 
-    private void TypeProcess_OnDropDownClosed(object sender, EventArgs e)
+    private void TypeProcess_OnDropDownClosed(object sender, Avalonia.Controls.SelectionChangedEventArgs e)
     {
-        var textBox = TypeProcess.Text;
+        var textBox = ((ComboBoxItem)TypeProcess.SelectedItem)?.Content?.ToString();
         if (string.IsNullOrEmpty(textBox)) return;
 
         switch (textBox)
         {
             case "Armor":
-                StackPanelXml.Visibility = Visibility.Visible;
-                ConvertSPlusCheckBox.Visibility = Visibility.Visible;
-                EnableEnchantGlowCheckBox.Visibility = Visibility.Visible;
+                StackPanelXml.IsVisible = true;
+                ConvertSPlusCheckBox.IsVisible = true;
+                EnableEnchantGlowCheckBox.IsVisible = true;
                 return;
             case "Items":
-                StackPanelXml.Visibility = Visibility.Visible;
-                ConvertSPlusCheckBox.Visibility = Visibility.Collapsed;
-                EnableEnchantGlowCheckBox.Visibility = Visibility.Collapsed;
+                StackPanelXml.IsVisible = true;
+                ConvertSPlusCheckBox.IsVisible = false;
+                EnableEnchantGlowCheckBox.IsVisible = false;
                 return;
             case "Weapons":
-                StackPanelXml.Visibility = Visibility.Visible;
-                ConvertSPlusCheckBox.Visibility = Visibility.Visible;
-                EnableEnchantGlowCheckBox.Visibility = Visibility.Collapsed;
+                StackPanelXml.IsVisible = true;
+                ConvertSPlusCheckBox.IsVisible = true;
+                EnableEnchantGlowCheckBox.IsVisible = false;
                 return;
         }
 
-        StackPanelXml.Visibility = Visibility.Collapsed;
-        ConvertSPlusCheckBox.Visibility = Visibility.Collapsed;
-        EnableEnchantGlowCheckBox.Visibility = Visibility.Collapsed;
+        StackPanelXml.IsVisible = false;
+        ConvertSPlusCheckBox.IsVisible = false;
+        EnableEnchantGlowCheckBox.IsVisible = false;
     }
 
     private async void CopyXml_OnClick(object sender, RoutedEventArgs e)
@@ -1077,10 +1037,11 @@ public partial class LiveData
         {
             var text = XmlData.Text;
             if (string.IsNullOrEmpty(text)) return;
-            Clipboard.SetText(text);
-            XmlCopied.Visibility = Visibility.Visible;
+            var topLevel = TopLevel.GetTopLevel(this);
+            await topLevel!.Clipboard!.SetTextAsync(text);
+            XmlCopied.IsVisible = true;
             await Task.Delay(3000);
-            XmlCopied.Visibility = Visibility.Collapsed;
+            XmlCopied.IsVisible = false;
         }
         catch (Exception)
         {

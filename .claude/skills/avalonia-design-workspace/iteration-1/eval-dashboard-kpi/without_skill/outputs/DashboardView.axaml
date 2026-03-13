@@ -1,0 +1,344 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="UnrealTools.Views.DashboardView"
+             Background="#F5F6FA">
+
+  <UserControl.Resources>
+
+    <!-- Card Style -->
+    <Style x:Key="MetricCardStyle" TargetType="Border">
+      <Setter Property="Background" Value="#FFFFFF"/>
+      <Setter Property="CornerRadius" Value="12"/>
+      <Setter Property="Padding" Value="24,20"/>
+      <Setter Property="BoxShadow" Value="0 2 8 0 #18000000"/>
+    </Style>
+
+    <!-- Card Title Style -->
+    <Style x:Key="CardTitleStyle" TargetType="TextBlock">
+      <Setter Property="FontSize" Value="13"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="Foreground" Value="#8A94A6"/>
+      <Setter Property="TextTransform" Value="Uppercase"/>
+      <Setter Property="LetterSpacing" Value="0.8"/>
+    </Style>
+
+    <!-- Card Value Style -->
+    <Style x:Key="CardValueStyle" TargetType="TextBlock">
+      <Setter Property="FontSize" Value="32"/>
+      <Setter Property="FontWeight" Value="Bold"/>
+      <Setter Property="Foreground" Value="#1A1D23"/>
+      <Setter Property="Margin" Value="0,6,0,4"/>
+    </Style>
+
+    <!-- Card Delta Style -->
+    <Style x:Key="CardDeltaPositiveStyle" TargetType="TextBlock">
+      <Setter Property="FontSize" Value="12"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="Foreground" Value="#22C55E"/>
+    </Style>
+
+    <Style x:Key="CardDeltaNegativeStyle" TargetType="TextBlock">
+      <Setter Property="FontSize" Value="12"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="Foreground" Value="#EF4444"/>
+    </Style>
+
+  </UserControl.Resources>
+
+  <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                VerticalScrollBarVisibility="Auto">
+    <StackPanel Margin="32,28,32,32" Spacing="28">
+
+      <!-- Page Header -->
+      <StackPanel Spacing="4">
+        <TextBlock Text="Dashboard"
+                   FontSize="26"
+                   FontWeight="Bold"
+                   Foreground="#1A1D23"/>
+        <TextBlock Text="Welcome back! Here's what's happening today."
+                   FontSize="14"
+                   Foreground="#8A94A6"/>
+      </StackPanel>
+
+      <!-- KPI Cards Row -->
+      <Grid ColumnDefinitions="*,*,*,*" RowDefinitions="Auto">
+
+        <!-- Card 1: Users -->
+        <Border Grid.Column="0"
+                Style="{StaticResource MetricCardStyle}"
+                Margin="0,0,12,0">
+          <StackPanel Spacing="0">
+            <Grid ColumnDefinitions="*,Auto">
+              <TextBlock Grid.Column="0"
+                         Text="TOTAL USERS"
+                         Style="{StaticResource CardTitleStyle}"/>
+              <Border Grid.Column="1"
+                      Background="#EEF2FF"
+                      CornerRadius="8"
+                      Padding="10,8">
+                <PathIcon Data="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"
+                          Width="18"
+                          Height="18"
+                          Foreground="#6366F1"/>
+              </Border>
+            </Grid>
+            <TextBlock Text="24,521"
+                       Style="{StaticResource CardValueStyle}"/>
+            <StackPanel Orientation="Horizontal" Spacing="4">
+              <TextBlock Text="↑ 12.5%"
+                         Style="{StaticResource CardDeltaPositiveStyle}"/>
+              <TextBlock Text="vs last month"
+                         FontSize="12"
+                         Foreground="#8A94A6"/>
+            </StackPanel>
+          </StackPanel>
+        </Border>
+
+        <!-- Card 2: Revenue -->
+        <Border Grid.Column="1"
+                Style="{StaticResource MetricCardStyle}"
+                Margin="6,0,6,0">
+          <StackPanel Spacing="0">
+            <Grid ColumnDefinitions="*,Auto">
+              <TextBlock Grid.Column="0"
+                         Text="REVENUE"
+                         Style="{StaticResource CardTitleStyle}"/>
+              <Border Grid.Column="1"
+                      Background="#F0FDF4"
+                      CornerRadius="8"
+                      Padding="10,8">
+                <PathIcon Data="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1H7.1c.12 2.19 1.76 3.42 3.7 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"
+                          Width="18"
+                          Height="18"
+                          Foreground="#22C55E"/>
+              </Border>
+            </Grid>
+            <TextBlock Text="$184,320"
+                       Style="{StaticResource CardValueStyle}"/>
+            <StackPanel Orientation="Horizontal" Spacing="4">
+              <TextBlock Text="↑ 8.2%"
+                         Style="{StaticResource CardDeltaPositiveStyle}"/>
+              <TextBlock Text="vs last month"
+                         FontSize="12"
+                         Foreground="#8A94A6"/>
+            </StackPanel>
+          </StackPanel>
+        </Border>
+
+        <!-- Card 3: Orders -->
+        <Border Grid.Column="2"
+                Style="{StaticResource MetricCardStyle}"
+                Margin="6,0,6,0">
+          <StackPanel Spacing="0">
+            <Grid ColumnDefinitions="*,Auto">
+              <TextBlock Grid.Column="0"
+                         Text="ORDERS"
+                         Style="{StaticResource CardTitleStyle}"/>
+              <Border Grid.Column="1"
+                      Background="#FFF7ED"
+                      CornerRadius="8"
+                      Padding="10,8">
+                <PathIcon Data="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"
+                          Width="18"
+                          Height="18"
+                          Foreground="#F97316"/>
+              </Border>
+            </Grid>
+            <TextBlock Text="3,847"
+                       Style="{StaticResource CardValueStyle}"/>
+            <StackPanel Orientation="Horizontal" Spacing="4">
+              <TextBlock Text="↓ 3.1%"
+                         Style="{StaticResource CardDeltaNegativeStyle}"/>
+              <TextBlock Text="vs last month"
+                         FontSize="12"
+                         Foreground="#8A94A6"/>
+            </StackPanel>
+          </StackPanel>
+        </Border>
+
+        <!-- Card 4: Open Tickets -->
+        <Border Grid.Column="3"
+                Style="{StaticResource MetricCardStyle}"
+                Margin="12,0,0,0">
+          <StackPanel Spacing="0">
+            <Grid ColumnDefinitions="*,Auto">
+              <TextBlock Grid.Column="0"
+                         Text="OPEN TICKETS"
+                         Style="{StaticResource CardTitleStyle}"/>
+              <Border Grid.Column="1"
+                      Background="#FFF1F2"
+                      CornerRadius="8"
+                      Padding="10,8">
+                <PathIcon Data="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z"
+                          Width="18"
+                          Height="18"
+                          Foreground="#EF4444"/>
+              </Border>
+            </Grid>
+            <TextBlock Text="142"
+                       Style="{StaticResource CardValueStyle}"/>
+            <StackPanel Orientation="Horizontal" Spacing="4">
+              <TextBlock Text="↑ 5.4%"
+                         Style="{StaticResource CardDeltaNegativeStyle}"/>
+              <TextBlock Text="vs last month"
+                         FontSize="12"
+                         Foreground="#8A94A6"/>
+            </StackPanel>
+          </StackPanel>
+        </Border>
+
+      </Grid>
+
+      <!-- Recent Activities Section -->
+      <Border Background="#FFFFFF"
+              CornerRadius="12"
+              BoxShadow="0 2 8 0 #18000000"
+              Padding="24,20">
+        <StackPanel Spacing="16">
+
+          <!-- Section Header -->
+          <Grid ColumnDefinitions="*,Auto">
+            <StackPanel Grid.Column="0" Spacing="2">
+              <TextBlock Text="Recent Activities"
+                         FontSize="16"
+                         FontWeight="SemiBold"
+                         Foreground="#1A1D23"/>
+              <TextBlock Text="Latest actions across the platform"
+                         FontSize="13"
+                         Foreground="#8A94A6"/>
+            </StackPanel>
+            <Button Grid.Column="1"
+                    Content="View All"
+                    FontSize="13"
+                    FontWeight="SemiBold"
+                    Foreground="#6366F1"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Cursor="Hand"
+                    VerticalAlignment="Center"/>
+          </Grid>
+
+          <!-- Divider -->
+          <Border Height="1" Background="#F0F2F5"/>
+
+          <!-- DataGrid -->
+          <DataGrid x:Name="ActivitiesGrid"
+                    AutoGenerateColumns="False"
+                    IsReadOnly="True"
+                    GridLinesVisibility="Horizontal"
+                    HorizontalGridLinesBrush="#F0F2F5"
+                    VerticalGridLinesBrush="Transparent"
+                    HeadersVisibility="Column"
+                    Background="Transparent"
+                    RowBackground="Transparent"
+                    AlternatingRowBackground="#FAFBFC"
+                    SelectionMode="Single"
+                    CanUserResizeColumns="True"
+                    CanUserSortColumns="True"
+                    BorderThickness="0"
+                    Margin="0">
+
+            <DataGrid.Styles>
+              <Style TargetType="DataGridColumnHeader">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Foreground" Value="#8A94A6"/>
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+                <Setter Property="Padding" Value="12,10"/>
+                <Setter Property="BorderBrush" Value="#F0F2F5"/>
+                <Setter Property="BorderThickness" Value="0,0,0,1"/>
+              </Style>
+              <Style TargetType="DataGridCell">
+                <Setter Property="Foreground" Value="#3D4452"/>
+                <Setter Property="FontSize" Value="13"/>
+                <Setter Property="Padding" Value="12,12"/>
+                <Setter Property="BorderThickness" Value="0"/>
+              </Style>
+              <Style TargetType="DataGridRow">
+                <Setter Property="MinHeight" Value="48"/>
+              </Style>
+            </DataGrid.Styles>
+
+            <DataGrid.Columns>
+
+              <!-- Name Column -->
+              <DataGridTemplateColumn Header="Name" Width="*" SortMemberPath="Name">
+                <DataGridTemplateColumn.CellTemplate>
+                  <DataTemplate>
+                    <StackPanel Orientation="Horizontal"
+                                Spacing="10"
+                                VerticalAlignment="Center"
+                                Margin="12,0">
+                      <Border Width="32"
+                              Height="32"
+                              CornerRadius="16"
+                              Background="#EEF2FF">
+                        <TextBlock Text="{Binding Initials}"
+                                   FontSize="12"
+                                   FontWeight="SemiBold"
+                                   Foreground="#6366F1"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                      </Border>
+                      <StackPanel Spacing="1" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding Name}"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"
+                                   Foreground="#1A1D23"/>
+                        <TextBlock Text="{Binding Email}"
+                                   FontSize="11"
+                                   Foreground="#8A94A6"/>
+                      </StackPanel>
+                    </StackPanel>
+                  </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+              </DataGridTemplateColumn>
+
+              <!-- Status Column -->
+              <DataGridTemplateColumn Header="Status" Width="160" SortMemberPath="Status">
+                <DataGridTemplateColumn.CellTemplate>
+                  <DataTemplate>
+                    <Border HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Margin="12,0"
+                            CornerRadius="12"
+                            Padding="10,4"
+                            Background="{Binding StatusBackground}">
+                      <TextBlock Text="{Binding Status}"
+                                 FontSize="12"
+                                 FontWeight="SemiBold"
+                                 Foreground="{Binding StatusForeground}"/>
+                    </Border>
+                  </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+              </DataGridTemplateColumn>
+
+              <!-- Date Column -->
+              <DataGridTextColumn Header="Date"
+                                  Width="180"
+                                  Binding="{Binding Date}"
+                                  SortMemberPath="Date">
+                <DataGridTextColumn.CellTheme>
+                  <ControlTheme TargetType="DataGridCell">
+                    <Setter Property="Foreground" Value="#8A94A6"/>
+                    <Setter Property="FontSize" Value="13"/>
+                    <Setter Property="Padding" Value="12,12"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                  </ControlTheme>
+                </DataGridTextColumn.CellTheme>
+              </DataGridTextColumn>
+
+            </DataGrid.Columns>
+
+          </DataGrid>
+
+        </StackPanel>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+
+</UserControl>

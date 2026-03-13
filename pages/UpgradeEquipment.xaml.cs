@@ -1,16 +1,16 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media.Media3D;
 using System.Xml.Linq;
+using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.Platform.Storage;
 using L2Toolkit.database;
 using L2Toolkit.DataMap;
-using Microsoft.Win32;
+using MsBox.Avalonia;
 
 namespace L2Toolkit.pages
 {
@@ -19,7 +19,7 @@ namespace L2Toolkit.pages
         public UpgradeEquipment()
         {
             InitializeComponent();
-            UpgradeContent.PreviewMouseDown += SelectPathFile;
+            UpgradeContent.PointerPressed += SelectPathFile;
             UpgradeGenerate.Click += ProcessData;
             UpgradeCopy.Click += CopyContent;
             var lastFile = AppDatabase.GetInstance().GetValue("lastUpgradeFile");
@@ -32,11 +32,12 @@ namespace L2Toolkit.pages
         private async void CopyContent(object sender, RoutedEventArgs e)
         {
             var content = UpgradeOutput.Text;
-            Clipboard.SetText(content);
-            CopyBlock.Visibility = Visibility.Visible;
+            var topLevel = TopLevel.GetTopLevel(this);
+            await topLevel!.Clipboard!.SetTextAsync(content);
+            CopyBlock.IsVisible = true;
             UpgradeOutput.Text = "";
             await Task.Delay(3000);
-            CopyBlock.Visibility = Visibility.Collapsed;
+            CopyBlock.IsVisible = false;
         }
 
         private void CreateByCustom(string filePath)
@@ -76,7 +77,6 @@ namespace L2Toolkit.pages
                 arrayData.Add(new UpgradeData(upgradeId, upgradeItem, listMaterials, commission, resultItem));
             }
 
-
             var build = new StringBuilder();
             const string model = "upgradesystem_begin\tupgrade_id={id}\tupgrade_item={{required}}\tmaterial_items={{materials}}\tcommission={commission}\tresult_item={{result}}\tapplycountry={all}\tupgradesystem_end";
 
@@ -110,31 +110,31 @@ namespace L2Toolkit.pages
                 var resultItem = data.Attribute("result_item")?.Value;
                 arrayData.Add(new UpgradeLucera(upgradeId, upgradeItem, materialItems, commission, resultItem));
             }
-            
+
             const string model = "upgradesystem_begin\tupgrade_id={id}\tupgrade_item={{required}}\tmaterial_items={{materials}}\tcommission={commission}\tresult_item={{result}}\tapplycountry={all}\tupgradesystem_end";
 
             var build = new StringBuilder();
-            
+
             foreach (var data in arrayData)
             {
                 var current = model;
                 current = current.Replace("{id}", data.UpgradeId);
                 current = current.Replace("{required}", data.UpgradeItem);
-                
+
                 var splitMaterials = data.Materials.Split(',');
                 var listForJoinMaterials = splitMaterials.Select(material => $"{{{material}}}").ToList();
                 var listMaterials = string.Join(";", listForJoinMaterials);
-                
+
                 current = current.Replace("{materials}", listMaterials);
                 current = current.Replace("{commission}", data.Commission);
                 current = current.Replace("{result}", data.ResultItem);
                 build.AppendLine(current);
             }
-            
+
             UpgradeOutput.Text = build.ToString();
         }
 
-        private void ProcessData(object sender, RoutedEventArgs e)
+        private async void ProcessData(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -144,7 +144,7 @@ namespace L2Toolkit.pages
                     throw new Exception("Preencha o caminho até o arquivo.");
                 }
 
-                var systemType = SystemVersion.Text;
+                var systemType = ((ComboBoxItem)SystemVersion.SelectedItem)?.Content?.ToString();
                 if (systemType == "Custom Upgrade")
                 {
                     CreateByCustom(filePath);
@@ -156,21 +156,28 @@ namespace L2Toolkit.pages
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                await MessageBoxManager.GetMessageBoxStandard("Erro", ex.Message).ShowWindowAsync();
             }
         }
 
-        private void SelectPathFile(object sender, MouseButtonEventArgs e)
+        private async void SelectPathFile(object sender, PointerPressedEventArgs e)
         {
-            var fileDialog = new OpenFileDialog
+            var topLevel = TopLevel.GetTopLevel(this);
+            var files = await topLevel!.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
             {
                 Title = "Selecione o arquivo",
-                Filter = "Arquivos XML (*.xml)|*.xml|Todos os arquivos (*.*)|*.*"
-            };
+                AllowMultiple = false,
+                FileTypeFilter = new[]
+                {
+                    new FilePickerFileType("Arquivos XML") { Patterns = new[] { "*.xml" } },
+                    new FilePickerFileType("Todos os arquivos") { Patterns = new[] { "*" } }
+                }
+            });
 
-            if (fileDialog.ShowDialog() != true) return;
-            AppDatabase.GetInstance().UpdateValue("lastUpgradeFile", fileDialog.FileName);
-            UpgradeContent.Text = fileDialog.FileName;
+            if (files.Count == 0) return;
+            var path = files[0].Path.LocalPath;
+            AppDatabase.GetInstance().UpdateValue("lastUpgradeFile", path);
+            UpgradeContent.Text = path;
         }
     }
 }

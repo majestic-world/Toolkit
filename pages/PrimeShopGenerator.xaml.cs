@@ -8,17 +8,19 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Threading;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Threading;
+using Avalonia.VisualTree;
 using L2Toolkit.database;
+using MsBox.Avalonia;
 
 namespace L2Toolkit.pages;
 
 public partial class PrimeShopGenerator : UserControl
 {
     private const string ItemNameFile = "./assets/ItemName_Classic-eu.txt";
-    
+
     private static readonly FrozenDictionary<string, string> Categories = new Dictionary<string, string>
     {
         { "11", "Equipment" },
@@ -34,12 +36,12 @@ public partial class PrimeShopGenerator : UserControl
         { "Armor", "./assets/Armorgrp_Classic.txt" },
         { "Weapon", "./assets/Weapongrp_Classic.txt" }
     }.ToFrozenDictionary();
-    
+
     private static readonly ConcurrentDictionary<string, string> ItemNameCache = new();
     private static readonly ConcurrentDictionary<string, ConcurrentDictionary<string, IconInfo>> IconCache = new();
     private static volatile bool _itemNameCacheLoaded;
     private static readonly ConcurrentDictionary<string, bool> IconCacheLoaded = new();
-    
+
     private static readonly Regex ItemNameRegex = new(@"name=\[(.*?)\]", RegexOptions.Compiled);
     private static readonly Regex ObjectIdRegex = new(@"id=(\d+)", RegexOptions.Compiled);
     private static readonly Regex IconRegex = new(@"\[\s*([^;\[\]{}]+)\s*\]", RegexOptions.Compiled);
@@ -57,16 +59,16 @@ public partial class PrimeShopGenerator : UserControl
         InitializeComponent();
         ConfigureComboBoxes();
         CreateTimers();
-        
+
         _ = Task.Run(PreLoadCacheAsync);
 
         _lastId = AppDatabase.GetInstance().GetInt("lastPrimeShopId", 9999);
 
         GerarButton.Click += async (s, e) => await GenerateItemsAsync();
-        CopiarClienteButton.Click += (s, e) => CopyText(ClientTextBox, ClienteCopiadoTextBlock, _clienteTimer);
-        CopiarServidorButton.Click += (s, e) => CopyText(ServerTextBox, ServidorCopiadoTextBlock, _serverTimer);
-        CopiarItensButton.Click += (s, e) => CopyText(ItemsGeneratedTextBox, ItensCopiadoTextBlock, _itemsTimer);
-        Unloaded += UserControl_Unloaded;
+        CopiarClienteButton.Click += async (s, e) => await CopyText(ClientTextBox, ClienteCopiadoTextBlock, _clienteTimer);
+        CopiarServidorButton.Click += async (s, e) => await CopyText(ServerTextBox, ServidorCopiadoTextBlock, _serverTimer);
+        CopiarItensButton.Click += async (s, e) => await CopyText(ItemsGeneratedTextBox, ItensCopiadoTextBlock, _itemsTimer);
+        DetachedFromVisualTree += UserControl_Unloaded;
     }
 
     private void CreateTimers()
@@ -78,17 +80,17 @@ public partial class PrimeShopGenerator : UserControl
         _statusTimer.Interval = TimeSpan.FromSeconds(8);
         _statusTimer.Tick += (s, e) =>
         {
-            NotificacaoBorder.Visibility = Visibility.Collapsed;
+            NotificacaoBorder.IsVisible = false;
             _statusTimer.Stop();
         };
     }
 
-    private void ConfigureTimer(DispatcherTimer timer, UIElement elemento)
+    private void ConfigureTimer(DispatcherTimer timer, Control elemento)
     {
         timer.Interval = TimeSpan.FromSeconds(3);
         timer.Tick += (s, e) =>
         {
-            elemento.Visibility = Visibility.Collapsed;
+            elemento.IsVisible = false;
             timer.Stop();
         };
     }
@@ -112,7 +114,7 @@ public partial class PrimeShopGenerator : UserControl
             if (inputData.Ids.Count == 0) return;
 
             var outputs = await GenerateOutputsAsync(inputData);
-            await Dispatcher.InvokeAsync(() =>
+            await Dispatcher.UIThread.InvokeAsync(() =>
             {
                 ClientTextBox.Text = outputs.ProductOutput.ToString().TrimEnd();
                 ServerTextBox.Text = outputs.XmlOutput.ToString().TrimEnd();
@@ -121,7 +123,7 @@ public partial class PrimeShopGenerator : UserControl
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Erro ao gerar itens: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            await MessageBoxManager.GetMessageBoxStandard("Erro", $"Erro ao gerar itens: {ex.Message}").ShowWindowAsync();
         }
     }
 
@@ -144,13 +146,13 @@ public partial class PrimeShopGenerator : UserControl
 
         if (string.IsNullOrWhiteSpace(idsRaw) || string.IsNullOrWhiteSpace(priceStr))
         {
-            MessageBox.Show("Preencha os campos de ID e Preço.", "Atenção", MessageBoxButton.OK, MessageBoxImage.Warning);
+            _ = MessageBoxManager.GetMessageBoxStandard("Atenção", "Preencha os campos de ID e Preço.").ShowWindowAsync();
             return new InputData(null, null, 0, 0, []);
         }
 
         if (!int.TryParse(priceStr, out int price))
         {
-            MessageBox.Show("O preço deve ser um número.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            _ = MessageBoxManager.GetMessageBoxStandard("Erro", "O preço deve ser um número.").ShowWindowAsync();
             return new InputData(null, null, 0, 0, []);
         }
 
@@ -167,7 +169,7 @@ public partial class PrimeShopGenerator : UserControl
 
         if (ids.Count == 0)
         {
-            MessageBox.Show("Insira ao menos um ID válido.", "Atenção", MessageBoxButton.OK, MessageBoxImage.Warning);
+            _ = MessageBoxManager.GetMessageBoxStandard("Atenção", "Insira ao menos um ID válido.").ShowWindowAsync();
             return new InputData(null, null, 0, 0, []);
         }
 
@@ -179,7 +181,7 @@ public partial class PrimeShopGenerator : UserControl
         var productOutput = new StringBuilder();
         var xmlOutput = new StringBuilder();
         var outputNames = new StringBuilder();
-        
+
         var tasks = inputData.Ids.Select(async itemId =>
         {
             var nome = await GetItemNameAsync(itemId);
@@ -199,7 +201,7 @@ public partial class PrimeShopGenerator : UserControl
         });
 
         var results = await Task.WhenAll(tasks);
-        
+
         foreach (var item in results)
         {
             outputNames.AppendLine($"{item.ShopId} - {item.Nome}");
@@ -240,7 +242,7 @@ public partial class PrimeShopGenerator : UserControl
 
             await using var fileStream = new FileStream(ItemNameFile, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var reader = new StreamReader(fileStream, Encoding.UTF8);
-            
+
             string line;
             while ((line = await reader.ReadLineAsync()) != null)
             {
@@ -278,22 +280,22 @@ public partial class PrimeShopGenerator : UserControl
             }
 
             var typeCache = IconCache.GetOrAdd(type, _ => new ConcurrentDictionary<string, IconInfo>());
-            
+
             if (typeCache.TryGetValue(objectId, out var cachedIcon))
                 return cachedIcon;
 
             var content = await File.ReadAllTextAsync(FileType[type], Encoding.UTF8);
             var items = content.Split("item_begin", StringSplitOptions.RemoveEmptyEntries);
-            
+
             var item = items.FirstOrDefault(i => i.Contains($"object_id={objectId}"));
-            
+
             string icon = "";
             string iconPanel = "None";
 
             if (item != null)
             {
                 var fields = item.Trim().Split('\t');
-                
+
                 await Task.Run(() =>
                 {
                     Parallel.ForEach(fields, field =>
@@ -322,22 +324,24 @@ public partial class PrimeShopGenerator : UserControl
 
     private int CreateUniqId() => Interlocked.Increment(ref _lastId);
 
-    private void CopyText(TextBox textBox, TextBlock notify, DispatcherTimer timer)
+    private async Task CopyText(TextBox textBox, Control notify, DispatcherTimer timer)
     {
         if (string.IsNullOrEmpty(textBox.Text)) return;
 
-        Clipboard.SetText(textBox.Text);
-        notify.Visibility = Visibility.Visible;
+        var topLevel = TopLevel.GetTopLevel(this);
+        if (topLevel?.Clipboard != null)
+            await topLevel.Clipboard.SetTextAsync(textBox.Text);
+        notify.IsVisible = true;
         timer.Stop();
         timer.Start();
     }
 
     private void SendNotify(string message)
     {
-        Dispatcher.InvokeAsync(() =>
+        Dispatcher.UIThread.InvokeAsync(() =>
         {
             StatusNotificacao.Text = "⚠️ " + message;
-            NotificacaoBorder.Visibility = Visibility.Visible;
+            NotificacaoBorder.IsVisible = true;
             _statusTimer.Stop();
             _statusTimer.Start();
         });
@@ -369,7 +373,7 @@ public partial class PrimeShopGenerator : UserControl
         try
         {
             var lines = await File.ReadAllLinesAsync(ItemNameFile, Encoding.UTF8);
-            
+
             await Task.Run(() =>
             {
                 Parallel.ForEach(lines, line =>
@@ -408,7 +412,7 @@ public partial class PrimeShopGenerator : UserControl
         await Task.WhenAll(tasks);
     }
 
-    private void UserControl_Unloaded(object sender, RoutedEventArgs e)
+    private void UserControl_Unloaded(object? sender, Avalonia.VisualTreeAttachmentEventArgs e)
     {
         _cacheSemaphore?.Dispose();
     }

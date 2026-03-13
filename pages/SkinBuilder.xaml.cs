@@ -1,30 +1,29 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
 using System.Xml.Linq;
+using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.Platform.Storage;
+using Avalonia.Threading;
 using L2Toolkit.database;
 using L2Toolkit.DataMap;
 using L2Toolkit.ProcessData;
 using L2Toolkit.Utilities;
-using Microsoft.Win32;
+using MsBox.Avalonia;
 
 namespace L2Toolkit.pages;
 
 public partial class SkinBuilder : UserControl
 {
-    private const string SkillGrp = "Skillgrp.txt";
-    private const string SkillName = "SkillName-eu.txt";
     private const string ItemsName = "ItemName-eu.txt";
     private const string WeaponsGrp = "Weapongrp.txt";
     private const string ArmorGrp = "Armorgrp.txt";
-    private const string ItemsGrp = "EtcItemgrp.txt";
     private const string ItemStatus = "ItemStatData.txt";
 
     private const string InvalidData = "Dados de parse inválidos!";
@@ -75,15 +74,15 @@ public partial class SkinBuilder : UserControl
         }
     }
 
-    private void ClientFolder_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
+    private async void ClientFolder_OnPreviewMouseDown(object sender, PointerPressedEventArgs e)
     {
-        var dialog = new OpenFolderDialog();
-        if (dialog.ShowDialog() != true) return;
-        ClientFolder.Text = dialog.FolderName;
-        AppDatabase.GetInstance().UpdateValue("lastLiveFolder", dialog.FolderName);
+        var topLevel = TopLevel.GetTopLevel(this);
+        var folders = await topLevel!.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions());
+        if (folders.Count == 0) return;
+        var path = folders[0].Path.LocalPath;
+        ClientFolder.Text = path;
+        AppDatabase.GetInstance().UpdateValue("lastLiveFolder", path);
     }
-
-    #region DataSkillParse
 
     private async Task<ConcurrentDictionary<string, string>> GetSkillNameAsync(string path)
     {
@@ -104,11 +103,6 @@ public partial class SkinBuilder : UserControl
 
         return names;
     }
-
-    #endregion
-
-
-    #region DataItemParse
 
     private List<string> ParseIds(string ids)
     {
@@ -150,8 +144,6 @@ public partial class SkinBuilder : UserControl
         return list;
     }
 
-    #endregion
-
     private async Task GetItemsName()
     {
         var file = Path.Combine(_folderPath, ItemsName);
@@ -170,20 +162,20 @@ public partial class SkinBuilder : UserControl
             _itemsName.TryAdd(id, line);
         }
     }
-    
+
     private string ResetShotCounts(string line)
     {
         var pattern1 = @"soulshot_count=[^\t\r\n]+";
         var replacement1 = "soulshot_count=0";
         var result = Regex.Replace(line, pattern1, replacement1);
-        
+
         var pattern2 = @"spiritshot_count=[^\t\r\n]+";
         var replacement2 = "spiritshot_count=0";
         result = Regex.Replace(result, pattern2, replacement2);
-    
+
         return result;
     }
-    
+
     private string RemoveMpBonus(string line)
     {
         var pattern1 = @"mp_bonus=[^\t\r\n]+";
@@ -285,7 +277,6 @@ public partial class SkinBuilder : UserControl
 
             _itemsName.TryGetValue(data.ObjectId, out var name);
             var weaponName = "";
-            var adittionalName = "";
             if (!string.IsNullOrEmpty(name))
             {
                 weaponName = Parser.GetValue(name, "name=[", "]");
@@ -302,82 +293,33 @@ public partial class SkinBuilder : UserControl
 
             if (data.WeaponType == "bow")
             {
-                element.Add(new XElement("set",
-                    new XAttribute("name", "atk_reuse"),
-                    new XAttribute("value", "1500")
-                ));
+                element.Add(new XElement("set", new XAttribute("name", "atk_reuse"), new XAttribute("value", "1500")));
             }
 
             if (!string.IsNullOrEmpty(crystalCount))
             {
-                element.Add(new XElement("set",
-                    new XAttribute("name", "crystal_count"),
-                    new XAttribute("value", crystalCount)
-                ));
+                element.Add(new XElement("set", new XAttribute("name", "crystal_count"), new XAttribute("value", crystalCount)));
             }
 
-            element.Add(new XElement("set",
-                new XAttribute("name", "crystal_type"),
-                new XAttribute("value", crystalType)
-            ));
-
-            element.Add(new XElement("set",
-                new XAttribute("name", "crystallizable"),
-                new XAttribute("value", data.Crystallizable == "0" ? "false" : "true")
-            ));
-
-            element.Add(new XElement("set",
-                new XAttribute("name", "icon"),
-                new XAttribute("value", data.Icon)
-            ));
-
-            element.Add(new XElement("set",
-                new XAttribute("name", "price"),
-                new XAttribute("value", "48800000")
-            ));
-
-
-            element.Add(new XElement("set",
-                new XAttribute("name", "rnd_dam"),
-                new XAttribute("value", data.RandomDamage)
-            ));
-
-            element.Add(new XElement("set",
-                new XAttribute("name", "soulshots"),
-                new XAttribute("value", data.SoulshotCount)
-            ));
-
-            element.Add(new XElement("set",
-                new XAttribute("name", "spiritshots"),
-                new XAttribute("value", data.SpiritshotCount)
-            ));
+            element.Add(new XElement("set", new XAttribute("name", "crystal_type"), new XAttribute("value", crystalType)));
+            element.Add(new XElement("set", new XAttribute("name", "crystallizable"), new XAttribute("value", data.Crystallizable == "0" ? "false" : "true")));
+            element.Add(new XElement("set", new XAttribute("name", "icon"), new XAttribute("value", data.Icon)));
+            element.Add(new XElement("set", new XAttribute("name", "price"), new XAttribute("value", "48800000")));
+            element.Add(new XElement("set", new XAttribute("name", "rnd_dam"), new XAttribute("value", data.RandomDamage)));
+            element.Add(new XElement("set", new XAttribute("name", "soulshots"), new XAttribute("value", data.SoulshotCount)));
+            element.Add(new XElement("set", new XAttribute("name", "spiritshots"), new XAttribute("value", data.SpiritshotCount)));
 
             if (!isShield)
             {
-                element.Add(new XElement("set",
-                    new XAttribute("name", "ensoul_slots"),
-                    new XAttribute("value", "0")
-                ));
-
-                element.Add(new XElement("set",
-                    new XAttribute("name", "ensoul_bm_slots"),
-                    new XAttribute("value", "0")
-                ));
+                element.Add(new XElement("set", new XAttribute("name", "ensoul_slots"), new XAttribute("value", "0")));
+                element.Add(new XElement("set", new XAttribute("name", "ensoul_bm_slots"), new XAttribute("value", "0")));
             }
 
-            element.Add(new XElement("set",
-                new XAttribute("name", "type"),
-                new XAttribute("value", XmlDataParse.GetWeaponType(data.WeaponType))
-            ));
-
-            element.Add(new XElement("set",
-                new XAttribute("name", "weight"),
-                new XAttribute("value", data.Weight)
-            ));
+            element.Add(new XElement("set", new XAttribute("name", "type"), new XAttribute("value", XmlDataParse.GetWeaponType(data.WeaponType))));
+            element.Add(new XElement("set", new XAttribute("name", "weight"), new XAttribute("value", data.Weight)));
 
             var equip = new XElement("equip");
             equip.Add(new XElement("slot", new XAttribute("id", XmlDataParse.GetWeaponSlot(data.BodyPart))));
-
             element.Add(equip);
 
             var forElement = new XElement("for");
@@ -389,8 +331,8 @@ public partial class SkinBuilder : UserControl
 
         CreateSkinsIds(skinIds);
 
-        Dispatcher.Invoke(() => ClientTextBox.Text = itemGrpBuild.ToString());
-        Dispatcher.Invoke(() => NameData.Text = itemNameBuild.ToString());
+        Dispatcher.UIThread.Invoke(() => ClientTextBox.Text = itemGrpBuild.ToString());
+        Dispatcher.UIThread.Invoke(() => NameData.Text = itemNameBuild.ToString());
 
         var build = new StringBuilder();
 
@@ -399,7 +341,7 @@ public partial class SkinBuilder : UserControl
             build.AppendLine(data.ToString());
         }
 
-        Dispatcher.Invoke(() => XmlData.Text = build.ToString());
+        Dispatcher.UIThread.Invoke(() => XmlData.Text = build.ToString());
 
         itemGrpBuild.Clear();
         itemNameBuild.Clear();
@@ -439,7 +381,6 @@ public partial class SkinBuilder : UserControl
             var body = Parser.GetValue(armor, "body_part=", "\t");
             var id = Parser.GetValue(armor, "object_id=", "\t");
 
-
             var armorType = Parser.GetValue(armor, "armor_type=", "\t").ToUpper();
             var (crystalType, crystalCout) = XmlDataParse.GetCrystal(crystal);
             var icon = Parser.GetValue(armor, "icon={[", "];");
@@ -461,42 +402,15 @@ public partial class SkinBuilder : UserControl
 
             if (!string.IsNullOrEmpty(crystalCout))
             {
-                armorElement.Add(new XElement("set",
-                    new XAttribute("name", "crystal_count"),
-                    new XAttribute("value", crystalCout)
-                ));
+                armorElement.Add(new XElement("set", new XAttribute("name", "crystal_count"), new XAttribute("value", crystalCout)));
             }
 
-            armorElement.Add(new XElement("set",
-                new XAttribute("name", "crystal_type"),
-                new XAttribute("value", crystalType)
-            ));
-
-            armorElement.Add(new XElement("set",
-                new XAttribute("name", "crystallizable"),
-                new XAttribute("value", "true")
-            ));
-
-            armorElement.Add(new XElement("set",
-                new XAttribute("name", "icon"),
-                new XAttribute("value", icon)
-            ));
-
-            armorElement.Add(new XElement("set",
-                new XAttribute("name", "price"),
-                new XAttribute("value", "35000000")
-            ));
-
-            armorElement.Add(new XElement("set",
-                new XAttribute("name", "type"),
-                new XAttribute("value", armorType)
-            ));
-
-            armorElement.Add(new XElement("set",
-                new XAttribute("name", "weight"),
-                new XAttribute("value", weight)
-            ));
-
+            armorElement.Add(new XElement("set", new XAttribute("name", "crystal_type"), new XAttribute("value", crystalType)));
+            armorElement.Add(new XElement("set", new XAttribute("name", "crystallizable"), new XAttribute("value", "true")));
+            armorElement.Add(new XElement("set", new XAttribute("name", "icon"), new XAttribute("value", icon)));
+            armorElement.Add(new XElement("set", new XAttribute("name", "price"), new XAttribute("value", "35000000")));
+            armorElement.Add(new XElement("set", new XAttribute("name", "type"), new XAttribute("value", armorType)));
+            armorElement.Add(new XElement("set", new XAttribute("name", "weight"), new XAttribute("value", weight)));
 
             var splitSlot = bodyPart.Split(';');
             var equip = new XElement("equip");
@@ -508,7 +422,6 @@ public partial class SkinBuilder : UserControl
             armorElement.Add(equip);
 
             var forData = new XElement("for");
-
             armorElement.Add(forData);
 
             root.Add(armorElement);
@@ -595,8 +508,8 @@ public partial class SkinBuilder : UserControl
 
         CreateSkinsIds(saveIds);
 
-        Dispatcher.Invoke(() => ClientTextBox.Text = itemGrpBuild.ToString());
-        Dispatcher.Invoke(() => NameData.Text = itemNameBuild.ToString());
+        Dispatcher.UIThread.Invoke(() => ClientTextBox.Text = itemGrpBuild.ToString());
+        Dispatcher.UIThread.Invoke(() => NameData.Text = itemNameBuild.ToString());
 
         _log.AddLog($"Dados GRP recuperados: {successId}");
         _log.AddLog($"Dados de nomes recuperados: {successName}");
@@ -611,8 +524,6 @@ public partial class SkinBuilder : UserControl
     }
 
     #endregion
-
-    #region ProcessItems
 
     private void CreateSkinsIds(List<string> ids)
     {
@@ -643,14 +554,12 @@ public partial class SkinBuilder : UserControl
         }
     }
 
-    #endregion
-
     private async void GerarButton_OnClick(object sender, RoutedEventArgs e)
     {
         try
         {
             var folder = ClientFolder.Text;
-            var type = TypeProcess.Text;
+            var type = ((ComboBoxItem)TypeProcess.SelectedItem)?.Content?.ToString();
             var ids = ProcessClientId.Text;
 
             if (string.IsNullOrEmpty(folder) || string.IsNullOrEmpty(type) || string.IsNullOrEmpty(ids))
@@ -682,7 +591,7 @@ public partial class SkinBuilder : UserControl
         }
         catch (Exception ex)
         {
-            MessageBox.Show(ex.Source, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+            await MessageBoxManager.GetMessageBoxStandard("ERROR", ex.Message).ShowWindowAsync();
             Console.WriteLine(ex);
         }
     }
@@ -713,20 +622,21 @@ public partial class SkinBuilder : UserControl
                 "property_params=0",
                 "item_end"
             };
-        
+
             list.AppendLine(string.Join("\t", items));
         }
-        StatusData.Text =  list.ToString();
+        StatusData.Text = list.ToString();
     }
 
     private async void CopiarClienteButton_OnClick(object sender, RoutedEventArgs e)
     {
         var text = ClientTextBox.Text;
         if (string.IsNullOrEmpty(text)) return;
-        Clipboard.SetText(text);
-        GrpCopyData.Visibility = Visibility.Visible;
+        var topLevel = TopLevel.GetTopLevel(this);
+        await topLevel!.Clipboard!.SetTextAsync(text);
+        GrpCopyData.IsVisible = true;
         await Task.Delay(3000);
-        GrpCopyData.Visibility = Visibility.Collapsed;
+        GrpCopyData.IsVisible = false;
     }
 
     private string ConvertCrystal(string line)
@@ -759,19 +669,19 @@ public partial class SkinBuilder : UserControl
         return result;
     }
 
-
     private async void CopiarServidorButton_OnClick(object sender, RoutedEventArgs e)
     {
         try
         {
             var text = NameData.Text;
             if (string.IsNullOrEmpty(text)) return;
-            Clipboard.SetText(text);
-            NameCopyContent.Visibility = Visibility.Visible;
+            var topLevel = TopLevel.GetTopLevel(this);
+            await topLevel!.Clipboard!.SetTextAsync(text);
+            NameCopyContent.IsVisible = true;
             await Task.Delay(3000);
-            NameCopyContent.Visibility = Visibility.Collapsed;
+            NameCopyContent.IsVisible = false;
         }
-        catch (Exception ignored)
+        catch (Exception)
         {
             //ignore
         }
@@ -783,10 +693,11 @@ public partial class SkinBuilder : UserControl
         {
             var text = XmlData.Text;
             if (string.IsNullOrEmpty(text)) return;
-            Clipboard.SetText(text);
-            XmlCopied.Visibility = Visibility.Visible;
+            var topLevel = TopLevel.GetTopLevel(this);
+            await topLevel!.Clipboard!.SetTextAsync(text);
+            XmlCopied.IsVisible = true;
             await Task.Delay(3000);
-            XmlCopied.Visibility = Visibility.Collapsed;
+            XmlCopied.IsVisible = false;
         }
         catch (Exception)
         {
@@ -800,10 +711,11 @@ public partial class SkinBuilder : UserControl
         {
             var text = SkinData.Text;
             if (string.IsNullOrEmpty(text)) return;
-            Clipboard.SetText(text);
-            ButtonCopySkins.Visibility = Visibility.Visible;
+            var topLevel = TopLevel.GetTopLevel(this);
+            await topLevel!.Clipboard!.SetTextAsync(text);
+            ButtonCopySkins.IsVisible = true;
             await Task.Delay(3000);
-            ButtonCopySkins.Visibility = Visibility.Collapsed;
+            ButtonCopySkins.IsVisible = false;
         }
         catch (Exception)
         {
@@ -817,14 +729,15 @@ public partial class SkinBuilder : UserControl
         {
             var text = StatusData.Text;
             if (string.IsNullOrEmpty(text)) return;
-            Clipboard.SetText(text);
-            ButtonCopyStatus.Visibility = Visibility.Visible;
+            var topLevel = TopLevel.GetTopLevel(this);
+            await topLevel!.Clipboard!.SetTextAsync(text);
+            ButtonCopyStatus.IsVisible = true;
             await Task.Delay(3000);
-            ButtonCopyStatus.Visibility = Visibility.Collapsed;
+            ButtonCopyStatus.IsVisible = false;
         }
-        catch (Exception ignored)
+        catch (Exception)
         {
-            //ignored
+            //ignore
         }
     }
 }

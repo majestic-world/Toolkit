@@ -1,0 +1,32 @@
+{
+  "eval_id": 1,
+  "eval_name": "eval-dashboard-kpi",
+  "prompt": "Crie um dashboard Avalonia com 4 cards de métricas (usuários, receita, pedidos, tickets abertos) e uma tabela de atividades recentes com colunas nome, status e data. Tema light.",
+  "assertions": [
+    {
+      "text": "Existem exatamente 4 cards de métricas/KPI distintos (usuários, receita, pedidos, tickets)",
+      "passed": null,
+      "evidence": null
+    },
+    {
+      "text": "Existe um DataGrid ou tabela com ao menos 3 colunas (nome, status, data)",
+      "passed": null,
+      "evidence": null
+    },
+    {
+      "text": "Nenhuma cor hexadecimal hardcoded no layout principal",
+      "passed": null,
+      "evidence": null
+    },
+    {
+      "text": "Usa DynamicResource para cores/brushes nos componentes",
+      "passed": null,
+      "evidence": null
+    },
+    {
+      "text": "Tema light referenciado (tokens light ou ausência de dark como padrão)",
+      "passed": null,
+      "evidence": null
+    }
+  ]
+}

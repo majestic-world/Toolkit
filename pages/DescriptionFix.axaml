@@ -1,0 +1,140 @@
+<UserControl x:Class="L2Toolkit.pages.DescriptionFix"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="White">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="30">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Margin="0 0 0 16">
+                <TextBlock Text="Corrigir descrição"
+                           FontSize="32"
+                           FontWeight="Light"
+                           Foreground="#1F2937"
+                           Margin="0,0,0,2"/>
+                <TextBlock Text="Ideal para itens com (Not Used) na descrição"
+                           FontSize="16"
+                           Foreground="#6B7280"/>
+            </StackPanel>
+
+            <Border x:Name="NotificacaoBorder"
+                   Grid.Row="0"
+                   Background="#FFEBE6"
+                   BorderBrush="#FF0000"
+                   BorderThickness="1"
+                   CornerRadius="5"
+                   Margin="0,35,0,15"
+                   Padding="10,8"
+                   MinWidth="300"
+                   MaxWidth="600"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Top"
+                   IsVisible="False">
+                <TextBlock x:Name="StatusNotificacao"
+                           Foreground="#C00000"
+                           FontWeight="Bold"
+                           TextWrapping="Wrap"
+                           TextAlignment="Center"
+                           FontSize="13"/>
+            </Border>
+
+            <Border x:Name="SucessoBorder"
+                   Grid.Row="0"
+                   Background="#E6FFEB"
+                   BorderBrush="#00C853"
+                   BorderThickness="1"
+                   CornerRadius="5"
+                   Margin="0,35,0,15"
+                   Padding="10,8"
+                   MinWidth="300"
+                   MaxWidth="600"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Top"
+                   IsVisible="False">
+                <TextBlock x:Name="SucessoNotificacao"
+                           Foreground="#2E7D32"
+                           FontWeight="Bold"
+                           TextWrapping="Wrap"
+                           TextAlignment="Center"
+                           FontSize="13"/>
+            </Border>
+
+            <StackPanel Grid.Row="1" Margin="0,0,0,15">
+                <TextBlock Text="Selecione o arquivo para modificar:"
+                           FontSize="14"
+                           FontWeight="SemiBold"
+                           Margin="0,0,0,5"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="0"
+                            Background="White"
+                            CornerRadius="8"
+                            BorderBrush="#350B0B17"
+                            BorderThickness="1">
+                        <TextBox x:Name="ArquivoSelecionadoTextBox"
+                                 Padding="10,8"
+                                 BorderThickness="0"
+                                 Background="Transparent"
+                                 Foreground="#333333"
+                                 FontSize="13"
+                                 Height="40"
+                                 IsReadOnly="True"/>
+                    </Border>
+                    <Button x:Name="SelecionarArquivoButton"
+                            Grid.Column="1"
+                            Content="Selecionar Arquivo"
+                            Height="40"
+                            Margin="10,0,0,0"
+                            Padding="10,0"
+                            Theme="{StaticResource PrimaryButton}"
+                            FontSize="12"
+                            Width="140"
+                            FontWeight="Bold"/>
+                </Grid>
+            </StackPanel>
+
+            <Button x:Name="ProcessarButton"
+                    Grid.Row="3"
+                    Content="PROCESSAR ARQUIVO"
+                    Height="45"
+                    Width="180"
+                    Margin="0,0,0,15"
+                    FontSize="14"
+                    Theme="{StaticResource PrimaryButton}"
+                    FontWeight="Bold"
+                    HorizontalAlignment="Center"/>
+
+            <Border Grid.Row="4"
+                    Background="#EEF5FF"
+                    BorderBrush="#B3E5FC"
+                    BorderThickness="1"
+                    CornerRadius="5"
+                    Height="110"
+                    Padding="15,10"
+                    Margin="0,10,0,0">
+                <TextBlock TextWrapping="Wrap" FontSize="13">
+                    <TextBlock.Inlines>
+                        <Run FontWeight="Bold">Informações:</Run>
+                        <LineBreak/>
+                        <Run>- O arquivo h5_names.txt deve estar na pasta do aplicativo.</Run>
+                        <LineBreak/>
+                        <Run>- As descrições são extraídas deste arquivo e aplicadas no arquivo selecionado.</Run>
+                        <LineBreak/>
+                        <Run>- Apenas o campo "description" será modificado, preservando todo o restante.</Run>
+                        <LineBreak/>
+                        <Run>- Após o processamento, o arquivo modificado será salvo em um novo local.</Run>
+                    </TextBlock.Inlines>
+                </TextBlock>
+            </Border>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

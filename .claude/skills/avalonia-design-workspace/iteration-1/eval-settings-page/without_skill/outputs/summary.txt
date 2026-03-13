@@ -1,0 +1,53 @@
+Settings Page — Avalonia UI Implementation Summary
+====================================================
+
+Files produced
+--------------
+  SettingsView.axaml       — Main UserControl (view only, no VM dependency)
+  SettingsView.axaml.cs    — Minimal code-behind (partial class, InitializeComponent)
+  summary.txt              — This file
+
+Design decisions
+----------------
+
+Layout
+  - Centred single-column layout, max-width 680 px, inside a ScrollViewer.
+  - Outer grid uses three columns (spacer / content / spacer) to achieve centring
+    without hard-coding margins that break on resize.
+  - 40 px top padding, 60 px bottom padding for breathing room.
+
+Sections — each in a rounded card (Border, CornerRadius=8, 1 px border)
+  1. Profile
+       - Full Name TextBox  (MaxLength 120, watermark, hint text below)
+       - Email Address TextBox (MaxLength 254, watermark, hint text below)
+       - Horizontal Separator between fields
+       - "Save Profile" primary button, right-aligned
+  2. Appearance
+       - Two-column Grid: label + description on the left, ToggleSwitch on the right
+       - ToggleSwitch bound IsChecked=False by default; wire to a VM bool for real use
+  3. Danger Zone
+       - Card uses a red border (#C42B1C) to signal destructive territory
+       - Section header rendered in the same red rather than the muted grey used elsewhere
+       - Two-column Grid: description on the left, "Delete Account" button on the right
+       - Button uses btn-danger style (red background, white text, hover/pressed states)
+
+Styles
+  - All styles are defined inline in UserControl.Styles for portability.
+  - Uses DynamicResource SystemXxx tokens so the UI automatically respects the
+    FluentTheme light/dark variant (no hard-coded greys).
+  - Explicit hex colours are used only where brand/semantic intent is needed:
+      #0078D4  — Microsoft Fluent blue for primary action
+      #C42B1C  — Windows 11 danger/error red for destructive action
+
+Compiled bindings
+  - No x:DataType is set because this iteration contains no ViewModel bindings.
+  - To wire the ToggleSwitch: add a SettingsViewModel with a bool IsDarkMode
+    property, set x:DataType on the UserControl, and bind IsChecked to IsDarkMode.
+  - To wire Save / Delete: expose ICommand properties on the ViewModel and use
+    Button.Command bindings.
+
+Avalonia version compatibility
+  - Targets Avalonia 11.3.x / .NET 10 (matches project .csproj).
+  - TextTransform="Uppercase" is supported from Avalonia 11.1+.
+  - LetterSpacing is supported from Avalonia 11.0+.
+  - No preview / experimental APIs used.

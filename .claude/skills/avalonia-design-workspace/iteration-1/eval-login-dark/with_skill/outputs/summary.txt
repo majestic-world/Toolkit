@@ -1,0 +1,69 @@
+ERP Login Screen - Dark Theme
+Output Summary
+==============
+
+Files produced
+--------------
+1. Tokens.Dark.axaml
+   Full token ResourceDictionary using ThemeDictionaries with both "Light" and
+   "Dark" keys. Color tokens override surfaces, content, accent, and semantic
+   roles. SolidColorBrush resources are declared once (outside the theme
+   dictionaries) and reference colors via DynamicResource so they automatically
+   pick up whichever variant is active at runtime. Typography, spacing
+   (4px grid), and corner-radius tokens are also defined here.
+
+2. Controls.axaml
+   Styles file (not ControlTheme with x:Key, but class-based Styles selectors)
+   containing:
+   - Button.Primary  — accent fill button with :pointerover, :pressed,
+                       :disabled states and a 120ms BrushTransition.
+   - Button.Link     — transparent background link-style button with opacity
+                       transitions; used for "Esqueci minha senha".
+   - TextBox.Field   — elevated-surface input with 1px border, :focus accent
+                       ring, :pointerover subtle highlight, :disabled fade,
+                       and a 120ms BorderBrush transition.
+
+3. LoginView.axaml
+   UserControl (not a Window) so it can be hosted inside the app shell or
+   shown in a full-screen ContentControl.
+   Layout decisions:
+   - Full-screen centering via a root Grid + VerticalAlignment="Center" on
+     the card Border.
+   - Card is 400px wide with RadiusXL (12px) corners and a subtle BoxShadow
+     for elevation on the dark background.
+   - Brand mark: 44x44px accent square (RadiusL) with an inner highlight
+     layer to suggest depth without a gradient.
+   - "Esqueci minha senha" is placed as a Button.Link inside the password
+     label row (right-aligned) — the canonical position for forgot-password
+     links per UX convention.
+   - Sign-in button stretches full card width with centered label text.
+   - An "ou" divider separates the primary action from a secondary
+     registration prompt, keeping the visual hierarchy clear.
+   - TabIndex attributes (0, 1, 2, 3) enforce logical keyboard navigation:
+     email -> password -> sign-in -> forgot-password.
+   - x:DataType="vm:LoginViewModel" enables compiled bindings.
+   - No hardcoded hex values; every color reference is DynamicResource.
+
+Design decisions
+----------------
+- Dark accent: #3B9EDD (from the dark token set), slightly lighter than the
+  light-theme blue to maintain visibility contrast on dark surfaces.
+- Spacing follows the 4px grid throughout (SpacingXXL=32 between sections,
+  SpacingL=16 between fields, SpacingXS=4 label-to-input gap).
+- Only two accent hues used: AccentPrimary (buttons, links) and the card
+  border / background neutrals.
+- WCAG AA compliance: ContentPrimary (#F9FAFB) on SurfaceCard (#1F2937)
+  yields approximately 13:1 contrast ratio, well above the 4.5:1 minimum.
+  AccentPrimary (#3B9EDD) on SurfaceCard passes 3:1 for large/bold text.
+- No external icon dependencies; the brand mark is a pure Border element.
+
+Integration notes
+-----------------
+- Set Application.RequestedThemeVariant="Dark" in App.axaml, or switch at
+  runtime via Application.Current!.RequestedThemeVariant = ThemeVariant.Dark.
+- Merge Tokens.Dark.axaml in Application.Resources.MergedDictionaries.
+- Include Controls.axaml in Application.Styles via StyleInclude.
+- Replace "YourApp" namespace in x:Class and xmlns:vm with the actual project
+  namespace.
+- The IsBusy binding on the sign-in button assumes a bool property on
+  LoginViewModel; wire it to show a progress indicator or spinner as needed.

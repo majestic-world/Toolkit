@@ -1,0 +1,66 @@
+Settings Page — Output Summary
+===============================
+
+Task: Enterprise-quality Settings page with 3 sections (Perfil, Aparencia, Zona de Perigo).
+
+Files produced
+--------------
+1. Resources/Tokens.axaml
+   - Full light + dark ThemeDictionaries with all color tokens.
+   - Brushes defined once outside the dictionaries; they pick up the active
+     variant automatically via DynamicResource — no layout changes needed
+     when switching themes.
+   - Spacing (4px grid), typography, and corner radius tokens included.
+   - Danger-specific token set: ColorDanger, ColorDangerBg, ColorDangerBorder,
+     ColorDangerSurface, ColorDangerHover — all themed per variant.
+
+2. Styles/Controls.axaml
+   - Class-based styles (Button.Primary, Button.Ghost, Button.Danger,
+     TextBox.Field) rather than x:Key ControlThemes so they compose cleanly
+     without requiring Theme= attribute on every element.
+   - Every interactive control has :pointerover, :pressed, and :disabled states.
+   - BrushTransitions on Background for 120ms polished feel.
+   - ToggleSwitch track styled with accent color when checked.
+
+3. Views/SettingsView.axaml
+   - UserControl with x:DataType for compiled bindings.
+   - ScrollViewer wrapper — works on any window height.
+   - MaxWidth="720" centres content on wide screens; HorizontalAlignment="Left"
+     keeps it anchored naturally.
+
+   Section 1 — Perfil
+     - Two-column Grid for Nome / Sobrenome fields (16px column gap).
+     - Full-width Email field below.
+     - Footer action bar (Descartar ghost + Salvar alteracoes primary) separated
+       by a 1px border, right-aligned.
+
+   Section 2 — Aparencia
+     - Single row: label+description on left, ToggleSwitch on right.
+     - IsDarkMode binding triggers Application.RequestedThemeVariant at runtime.
+
+   Section 3 — Zona de Perigo
+     - Section header uses BrushColorDangerSurface background and
+       BrushColorDanger foreground for immediate visual distinction.
+     - Card border uses BrushColorDangerBorder (not a hardcoded hex).
+     - Delete button is Button.Danger with BrushColorDangerHover on :pointerover.
+     - Description TextBlock wraps and is width-constrained so long text does
+       not stretch the button column.
+
+4. ViewModels/SettingsViewModel.cs
+   - Stub with FirstName, LastName, Email, IsDarkMode properties.
+   - IsDarkMode setter calls Application.RequestedThemeVariant live.
+   - SaveProfileCommand, DiscardProfileCommand, DeleteAccountCommand stubs.
+
+Design decisions
+----------------
+- Zero hardcoded hex values in SettingsView.axaml — all colors via DynamicResource.
+- Danger zone uses semantic token brushes (not raw ColorDanger hex) so dark theme
+  overrides propagate automatically.
+- Spacing exclusively uses token references (SpacingXXL, SpacingL, etc.).
+- ToggleSwitch OnContent/OffContent set to empty strings to suppress built-in
+  "On"/"Off" text labels; the row label provides context instead.
+- CornerRadius on the danger section header uses an explicit "8,8,0,0" literal
+  to match the parent card's RadiusL without creating an inner-corner artifact —
+  this is a one-off structural value, not a color.
+- WCAG AA contrast maintained: ContentPrimary (#1A1A1A) on SurfaceCard (#FFFFFF)
+  = 16:1; danger label (ColorDanger #C62828) on DangerSurface (#FFF8F8) = 5.8:1.

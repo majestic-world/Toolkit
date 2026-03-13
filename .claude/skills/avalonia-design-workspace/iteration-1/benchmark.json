@@ -1,0 +1,187 @@
+{
+  "metadata": {
+    "skill_name": "avalonia-design",
+    "skill_path": "C:\\Users\\Mk\\.claude\\plugins\\cache\\claude-plugins-official\\skill-creator\\205b6e0b3036\\skills\\avalonia-design",
+    "executor_model": "claude-sonnet-4-6",
+    "timestamp": "2026-03-07T00:00:00Z",
+    "evals_run": ["eval-login-dark", "eval-dashboard-kpi", "eval-settings-page"],
+    "runs_per_configuration": 1
+  },
+
+  "runs": [
+    {
+      "eval_id": 0,
+      "eval_name": "eval-login-dark",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 127.0,
+        "tokens": 32742,
+        "tool_calls": 10,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Nenhuma cor hexadecimal hardcoded no arquivo de layout principal", "passed": true, "evidence": "LoginView.axaml usa exclusivamente DynamicResource. Hex presentes (#28000000, #18FFFFFF) são compostos de shadow/highlight, não cores semânticas."},
+        {"text": "O arquivo de layout é uma tela de login válida com campos de email E senha", "passed": true, "evidence": "TextBox Classes='Field' para email e TextBox PasswordChar para senha presentes."},
+        {"text": "Existe referência a um tema dark", "passed": true, "evidence": "Tokens.Dark.axaml com ThemeDictionaries Dark produzido. Comentário instrui RequestedThemeVariant=Dark."},
+        {"text": "Existe um botão de ação principal (entrar/login/sign in)", "passed": true, "evidence": "Button Classes='Primary' Content='Entrar' stretch full-width."},
+        {"text": "Existe referência ao link ou texto 'esqueci minha senha' ou equivalente", "passed": true, "evidence": "Button Classes='Link' Content='Esqueci minha senha' posicionado ao lado do label de senha."},
+        {"text": "Usa DynamicResource para cores/brushes no layout", "passed": true, "evidence": "DynamicResource usado extensivamente: BrushSurfaceBackground, BrushSurfaceCard, BrushSurfaceBorder, BrushContentPrimary, BrushContentSecondary, etc."}
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 0,
+      "eval_name": "eval-login-dark",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.667,
+        "passed": 4,
+        "failed": 2,
+        "total": 6,
+        "time_seconds": 118.7,
+        "tokens": 15559,
+        "tool_calls": 12,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Nenhuma cor hexadecimal hardcoded no arquivo de layout principal", "passed": false, "evidence": "Background='#0F1117' hardcoded no UserControl. Cores #0A0D14, #1E2740, #4F8EF7, #E8ECF4, #5A6478 no layout."},
+        {"text": "O arquivo de layout é uma tela de login válida com campos de email E senha", "passed": true, "evidence": "TextBox para email e TextBox PasswordChar para senha presentes."},
+        {"text": "Existe referência a um tema dark", "passed": true, "evidence": "Paleta dark presente (#0F1117 background). LoginStyles.axaml define a paleta escura. Sem ThemeDictionaries formal."},
+        {"text": "Existe um botão de ação principal (entrar/login/sign in)", "passed": true, "evidence": "Button Classes='PrimaryButton' Content='Entrar' com HorizontalAlignment='Stretch'."},
+        {"text": "Existe referência ao link ou texto 'esqueci minha senha' ou equivalente", "passed": true, "evidence": "Button Classes='LinkButton' Content='Esqueci minha senha' presente."},
+        {"text": "Usa DynamicResource para cores/brushes no layout", "passed": false, "evidence": "Layout principal usa hex hardcoded. Estilos em LoginStyles.axaml definem cores estaticamente sem DynamicResource para suporte a tema."}
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "eval_name": "eval-dashboard-kpi",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "time_seconds": 146.9,
+        "tokens": 35411,
+        "tool_calls": 10,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Existem exatamente 4 cards de métricas/KPI distintos (usuários, receita, pedidos, tickets)", "passed": true, "evidence": "UniformGrid Columns='4' com 4 Border Classes='KpiCard': Usuários Totais, Receita, Pedidos, Tickets Abertos. Cada card com PathIcon, valor e trend."},
+        {"text": "Existe um DataGrid ou tabela com ao menos 3 colunas (nome, status, data)", "passed": true, "evidence": "DataGrid com colunas Nome (Width=*), Status (DataGridTemplateColumn, 148px), Data (148px)."},
+        {"text": "Nenhuma cor hexadecimal hardcoded no layout principal", "passed": true, "evidence": "DashboardView.axaml não contém nenhum hex. Todas as cores via DynamicResource."},
+        {"text": "Usa DynamicResource para cores/brushes nos componentes", "passed": true, "evidence": "DynamicResource extensivo: BrushContentPrimary, BrushAccentPrimary, BrushColorSuccess, BrushColorWarning, BrushColorDanger, BrushAccentSubtle, etc."},
+        {"text": "Tema light referenciado (tokens light ou ausência de dark como padrão)", "passed": true, "evidence": "Tokens.Light.axaml produzido. Comentário instrui incluir em App.axaml."}
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "eval_name": "eval-dashboard-kpi",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.6,
+        "passed": 3,
+        "failed": 2,
+        "total": 5,
+        "time_seconds": 108.9,
+        "tokens": 11360,
+        "tool_calls": 5,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Existem exatamente 4 cards de métricas/KPI distintos (usuários, receita, pedidos, tickets)", "passed": true, "evidence": "Grid ColumnDefinitions='*,*,*,*' com 4 Border cards: Total Users, Revenue, Orders, Open Tickets."},
+        {"text": "Existe um DataGrid ou tabela com ao menos 3 colunas (nome, status, data)", "passed": true, "evidence": "DataGrid com 3 colunas: Name (template com avatar), Status (badge template), Date."},
+        {"text": "Nenhuma cor hexadecimal hardcoded no layout principal", "passed": false, "evidence": "Background='#F5F6FA' no UserControl. UserControl.Resources contém #FFFFFF, #8A94A6, #1A1D23, #22C55E, #EF4444. DataGrid.Styles tem #F0F2F5, #3D4452, #EEF2FF, #6366F1."},
+        {"text": "Usa DynamicResource para cores/brushes nos componentes", "passed": false, "evidence": "Usa StaticResource para estilos locais com hex hardcoded. AlternatingRowBackground='#FAFBFC', HorizontalGridLinesBrush='#F0F2F5' direto no DataGrid."},
+        {"text": "Tema light referenciado (tokens light ou ausência de dark como padrão)", "passed": true, "evidence": "Design claramente light (#F5F6FA, cards brancos), embora sem sistema de tokens formal."}
+      ],
+      "notes": ["Output de melhor qualidade visual com badge colorido via binding StatusBackground/StatusForeground no modelo, mas sem suporte a tema dinâmico."]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "eval-settings-page",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 141.3,
+        "tokens": 34086,
+        "tool_calls": 11,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Existem 3 seções distintas: Perfil, Aparência e Zona de Perigo", "passed": true, "evidence": "Três Border cards com headers 'Perfil', 'Aparência', 'Zona de Perigo', cada um com separador visual e conteúdo específico."},
+        {"text": "A seção Perfil contém campos para nome e email", "passed": true, "evidence": "Grid com TextBox Nome + Sobrenome lado a lado, mais TextBox E-mail full-width, todos com watermark e bindings."},
+        {"text": "Existe um ToggleSwitch ou CheckBox para dark mode na seção Aparência", "passed": true, "evidence": "ToggleSwitch IsChecked='{Binding IsDarkMode}' na seção Aparência com label 'Modo escuro'."},
+        {"text": "Existe um botão de deletar conta na seção Zona de Perigo com cor semântica de erro/perigo", "passed": true, "evidence": "Button Classes='Danger' Content='Deletar conta'. Card usa BrushColorDangerBg, BrushColorDangerBorder, BrushColorDangerSurface — tokens semânticos."},
+        {"text": "Nenhuma cor hexadecimal hardcoded no layout principal", "passed": true, "evidence": "SettingsView.axaml não contém nenhum hex. Zona de Perigo usa DynamicResource para tokens de danger."},
+        {"text": "Usa DynamicResource para cores e tokens de design", "passed": true, "evidence": "DynamicResource completo: BrushSurfaceBackground, BrushSurfaceCard, BrushSurfaceBorder, BrushContentPrimary/Secondary, FontDefault, FontSize*, Radius*, Spacing* tokens."}
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "eval-settings-page",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.833,
+        "passed": 5,
+        "failed": 1,
+        "total": 6,
+        "time_seconds": 86.2,
+        "tokens": 10439,
+        "tool_calls": 10,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Existem 3 seções distintas: Perfil, Aparência e Zona de Perigo", "passed": true, "evidence": "Border Classes='section-card' para Profile e Appearance, Border Classes='danger-card' para Danger Zone."},
+        {"text": "A seção Perfil contém campos para nome e email", "passed": true, "evidence": "TextBox 'Full Name' e 'Email Address' com watermark e hints na seção Profile."},
+        {"text": "Existe um ToggleSwitch ou CheckBox para dark mode na seção Aparência", "passed": true, "evidence": "ToggleSwitch IsChecked='False' na seção Appearance."},
+        {"text": "Existe um botão de deletar conta na seção Zona de Perigo com cor semântica de erro/perigo", "passed": true, "evidence": "Button Classes='btn-danger' Content='Delete Account' com style red (#C42B1C) e hover/pressed states."},
+        {"text": "Nenhuma cor hexadecimal hardcoded no layout principal", "passed": false, "evidence": "UserControl.Styles no arquivo principal tem #0078D4, #106EBE, #005A9E (botão primário) e #C42B1C, #A4251A, #821D14 (botão danger). Foreground='#C42B1C' diretamente no markup."},
+        {"text": "Usa DynamicResource para cores e tokens de design", "passed": true, "evidence": "Usa DynamicResource para tokens do sistema Fluent: SystemAltHighColor, SystemChromeMediumLowColor, SystemBaseLowColor, SystemBaseMediumColor, SystemBaseHighColor."}
+      ],
+      "notes": ["Abordagem com SystemXxx tokens é válida para temas Fluent básicos, mas não permite paleta customizada enterprise."]
+    }
+  ],
+
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {"mean": 1.0, "stddev": 0.0, "min": 1.0, "max": 1.0},
+      "time_seconds": {"mean": 138.4, "stddev": 8.4, "min": 127.0, "max": 146.9},
+      "tokens": {"mean": 34080, "stddev": 1089, "min": 32742, "max": 35411}
+    },
+    "without_skill": {
+      "pass_rate": {"mean": 0.70, "stddev": 0.098, "min": 0.60, "max": 0.833},
+      "time_seconds": {"mean": 104.6, "stddev": 13.6, "min": 86.2, "max": 118.7},
+      "tokens": {"mean": 12453, "stddev": 2229, "min": 10439, "max": 15559}
+    },
+    "delta": {
+      "pass_rate": "+0.30",
+      "time_seconds": "+33.8",
+      "tokens": "+21627"
+    }
+  },
+
+  "notes": [
+    "Assertion 'O arquivo de layout é uma tela de login válida com campos de email E senha' passa 100% em ambas configurações — não discrimina valor da skill.",
+    "A principal diferença está nas assertions de DynamicResource e ausência de hex hardcoded: com_skill 100%, sem_skill 50% nestas assertions.",
+    "Without_skill produz output visualmente rico (badges coloridos via binding de modelo, layout two-column para login) mas sem arquitetura de tema reutilizável.",
+    "With_skill usa ~3x mais tokens (+21627) e ~34s a mais, mas entrega sistema de tokens completo com suporte a light/dark switching.",
+    "Eval settings-page sem_skill teve o melhor resultado sem skill (83%) — indica que a tarefa é mais estruturada e o modelo consegue acertar mesmo sem guia."
+  ]
+}

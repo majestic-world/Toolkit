@@ -1,14 +1,15 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
+using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.Platform.Storage;
 using System.Xml.Linq;
 using L2Toolkit.database;
-using Microsoft.Win32;
+using MsBox.Avalonia;
 
 namespace L2Toolkit.pages
 {
@@ -19,7 +20,7 @@ namespace L2Toolkit.pages
             InitializeComponent();
             RewardGenerate.Click += RewardGenerate_Click;
             RewardCopy.Click += CopyRewardContent;
-            RewardContent.PreviewMouseDown += ClickFilePath;
+            RewardContent.PointerPressed += ClickFilePath;
 
             var lastFilePath = AppDatabase.GetInstance().GetValue("lastRewardFile");
             if (lastFilePath != "")
@@ -28,26 +29,35 @@ namespace L2Toolkit.pages
             }
         }
 
-        private void ClickFilePath(object sender, MouseButtonEventArgs e)
+        private async void ClickFilePath(object sender, PointerPressedEventArgs e)
         {
-            var dialog = new OpenFileDialog
+            var topLevel = TopLevel.GetTopLevel(this);
+            var files = await topLevel!.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
             {
                 Title = "Selecione o arquivo",
-                Filter = "Arquivos XML (*.xml)|*.xml|Todos os arquivos (*.*)|*.*"
-            };
-            if (dialog.ShowDialog() != true) return;
-            RewardContent.Text = dialog.FileName;
-            AppDatabase.GetInstance().UpdateValue("lastRewardFile", dialog.FileName);
+                AllowMultiple = false,
+                FileTypeFilter = new[]
+                {
+                    new FilePickerFileType("Arquivos XML") { Patterns = new[] { "*.xml" } },
+                    new FilePickerFileType("Todos os arquivos") { Patterns = new[] { "*" } }
+                }
+            });
+
+            if (files.Count == 0) return;
+            var path = files[0].Path.LocalPath;
+            RewardContent.Text = path;
+            AppDatabase.GetInstance().UpdateValue("lastRewardFile", path);
         }
 
         private async void CopyRewardContent(object sender, RoutedEventArgs e)
         {
             var text = RewardOutput.Text.Trim();
-            Clipboard.SetText(text);
-            CopyBlock.Visibility = Visibility.Visible;
+            var topLevel = TopLevel.GetTopLevel(this);
+            await topLevel!.Clipboard!.SetTextAsync(text);
+            CopyBlock.IsVisible = true;
             RewardOutput.Text = "";
             await Task.Delay(3000);
-            CopyBlock.Visibility = Visibility.Collapsed;
+            CopyBlock.IsVisible = false;
         }
 
         public class OneDayReward
@@ -74,7 +84,7 @@ namespace L2Toolkit.pages
             }
         }
 
-        private void RewardGenerate_Click(object sender, RoutedEventArgs e)
+        private async void RewardGenerate_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -188,7 +198,7 @@ namespace L2Toolkit.pages
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "ERRO", MessageBoxButton.OK, MessageBoxImage.Error);
+                await MessageBoxManager.GetMessageBoxStandard("ERRO", ex.Message).ShowWindowAsync();
             }
         }
     }

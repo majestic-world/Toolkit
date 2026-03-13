@@ -1,0 +1,34 @@
+{
+  "expectations": [
+    {
+      "text": "Existem 3 seções distintas: Perfil, Aparência e Zona de Perigo",
+      "passed": true,
+      "evidence": "Border Classes='section-card' para Profile e Appearance, Border Classes='danger-card' para Danger Zone. Três seções claramente separadas com headers."
+    },
+    {
+      "text": "A seção Perfil contém campos para nome e email",
+      "passed": true,
+      "evidence": "Seção Profile tem TextBox Classes='field-input' para 'Full Name' e 'Email Address', ambos com Watermark e hints."
+    },
+    {
+      "text": "Existe um ToggleSwitch ou CheckBox para dark mode na seção Aparência",
+      "passed": true,
+      "evidence": "ToggleSwitch Grid.Column='1' OffContent='' OnContent='' IsChecked='False' na seção Appearance."
+    },
+    {
+      "text": "Existe um botão de deletar conta na seção Zona de Perigo com cor semântica de erro/perigo",
+      "passed": true,
+      "evidence": "Button Classes='btn-danger' Content='Delete Account' na Danger Zone. Style btn-danger define Background='#C42B1C' com hover/pressed states."
+    },
+    {
+      "text": "Nenhuma cor hexadecimal hardcoded no layout principal (exceto zona de perigo que pode ter cor de erro explícita)",
+      "passed": false,
+      "evidence": "UserControl.Styles dentro do SettingsView.axaml contém hex hardcoded: btn-primary usa #0078D4, #106EBE, #005A9E. btn-danger usa #C42B1C, #A4251A, #821D14. Danger Zone header tem Foreground='#C42B1C' diretamente no markup."
+    },
+    {
+      "text": "Usa DynamicResource para cores e tokens de design",
+      "passed": true,
+      "evidence": "Usa DynamicResource para tokens do sistema Fluent: SystemAltHighColor, SystemChromeMediumLowColor, SystemBaseLowColor, SystemBaseMediumColor, SystemBaseHighColor. Abordagem válida mas depende de tokens do sistema, não de um sistema de tokens customizado."
+    }
+  ]
+}

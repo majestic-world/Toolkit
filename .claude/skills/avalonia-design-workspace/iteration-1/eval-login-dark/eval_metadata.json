@@ -1,0 +1,37 @@
+{
+  "eval_id": 0,
+  "eval_name": "eval-login-dark",
+  "prompt": "Quero criar uma tela de login para um sistema ERP empresarial com tema dark. Precisa ter campos de email e senha, um botão de entrar e link 'esqueci minha senha'.",
+  "assertions": [
+    {
+      "text": "Nenhuma cor hexadecimal hardcoded no arquivo de layout principal (cores devem estar em tokens/ResourceDictionary)",
+      "passed": null,
+      "evidence": null
+    },
+    {
+      "text": "O arquivo de layout é uma tela de login válida com campos de email E senha",
+      "passed": null,
+      "evidence": null
+    },
+    {
+      "text": "Existe referência a um tema dark (tokens dark, ThemeDictionaries, ou RequestedThemeVariant Dark)",
+      "passed": null,
+      "evidence": null
+    },
+    {
+      "text": "Existe um botão de ação principal (entrar/login/sign in)",
+      "passed": null,
+      "evidence": null
+    },
+    {
+      "text": "Existe referência ao link ou texto 'esqueci minha senha' ou equivalente",
+      "passed": null,
+      "evidence": null
+    },
+    {
+      "text": "Usa DynamicResource (não StaticResource ou valores inline) para cores/brushes no layout",
+      "passed": null,
+      "evidence": null
+    }
+  ]
+}

@@ -1,0 +1,134 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignWidth="1280" d:DesignHeight="800"
+             x:Class="Unreal_Tools.Views.LoginView"
+             Background="#0F1117">
+
+    <UserControl.Styles>
+        <StyleInclude Source="/Styles/LoginStyles.axaml" />
+    </UserControl.Styles>
+
+    <!-- Full-screen split layout: branding left, form right -->
+    <Grid ColumnDefinitions="1*, 480">
+
+        <!-- Left panel: branding / hero area -->
+        <Border Grid.Column="0"
+                Background="#0A0D14">
+            <StackPanel HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Spacing="16">
+
+                <!-- Company logo placeholder -->
+                <Border Width="72" Height="72"
+                        CornerRadius="16"
+                        Background="#1E2740"
+                        HorizontalAlignment="Center">
+                    <TextBlock Text="ERP"
+                               FontSize="22"
+                               FontWeight="Bold"
+                               Foreground="#4F8EF7"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center" />
+                </Border>
+
+                <TextBlock Text="NexusERP"
+                           FontSize="32"
+                           FontWeight="Bold"
+                           Foreground="#E8ECF4"
+                           HorizontalAlignment="Center"
+                           LetterSpacing="1" />
+
+                <TextBlock Text="Gestão Empresarial Integrada"
+                           FontSize="14"
+                           Foreground="#5A6478"
+                           HorizontalAlignment="Center" />
+
+                <!-- Decorative divider -->
+                <Border Height="1"
+                        Width="160"
+                        Background="#1E2740"
+                        Margin="0,16,0,16" />
+
+                <TextBlock Text="Acesse sua conta para gerenciar&#10;processos, equipes e resultados&#10;em um único lugar."
+                           FontSize="13"
+                           Foreground="#3E4A60"
+                           HorizontalAlignment="Center"
+                           TextAlignment="Center"
+                           LineHeight="22" />
+            </StackPanel>
+        </Border>
+
+        <!-- Right panel: login form -->
+        <Border Grid.Column="1"
+                Background="#13161F"
+                BoxShadow="-4 0 32 0 #0D0F17">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                            Width="360"
+                            Spacing="0"
+                            Margin="0,64,0,64">
+
+                    <!-- Form header -->
+                    <TextBlock Text="Bem-vindo de volta"
+                               FontSize="24"
+                               FontWeight="SemiBold"
+                               Foreground="#E8ECF4"
+                               Margin="0,0,0,6" />
+                    <TextBlock Text="Insira suas credenciais para continuar"
+                               FontSize="13"
+                               Foreground="#5A6478"
+                               Margin="0,0,0,40" />
+
+                    <!-- Email field -->
+                    <TextBlock Text="E-mail corporativo"
+                               Classes="FieldLabel" />
+                    <TextBox x:Name="EmailTextBox"
+                             Classes="LoginField"
+                             Watermark="nome@empresa.com.br"
+                             KeyboardNavigation.TabIndex="0"
+                             Margin="0,6,0,20" />
+
+                    <!-- Password field -->
+                    <TextBlock Text="Senha"
+                               Classes="FieldLabel" />
+                    <TextBox x:Name="PasswordTextBox"
+                             Classes="LoginField"
+                             PasswordChar="&#x2022;"
+                             Watermark="••••••••"
+                             KeyboardNavigation.TabIndex="1"
+                             Margin="0,6,0,8" />
+
+                    <!-- Forgot password link (right-aligned under password) -->
+                    <Button Classes="LinkButton"
+                            Content="Esqueci minha senha"
+                            HorizontalAlignment="Right"
+                            KeyboardNavigation.TabIndex="2"
+                            Margin="0,0,0,32" />
+
+                    <!-- Login button -->
+                    <Button x:Name="LoginButton"
+                            Classes="PrimaryButton"
+                            Content="Entrar"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Center"
+                            KeyboardNavigation.TabIndex="3" />
+
+                    <!-- Footer note -->
+                    <TextBlock Text="Ao acessar, você concorda com os Termos de Uso&#10;e a Política de Privacidade da sua organização."
+                               FontSize="11"
+                               Foreground="#3E4A60"
+                               HorizontalAlignment="Center"
+                               TextAlignment="Center"
+                               LineHeight="18"
+                               Margin="0,32,0,0" />
+
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+
+    </Grid>
+</UserControl>

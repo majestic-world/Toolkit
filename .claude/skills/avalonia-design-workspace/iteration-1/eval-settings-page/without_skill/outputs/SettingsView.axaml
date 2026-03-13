@@ -1,0 +1,255 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignWidth="900" d:DesignHeight="760"
+             x:Class="Unreal_Tools.Views.SettingsView"
+             Background="{DynamicResource SystemAltHighColor}">
+
+  <UserControl.Styles>
+
+    <!-- Section card -->
+    <Style Selector="Border.section-card">
+      <Setter Property="Background" Value="{DynamicResource SystemChromeMediumLowColor}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource SystemBaseLowColor}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="8" />
+      <Setter Property="Padding" Value="28 24" />
+      <Setter Property="Margin" Value="0 0 0 20" />
+    </Style>
+
+    <!-- Section header label -->
+    <Style Selector="TextBlock.section-header">
+      <Setter Property="FontSize" Value="11" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+      <Setter Property="LetterSpacing" Value="1.2" />
+      <Setter Property="Foreground" Value="{DynamicResource SystemBaseMediumColor}" />
+      <Setter Property="Margin" Value="0 0 0 20" />
+      <Setter Property="TextTransform" Value="Uppercase" />
+    </Style>
+
+    <!-- Field label -->
+    <Style Selector="TextBlock.field-label">
+      <Setter Property="FontSize" Value="13" />
+      <Setter Property="FontWeight" Value="Medium" />
+      <Setter Property="Foreground" Value="{DynamicResource SystemBaseHighColor}" />
+      <Setter Property="Margin" Value="0 0 0 6" />
+    </Style>
+
+    <!-- Field hint -->
+    <Style Selector="TextBlock.field-hint">
+      <Setter Property="FontSize" Value="12" />
+      <Setter Property="Foreground" Value="{DynamicResource SystemBaseMediumColor}" />
+      <Setter Property="Margin" Value="0 4 0 0" />
+    </Style>
+
+    <!-- Standard text box -->
+    <Style Selector="TextBox.field-input">
+      <Setter Property="Height" Value="38" />
+      <Setter Property="FontSize" Value="14" />
+      <Setter Property="CornerRadius" Value="6" />
+      <Setter Property="Padding" Value="12 0" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="BorderBrush" Value="{DynamicResource SystemBaseLowColor}" />
+      <Setter Property="Background" Value="{DynamicResource SystemAltHighColor}" />
+    </Style>
+
+    <!-- Divider -->
+    <Style Selector="Separator.row-divider">
+      <Setter Property="Margin" Value="0 18" />
+      <Setter Property="Background" Value="{DynamicResource SystemBaseLowColor}" />
+      <Setter Property="Height" Value="1" />
+    </Style>
+
+    <!-- Row label column -->
+    <Style Selector="TextBlock.row-label">
+      <Setter Property="FontSize" Value="14" />
+      <Setter Property="FontWeight" Value="Normal" />
+      <Setter Property="Foreground" Value="{DynamicResource SystemBaseHighColor}" />
+      <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <!-- Row sub-label -->
+    <Style Selector="TextBlock.row-sub-label">
+      <Setter Property="FontSize" Value="12" />
+      <Setter Property="Foreground" Value="{DynamicResource SystemBaseMediumColor}" />
+    </Style>
+
+    <!-- Save button -->
+    <Style Selector="Button.btn-primary">
+      <Setter Property="Height" Value="38" />
+      <Setter Property="Padding" Value="20 0" />
+      <Setter Property="FontSize" Value="13" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+      <Setter Property="CornerRadius" Value="6" />
+      <Setter Property="Background" Value="#0078D4" />
+      <Setter Property="Foreground" Value="White" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="Cursor" Value="Hand" />
+    </Style>
+    <Style Selector="Button.btn-primary:pointerover /template/ ContentPresenter">
+      <Setter Property="Background" Value="#106EBE" />
+    </Style>
+    <Style Selector="Button.btn-primary:pressed /template/ ContentPresenter">
+      <Setter Property="Background" Value="#005A9E" />
+    </Style>
+
+    <!-- Danger button -->
+    <Style Selector="Button.btn-danger">
+      <Setter Property="Height" Value="38" />
+      <Setter Property="Padding" Value="20 0" />
+      <Setter Property="FontSize" Value="13" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+      <Setter Property="CornerRadius" Value="6" />
+      <Setter Property="Background" Value="#C42B1C" />
+      <Setter Property="Foreground" Value="White" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="Cursor" Value="Hand" />
+    </Style>
+    <Style Selector="Button.btn-danger:pointerover /template/ ContentPresenter">
+      <Setter Property="Background" Value="#A4251A" />
+    </Style>
+    <Style Selector="Button.btn-danger:pressed /template/ ContentPresenter">
+      <Setter Property="Background" Value="#821D14" />
+    </Style>
+
+    <!-- Danger zone card override -->
+    <Style Selector="Border.danger-card">
+      <Setter Property="Background" Value="{DynamicResource SystemChromeMediumLowColor}" />
+      <Setter Property="BorderBrush" Value="#C42B1C" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="8" />
+      <Setter Property="Padding" Value="28 24" />
+      <Setter Property="Margin" Value="0 0 0 20" />
+    </Style>
+
+  </UserControl.Styles>
+
+  <!-- Root scroll container -->
+  <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                VerticalScrollBarVisibility="Auto">
+    <Grid ColumnDefinitions="1*, Auto, 1*"
+          RowDefinitions="Auto">
+      <!-- Centre column: max 680px, with top/bottom padding -->
+      <StackPanel Grid.Column="1"
+                  Width="680"
+                  Margin="0 40 0 60">
+
+        <!-- ── Page title ── -->
+        <TextBlock Text="Settings"
+                   FontSize="26"
+                   FontWeight="SemiBold"
+                   Foreground="{DynamicResource SystemBaseHighColor}"
+                   Margin="0 0 0 6" />
+        <TextBlock Text="Manage your account preferences and application behaviour."
+                   FontSize="14"
+                   Foreground="{DynamicResource SystemBaseMediumColor}"
+                   Margin="0 0 0 32" />
+
+        <!-- ════════════════════════════════════
+             SECTION 1 — Profile
+             ════════════════════════════════════ -->
+        <Border Classes="section-card">
+          <StackPanel>
+            <TextBlock Classes="section-header" Text="Profile" />
+
+            <!-- Name field -->
+            <TextBlock Classes="field-label" Text="Full Name" />
+            <TextBox Classes="field-input"
+                     Watermark="e.g. Jane Doe"
+                     MaxLength="120" />
+            <TextBlock Classes="field-hint"
+                       Text="This name may appear in reports and shared views." />
+
+            <Separator Classes="row-divider" />
+
+            <!-- Email field -->
+            <TextBlock Classes="field-label" Text="Email Address" />
+            <TextBox Classes="field-input"
+                     Watermark="e.g. jane@company.com"
+                     MaxLength="254" />
+            <TextBlock Classes="field-hint"
+                       Text="Used for notifications and account recovery." />
+
+            <!-- Save row -->
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        Margin="0 24 0 0">
+              <Button Classes="btn-primary" Content="Save Profile" />
+            </StackPanel>
+          </StackPanel>
+        </Border>
+
+        <!-- ════════════════════════════════════
+             SECTION 2 — Appearance
+             ════════════════════════════════════ -->
+        <Border Classes="section-card">
+          <StackPanel>
+            <TextBlock Classes="section-header" Text="Appearance" />
+
+            <!-- Dark mode row -->
+            <Grid ColumnDefinitions="* Auto">
+              <!-- Left: label + description -->
+              <StackPanel Grid.Column="0"
+                          VerticalAlignment="Center"
+                          Margin="0 0 16 0">
+                <TextBlock Classes="row-label" Text="Dark Mode" />
+                <TextBlock Classes="row-sub-label"
+                           Text="Switch between light and dark interface themes." />
+              </StackPanel>
+
+              <!-- Right: toggle -->
+              <ToggleSwitch Grid.Column="1"
+                            VerticalAlignment="Center"
+                            OffContent=""
+                            OnContent=""
+                            IsChecked="False" />
+            </Grid>
+          </StackPanel>
+        </Border>
+
+        <!-- ════════════════════════════════════
+             SECTION 3 — Danger Zone
+             ════════════════════════════════════ -->
+        <Border Classes="danger-card">
+          <StackPanel>
+            <!-- Header with warning tint -->
+            <StackPanel Orientation="Horizontal"
+                        Margin="0 0 0 4">
+              <TextBlock Text="Danger Zone"
+                         FontSize="11"
+                         FontWeight="SemiBold"
+                         LetterSpacing="1.2"
+                         Foreground="#C42B1C"
+                         TextTransform="Uppercase" />
+            </StackPanel>
+
+            <Separator Classes="row-divider" Margin="0 12 0 16" />
+
+            <!-- Delete account row -->
+            <Grid ColumnDefinitions="* Auto">
+              <StackPanel Grid.Column="0"
+                          VerticalAlignment="Center"
+                          Margin="0 0 16 0">
+                <TextBlock Classes="row-label"
+                           Text="Delete Account"
+                           FontWeight="Medium" />
+                <TextBlock Classes="row-sub-label"
+                           TextWrapping="Wrap"
+                           Text="Permanently remove your account and all associated data. This action cannot be undone." />
+              </StackPanel>
+
+              <Button Grid.Column="1"
+                      Classes="btn-danger"
+                      VerticalAlignment="Center"
+                      Content="Delete Account" />
+            </Grid>
+          </StackPanel>
+        </Border>
+
+      </StackPanel>
+    </Grid>
+  </ScrollViewer>
+
+</UserControl>

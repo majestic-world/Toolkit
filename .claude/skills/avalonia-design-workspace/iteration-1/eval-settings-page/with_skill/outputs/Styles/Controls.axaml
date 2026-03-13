@@ -1,0 +1,113 @@
+<!-- Styles/Controls.axaml -->
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <!-- ============================================================
+       PRIMARY BUTTON
+  ============================================================ -->
+  <Style Selector="Button.Primary">
+    <Setter Property="Background"      Value="{DynamicResource BrushAccentPrimary}"/>
+    <Setter Property="Foreground"      Value="{DynamicResource BrushAccentForeground}"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="CornerRadius"    Value="{DynamicResource RadiusM}"/>
+    <Setter Property="Padding"         Value="16,9"/>
+    <Setter Property="FontSize"        Value="{DynamicResource FontSizeBody}"/>
+    <Setter Property="FontWeight"      Value="Medium"/>
+    <Setter Property="Cursor"          Value="Hand"/>
+    <Setter Property="Transitions">
+      <Transitions>
+        <BrushTransition Property="Background" Duration="0:0:0.12"/>
+      </Transitions>
+    </Setter>
+  </Style>
+  <Style Selector="Button.Primary:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource BrushAccentHover}"/>
+  </Style>
+  <Style Selector="Button.Primary:pressed /template/ ContentPresenter">
+    <Setter Property="Background"       Value="{DynamicResource BrushAccentPressed}"/>
+    <Setter Property="RenderTransform"  Value="scale(0.98)"/>
+  </Style>
+  <Style Selector="Button.Primary:disabled">
+    <Setter Property="Opacity" Value="0.4"/>
+    <Setter Property="Cursor"  Value="Arrow"/>
+  </Style>
+
+  <!-- ============================================================
+       GHOST BUTTON
+  ============================================================ -->
+  <Style Selector="Button.Ghost">
+    <Setter Property="Background"      Value="Transparent"/>
+    <Setter Property="Foreground"      Value="{DynamicResource BrushContentSecondary}"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="CornerRadius"    Value="{DynamicResource RadiusM}"/>
+    <Setter Property="Padding"         Value="12,8"/>
+    <Setter Property="FontSize"        Value="{DynamicResource FontSizeBody}"/>
+    <Setter Property="Cursor"          Value="Hand"/>
+  </Style>
+  <Style Selector="Button.Ghost:pointerover /template/ ContentPresenter">
+    <Setter Property="Background"              Value="{DynamicResource BrushSurfaceBorder}"/>
+    <Setter Property="TextElement.Foreground"  Value="{DynamicResource BrushContentPrimary}"/>
+  </Style>
+
+  <!-- ============================================================
+       DANGER BUTTON
+  ============================================================ -->
+  <Style Selector="Button.Danger">
+    <Setter Property="Background"      Value="{DynamicResource BrushColorDanger}"/>
+    <Setter Property="Foreground"      Value="{DynamicResource BrushAccentForeground}"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="CornerRadius"    Value="{DynamicResource RadiusM}"/>
+    <Setter Property="Padding"         Value="16,9"/>
+    <Setter Property="FontSize"        Value="{DynamicResource FontSizeBody}"/>
+    <Setter Property="FontWeight"      Value="Medium"/>
+    <Setter Property="Cursor"          Value="Hand"/>
+    <Setter Property="Transitions">
+      <Transitions>
+        <BrushTransition Property="Background" Duration="0:0:0.12"/>
+      </Transitions>
+    </Setter>
+  </Style>
+  <Style Selector="Button.Danger:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource BrushColorDangerHover}"/>
+  </Style>
+  <Style Selector="Button.Danger:pressed /template/ ContentPresenter">
+    <Setter Property="RenderTransform" Value="scale(0.98)"/>
+  </Style>
+  <Style Selector="Button.Danger:disabled">
+    <Setter Property="Opacity" Value="0.4"/>
+    <Setter Property="Cursor"  Value="Arrow"/>
+  </Style>
+
+  <!-- ============================================================
+       TEXT BOX
+  ============================================================ -->
+  <Style Selector="TextBox.Field">
+    <Setter Property="Background"      Value="{DynamicResource BrushSurfaceCard}"/>
+    <Setter Property="Foreground"      Value="{DynamicResource BrushContentPrimary}"/>
+    <Setter Property="BorderBrush"     Value="{DynamicResource BrushSurfaceBorder}"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="CornerRadius"    Value="{DynamicResource RadiusS}"/>
+    <Setter Property="Padding"         Value="12,9"/>
+    <Setter Property="FontSize"        Value="{DynamicResource FontSizeBody}"/>
+    <Setter Property="MinHeight"       Value="36"/>
+    <Setter Property="Transitions">
+      <Transitions>
+        <BrushTransition Property="BorderBrush" Duration="0:0:0.12"/>
+      </Transitions>
+    </Setter>
+  </Style>
+  <Style Selector="TextBox.Field:focus">
+    <Setter Property="BorderBrush" Value="{DynamicResource BrushAccentPrimary}"/>
+  </Style>
+  <Style Selector="TextBox.Field:disabled">
+    <Setter Property="Opacity" Value="0.5"/>
+  </Style>
+
+  <!-- ============================================================
+       TOGGLE SWITCH — accent track when on
+  ============================================================ -->
+  <Style Selector="ToggleSwitch:checked /template/ Border#SwitchKnobBounds">
+    <Setter Property="Background" Value="{DynamicResource BrushAccentPrimary}"/>
+  </Style>
+
+</Styles>

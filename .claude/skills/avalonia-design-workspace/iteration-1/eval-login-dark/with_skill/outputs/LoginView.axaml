@@ -1,0 +1,174 @@
+<!-- Views/LoginView.axaml -->
+<!--
+  ERP Enterprise Login Screen — Dark Theme
+  =========================================
+  Prerequisites:
+    - Tokens.Dark.axaml merged in Application.Resources (ThemeDictionaries)
+    - Controls.axaml included in Application.Styles
+    - Application.RequestedThemeVariant set to "Dark" (or user-controlled)
+
+  ViewModel: LoginViewModel
+    Properties : Email (string), Password (string), IsBusy (bool)
+    Commands   : SignInCommand (ICommand), ForgotPasswordCommand (ICommand)
+-->
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:YourApp.ViewModels"
+             x:DataType="vm:LoginViewModel"
+             x:Class="YourApp.Views.LoginView"
+             Background="{DynamicResource BrushSurfaceBackground}">
+
+  <!--
+    Full-screen centering grid.
+    The card is fixed at 400px wide — standard for auth forms.
+    Vertical centering is achieved with VerticalAlignment="Center" on the card.
+  -->
+  <Grid>
+
+    <Border Width="400"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Background="{DynamicResource BrushSurfaceCard}"
+            BorderBrush="{DynamicResource BrushSurfaceBorder}"
+            BorderThickness="1"
+            CornerRadius="{DynamicResource RadiusXL}"
+            Padding="40"
+            BoxShadow="0 8 32 0 #28000000">
+
+      <StackPanel Spacing="32">
+
+        <!-- ── Brand / Logo ──────────────────────────────────────────── -->
+        <StackPanel HorizontalAlignment="Center" Spacing="12">
+
+          <!-- Abstract brand mark: accent square with rounded corners -->
+          <Border Width="44" Height="44"
+                  CornerRadius="{DynamicResource RadiusL}"
+                  Background="{DynamicResource BrushAccentPrimary}"
+                  HorizontalAlignment="Center">
+            <!-- Inner highlight gives depth without a gradient -->
+            <Border CornerRadius="6,6,0,0"
+                    Height="10"
+                    VerticalAlignment="Top"
+                    Background="#18FFFFFF"
+                    Margin="0"/>
+          </Border>
+
+          <!-- App / system name -->
+          <StackPanel Spacing="4" HorizontalAlignment="Center">
+            <TextBlock Text="ERP Empresarial"
+                       FontFamily="{DynamicResource FontDefault}"
+                       FontSize="{DynamicResource FontSizeTitle}"
+                       FontWeight="SemiBold"
+                       HorizontalAlignment="Center"
+                       Foreground="{DynamicResource BrushContentPrimary}"/>
+            <TextBlock Text="Acesse sua conta para continuar"
+                       FontFamily="{DynamicResource FontDefault}"
+                       FontSize="{DynamicResource FontSizeBody}"
+                       HorizontalAlignment="Center"
+                       Foreground="{DynamicResource BrushContentSecondary}"/>
+          </StackPanel>
+
+        </StackPanel>
+
+        <!-- ── Form Fields ───────────────────────────────────────────── -->
+        <StackPanel Spacing="16">
+
+          <!-- Email field -->
+          <StackPanel Spacing="4">
+            <TextBlock Text="E-mail"
+                       FontFamily="{DynamicResource FontDefault}"
+                       FontSize="{DynamicResource FontSizeBody}"
+                       FontWeight="Medium"
+                       Foreground="{DynamicResource BrushContentSecondary}"/>
+            <TextBox Classes="Field"
+                     Watermark="nome@empresa.com.br"
+                     Text="{Binding Email}"
+                     KeyboardNavigation.TabIndex="0"/>
+          </StackPanel>
+
+          <!-- Password field + forgot-password link in label row -->
+          <StackPanel Spacing="4">
+            <Grid ColumnDefinitions="*,Auto">
+              <TextBlock Grid.Column="0"
+                         Text="Senha"
+                         FontFamily="{DynamicResource FontDefault}"
+                         FontSize="{DynamicResource FontSizeBody}"
+                         FontWeight="Medium"
+                         Foreground="{DynamicResource BrushContentSecondary}"
+                         VerticalAlignment="Center"/>
+              <Button Grid.Column="1"
+                      Classes="Link"
+                      Content="Esqueci minha senha"
+                      FontFamily="{DynamicResource FontDefault}"
+                      FontSize="{DynamicResource FontSizeSmall}"
+                      VerticalAlignment="Center"
+                      Command="{Binding ForgotPasswordCommand}"
+                      KeyboardNavigation.TabIndex="3"/>
+            </Grid>
+            <TextBox Classes="Field"
+                     PasswordChar="*"
+                     Watermark="••••••••"
+                     Text="{Binding Password}"
+                     KeyboardNavigation.TabIndex="1"/>
+          </StackPanel>
+
+        </StackPanel>
+
+        <!-- ── Sign-in button ────────────────────────────────────────── -->
+        <!--
+          HorizontalAlignment="Stretch" + HorizontalContentAlignment="Center"
+          makes the button fill the card width — standard for login forms.
+          IsEnabled binding to !IsBusy prevents double-submit.
+        -->
+        <Button Classes="Primary"
+                Content="Entrar"
+                FontFamily="{DynamicResource FontDefault}"
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Center"
+                Command="{Binding SignInCommand}"
+                IsEnabled="{Binding !IsBusy}"
+                KeyboardNavigation.TabIndex="2"/>
+
+        <!-- ── Divider with label ─────────────────────────────────────── -->
+        <Grid ColumnDefinitions="*,Auto,*" VerticalAlignment="Center">
+          <Separator Grid.Column="0"
+                     Background="{DynamicResource BrushSurfaceBorder}"
+                     Height="1"/>
+          <TextBlock Grid.Column="1"
+                     Text="ou"
+                     Margin="12,0"
+                     FontFamily="{DynamicResource FontDefault}"
+                     FontSize="{DynamicResource FontSizeSmall}"
+                     Foreground="{DynamicResource BrushContentTertiary}"/>
+          <Separator Grid.Column="2"
+                     Background="{DynamicResource BrushSurfaceBorder}"
+                     Height="1"/>
+        </Grid>
+
+        <!-- ── Footer: registration prompt ──────────────────────────── -->
+        <!--
+          "Esqueci minha senha" appears inline above the password field
+          (as a link-style button). A second entry point lives here for
+          discoverability, styled consistently with the accent color.
+        -->
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    Spacing="4">
+          <TextBlock Text="Primeiro acesso?"
+                     FontFamily="{DynamicResource FontDefault}"
+                     FontSize="{DynamicResource FontSizeBody}"
+                     Foreground="{DynamicResource BrushContentSecondary}"
+                     VerticalAlignment="Center"/>
+          <Button Classes="Link"
+                  Content="Solicitar cadastro"
+                  FontFamily="{DynamicResource FontDefault}"
+                  FontSize="{DynamicResource FontSizeBody}"
+                  VerticalAlignment="Center"/>
+        </StackPanel>
+
+      </StackPanel>
+    </Border>
+
+  </Grid>
+
+</UserControl>

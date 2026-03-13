@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,14 +7,16 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
+using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.Platform.Storage;
 using L2Toolkit.database;
-using Microsoft.Win32;
+using MsBox.Avalonia;
 
 namespace L2Toolkit.pages;
 
-public partial class LogParse
+public partial class LogParse : UserControl
 {
     private readonly Queue<string> _logQueue = new();
     private readonly object _logLock = new();
@@ -50,25 +52,23 @@ public partial class LogParse
         }
     }
 
-    private void LogFile_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
+    private async void LogFile_OnPreviewMouseDown(object sender, PointerPressedEventArgs e)
     {
-        var initialDir = string.IsNullOrEmpty(LogFile.Text)
-            ? string.Empty
-            : Path.GetDirectoryName(LogFile.Text) ?? string.Empty;
-
-        var dialog = new OpenFileDialog
+        var topLevel = TopLevel.GetTopLevel(this);
+        var files = await topLevel!.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
-            Multiselect = false,
-            CheckFileExists = true,
-            CheckPathExists = true,
-            Filter = "Log files (*.log)|*.log",
-            InitialDirectory = initialDir
-        };
+            AllowMultiple = false,
+            FileTypeFilter = new[]
+            {
+                new FilePickerFileType("Log files") { Patterns = new[] { "*.log" } }
+            }
+        });
 
-        if (dialog.ShowDialog() == true)
+        if (files.Count > 0)
         {
-            LogFile.Text = dialog.FileName;
-            AppDatabase.GetInstance().UpdateValue("lastLogFile", dialog.FileName);
+            var path = files[0].Path.LocalPath;
+            LogFile.Text = path;
+            AppDatabase.GetInstance().UpdateValue("lastLogFile", path);
         }
     }
 
@@ -86,7 +86,7 @@ public partial class LogParse
         var playerLogs = new ConcurrentQueue<string>();
 
         var lines = File.ReadLines(fileLog, encoding);
-        
+
         const string pattern = @"\[\d{2}\.\d{2}\.\d{2} \d{2}:\d{2}:\d{2}\]\s*";
         var regex = new Regex(pattern, RegexOptions.Compiled);
 
@@ -94,7 +94,7 @@ public partial class LogParse
         {
             var withoutDate = regex.Replace(line, string.Empty);
             var parse = withoutDate.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            
+
             Interlocked.Increment(ref _totalLogs);
 
             if (parse.Length < 2)
@@ -159,7 +159,7 @@ public partial class LogParse
 
             AddLog($"Logs encontrados: {matchedLines.Count:N0}");
             AddLog($"Total de logs: {_totalLogs:N0}");
-            
+
             _totalLogs = 0;
 
             if (!string.IsNullOrEmpty(optionalEvent))
@@ -178,7 +178,7 @@ public partial class LogParse
 
             await File.WriteAllLinesAsync(saveFileDir, matchedLines, encoding);
             AddLog($"Pronto, o arquivo {fileName} foi criado com sucesso");
-            
+
             if (File.Exists(saveFileDir))
             {
                 Process.Start(new ProcessStartInfo
@@ -190,11 +190,7 @@ public partial class LogParse
         }
         catch (Exception ex)
         {
-            MessageBox.Show(
-                ex.Message,
-                "Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            await MessageBoxManager.GetMessageBoxStandard("Error", ex.Message).ShowWindowAsync();
         }
         finally
         {
@@ -202,13 +198,15 @@ public partial class LogParse
         }
     }
 
-    private void OutputDir_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
+    private async void OutputDir_OnPreviewMouseDown(object sender, PointerPressedEventArgs e)
     {
-        var dialog = new OpenFolderDialog();
-        if (dialog.ShowDialog() == true)
+        var topLevel = TopLevel.GetTopLevel(this);
+        var folders = await topLevel!.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions());
+        if (folders.Count > 0)
         {
-            OutputDir.Text = dialog.FolderName;
-            AppDatabase.GetInstance().UpdateValue("lastOutputDir", dialog.FolderName);
+            var path = folders[0].Path.LocalPath;
+            OutputDir.Text = path;
+            AppDatabase.GetInstance().UpdateValue("lastOutputDir", path);
         }
     }
 }

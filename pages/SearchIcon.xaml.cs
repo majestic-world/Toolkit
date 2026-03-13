@@ -1,13 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
+using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
 using L2Toolkit.DataMap;
 using L2Toolkit.Utilities;
+using MsBox.Avalonia;
 
 namespace L2Toolkit.pages
 {
@@ -47,11 +47,11 @@ namespace L2Toolkit.pages
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                _ = MessageBoxManager.GetMessageBoxStandard("Error", e.Message).ShowWindowAsync();
             }
         }
 
-        private void Search(string id, ConcurrentDictionary<string, IconModel> dictionary, string file)
+        private async void Search(string id, ConcurrentDictionary<string, IconModel> dictionary, string file)
         {
             if (dictionary.Count == 0)
             {
@@ -102,16 +102,16 @@ namespace L2Toolkit.pages
             }
             else
             {
-                MessageBox.Show("O item não foi encontrado!", "ERRO", MessageBoxButton.OK, MessageBoxImage.Error);
+                await MessageBoxManager.GetMessageBoxStandard("ERRO", "O item não foi encontrado!").ShowWindowAsync();
             }
         }
 
-        private void SearchButton_OnClick(object sender, RoutedEventArgs e)
+        private async void SearchButton_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
                 var id = ItemId.Text;
-                var type = ItemType.SelectedItem is ComboBoxItem selectedItem ? selectedItem.Content?.ToString() : ItemType.Text;
+                var type = ItemType.SelectedItem is ComboBoxItem selectedItem ? selectedItem.Content?.ToString() : null;
                 switch (type)
                 {
                     case "Armor":
@@ -130,39 +130,41 @@ namespace L2Toolkit.pages
             }
             catch (Exception exception)
             {
-                MessageBox.Show(exception.Message, "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                await MessageBoxManager.GetMessageBoxStandard("Erro", exception.Message).ShowWindowAsync();
             }
         }
 
-        private async void IconOutput_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
+        private async void IconOutput_OnPreviewMouseDown(object sender, PointerPressedEventArgs e)
         {
             try
             {
                 var text = IconOutput.Text;
                 if (string.IsNullOrWhiteSpace(text)) return;
-                Clipboard.SetText(text);
-                CopyBlock.Visibility = Visibility.Visible;
+                var topLevel = TopLevel.GetTopLevel(this);
+                await topLevel!.Clipboard!.SetTextAsync(text);
+                CopyBlock.IsVisible = true;
                 await Task.Delay(3000);
-                CopyBlock.Visibility = Visibility.Collapsed;
+                CopyBlock.IsVisible = false;
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 //ignore
             }
         }
 
-        private async void IconPanelOutput_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
+        private async void IconPanelOutput_OnPreviewMouseDown(object sender, PointerPressedEventArgs e)
         {
             try
             {
                 var text = IconPanelOutput.Text;
                 if (string.IsNullOrWhiteSpace(text)) return;
-                Clipboard.SetText(text);
-                CopyBlock.Visibility = Visibility.Visible;
+                var topLevel = TopLevel.GetTopLevel(this);
+                await topLevel!.Clipboard!.SetTextAsync(text);
+                CopyBlock.IsVisible = true;
                 await Task.Delay(3000);
-                CopyBlock.Visibility = Visibility.Collapsed;
+                CopyBlock.IsVisible = false;
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 //ignore
             }

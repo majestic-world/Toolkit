@@ -1,0 +1,34 @@
+{
+  "expectations": [
+    {
+      "text": "Nenhuma cor hexadecimal hardcoded no arquivo de layout principal (cores devem estar em tokens/ResourceDictionary)",
+      "passed": false,
+      "evidence": "LoginView.axaml tem Background='#0F1117' hardcoded no UserControl. Cores como #0A0D14, #1E2740, #4F8EF7, #E8ECF4, #5A6478, #3E4A60 aparecem diretamente no layout, não em ResourceDictionary."
+    },
+    {
+      "text": "O arquivo de layout é uma tela de login válida com campos de email E senha",
+      "passed": true,
+      "evidence": "TextBox Classes='LoginField' para email e TextBox Classes='LoginField' PasswordChar com 'Senha' label. Ambos presentes."
+    },
+    {
+      "text": "Existe referência a um tema dark (tokens dark, ThemeDictionaries, ou RequestedThemeVariant Dark)",
+      "passed": true,
+      "evidence": "A paleta usada é dark (#0F1117 background, etc.) e LoginStyles.axaml define a paleta escura. Sem ThemeDictionaries formal, mas visualmente dark."
+    },
+    {
+      "text": "Existe um botão de ação principal (entrar/login/sign in)",
+      "passed": true,
+      "evidence": "Button Classes='PrimaryButton' Content='Entrar' com HorizontalAlignment='Stretch'."
+    },
+    {
+      "text": "Existe referência ao link ou texto 'esqueci minha senha' ou equivalente",
+      "passed": true,
+      "evidence": "Button Classes='LinkButton' Content='Esqueci minha senha' presente e bem posicionado (HorizontalAlignment='Right' abaixo do campo de senha)."
+    },
+    {
+      "text": "Usa DynamicResource (não StaticResource ou valores inline) para cores/brushes no layout",
+      "passed": false,
+      "evidence": "O layout principal usa hardcoded hex em vez de DynamicResource. As classes de estilo referenciam um StyleInclude do LoginStyles.axaml onde as cores são definidas estaticamente, sem DynamicResource para adaptação de tema."
+    }
+  ]
+}

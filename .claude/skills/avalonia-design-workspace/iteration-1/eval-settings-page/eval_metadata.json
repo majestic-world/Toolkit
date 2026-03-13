@@ -1,0 +1,37 @@
+{
+  "eval_id": 2,
+  "eval_name": "eval-settings-page",
+  "prompt": "Preciso de uma página de Settings com seções: Perfil (nome, email), Aparência (toggle dark mode), e Zona de Perigo (botão deletar conta). Layout enterprise, clean.",
+  "assertions": [
+    {
+      "text": "Existem 3 seções distintas: Perfil, Aparência e Zona de Perigo",
+      "passed": null,
+      "evidence": null
+    },
+    {
+      "text": "A seção Perfil contém campos para nome e email",
+      "passed": null,
+      "evidence": null
+    },
+    {
+      "text": "Existe um ToggleSwitch ou CheckBox para dark mode na seção Aparência",
+      "passed": null,
+      "evidence": null
+    },
+    {
+      "text": "Existe um botão de deletar conta na seção Zona de Perigo com cor semântica de erro/perigo",
+      "passed": null,
+      "evidence": null
+    },
+    {
+      "text": "Nenhuma cor hexadecimal hardcoded no layout principal (exceto zona de perigo que pode ter cor de erro explícita)",
+      "passed": null,
+      "evidence": null
+    },
+    {
+      "text": "Usa DynamicResource para cores e tokens de design",
+      "passed": null,
+      "evidence": null
+    }
+  ]
+}

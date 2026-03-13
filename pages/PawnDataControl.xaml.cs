@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Threading;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Threading;
 
 namespace L2Toolkit.pages
 {
@@ -18,20 +18,21 @@ namespace L2Toolkit.pages
             _dispatcherTimer.Interval = TimeSpan.FromSeconds(3);
             _dispatcherTimer.Tick += (s, e) =>
             {
-                CopiadoTextBlock.Visibility = Visibility.Collapsed;
+                CopiadoTextBlock.IsVisible = false;
                 _dispatcherTimer.Stop();
             };
             GenerateButton.Click += GenerateButton_Click;
             CopiarButton.Click += CopiarButton_Click;
         }
 
-        private void CopiarButton_Click(object sender, RoutedEventArgs e)
+        private async void CopiarButton_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(OutputTextBox.Text))
                 return;
 
-            Clipboard.SetText(OutputTextBox.Text);
-            CopiadoTextBlock.Visibility = Visibility.Visible;
+            var topLevel = TopLevel.GetTopLevel(this);
+            await topLevel!.Clipboard!.SetTextAsync(OutputTextBox.Text);
+            CopiadoTextBlock.IsVisible = true;
             _dispatcherTimer.Stop();
             _dispatcherTimer.Start();
         }
@@ -59,7 +60,7 @@ namespace L2Toolkit.pages
 
             foreach (int idx in indices)
             {
-                TextBox entry = FindName($"Entry_{idx}") as TextBox;
+                TextBox entry = this.FindControl<TextBox>($"Entry_{idx}");
                 if (entry != null)
                 {
                     string animText = entry.Text.Trim();
@@ -118,4 +119,4 @@ namespace L2Toolkit.pages
             return sb.ToString();
         }
     }
-} 
+}

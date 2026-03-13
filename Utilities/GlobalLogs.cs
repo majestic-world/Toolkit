@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Controls;
+using Avalonia.Controls;
+using Avalonia.Threading;
 
 namespace L2Toolkit.Utilities;
 
@@ -39,13 +40,13 @@ public class GlobalLogs
 
         var text = string.Join("\n", _logQueue.Reverse());
 
-        if (_textBlock.Dispatcher.CheckAccess())
+        if (Dispatcher.UIThread.CheckAccess())
         {
             _textBlock.Text = text;
         }
         else
         {
-            _textBlock.Dispatcher.Invoke(() =>
+            Dispatcher.UIThread.Post(() =>
             {
                 _textBlock.Text = text;
             });
