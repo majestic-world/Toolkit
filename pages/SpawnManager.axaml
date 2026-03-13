@@ -237,7 +237,7 @@
             </Grid>
 
             <!-- ── Painel 03: Resultado ──────────────────────────────── -->
-            <Border Margin="32,0,32,32"
+            <Border Margin="32,10,32,32"
                     CornerRadius="8"
                     Background="#323232"
                     BorderBrush="#464646"
