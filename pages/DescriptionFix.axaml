@@ -255,7 +255,7 @@
                             <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
                                 <Border Width="4" Height="4" CornerRadius="2"
                                         Background="#5B9BD5" VerticalAlignment="Center"/>
-                                <TextBlock Text="O arquivo h5_names.txt deve estar na pasta do aplicativo."
+                                <TextBlock Text="As descrições do H5 estão embutidas no executável — nenhum arquivo externo é necessário."
                                            FontSize="13"
                                            Foreground="#B0B0B0"
                                            TextWrapping="Wrap"/>
@@ -264,7 +264,7 @@
                             <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
                                 <Border Width="4" Height="4" CornerRadius="2"
                                         Background="#5B9BD5" VerticalAlignment="Center"/>
-                                <TextBlock Text="As descrições são extraídas deste arquivo e aplicadas no arquivo selecionado."
+                                <TextBlock Text="Selecione um arquivo de itens Classic e clique em Processar para substituir as descrições."
                                            FontSize="13"
                                            Foreground="#B0B0B0"
                                            TextWrapping="Wrap"/>
