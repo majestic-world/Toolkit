@@ -8,14 +8,12 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
+using L2Toolkit.Data;
 
 namespace L2Toolkit.pages
 {
     public partial class DescriptionFix : UserControl
     {
-        private static readonly Dictionary<string, string> descriptionsCache = new Dictionary<string, string>();
-        private static bool cacheLoaded = false;
-
         private string selectedFile = null;
 
         private readonly DispatcherTimer statusTimer = new DispatcherTimer();
@@ -26,8 +24,6 @@ namespace L2Toolkit.pages
             InitializeComponent();
 
             ConfigureTimers();
-
-            Task.Run(() => LoadCache());
 
             SelecionarArquivoButton.Click += SelectFileButton_Click;
             ProcessarButton.Click += ProcessButton_Click;
@@ -40,53 +36,6 @@ namespace L2Toolkit.pages
 
             successTimer.Interval = TimeSpan.FromSeconds(5);
             successTimer.Tick += (s, e) => { SucessoBorder.IsVisible = false; successTimer.Stop(); };
-        }
-
-        private void LoadCache()
-        {
-            try
-            {
-                string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-                string filePath = Path.Combine(baseDirectory, "assets/h5_names.txt");
-
-                if (!File.Exists(filePath))
-                {
-                    Dispatcher.UIThread.Invoke(() =>
-                        ShowNotification($"File '{filePath}' not found! Replacement cannot be performed."));
-                    return;
-                }
-
-                lock (descriptionsCache)
-                {
-                    descriptionsCache.Clear();
-                    foreach (var line in File.ReadLines(filePath, Encoding.UTF8))
-                    {
-                        if (string.IsNullOrWhiteSpace(line))
-                            continue;
-
-                        var idMatch = Regex.Match(line, @"\bid=(\d+)\b");
-                        if (!idMatch.Success)
-                            continue;
-
-                        string id = idMatch.Groups[1].Value;
-
-                        var descMatch = Regex.Match(line, @"description=\[(.*?)\]", RegexOptions.Singleline);
-                        if (!descMatch.Success)
-                            continue;
-
-                        string description = descMatch.Groups[1].Value;
-
-                        descriptionsCache[id] = description;
-                    }
-
-                    cacheLoaded = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Dispatcher.UIThread.Invoke(() =>
-                    ShowNotification($"Error loading descriptions file: {ex.Message}"));
-            }
         }
 
         private async void SelectFileButton_Click(object sender, RoutedEventArgs e)
@@ -126,17 +75,6 @@ namespace L2Toolkit.pages
                     return;
                 }
 
-                if (!cacheLoaded)
-                {
-                    await Task.Run(() => LoadCache());
-
-                    if (!cacheLoaded)
-                    {
-                        ShowNotification("Could not load descriptions. Check if 'h5_names.txt' exists.");
-                        return;
-                    }
-                }
-
                 Encoding encoding = Encoding.GetEncoding(1252);
 
                 string[] lines = File.ReadAllLines(selectedFile, encoding);
@@ -153,7 +91,7 @@ namespace L2Toolkit.pages
                     }
 
                     string id = idMatch.Groups[1].Value;
-                    if (!descriptionsCache.TryGetValue(id, out var newDescription))
+                    if (!H5Names.Descriptions.TryGetValue(id, out var newDescription))
                     {
                         output.Add(line);
                         continue;
