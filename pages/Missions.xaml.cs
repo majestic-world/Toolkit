@@ -4,12 +4,11 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using System.Xml.Linq;
+using Avalonia.Threading;
 using L2Toolkit.database;
-using MsBox.Avalonia;
 
 namespace L2Toolkit.pages
 {
@@ -17,10 +16,13 @@ namespace L2Toolkit.pages
     {
         public Missions()
         {
+            _errorTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(6) };
+            _errorTimer.Tick += (s, e) => { NotificacaoBorder.IsVisible = false; _errorTimer.Stop(); };
+
             InitializeComponent();
             RewardGenerate.Click += RewardGenerate_Click;
             RewardCopy.Click += CopyRewardContent;
-            RewardContent.PointerPressed += ClickFilePath;
+            SelecionarArquivoButton.Click += async (s, e) => await SelectFileAsync();
 
             var lastFilePath = AppDatabase.GetInstance().GetValue("lastRewardFile");
             if (lastFilePath != "")
@@ -29,10 +31,12 @@ namespace L2Toolkit.pages
             }
         }
 
-        private async void ClickFilePath(object sender, PointerPressedEventArgs e)
+        private async Task SelectFileAsync()
         {
             var topLevel = TopLevel.GetTopLevel(this);
-            var files = await topLevel!.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+            if (topLevel == null) return;
+
+            var files = await topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
             {
                 Title = "Selecione o arquivo",
                 AllowMultiple = false,
@@ -49,9 +53,19 @@ namespace L2Toolkit.pages
             AppDatabase.GetInstance().UpdateValue("lastRewardFile", path);
         }
 
+        private readonly DispatcherTimer _errorTimer;
+
+        private void ShowNotification(string message)
+        {
+            _errorTimer.Stop();
+            NotificacaoBorder.IsVisible = true;
+            StatusNotificacao.Text = !string.IsNullOrWhiteSpace(message) ? message : "Ocorreu um erro inesperado.";
+            _errorTimer.Start();
+        }
+
         private async void CopyRewardContent(object sender, RoutedEventArgs e)
         {
-            var text = RewardOutput.Text.Trim();
+            var text = RewardOutput.Text?.Trim() ?? string.Empty;
             var topLevel = TopLevel.GetTopLevel(this);
             await topLevel!.Clipboard!.SetTextAsync(text);
             CopyBlock.IsVisible = true;
@@ -198,7 +212,7 @@ namespace L2Toolkit.pages
             }
             catch (Exception ex)
             {
-                await MessageBoxManager.GetMessageBoxStandard("ERRO", ex.Message).ShowWindowAsync();
+                ShowNotification(ex.Message);
             }
         }
     }

@@ -43,7 +43,7 @@ namespace L2Toolkit.pages
         {
             try
             {
-                var idsText = NpcIdsTextBox.Text.Trim();
+                var idsText = NpcIdsTextBox.Text?.Trim() ?? string.Empty;
                 if (string.IsNullOrEmpty(idsText))
                 {
                     await MessageBoxManager.GetMessageBoxStandard("Entrada inválida", "Por favor, insira os IDs dos NPCs.").ShowWindowAsync();

@@ -1,13 +1,13 @@
 <UserControl x:Class="L2Toolkit.pages.PawnDataControl"
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             Background="#3D3D3D">
+             Background="#393939">
 
     <UserControl.Resources>
         <ControlTheme x:Key="GhostButton" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Foreground" Value="#B0B0B0"/>
-            <Setter Property="BorderBrush" Value="#484848"/>
+            <Setter Property="BorderBrush" Value="#565656"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -28,11 +28,11 @@
                 </ControlTemplate>
             </Setter>
             <Style Selector="^:pointerover /template/ Border#PART_Border">
-                <Setter Property="Background" Value="#2E2E2E"/>
+                <Setter Property="Background" Value="#3C3C3C"/>
                 <Setter Property="BorderBrush" Value="#646464"/>
             </Style>
             <Style Selector="^:pressed /template/ Border#PART_Border">
-                <Setter Property="Background" Value="#242424"/>
+                <Setter Property="Background" Value="#323232"/>
             </Style>
         </ControlTheme>
     </UserControl.Resources>
@@ -41,11 +41,11 @@
 
         <!-- Form TextBox: dark input field -->
         <Style Selector="TextBox.FormField">
-            <Setter Property="Background" Value="#2A2A2A"/>
+            <Setter Property="Background" Value="#383838"/>
             <Setter Property="Foreground" Value="#D4D4D4"/>
             <Setter Property="CaretBrush" Value="#5B9BD5"/>
             <Setter Property="SelectionBrush" Value="#1E3A5A"/>
-            <Setter Property="BorderBrush" Value="#3C3C3C"/>
+            <Setter Property="BorderBrush" Value="#464646"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="CornerRadius" Value="5"/>
             <Setter Property="Padding" Value="10,7"/>
@@ -56,25 +56,25 @@
             <Setter Property="BorderThickness" Value="1"/>
         </Style>
         <Style Selector="TextBox.FormField /template/ Border#PART_BorderElement">
-            <Setter Property="Background" Value="#2A2A2A"/>
+            <Setter Property="Background" Value="#383838"/>
             <Setter Property="CornerRadius" Value="5"/>
         </Style>
         <Style Selector="TextBox.FormField:pointerover /template/ Border#PART_BorderElement">
-            <Setter Property="BorderBrush" Value="#505050"/>
+            <Setter Property="BorderBrush" Value="#5E5E5E"/>
         </Style>
 
         <!-- Code output TextBox -->
         <Style Selector="TextBox.Code /template/ Border#PART_BorderElement">
-            <Setter Property="Background" Value="#2A2A2A"/>
+            <Setter Property="Background" Value="#383838"/>
             <Setter Property="BorderThickness" Value="0"/>
         </Style>
         <Style Selector="TextBox.Code:focus /template/ Border#PART_BorderElement">
-            <Setter Property="Background" Value="#2A2A2A"/>
+            <Setter Property="Background" Value="#383838"/>
             <Setter Property="BorderBrush" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
         </Style>
         <Style Selector="TextBox.Code:pointerover /template/ Border#PART_BorderElement">
-            <Setter Property="Background" Value="#2A2A2A"/>
+            <Setter Property="Background" Value="#383838"/>
         </Style>
 
     </UserControl.Styles>
@@ -90,14 +90,14 @@
                            Foreground="#E8E8E8"/>
                 <TextBlock Text="Gerador de PawnAnimData.dat para Lineage II"
                            FontSize="13"
-                           Foreground="#636363"/>
+                           Foreground="#E8E8E8"/>
             </StackPanel>
 
             <!-- ── Painel 01: Nome do Pawn ───────────────────────────── -->
             <Border Margin="32,0"
                     CornerRadius="8"
-                    Background="#212121"
-                    BorderBrush="#343434"
+                    Background="#323232"
+                    BorderBrush="#464646"
                     BorderThickness="1"
                     ClipToBounds="True">
                 <Grid ColumnDefinitions="4,*">
@@ -113,7 +113,7 @@
                                        FontWeight="Bold"
                                        Foreground="#4A88B8"
                                        VerticalAlignment="Center"/>
-                            <Border Width="1" Height="18" Background="#484848" VerticalAlignment="Center"/>
+                            <Border Width="1" Height="18" Background="#565656" VerticalAlignment="Center"/>
                             <TextBlock Text="NOME DO PAWN"
                                        FontSize="11"
                                        FontWeight="Bold"
@@ -122,7 +122,7 @@
                                        VerticalAlignment="Center"/>
                         </StackPanel>
 
-                        <Border Height="1" Background="#2A2A2A"/>
+                        <Border Height="1" Background="#464646"/>
 
                         <TextBox x:Name="PawnNameTextBox"
                                  Classes="FormField"
@@ -136,8 +136,8 @@
             <!-- ── Painel 02: Entradas de Animação ─────────────────── -->
             <Border Margin="32,16"
                     CornerRadius="8"
-                    Background="#212121"
-                    BorderBrush="#343434"
+                    Background="#323232"
+                    BorderBrush="#464646"
                     BorderThickness="1"
                     ClipToBounds="True">
                 <Grid ColumnDefinitions="4,*">
@@ -153,7 +153,7 @@
                                        FontWeight="Bold"
                                        Foreground="#4A88B8"
                                        VerticalAlignment="Center"/>
-                            <Border Width="1" Height="18" Background="#484848" VerticalAlignment="Center"/>
+                            <Border Width="1" Height="18" Background="#565656" VerticalAlignment="Center"/>
                             <TextBlock Text="ENTRADAS DE ANIMAÇÃO"
                                        FontSize="11"
                                        FontWeight="Bold"
@@ -162,7 +162,7 @@
                                        VerticalAlignment="Center"/>
                         </StackPanel>
 
-                        <Border Height="1" Background="#2A2A2A"/>
+                        <Border Height="1" Background="#464646"/>
 
                         <!-- Animation fields grid -->
                         <Grid Margin="20,16,20,20"
@@ -191,7 +191,7 @@
 
                             <!-- Subtle group separator -->
                             <Border Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="3"
-                                    Height="1" Background="#2E2E2E" Margin="0,4"/>
+                                    Height="1" Background="#2C2C2C" Margin="0,4"/>
 
                             <!-- Row 4 -->
                             <StackPanel Grid.Column="0" Grid.Row="4" Spacing="4">
@@ -211,7 +211,7 @@
 
                             <!-- Subtle group separator -->
                             <Border Grid.Column="0" Grid.Row="8" Grid.ColumnSpan="3"
-                                    Height="1" Background="#2E2E2E" Margin="0,4"/>
+                                    Height="1" Background="#2C2C2C" Margin="0,4"/>
 
                             <!-- Row 8 -->
                             <StackPanel Grid.Column="0" Grid.Row="8" Spacing="4">
@@ -265,7 +265,7 @@
 
                             <!-- Subtle group separator -->
                             <Border Grid.Column="0" Grid.Row="18" Grid.ColumnSpan="3"
-                                    Height="1" Background="#2E2E2E" Margin="0,4"/>
+                                    Height="1" Background="#2C2C2C" Margin="0,4"/>
 
                             <!-- Row 18 -->
                             <StackPanel Grid.Column="0" Grid.Row="18" Spacing="4">
@@ -293,7 +293,7 @@
             <Grid Margin="32,4" ColumnDefinitions="*,Auto,*">
                 <Border Grid.Column="0"
                         Height="1"
-                        Background="#3C3C3C"
+                        Background="#464646"
                         VerticalAlignment="Center"/>
                 <Button Grid.Column="1"
                         x:Name="GenerateButton"
@@ -314,15 +314,15 @@
                 </Button>
                 <Border Grid.Column="2"
                         Height="1"
-                        Background="#3C3C3C"
+                        Background="#464646"
                         VerticalAlignment="Center"/>
             </Grid>
 
             <!-- ── Painel 03: Saída ──────────────────────────────────── -->
-            <Border Margin="32,0,32,32"
+            <Border Margin="32,12,32,32"
                     CornerRadius="8"
-                    Background="#212121"
-                    BorderBrush="#343434"
+                    Background="#323232"
+                    BorderBrush="#464646"
                     BorderThickness="1"
                     ClipToBounds="True">
                 <Grid ColumnDefinitions="4,*">
@@ -342,7 +342,7 @@
 
                             <Border Grid.Column="1"
                                     Width="1" Height="18"
-                                    Background="#484848"
+                                    Background="#565656"
                                     VerticalAlignment="Center"
                                     Margin="14,0"/>
 
@@ -400,7 +400,7 @@
 
                         </Grid>
 
-                        <Border Height="1" Background="#2A2A2A"/>
+                        <Border Height="1" Background="#464646"/>
 
                         <TextBox x:Name="OutputTextBox"
                                  Classes="Code"
@@ -409,7 +409,7 @@
                                  Height="160"
                                  Padding="20,14"
                                  BorderThickness="0"
-                                 Background="#2A2A2A"
+                                 Background="#383838"
                                  Foreground="#9CDCFE"
                                  CaretBrush="#5B9BD5"
                                  SelectionBrush="#1E3A5A"

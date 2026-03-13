@@ -5,12 +5,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
+using Avalonia.Threading;
 using L2Toolkit.database;
 using L2Toolkit.Utilities;
-using MsBox.Avalonia;
 
 namespace L2Toolkit.pages;
 
@@ -18,43 +17,43 @@ public partial class Commission : UserControl
 {
     private readonly GlobalLogs _logs = new();
     private readonly ConcurrentDictionary<string, string> _dictionary = new();
+    private readonly DispatcherTimer _errorTimer;
 
     public Commission()
     {
+        _errorTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(6) };
+        _errorTimer.Tick += (s, e) => { NotificacaoBorder.IsVisible = false; _errorTimer.Stop(); };
+
         InitializeComponent();
         _logs.RegisterBlock(LogData);
+
+        SelecionarMobiusButton.Click += async (s, e) => await SelectFolderAsync("MobiusFolder", MobiusFolder);
+        SelecionarLuceraButton.Click += async (s, e) => await SelectFolderAsync("LuceraFolder", LuceraFolder);
+
         var mobiusFolder = AppDatabase.GetInstance().GetValue("MobiusFolder");
         var luceraFolder = AppDatabase.GetInstance().GetValue("LuceraFolder");
 
-        if (mobiusFolder != null)
-        {
-            MobiusFolder.Text = mobiusFolder;
-        }
-
-        if (luceraFolder != null)
-        {
-            LuceraFolder.Text = luceraFolder;
-        }
+        if (mobiusFolder != null) MobiusFolder.Text = mobiusFolder;
+        if (luceraFolder != null) LuceraFolder.Text = luceraFolder;
     }
 
-    private async void ProductionId_OnPreviewMouseDown(object? sender, PointerPressedEventArgs e)
+    private void ShowNotification(string message)
     {
-        var topLevel = TopLevel.GetTopLevel(this);
-        var folders = await topLevel!.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions());
-        if (folders.Count == 0) return;
-        var message = folders[0].Path.LocalPath;
-        MobiusFolder.Text = message;
-        AppDatabase.GetInstance().UpdateValue("MobiusFolder", message);
+        _errorTimer.Stop();
+        NotificacaoBorder.IsVisible = true;
+        StatusNotificacao.Text = !string.IsNullOrWhiteSpace(message) ? message : "Ocorreu um erro inesperado.";
+        _errorTimer.Start();
     }
 
-    private async void MaterialId_OnPreviewMouseDown(object? sender, PointerPressedEventArgs e)
+    private async Task SelectFolderAsync(string dbKey, TextBox target)
     {
         var topLevel = TopLevel.GetTopLevel(this);
-        var folders = await topLevel!.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions());
+        if (topLevel == null) return;
+        var folders = await topLevel.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions());
         if (folders.Count == 0) return;
-        var message = folders[0].Path.LocalPath;
-        LuceraFolder.Text = message;
-        AppDatabase.GetInstance().UpdateValue("LuceraFolder", message);
+        var path = folders[0].Path.LocalPath;
+        target.Text = path;
+        AppDatabase.GetInstance().UpdateValue(dbKey, path);
     }
 
     private Task LoadMobiusItems()
@@ -148,7 +147,7 @@ public partial class Commission : UserControl
         }
         catch (Exception ex)
         {
-            await MessageBoxManager.GetMessageBoxStandard("Error", ex.Message).ShowWindowAsync();
+            ShowNotification(ex.Message);
         }
     }
 }

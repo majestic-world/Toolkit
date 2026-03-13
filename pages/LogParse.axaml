@@ -1,133 +1,346 @@
 <UserControl x:Class="L2Toolkit.pages.LogParse"
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             Background="White">
-    <Grid>
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <Grid Margin="30">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
+             Background="#393939">
 
-                <StackPanel Grid.Row="0" Margin="0 0 0 16">
-                    <TextBlock Text="Separador de Logs"
-                               FontSize="32"
-                               FontWeight="Light"
-                               Foreground="#1F2937"
-                               Margin="0,0,0,2"/>
-                    <TextBlock Text="Ideal para melhor analise de dados"
-                               FontSize="16"
-                               Foreground="#6B7280"/>
-                </StackPanel>
-
-                <StackPanel Grid.Row="1" Orientation="Vertical" Margin="0,0,0,10">
-                    <TextBlock Text="Selecione o arquivo de log"
-                               FontSize="16"
-                               FontWeight="SemiBold"
-                               Margin="0,0,0,8" />
-                    <Border Background="White" CornerRadius="10" BorderBrush="#E0E0E0" BorderThickness="1">
-                        <TextBox x:Name="LogFile"
-                                 AcceptsReturn="True"
-                                 IsReadOnly="True"
-                                 PointerPressed="LogFile_OnPreviewMouseDown"
-                                 TextWrapping="NoWrap"
-                                 Height="40"
-                                 Cursor="Hand"
-                                 Padding="15,10"
-                                 BorderThickness="0"
-                                 Background="Transparent" />
+    <UserControl.Resources>
+        <ControlTheme x:Key="GhostButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#B0B0B0"/>
+            <Setter Property="BorderBrush" Value="#565656"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border x:Name="PART_Border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="6"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Content="{TemplateBinding Content}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"/>
                     </Border>
-                </StackPanel>
+                </ControlTemplate>
+            </Setter>
+            <Style Selector="^:pointerover /template/ Border#PART_Border">
+                <Setter Property="Background" Value="#3C3C3C"/>
+                <Setter Property="BorderBrush" Value="#646464"/>
+            </Style>
+            <Style Selector="^:pressed /template/ Border#PART_Border">
+                <Setter Property="Background" Value="#323232"/>
+            </Style>
+        </ControlTheme>
+    </UserControl.Resources>
 
-                <StackPanel Grid.Row="2" Orientation="Vertical" Margin="0,0,0,10">
-                    <TextBlock Text="Selecione a pasta de sáida"
-                               FontSize="16"
-                               FontWeight="SemiBold"
-                               Margin="0,0,0,8" />
-                    <Border Background="White" CornerRadius="10" BorderBrush="#E0E0E0" BorderThickness="1">
-                        <TextBox x:Name="OutputDir"
-                                 AcceptsReturn="True"
-                                 IsReadOnly="True"
-                                 PointerPressed="OutputDir_OnPreviewMouseDown"
-                                 TextWrapping="NoWrap"
-                                 Height="40"
-                                 Cursor="Hand"
-                                 Padding="15,10"
-                                 BorderThickness="0"
-                                 Background="Transparent" />
-                    </Border>
-                </StackPanel>
+    <UserControl.Styles>
 
-                <StackPanel Grid.Row="3" Orientation="Vertical" Margin="0 0 0 10">
-                    <TextBlock Text="Insira a Key"
-                               FontSize="16"
-                               FontWeight="SemiBold"
-                               Margin="0,0,0,8" />
-                    <Border Background="White" CornerRadius="10" BorderBrush="#E0E0E0" BorderThickness="1">
-                        <TextBox x:Name="PlayerName"
-                                 AcceptsReturn="True"
-                                 TextWrapping="Wrap"
-                                 Height="40"
-                                 Padding="15,10"
-                                 BorderThickness="0"
-                                 Background="Transparent"
-                                 IsReadOnly="False" />
-                    </Border>
-                </StackPanel>
+        <Style Selector="TextBox.FormField">
+            <Setter Property="Background" Value="#383838"/>
+            <Setter Property="Foreground" Value="#D4D4D4"/>
+            <Setter Property="CaretBrush" Value="#5B9BD5"/>
+            <Setter Property="SelectionBrush" Value="#1E3A5A"/>
+            <Setter Property="BorderBrush" Value="#464646"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="Padding" Value="10,7"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+        <Style Selector="TextBox.FormField /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="#383838"/>
+            <Setter Property="CornerRadius" Value="5"/>
+        </Style>
+        <Style Selector="TextBox.FormField:focus /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="#5B9BD5"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+        <Style Selector="TextBox.FormField:pointerover /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="#5E5E5E"/>
+        </Style>
 
-                <StackPanel Grid.Row="4" Orientation="Vertical" Margin="0 0 0 10">
-                    <TextBlock Text="Evento (Opcional)"
-                               FontSize="16"
-                               FontWeight="SemiBold"
-                               Margin="0,0,0,8" />
-                    <Border Background="White" CornerRadius="10" BorderBrush="#E0E0E0" BorderThickness="1">
-                        <TextBox x:Name="SearchEvent"
-                                 AcceptsReturn="True"
-                                 TextWrapping="Wrap"
-                                 Height="40"
-                                 Padding="15,10"
-                                 BorderThickness="0"
-                                 Background="Transparent"
-                                 IsReadOnly="False" />
-                    </Border>
-                </StackPanel>
+        <Style Selector="TextBox.Code /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="#383838"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        <Style Selector="TextBox.Code:focus /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="#383838"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        <Style Selector="TextBox.Code:pointerover /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="#383838"/>
+        </Style>
 
-                <StackPanel Grid.Row="5" Orientation="Vertical" Margin="0 0 0 10">
-                    <TextBlock Text="Logs de processamento"
-                               FontSize="16"
-                               FontWeight="SemiBold"
-                               Margin="0,0,0,8" />
-                    <Border Background="White" CornerRadius="10" BorderBrush="#E0E0E0" BorderThickness="1">
-                        <TextBox x:Name="LogContent"
-                                 AcceptsReturn="True"
-                                 TextWrapping="Wrap"
-                                 FontSize="16"
-                                 Foreground="#515151"
-                                 Height="125"
-                                 Padding="15,10"
-                                 BorderThickness="0"
-                                 Background="Transparent"
-                                 IsReadOnly="True" />
-                    </Border>
-                </StackPanel>
+    </UserControl.Styles>
 
-                <StackPanel Grid.Row="6" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
-                    <Button Content="Gerar Dados"
-                            Width="110"
-                            x:Name="ButtonGenerate"
-                            Click="RewardGenerate_OnClick"
-                            Height="40"
-                            FontSize="14"
-                            Theme="{StaticResource PrimaryButton}"
-                            Margin="0,0,10,0"/>
-                </StackPanel>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+
+            <!-- ── Page Header ──────────────────────────────────────── -->
+            <StackPanel Margin="32,28,32,24" Spacing="3">
+                <TextBlock Text="Gerenciar Logs"
+                           FontSize="22"
+                           FontWeight="SemiBold"
+                           Foreground="#E8E8E8"/>
+                <TextBlock Text="Separador de logs — ideal para melhor análise de dados"
+                           FontSize="13"
+                           Foreground="#E8E8E8"/>
+            </StackPanel>
+
+            <!-- ── Banner de erro ────────────────────────────────────── -->
+            <Border x:Name="NotificacaoBorder"
+                    Margin="32,0,32,16"
+                    Background="#1F1A0A"
+                    BorderBrush="#5C4A00"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Padding="14,10"
+                    IsVisible="False">
+                <Grid ColumnDefinitions="Auto,*">
+                    <TextBlock Grid.Column="0"
+                               Text="&#xE7BA;"
+                               FontFamily="Segoe MDL2 Assets"
+                               FontSize="14"
+                               Foreground="#D4A017"
+                               VerticalAlignment="Center"
+                               Margin="0,0,10,0"/>
+                    <TextBlock Grid.Column="1"
+                               x:Name="StatusNotificacao"
+                               Foreground="#D4A017"
+                               TextWrapping="Wrap"
+                               FontSize="13"
+                               VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
+
+            <!-- ── Painel 01: Configurações ──────────────────────────── -->
+            <Border Margin="32,0"
+                    CornerRadius="8"
+                    Background="#323232"
+                    BorderBrush="#464646"
+                    BorderThickness="1"
+                    ClipToBounds="True">
+                <Grid ColumnDefinitions="4,*">
+                    <Border Grid.Column="0" Background="#5B9BD5"/>
+                    <StackPanel Grid.Column="1">
+
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="20,14,20,14"
+                                    Spacing="14"
+                                    VerticalAlignment="Center">
+                            <TextBlock Text="01"
+                                       FontSize="24"
+                                       FontWeight="Bold"
+                                       Foreground="#4A88B8"
+                                       VerticalAlignment="Center"/>
+                            <Border Width="1" Height="18" Background="#565656" VerticalAlignment="Center"/>
+                            <TextBlock Text="CONFIGURAÇÕES"
+                                       FontSize="11"
+                                       FontWeight="Bold"
+                                       Foreground="#9A9A9A"
+                                       LetterSpacing="1.5"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <Border Height="1" Background="#464646"/>
+
+                        <StackPanel Margin="20,16,20,20" Spacing="14">
+
+                            <!-- Arquivo de log -->
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Arquivo de log"
+                                           FontSize="12"
+                                           Foreground="#9A9A9A"
+                                           FontWeight="Medium"/>
+                                <Grid ColumnDefinitions="*,12,Auto">
+                                    <TextBox x:Name="LogFile"
+                                             Grid.Column="0"
+                                             Classes="FormField"
+                                             IsReadOnly="True"
+                                             VerticalContentAlignment="Center"
+                                             Height="38"
+                                             Padding="12,0"
+                                             FontFamily="Consolas,Courier New,monospace"
+                                             FontSize="12"
+                                             Watermark="Selecione o arquivo .log..."/>
+                                    <Button x:Name="SelecionarLogButton"
+                                            Grid.Column="2"
+                                            Height="38"
+                                            Padding="16,0"
+                                            Theme="{StaticResource GhostButton}">
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <TextBlock Text="&#xE838;"
+                                                       FontFamily="Segoe MDL2 Assets"
+                                                       FontSize="13"
+                                                       VerticalAlignment="Center"/>
+                                            <TextBlock Text="Selecionar"
+                                                       FontSize="13"
+                                                       FontWeight="Medium"
+                                                       VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+                                </Grid>
+                            </StackPanel>
+
+                            <!-- Pasta de saída -->
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Pasta de saída"
+                                           FontSize="12"
+                                           Foreground="#9A9A9A"
+                                           FontWeight="Medium"/>
+                                <Grid ColumnDefinitions="*,12,Auto">
+                                    <TextBox x:Name="OutputDir"
+                                             Grid.Column="0"
+                                             Classes="FormField"
+                                             IsReadOnly="True"
+                                             VerticalContentAlignment="Center"
+                                             Height="38"
+                                             Padding="12,0"
+                                             FontFamily="Consolas,Courier New,monospace"
+                                             FontSize="12"
+                                             Watermark="Selecione a pasta de saída..."/>
+                                    <Button x:Name="SelecionarOutputButton"
+                                            Grid.Column="2"
+                                            Height="38"
+                                            Padding="16,0"
+                                            Theme="{StaticResource GhostButton}">
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <TextBlock Text="&#xE838;"
+                                                       FontFamily="Segoe MDL2 Assets"
+                                                       FontSize="13"
+                                                       VerticalAlignment="Center"/>
+                                            <TextBlock Text="Selecionar"
+                                                       FontSize="13"
+                                                       FontWeight="Medium"
+                                                       VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+                                </Grid>
+                            </StackPanel>
+
+                            <!-- Key de pesquisa -->
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Key de pesquisa (nome do player ou termo)"
+                                           FontSize="12"
+                                           Foreground="#9A9A9A"
+                                           FontWeight="Medium"/>
+                                <TextBox x:Name="PlayerName"
+                                         Classes="FormField"
+                                         Height="38"
+                                         Padding="12,0"
+                                         VerticalContentAlignment="Center"
+                                         FontFamily="Consolas,Courier New,monospace"
+                                         FontSize="12"
+                                         Watermark="Ex: PlayerName"/>
+                            </StackPanel>
+
+                            <!-- Evento (opcional) -->
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Evento — opcional (filtra por tipo de evento)"
+                                           FontSize="12"
+                                           Foreground="#9A9A9A"
+                                           FontWeight="Medium"/>
+                                <TextBox x:Name="SearchEvent"
+                                         Classes="FormField"
+                                         Height="38"
+                                         Padding="12,0"
+                                         VerticalContentAlignment="Center"
+                                         FontFamily="Consolas,Courier New,monospace"
+                                         FontSize="12"
+                                         Watermark="Ex: TRADE, ENCHANT, DROP..."/>
+                            </StackPanel>
+
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- ── Ação: Gerar (separador de pipeline) ──────────────── -->
+            <Grid Margin="32,16" ColumnDefinitions="*,Auto,*">
+                <Border Grid.Column="0"
+                        Height="1"
+                        Background="#464646"
+                        VerticalAlignment="Center"/>
+                <Button Grid.Column="1"
+                        x:Name="ButtonGenerate"
+                        Click="RewardGenerate_OnClick"
+                        Height="40"
+                        Padding="28,0"
+                        Margin="20,0"
+                        Theme="{StaticResource SecondaryButton}">
+                    <StackPanel Orientation="Horizontal" Spacing="9">
+                        <TextBlock Text="&#xE72D;"
+                                   FontFamily="Segoe MDL2 Assets"
+                                   FontSize="13"
+                                   VerticalAlignment="Center"/>
+                        <TextBlock x:Name="ButtonGenerateText"
+                                   Text="Gerar Dados"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <Border Grid.Column="2"
+                        Height="1"
+                        Background="#464646"
+                        VerticalAlignment="Center"/>
             </Grid>
-        </ScrollViewer>
-    </Grid>
+
+            <!-- ── Painel 02: Logs de processamento ──────────────────── -->
+            <Border Margin="32,0,32,32"
+                    CornerRadius="8"
+                    Background="#323232"
+                    BorderBrush="#464646"
+                    BorderThickness="1"
+                    ClipToBounds="True">
+                <Grid ColumnDefinitions="4,*">
+                    <Border Grid.Column="0" Background="#5B9BD5"/>
+                    <StackPanel Grid.Column="1">
+
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="20,14,20,14"
+                                    Spacing="14"
+                                    VerticalAlignment="Center">
+                            <TextBlock Text="02"
+                                       FontSize="24"
+                                       FontWeight="Bold"
+                                       Foreground="#4A88B8"
+                                       VerticalAlignment="Center"/>
+                            <Border Width="1" Height="18" Background="#565656" VerticalAlignment="Center"/>
+                            <TextBlock Text="LOGS DE PROCESSAMENTO"
+                                       FontSize="11"
+                                       FontWeight="Bold"
+                                       Foreground="#9A9A9A"
+                                       LetterSpacing="1.5"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <Border Height="1" Background="#464646"/>
+
+                        <TextBox x:Name="LogContent"
+                                 Classes="Code"
+                                 AcceptsReturn="True"
+                                 TextWrapping="Wrap"
+                                 Height="180"
+                                 Padding="20,14"
+                                 BorderThickness="0"
+                                 Background="#383838"
+                                 Foreground="#B0C4B1"
+                                 CaretBrush="#5B9BD5"
+                                 SelectionBrush="#1E3A5A"
+                                 FontFamily="Consolas,Courier New,monospace"
+                                 FontSize="12"
+                                 IsReadOnly="True"
+                                 Watermark="Logs de processamento aparecerão aqui..."/>
+
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>

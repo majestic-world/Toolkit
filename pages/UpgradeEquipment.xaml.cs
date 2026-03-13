@@ -5,23 +5,28 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
+using Avalonia.Threading;
 using L2Toolkit.database;
 using L2Toolkit.DataMap;
-using MsBox.Avalonia;
 
 namespace L2Toolkit.pages
 {
     public partial class UpgradeEquipment : UserControl
     {
+        private readonly DispatcherTimer _errorTimer;
+
         public UpgradeEquipment()
         {
+            _errorTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(6) };
+            _errorTimer.Tick += (s, e) => { NotificacaoBorder.IsVisible = false; _errorTimer.Stop(); };
+
             InitializeComponent();
-            UpgradeContent.PointerPressed += SelectPathFile;
+            SelecionarArquivoButton.Click += async (s, e) => await SelectFileAsync();
             UpgradeGenerate.Click += ProcessData;
             UpgradeCopy.Click += CopyContent;
+
             var lastFile = AppDatabase.GetInstance().GetValue("lastUpgradeFile");
             if (lastFile != "")
             {
@@ -29,9 +34,39 @@ namespace L2Toolkit.pages
             }
         }
 
+        private void ShowNotification(string message)
+        {
+            _errorTimer.Stop();
+            NotificacaoBorder.IsVisible = true;
+            StatusNotificacao.Text = !string.IsNullOrWhiteSpace(message) ? message : "Ocorreu um erro inesperado.";
+            _errorTimer.Start();
+        }
+
+        private async Task SelectFileAsync()
+        {
+            var topLevel = TopLevel.GetTopLevel(this);
+            if (topLevel == null) return;
+
+            var files = await topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+            {
+                Title = "Selecione o arquivo",
+                AllowMultiple = false,
+                FileTypeFilter = new[]
+                {
+                    new FilePickerFileType("Arquivos XML") { Patterns = new[] { "*.xml" } },
+                    new FilePickerFileType("Todos os arquivos") { Patterns = new[] { "*" } }
+                }
+            });
+
+            if (files.Count == 0) return;
+            var path = files[0].Path.LocalPath;
+            UpgradeContent.Text = path;
+            AppDatabase.GetInstance().UpdateValue("lastUpgradeFile", path);
+        }
+
         private async void CopyContent(object sender, RoutedEventArgs e)
         {
-            var content = UpgradeOutput.Text;
+            var content = UpgradeOutput.Text?.Trim() ?? string.Empty;
             var topLevel = TopLevel.GetTopLevel(this);
             await topLevel!.Clipboard!.SetTextAsync(content);
             CopyBlock.IsVisible = true;
@@ -134,18 +169,18 @@ namespace L2Toolkit.pages
             UpgradeOutput.Text = build.ToString();
         }
 
-        private async void ProcessData(object sender, RoutedEventArgs e)
+        private void ProcessData(object sender, RoutedEventArgs e)
         {
             try
             {
                 var filePath = UpgradeContent.Text;
-                if (filePath == "")
+                if (string.IsNullOrEmpty(filePath))
                 {
                     throw new Exception("Preencha o caminho até o arquivo.");
                 }
 
                 var systemType = ((ComboBoxItem)SystemVersion.SelectedItem)?.Content?.ToString();
-                if (systemType == "Custom Upgrade")
+                if (systemType == "Majestic World")
                 {
                     CreateByCustom(filePath);
                 }
@@ -156,28 +191,8 @@ namespace L2Toolkit.pages
             }
             catch (Exception ex)
             {
-                await MessageBoxManager.GetMessageBoxStandard("Erro", ex.Message).ShowWindowAsync();
+                ShowNotification(ex.Message);
             }
-        }
-
-        private async void SelectPathFile(object sender, PointerPressedEventArgs e)
-        {
-            var topLevel = TopLevel.GetTopLevel(this);
-            var files = await topLevel!.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
-            {
-                Title = "Selecione o arquivo",
-                AllowMultiple = false,
-                FileTypeFilter = new[]
-                {
-                    new FilePickerFileType("Arquivos XML") { Patterns = new[] { "*.xml" } },
-                    new FilePickerFileType("Todos os arquivos") { Patterns = new[] { "*" } }
-                }
-            });
-
-            if (files.Count == 0) return;
-            var path = files[0].Path.LocalPath;
-            AppDatabase.GetInstance().UpdateValue("lastUpgradeFile", path);
-            UpgradeContent.Text = path;
         }
     }
 }

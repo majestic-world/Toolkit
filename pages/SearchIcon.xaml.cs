@@ -3,20 +3,32 @@ using System.Collections.Concurrent;
 using System.IO;
 using System.Threading.Tasks;
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Threading;
 using L2Toolkit.DataMap;
 using L2Toolkit.Utilities;
-using MsBox.Avalonia;
 
 namespace L2Toolkit.pages
 {
     public partial class SearchIcon : UserControl
     {
+        private readonly DispatcherTimer _errorTimer;
+
         public SearchIcon()
         {
+            _errorTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(6) };
+            _errorTimer.Tick += (s, e) => { NotificacaoBorder.IsVisible = false; _errorTimer.Stop(); };
+
             InitializeComponent();
             LoadName();
+        }
+
+        private void ShowNotification(string message)
+        {
+            _errorTimer.Stop();
+            NotificacaoBorder.IsVisible = true;
+            StatusNotificacao.Text = !string.IsNullOrWhiteSpace(message) ? message : "Ocorreu um erro inesperado.";
+            _errorTimer.Start();
         }
 
         private readonly ConcurrentDictionary<string, IconModel> _armor = new();
@@ -47,23 +59,20 @@ namespace L2Toolkit.pages
             }
             catch (Exception e)
             {
-                _ = MessageBoxManager.GetMessageBoxStandard("Error", e.Message).ShowWindowAsync();
+                ShowNotification(e.Message);
             }
         }
 
-        private async void Search(string id, ConcurrentDictionary<string, IconModel> dictionary, string file)
+        private void Search(string id, ConcurrentDictionary<string, IconModel> dictionary, string file)
         {
             if (dictionary.Count == 0)
             {
                 if (!File.Exists(file))
-                {
                     throw new FileNotFoundException("Arquivo não encontrado: " + file);
-                }
 
-                StatusBox.Text = "Carregando informações...";
+                StatusBox.Text = "CARREGANDO...";
 
                 var lines = File.ReadLines(file);
-
                 Parallel.ForEach(lines, line =>
                 {
                     var itemId = Parser.GetValue(line, file == FileSkills ? "skill_id=" : "object_id=", "\t");
@@ -73,7 +82,7 @@ namespace L2Toolkit.pages
                 });
             }
 
-            StatusBox.Text = "Resultado da pesquisa";
+            StatusBox.Text = "RESULTADO";
 
             if (dictionary.ContainsKey(id))
             {
@@ -86,13 +95,9 @@ namespace L2Toolkit.pages
                     _name.TryGetValue(id, out var name);
                     if (!string.IsNullOrEmpty(name?.ItemName))
                     {
-                        var itemName = name?.ItemName;
-                        var additionalName = name?.AdditionalName;
-                        NameOutput.Text = itemName ?? "";
-                        if (!string.IsNullOrEmpty(additionalName))
-                        {
-                            NameOutput.Text += $" - {additionalName}";
-                        }
+                        NameOutput.Text = string.IsNullOrEmpty(name?.AdditionalName)
+                            ? name?.ItemName
+                            : $"{name?.ItemName} - {name?.AdditionalName}";
                     }
                 }
                 else
@@ -102,72 +107,70 @@ namespace L2Toolkit.pages
             }
             else
             {
-                await MessageBoxManager.GetMessageBoxStandard("ERRO", "O item não foi encontrado!").ShowWindowAsync();
+                ShowNotification("O item não foi encontrado!");
             }
         }
 
-        private async void SearchButton_OnClick(object sender, RoutedEventArgs e)
+        private void SearchButton_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
                 var id = ItemId.Text;
-                var type = ItemType.SelectedItem is ComboBoxItem selectedItem ? selectedItem.Content?.ToString() : null;
+                if (string.IsNullOrWhiteSpace(id))
+                {
+                    ShowNotification("Insira o ID do item.");
+                    return;
+                }
+
+                var type = ItemType.SelectedItem is ComboBoxItem selectedItem
+                    ? selectedItem.Content?.ToString()
+                    : null;
+
                 switch (type)
                 {
-                    case "Armor":
-                        Search(id, _armor, FileArmor);
-                        break;
-                    case "Weapon":
-                        Search(id, _weapon, FileWeapon);
-                        break;
-                    case "Items":
-                        Search(id, _items, FileItens);
-                        break;
-                    case "Skills":
-                        Search(id, _skills, FileSkills);
-                        break;
+                    case "Armor":   Search(id, _armor,  FileArmor);  break;
+                    case "Weapon":  Search(id, _weapon, FileWeapon); break;
+                    case "Items":   Search(id, _items,  FileItens);  break;
+                    case "Skills":  Search(id, _skills, FileSkills); break;
                 }
             }
-            catch (Exception exception)
+            catch (Exception ex)
             {
-                await MessageBoxManager.GetMessageBoxStandard("Erro", exception.Message).ShowWindowAsync();
+                ShowNotification(ex.Message);
             }
         }
 
-        private async void IconOutput_OnPreviewMouseDown(object sender, PointerPressedEventArgs e)
+        private async void CopyNameButton_OnClick(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                var text = IconOutput.Text;
-                if (string.IsNullOrWhiteSpace(text)) return;
-                var topLevel = TopLevel.GetTopLevel(this);
-                await topLevel!.Clipboard!.SetTextAsync(text);
-                CopyBlock.IsVisible = true;
-                await Task.Delay(3000);
-                CopyBlock.IsVisible = false;
-            }
-            catch (Exception)
-            {
-                //ignore
-            }
+            var text = NameOutput.Text;
+            if (string.IsNullOrWhiteSpace(text)) return;
+            var topLevel = TopLevel.GetTopLevel(this);
+            await topLevel!.Clipboard!.SetTextAsync(text);
+            CopyBlock.IsVisible = true;
+            await Task.Delay(3000);
+            CopyBlock.IsVisible = false;
         }
 
-        private async void IconPanelOutput_OnPreviewMouseDown(object sender, PointerPressedEventArgs e)
+        private async void CopyIconButton_OnClick(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                var text = IconPanelOutput.Text;
-                if (string.IsNullOrWhiteSpace(text)) return;
-                var topLevel = TopLevel.GetTopLevel(this);
-                await topLevel!.Clipboard!.SetTextAsync(text);
-                CopyBlock.IsVisible = true;
-                await Task.Delay(3000);
-                CopyBlock.IsVisible = false;
-            }
-            catch (Exception)
-            {
-                //ignore
-            }
+            var text = IconOutput.Text;
+            if (string.IsNullOrWhiteSpace(text)) return;
+            var topLevel = TopLevel.GetTopLevel(this);
+            await topLevel!.Clipboard!.SetTextAsync(text);
+            CopyBlock.IsVisible = true;
+            await Task.Delay(3000);
+            CopyBlock.IsVisible = false;
+        }
+
+        private async void CopyIconPanelButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            var text = IconPanelOutput.Text;
+            if (string.IsNullOrWhiteSpace(text)) return;
+            var topLevel = TopLevel.GetTopLevel(this);
+            await topLevel!.Clipboard!.SetTextAsync(text);
+            CopyBlock.IsVisible = true;
+            await Task.Delay(3000);
+            CopyBlock.IsVisible = false;
         }
     }
 }

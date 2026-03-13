@@ -1,140 +1,296 @@
 <UserControl x:Class="L2Toolkit.pages.DescriptionFix"
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             Background="White">
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <Grid Margin="30">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+             Background="#393939">
 
-            <StackPanel Grid.Row="0" Margin="0 0 0 16">
-                <TextBlock Text="Corrigir descrição"
-                           FontSize="32"
-                           FontWeight="Light"
-                           Foreground="#1F2937"
-                           Margin="0,0,0,2"/>
-                <TextBlock Text="Ideal para itens com (Not Used) na descrição"
-                           FontSize="16"
-                           Foreground="#6B7280"/>
-            </StackPanel>
-
-            <Border x:Name="NotificacaoBorder"
-                   Grid.Row="0"
-                   Background="#FFEBE6"
-                   BorderBrush="#FF0000"
-                   BorderThickness="1"
-                   CornerRadius="5"
-                   Margin="0,35,0,15"
-                   Padding="10,8"
-                   MinWidth="300"
-                   MaxWidth="600"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Top"
-                   IsVisible="False">
-                <TextBlock x:Name="StatusNotificacao"
-                           Foreground="#C00000"
-                           FontWeight="Bold"
-                           TextWrapping="Wrap"
-                           TextAlignment="Center"
-                           FontSize="13"/>
-            </Border>
-
-            <Border x:Name="SucessoBorder"
-                   Grid.Row="0"
-                   Background="#E6FFEB"
-                   BorderBrush="#00C853"
-                   BorderThickness="1"
-                   CornerRadius="5"
-                   Margin="0,35,0,15"
-                   Padding="10,8"
-                   MinWidth="300"
-                   MaxWidth="600"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Top"
-                   IsVisible="False">
-                <TextBlock x:Name="SucessoNotificacao"
-                           Foreground="#2E7D32"
-                           FontWeight="Bold"
-                           TextWrapping="Wrap"
-                           TextAlignment="Center"
-                           FontSize="13"/>
-            </Border>
-
-            <StackPanel Grid.Row="1" Margin="0,0,0,15">
-                <TextBlock Text="Selecione o arquivo para modificar:"
-                           FontSize="14"
-                           FontWeight="SemiBold"
-                           Margin="0,0,0,5"/>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <Border Grid.Column="0"
-                            Background="White"
-                            CornerRadius="8"
-                            BorderBrush="#350B0B17"
-                            BorderThickness="1">
-                        <TextBox x:Name="ArquivoSelecionadoTextBox"
-                                 Padding="10,8"
-                                 BorderThickness="0"
-                                 Background="Transparent"
-                                 Foreground="#333333"
-                                 FontSize="13"
-                                 Height="40"
-                                 IsReadOnly="True"/>
+    <UserControl.Resources>
+        <ControlTheme x:Key="GhostButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#B0B0B0"/>
+            <Setter Property="BorderBrush" Value="#565656"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border x:Name="PART_Border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="6"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Content="{TemplateBinding Content}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"/>
                     </Border>
-                    <Button x:Name="SelecionarArquivoButton"
-                            Grid.Column="1"
-                            Content="Selecionar Arquivo"
-                            Height="40"
-                            Margin="10,0,0,0"
-                            Padding="10,0"
-                            Theme="{StaticResource PrimaryButton}"
-                            FontSize="12"
-                            Width="140"
-                            FontWeight="Bold"/>
-                </Grid>
+                </ControlTemplate>
+            </Setter>
+            <Style Selector="^:pointerover /template/ Border#PART_Border">
+                <Setter Property="Background" Value="#3C3C3C"/>
+                <Setter Property="BorderBrush" Value="#646464"/>
+            </Style>
+            <Style Selector="^:pressed /template/ Border#PART_Border">
+                <Setter Property="Background" Value="#323232"/>
+            </Style>
+        </ControlTheme>
+    </UserControl.Resources>
+
+    <UserControl.Styles>
+        <Style Selector="TextBox.FormField">
+            <Setter Property="Background" Value="#383838"/>
+            <Setter Property="Foreground" Value="#D4D4D4"/>
+            <Setter Property="CaretBrush" Value="#5B9BD5"/>
+            <Setter Property="SelectionBrush" Value="#1E3A5A"/>
+            <Setter Property="BorderBrush" Value="#464646"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="Padding" Value="10,7"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+        <Style Selector="TextBox.FormField /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="#383838"/>
+            <Setter Property="CornerRadius" Value="5"/>
+        </Style>
+        <Style Selector="TextBox.FormField:focus /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="#5B9BD5"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+        <Style Selector="TextBox.FormField:pointerover /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="#5E5E5E"/>
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+
+            <!-- ── Page Header ──────────────────────────────────────── -->
+            <StackPanel Margin="32,28,32,24" Spacing="3">
+                <TextBlock Text="Corrigir Descrição"
+                           FontSize="22"
+                           FontWeight="SemiBold"
+                           Foreground="#E8E8E8"/>
+                <TextBlock Text="Ideal para itens com (Not Used) na descrição"
+                           FontSize="13"
+                           Foreground="#E8E8E8"/>
             </StackPanel>
 
-            <Button x:Name="ProcessarButton"
-                    Grid.Row="3"
-                    Content="PROCESSAR ARQUIVO"
-                    Height="45"
-                    Width="180"
-                    Margin="0,0,0,15"
-                    FontSize="14"
-                    Theme="{StaticResource PrimaryButton}"
-                    FontWeight="Bold"
-                    HorizontalAlignment="Center"/>
-
-            <Border Grid.Row="4"
-                    Background="#EEF5FF"
-                    BorderBrush="#B3E5FC"
+            <!-- ── Banner de erro ────────────────────────────────────── -->
+            <Border x:Name="NotificacaoBorder"
+                    Margin="32,0,32,16"
+                    Background="#1F1A0A"
+                    BorderBrush="#5C4A00"
                     BorderThickness="1"
-                    CornerRadius="5"
-                    Height="110"
-                    Padding="15,10"
-                    Margin="0,10,0,0">
-                <TextBlock TextWrapping="Wrap" FontSize="13">
-                    <TextBlock.Inlines>
-                        <Run FontWeight="Bold">Informações:</Run>
-                        <LineBreak/>
-                        <Run>- O arquivo h5_names.txt deve estar na pasta do aplicativo.</Run>
-                        <LineBreak/>
-                        <Run>- As descrições são extraídas deste arquivo e aplicadas no arquivo selecionado.</Run>
-                        <LineBreak/>
-                        <Run>- Apenas o campo "description" será modificado, preservando todo o restante.</Run>
-                        <LineBreak/>
-                        <Run>- Após o processamento, o arquivo modificado será salvo em um novo local.</Run>
-                    </TextBlock.Inlines>
-                </TextBlock>
+                    CornerRadius="6"
+                    Padding="14,10"
+                    IsVisible="False">
+                <Grid ColumnDefinitions="Auto,*">
+                    <TextBlock Grid.Column="0"
+                               Text="&#xE7BA;"
+                               FontFamily="Segoe MDL2 Assets"
+                               FontSize="14"
+                               Foreground="#D4A017"
+                               VerticalAlignment="Center"
+                               Margin="0,0,10,0"/>
+                    <TextBlock Grid.Column="1"
+                               x:Name="StatusNotificacao"
+                               Foreground="#D4A017"
+                               TextWrapping="Wrap"
+                               FontSize="13"
+                               VerticalAlignment="Center"/>
+                </Grid>
             </Border>
-        </Grid>
+
+            <!-- ── Banner de sucesso ─────────────────────────────────── -->
+            <Border x:Name="SucessoBorder"
+                    Margin="32,0,32,16"
+                    Background="#0D1F12"
+                    BorderBrush="#245230"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Padding="14,10"
+                    IsVisible="False">
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                    <TextBlock Text="&#xE73E;"
+                               FontFamily="Segoe MDL2 Assets"
+                               FontSize="14"
+                               Foreground="#52C97A"
+                               VerticalAlignment="Center"/>
+                    <TextBlock x:Name="SucessoNotificacao"
+                               Foreground="#52C97A"
+                               TextWrapping="Wrap"
+                               FontSize="13"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+
+            <!-- ── Painel 01: Arquivo de entrada ────────────────────── -->
+            <Border Margin="32,0"
+                    CornerRadius="8"
+                    Background="#323232"
+                    BorderBrush="#464646"
+                    BorderThickness="1"
+                    ClipToBounds="True">
+                <Grid ColumnDefinitions="4,*">
+                    <Border Grid.Column="0" Background="#5B9BD5"/>
+                    <StackPanel Grid.Column="1">
+
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="20,14,20,14"
+                                    Spacing="14"
+                                    VerticalAlignment="Center">
+                            <TextBlock Text="01"
+                                       FontSize="24"
+                                       FontWeight="Bold"
+                                       Foreground="#4A88B8"
+                                       VerticalAlignment="Center"/>
+                            <Border Width="1" Height="18" Background="#565656" VerticalAlignment="Center"/>
+                            <TextBlock Text="ARQUIVO DE ENTRADA"
+                                       FontSize="11"
+                                       FontWeight="Bold"
+                                       Foreground="#9A9A9A"
+                                       LetterSpacing="1.5"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <Border Height="1" Background="#464646"/>
+
+                        <Grid Margin="20,16,20,20" ColumnDefinitions="*,12,Auto">
+                            <TextBox x:Name="ArquivoSelecionadoTextBox"
+                                     Grid.Column="0"
+                                     Classes="FormField"
+                                     IsReadOnly="True"
+                                     VerticalContentAlignment="Center"
+                                     Watermark="Nenhum arquivo selecionado..."
+                                     FontFamily="Consolas,Courier New,monospace"
+                                     FontSize="12"/>
+                            <Button x:Name="SelecionarArquivoButton"
+                                    Grid.Column="2"
+                                    Height="36"
+                                    Padding="16,0"
+                                    Theme="{StaticResource GhostButton}">
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <TextBlock Text="&#xE838;"
+                                               FontFamily="Segoe MDL2 Assets"
+                                               FontSize="13"
+                                               VerticalAlignment="Center"/>
+                                    <TextBlock Text="Selecionar"
+                                               FontSize="13"
+                                               FontWeight="Medium"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- ── Ação: Processar (separador de pipeline) ───────────── -->
+            <Grid Margin="32,20" ColumnDefinitions="*,Auto,*">
+                <Border Grid.Column="0"
+                        Height="1"
+                        Background="#464646"
+                        VerticalAlignment="Center"/>
+                <Button Grid.Column="1"
+                        x:Name="ProcessarButton"
+                        Height="40"
+                        Padding="28,0"
+                        Margin="20,0"
+                        Theme="{StaticResource SecondaryButton}">
+                    <StackPanel Orientation="Horizontal" Spacing="9">
+                        <TextBlock Text="&#xE72D;"
+                                   FontFamily="Segoe MDL2 Assets"
+                                   FontSize="13"
+                                   VerticalAlignment="Center"/>
+                        <TextBlock Text="Processar Arquivo"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <Border Grid.Column="2"
+                        Height="1"
+                        Background="#464646"
+                        VerticalAlignment="Center"/>
+            </Grid>
+
+            <!-- ── Painel 02: Informações ────────────────────────────── -->
+            <Border Margin="32,0,32,32"
+                    CornerRadius="8"
+                    Background="#323232"
+                    BorderBrush="#464646"
+                    BorderThickness="1"
+                    ClipToBounds="True">
+                <Grid ColumnDefinitions="4,*">
+                    <Border Grid.Column="0" Background="#5B9BD5"/>
+                    <StackPanel Grid.Column="1">
+
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="20,14,20,14"
+                                    Spacing="14"
+                                    VerticalAlignment="Center">
+                            <TextBlock Text="02"
+                                       FontSize="24"
+                                       FontWeight="Bold"
+                                       Foreground="#4A88B8"
+                                       VerticalAlignment="Center"/>
+                            <Border Width="1" Height="18" Background="#565656" VerticalAlignment="Center"/>
+                            <TextBlock Text="INFORMAÇÕES"
+                                       FontSize="11"
+                                       FontWeight="Bold"
+                                       Foreground="#9A9A9A"
+                                       LetterSpacing="1.5"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <Border Height="1" Background="#464646"/>
+
+                        <StackPanel Margin="20,16,20,20" Spacing="12">
+
+                            <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+                                <Border Width="4" Height="4" CornerRadius="2"
+                                        Background="#5B9BD5" VerticalAlignment="Center"/>
+                                <TextBlock Text="O arquivo h5_names.txt deve estar na pasta do aplicativo."
+                                           FontSize="13"
+                                           Foreground="#B0B0B0"
+                                           TextWrapping="Wrap"/>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+                                <Border Width="4" Height="4" CornerRadius="2"
+                                        Background="#5B9BD5" VerticalAlignment="Center"/>
+                                <TextBlock Text="As descrições são extraídas deste arquivo e aplicadas no arquivo selecionado."
+                                           FontSize="13"
+                                           Foreground="#B0B0B0"
+                                           TextWrapping="Wrap"/>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+                                <Border Width="4" Height="4" CornerRadius="2"
+                                        Background="#5B9BD5" VerticalAlignment="Center"/>
+                                <TextBlock Text='Apenas o campo "description" será modificado, preservando todo o restante.'
+                                           FontSize="13"
+                                           Foreground="#B0B0B0"
+                                           TextWrapping="Wrap"/>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+                                <Border Width="4" Height="4" CornerRadius="2"
+                                        Background="#5B9BD5" VerticalAlignment="Center"/>
+                                <TextBlock Text="Após o processamento, o arquivo modificado será salvo em um novo local."
+                                           FontSize="13"
+                                           Foreground="#B0B0B0"
+                                           TextWrapping="Wrap"/>
+                            </StackPanel>
+
+                        </StackPanel>
+
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+        </StackPanel>
     </ScrollViewer>
 </UserControl>

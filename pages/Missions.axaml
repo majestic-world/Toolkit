@@ -1,89 +1,312 @@
 <UserControl x:Class="L2Toolkit.pages.Missions"
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             Background="White">
+             Background="#393939">
+
+    <UserControl.Resources>
+        <ControlTheme x:Key="GhostButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#B0B0B0"/>
+            <Setter Property="BorderBrush" Value="#565656"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border x:Name="PART_Border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="6"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Content="{TemplateBinding Content}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+            <Style Selector="^:pointerover /template/ Border#PART_Border">
+                <Setter Property="Background" Value="#3C3C3C"/>
+                <Setter Property="BorderBrush" Value="#646464"/>
+            </Style>
+            <Style Selector="^:pressed /template/ Border#PART_Border">
+                <Setter Property="Background" Value="#323232"/>
+            </Style>
+        </ControlTheme>
+    </UserControl.Resources>
+
+    <UserControl.Styles>
+        <Style Selector="TextBox.FilePath /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="#383838"/>
+            <Setter Property="CornerRadius" Value="5"/>
+        </Style>
+        <Style Selector="TextBox.FilePath:pointerover /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="#404040"/>
+            <Setter Property="BorderBrush" Value="#5E5E5E"/>
+        </Style>
+        <Style Selector="TextBox.FilePath:focus /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="#5B9BD5"/>
+        </Style>
+
+        <Style Selector="TextBox.Code /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="#383838"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        <Style Selector="TextBox.Code:focus /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="#383838"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        <Style Selector="TextBox.Code:pointerover /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="#383838"/>
+        </Style>
+    </UserControl.Styles>
+
     <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <Grid Margin="30">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+        <StackPanel>
 
-            <StackPanel Grid.Row="0" Margin="0 0 0 16">
-                <TextBlock Text="Missões diárias (OneDayReward)"
-                           FontSize="32"
-                           FontWeight="Light"
-                           Foreground="#1F2937"
-                           Margin="0,0,0,2"/>
-                <TextBlock Text="Gere dados para o cliente"
-                           FontSize="16"
-                           Foreground="#6B7280"/>
+            <!-- ── Page Header ──────────────────────────────────────── -->
+            <StackPanel Margin="32,28,32,24" Spacing="3">
+                <TextBlock Text="Missões Diárias"
+                           FontSize="22"
+                           FontWeight="SemiBold"
+                           Foreground="#E8E8E8"/>
+                <TextBlock Text="Gera dados de cliente a partir do OneDayReward.xml"
+                           FontSize="13"
+                           Foreground="#E8E8E8"/>
             </StackPanel>
 
-            <StackPanel Grid.Row="1" Orientation="Vertical" Margin="0,0,0,20">
-                <TextBlock Text="Selecione o arquivo OneDayReward.xml"
-                          FontSize="16"
-                          FontWeight="SemiBold"
-                          Margin="0,0,0,8"/>
-                <Border Background="White" CornerRadius="10" BorderBrush="#E0E0E0" BorderThickness="1">
-                    <TextBox x:Name="RewardContent"
-                             AcceptsReturn="True"
-                             IsReadOnly="True"
-                             TextWrapping="NoWrap"
-                             Height="40"
-                             Cursor="Hand"
-                             Padding="15,10"
-                             BorderThickness="0"
-                             Background="Transparent"/>
-                </Border>
-            </StackPanel>
+            <!-- ── Banner de erro ────────────────────────────────────── -->
+            <Border x:Name="NotificacaoBorder"
+                    Margin="32,0,32,16"
+                    Background="#1F1A0A"
+                    BorderBrush="#5C4A00"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Padding="14,10"
+                    IsVisible="False">
+                <Grid ColumnDefinitions="Auto,*" HorizontalAlignment="Stretch">
+                    <TextBlock Grid.Column="0"
+                               Text="&#xE7BA;"
+                               FontFamily="Segoe MDL2 Assets"
+                               FontSize="14"
+                               Foreground="#D4A017"
+                               VerticalAlignment="Center"
+                               Margin="0,0,10,0"/>
+                    <TextBlock Grid.Column="1"
+                               x:Name="StatusNotificacao"
+                               Foreground="#D4A017"
+                               TextWrapping="Wrap"
+                               FontSize="13"
+                               VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
 
-            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
-                <Button x:Name="RewardGenerate"
-                        Content="Gerar Dados"
-                        Width="110"
+            <!-- ── Painel 01: Arquivo XML ────────────────────────────── -->
+            <Border Margin="32,0"
+                    CornerRadius="8"
+                    Background="#323232"
+                    BorderBrush="#464646"
+                    BorderThickness="1"
+                    ClipToBounds="True">
+                <Grid ColumnDefinitions="4,*">
+                    <Border Grid.Column="0" Background="#5B9BD5"/>
+                    <StackPanel Grid.Column="1">
+
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="20,14,20,14"
+                                    Spacing="14"
+                                    VerticalAlignment="Center">
+                            <TextBlock Text="01"
+                                       FontSize="24"
+                                       FontWeight="Bold"
+                                       Foreground="#4A88B8"
+                                       VerticalAlignment="Center"/>
+                            <Border Width="1" Height="18" Background="#565656" VerticalAlignment="Center"/>
+                            <TextBlock Text="ARQUIVO XML"
+                                       FontSize="11"
+                                       FontWeight="Bold"
+                                       Foreground="#9A9A9A"
+                                       LetterSpacing="1.5"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <Border Height="1" Background="#464646"/>
+
+                        <Grid Margin="20,16,20,20" ColumnDefinitions="*,12,Auto">
+                            <TextBox x:Name="RewardContent"
+                                     Grid.Column="0"
+                                     Classes="FilePath"
+                                     IsReadOnly="True"
+                                     VerticalContentAlignment="Center"
+                                     Height="38"
+                                     Padding="12,0"
+                                     BorderBrush="#464646"
+                                     BorderThickness="1"
+                                     Background="#383838"
+                                     Foreground="#D4D4D4"
+                                     CaretBrush="#5B9BD5"
+                                     SelectionBrush="#1E3A5A"
+                                     FontFamily="Consolas,Courier New,monospace"
+                                     FontSize="12"
+                                     Watermark="Selecione o OneDayReward.xml..."/>
+                            <Button x:Name="SelecionarArquivoButton"
+                                    Grid.Column="2"
+                                    Height="38"
+                                    Padding="16,0"
+                                    Theme="{StaticResource GhostButton}">
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <TextBlock Text="&#xE838;"
+                                               FontFamily="Segoe MDL2 Assets"
+                                               FontSize="13"
+                                               VerticalAlignment="Center"/>
+                                    <TextBlock Text="Selecionar"
+                                               FontSize="13"
+                                               FontWeight="Medium"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- ── Ação: Gerar (separador de pipeline) ──────────────── -->
+            <Grid Margin="32,20" ColumnDefinitions="*,Auto,*">
+                <Border Grid.Column="0"
+                        Height="1"
+                        Background="#464646"
+                        VerticalAlignment="Center"/>
+                <Button Grid.Column="1"
+                        x:Name="RewardGenerate"
                         Height="40"
-                        FontSize="14"
-                        Theme="{StaticResource PrimaryButton}"
-                        Margin="0,0,10,0"/>
+                        Padding="28,0"
+                        Margin="20,0"
+                        Theme="{StaticResource SecondaryButton}">
+                    <StackPanel Orientation="Horizontal" Spacing="9">
+                        <TextBlock Text="&#xE72D;"
+                                   FontFamily="Segoe MDL2 Assets"
+                                   FontSize="13"
+                                   VerticalAlignment="Center"/>
+                        <TextBlock Text="Gerar Dados"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <Border Grid.Column="2"
+                        Height="1"
+                        Background="#464646"
+                        VerticalAlignment="Center"/>
+            </Grid>
 
-                <Button x:Name="RewardCopy"
-                        Content="Copiar Dados"
-                        Width="110"
-                        Height="40"
-                        Theme="{StaticResource SecondaryButton}"
-                        FontSize="14"/>
-            </StackPanel>
+            <!-- ── Painel 02: Resultado ──────────────────────────────── -->
+            <Border Margin="32,0,32,32"
+                    CornerRadius="8"
+                    Background="#323232"
+                    BorderBrush="#464646"
+                    BorderThickness="1"
+                    ClipToBounds="True">
+                <Grid ColumnDefinitions="4,*">
+                    <Border Grid.Column="0" Background="#5B9BD5"/>
+                    <StackPanel Grid.Column="1">
 
-            <StackPanel Grid.Row="3" Orientation="Vertical">
-                <TextBlock Text="Arquivos do client"
-                          FontSize="16"
-                          FontWeight="SemiBold"
-                          Margin="0,0,0,8"/>
-                <Border Background="White" CornerRadius="10" BorderBrush="#E0E0E0" BorderThickness="1">
-                    <TextBox x:Name="RewardOutput"
-                             AcceptsReturn="True"
-                             TextWrapping="Wrap"
-                             Height="320"
-                             Padding="15,10"
-                             BorderThickness="0"
-                             Background="Transparent"
-                             IsReadOnly="True"/>
-                </Border>
-            </StackPanel>
+                        <Grid ColumnDefinitions="Auto,Auto,*,Auto,Auto"
+                              Margin="20,0"
+                              Height="52">
 
-            <StackPanel Grid.Row="4">
-                <TextBlock
-                    IsVisible="False"
-                    x:Name="CopyBlock"
-                    Margin="0 3"
-                    Foreground="Green"
-                    FontWeight="SemiBold"
-                    Text="✓ Copiado com sucesso!"/>
-            </StackPanel>
-        </Grid>
+                            <TextBlock Grid.Column="0"
+                                       Text="02"
+                                       FontSize="24"
+                                       FontWeight="Bold"
+                                       Foreground="#4A88B8"
+                                       VerticalAlignment="Center"/>
+
+                            <Border Grid.Column="1"
+                                    Width="1" Height="18"
+                                    Background="#565656"
+                                    VerticalAlignment="Center"
+                                    Margin="14,0"/>
+
+                            <TextBlock Grid.Column="2"
+                                       Text="RESULTADO"
+                                       FontSize="11"
+                                       FontWeight="Bold"
+                                       Foreground="#9A9A9A"
+                                       LetterSpacing="1.5"
+                                       VerticalAlignment="Center"/>
+
+                            <!-- Badge "Copiado!" -->
+                            <Border Grid.Column="3"
+                                    x:Name="CopyBlock"
+                                    IsVisible="False"
+                                    Background="#142B1A"
+                                    BorderBrush="#245230"
+                                    BorderThickness="1"
+                                    CornerRadius="5"
+                                    Padding="10,4"
+                                    VerticalAlignment="Center"
+                                    Margin="0,0,10,0">
+                                <StackPanel Orientation="Horizontal" Spacing="5">
+                                    <TextBlock Text="&#xE73E;"
+                                               FontFamily="Segoe MDL2 Assets"
+                                               FontSize="10"
+                                               Foreground="#52C97A"
+                                               VerticalAlignment="Center"/>
+                                    <TextBlock Text="Copiado!"
+                                               FontSize="11"
+                                               FontWeight="Medium"
+                                               Foreground="#52C97A"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Copy button -->
+                            <Button Grid.Column="4"
+                                    x:Name="RewardCopy"
+                                    Height="30"
+                                    Padding="14,0"
+                                    VerticalAlignment="Center"
+                                    Theme="{StaticResource GhostButton}">
+                                <StackPanel Orientation="Horizontal" Spacing="7">
+                                    <TextBlock Text="&#xE8C8;"
+                                               FontFamily="Segoe MDL2 Assets"
+                                               FontSize="12"
+                                               VerticalAlignment="Center"/>
+                                    <TextBlock Text="Copiar"
+                                               FontSize="12"
+                                               FontWeight="Medium"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+
+                        </Grid>
+
+                        <Border Height="1" Background="#464646"/>
+
+                        <TextBox x:Name="RewardOutput"
+                                 Classes="Code"
+                                 AcceptsReturn="True"
+                                 TextWrapping="Wrap"
+                                 Height="280"
+                                 Padding="20,14"
+                                 BorderThickness="0"
+                                 Background="#383838"
+                                 Foreground="#9CDCFE"
+                                 CaretBrush="#5B9BD5"
+                                 SelectionBrush="#1E3A5A"
+                                 FontFamily="Consolas,Courier New,monospace"
+                                 FontSize="12"
+                                 IsReadOnly="True"
+                                 Watermark="O resultado aparecerá aqui..."/>
+
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+        </StackPanel>
     </ScrollViewer>
 </UserControl>

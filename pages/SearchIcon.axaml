@@ -1,145 +1,390 @@
 <UserControl x:Class="L2Toolkit.pages.SearchIcon"
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             HorizontalAlignment="Stretch"
-             VerticalAlignment="Stretch">
+             Background="#393939">
 
-    <ScrollViewer
-        HorizontalScrollBarVisibility="Auto"
-        VerticalScrollBarVisibility="Auto"
-        HorizontalAlignment="Stretch"
-        VerticalAlignment="Stretch">
+    <UserControl.Resources>
+        <ControlTheme x:Key="GhostButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#B0B0B0"/>
+            <Setter Property="BorderBrush" Value="#565656"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border x:Name="PART_Border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="6"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Content="{TemplateBinding Content}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+            <Style Selector="^:pointerover /template/ Border#PART_Border">
+                <Setter Property="Background" Value="#3C3C3C"/>
+                <Setter Property="BorderBrush" Value="#646464"/>
+            </Style>
+            <Style Selector="^:pressed /template/ Border#PART_Border">
+                <Setter Property="Background" Value="#323232"/>
+            </Style>
+        </ControlTheme>
+    </UserControl.Resources>
 
-        <Grid Margin="30">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
+    <UserControl.Styles>
 
-            <StackPanel Grid.Row="0" Margin="0 0 0 16">
-                <TextBlock Text="Pesquisa por ícone"
-                           FontSize="32"
-                           FontWeight="Light"
-                           Foreground="#1F2937"
-                           Margin="0,0,0,2"/>
+        <Style Selector="TextBox.FormField">
+            <Setter Property="Background" Value="#383838"/>
+            <Setter Property="Foreground" Value="#D4D4D4"/>
+            <Setter Property="CaretBrush" Value="#5B9BD5"/>
+            <Setter Property="SelectionBrush" Value="#1E3A5A"/>
+            <Setter Property="BorderBrush" Value="#464646"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="Padding" Value="10,7"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+        <Style Selector="TextBox.FormField /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="#383838"/>
+            <Setter Property="CornerRadius" Value="5"/>
+        </Style>
+        <Style Selector="TextBox.FormField:focus /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="#5B9BD5"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+        <Style Selector="TextBox.FormField:pointerover /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="#5E5E5E"/>
+        </Style>
+
+        <!-- ComboBox dark theme -->
+        <Style Selector="ComboBox">
+            <Setter Property="Background" Value="#383838"/>
+            <Setter Property="Foreground" Value="#D4D4D4"/>
+            <Setter Property="BorderBrush" Value="#464646"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10,7"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+        <Style Selector="ComboBox:pointerover">
+            <Setter Property="BorderBrush" Value="#5E5E5E"/>
+        </Style>
+        <Style Selector="ComboBox:focus">
+            <Setter Property="BorderBrush" Value="#5B9BD5"/>
+        </Style>
+        <Style Selector="ComboBoxItem">
+            <Setter Property="Background" Value="#383838"/>
+            <Setter Property="Foreground" Value="#D4D4D4"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+        <Style Selector="ComboBoxItem:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#414141"/>
+        </Style>
+
+    </UserControl.Styles>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+
+            <!-- ── Page Header ──────────────────────────────────────── -->
+            <StackPanel Margin="32,28,32,24" Spacing="3">
+                <TextBlock Text="Pesquisar Ícone"
+                           FontSize="22"
+                           FontWeight="SemiBold"
+                           Foreground="#E8E8E8"/>
                 <TextBlock Text="Pesquisa do ícone do item pelo Id"
-                           FontSize="16"
-                           Foreground="#6B7280"/>
+                           FontSize="13"
+                           Foreground="#E8E8E8"/>
             </StackPanel>
 
-            <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Stretch">
-                <TextBlock FontWeight="SemiBold" Text="Insira o Id do item" />
-                <Border Background="White"
-                        CornerRadius="10"
-                        Margin="0 6"
-                        BorderBrush="#350B0B17"
-                        BorderThickness="1">
-                    <TextBox x:Name="ItemId"
-                             AcceptsReturn="True"
-                             IsReadOnly="False"
-                             TextWrapping="NoWrap"
-                             Height="40"
-                             Padding="15,10"
-                             BorderThickness="0"
-                             Background="Transparent" />
-                </Border>
-            </StackPanel>
+            <!-- ── Banner de erro ────────────────────────────────────── -->
+            <Border x:Name="NotificacaoBorder"
+                    Margin="32,0,32,16"
+                    Background="#1F1A0A"
+                    BorderBrush="#5C4A00"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Padding="14,10"
+                    IsVisible="False">
+                <Grid ColumnDefinitions="Auto,*">
+                    <TextBlock Grid.Column="0"
+                               Text="&#xE7BA;"
+                               FontFamily="Segoe MDL2 Assets"
+                               FontSize="14"
+                               Foreground="#D4A017"
+                               VerticalAlignment="Center"
+                               Margin="0,0,10,0"/>
+                    <TextBlock Grid.Column="1"
+                               x:Name="StatusNotificacao"
+                               Foreground="#D4A017"
+                               TextWrapping="Wrap"
+                               FontSize="13"
+                               VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
 
-            <StackPanel Grid.Row="2" Margin="0 4 0 0" Orientation="Vertical" HorizontalAlignment="Stretch">
-                <TextBlock FontWeight="SemiBold" Text="Selecione o tipo do item" />
-                <ComboBox Margin="0 6 0 0" x:Name="ItemType" SelectedIndex="0">
-                    <ComboBoxItem Content="Weapon" />
-                    <ComboBoxItem Content="Armor" />
-                    <ComboBoxItem Content="Items" />
-                    <ComboBoxItem Content="Skills" />
-                </ComboBox>
-            </StackPanel>
+            <!-- ── Painel 01: Pesquisa ───────────────────────────────── -->
+            <Border Margin="32,0"
+                    CornerRadius="8"
+                    Background="#323232"
+                    BorderBrush="#464646"
+                    BorderThickness="1"
+                    ClipToBounds="True">
+                <Grid ColumnDefinitions="4,*">
+                    <Border Grid.Column="0" Background="#5B9BD5"/>
+                    <StackPanel Grid.Column="1">
 
-            <StackPanel Grid.Row="3">
-                <Button
-                    Theme="{StaticResource PrimaryButton}"
-                    Margin="0 10"
-                    Width="120"
-                    Height="40"
-                    Click="SearchButton_OnClick"
-                    x:Name="SearchButton"
-                    Content="Pesquisar" />
-            </StackPanel>
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="20,14,20,14"
+                                    Spacing="14"
+                                    VerticalAlignment="Center">
+                            <TextBlock Text="01"
+                                       FontSize="24"
+                                       FontWeight="Bold"
+                                       Foreground="#4A88B8"
+                                       VerticalAlignment="Center"/>
+                            <Border Width="1" Height="18" Background="#565656" VerticalAlignment="Center"/>
+                            <TextBlock Text="PESQUISA"
+                                       FontSize="11"
+                                       FontWeight="Bold"
+                                       Foreground="#9A9A9A"
+                                       LetterSpacing="1.5"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
 
-            <StackPanel Grid.Row="4">
-                <TextBlock
-                    x:Name="StatusBox"
-                    Margin="0 10"
-                    FontWeight="SemiBold"
-                    FontSize="16"
-                    Text="Resultado da pesquisa" />
-            </StackPanel>
+                        <Border Height="1" Background="#464646"/>
 
-            <StackPanel Grid.Row="5">
-                <TextBlock FontWeight="SemiBold" Text="Nome" Margin="0 4" />
-                <Border Background="White"
-                        CornerRadius="10"
-                        Margin="0 6"
-                        BorderBrush="#350B0B17"
-                        BorderThickness="1">
-                    <TextBox x:Name="NameOutput"
-                             PointerPressed="IconOutput_OnPreviewMouseDown"
-                             AcceptsReturn="True"
-                             IsReadOnly="True"
-                             TextWrapping="NoWrap"
-                             Height="40"
-                             Padding="15,10"
-                             BorderThickness="0"
-                             Background="Transparent" />
-                </Border>
-                <TextBlock FontWeight="SemiBold" Text="Icon" Margin="0 4" />
-                <Border Background="White"
-                        CornerRadius="10"
-                        Margin="0 6"
-                        BorderBrush="#350B0B17"
-                        BorderThickness="1">
-                    <TextBox x:Name="IconOutput"
-                             PointerPressed="IconOutput_OnPreviewMouseDown"
-                             AcceptsReturn="True"
-                             IsReadOnly="True"
-                             TextWrapping="NoWrap"
-                             Height="40"
-                             Padding="15,10"
-                             BorderThickness="0"
-                             Background="Transparent" />
-                </Border>
-                <TextBlock FontWeight="SemiBold" Text="Icon Panel" Margin="0 4" />
-                <Border Background="White"
-                        CornerRadius="10"
-                        Margin="0 6"
-                        BorderBrush="#350B0B17"
-                        BorderThickness="1">
-                    <TextBox x:Name="IconPanelOutput"
-                             AcceptsReturn="True"
-                             PointerPressed="IconPanelOutput_OnPreviewMouseDown"
-                             IsReadOnly="True"
-                             TextWrapping="NoWrap"
-                             Height="40"
-                             Padding="15,10"
-                             BorderThickness="0"
-                             Background="Transparent" />
-                </Border>
-            </StackPanel>
+                        <StackPanel Margin="20,16,20,20" Spacing="14">
 
-            <StackPanel Grid.Row="6">
-                <TextBlock
-                    IsVisible="False"
-                    x:Name="CopyBlock"
-                    Margin="0 3"
-                    Foreground="Green"
-                    FontWeight="SemiBold"
-                    Text="✓ Copiado com sucesso!" />
-            </StackPanel>
-        </Grid>
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="ID do item"
+                                           FontSize="12"
+                                           Foreground="#9A9A9A"
+                                           FontWeight="Medium"/>
+                                <TextBox x:Name="ItemId"
+                                         Classes="FormField"
+                                         Height="38"
+                                         Padding="12,0"
+                                         VerticalContentAlignment="Center"
+                                         FontFamily="Consolas,Courier New,monospace"
+                                         FontSize="12"
+                                         Watermark="Ex: 49"/>
+                            </StackPanel>
+
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Tipo do item"
+                                           FontSize="12"
+                                           Foreground="#9A9A9A"
+                                           FontWeight="Medium"/>
+                                <ComboBox x:Name="ItemType" SelectedIndex="0">
+                                    <ComboBoxItem Content="Weapon"/>
+                                    <ComboBoxItem Content="Armor"/>
+                                    <ComboBoxItem Content="Items"/>
+                                    <ComboBoxItem Content="Skills"/>
+                                </ComboBox>
+                            </StackPanel>
+
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- ── Ação: Pesquisar (separador de pipeline) ───────────── -->
+            <Grid Margin="32,16" ColumnDefinitions="*,Auto,*">
+                <Border Grid.Column="0"
+                        Height="1"
+                        Background="#464646"
+                        VerticalAlignment="Center"/>
+                <Button Grid.Column="1"
+                        x:Name="SearchButton"
+                        Click="SearchButton_OnClick"
+                        Height="40"
+                        Padding="28,0"
+                        Margin="20,0"
+                        Theme="{StaticResource SecondaryButton}">
+                    <StackPanel Orientation="Horizontal" Spacing="9">
+                        <TextBlock Text="&#xE721;"
+                                   FontFamily="Segoe MDL2 Assets"
+                                   FontSize="13"
+                                   VerticalAlignment="Center"/>
+                        <TextBlock Text="Pesquisar"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <Border Grid.Column="2"
+                        Height="1"
+                        Background="#464646"
+                        VerticalAlignment="Center"/>
+            </Grid>
+
+            <!-- ── Painel 02: Resultado ──────────────────────────────── -->
+            <Border Margin="32,0,32,32"
+                    CornerRadius="8"
+                    Background="#323232"
+                    BorderBrush="#464646"
+                    BorderThickness="1"
+                    ClipToBounds="True">
+                <Grid ColumnDefinitions="4,*">
+                    <Border Grid.Column="0" Background="#5B9BD5"/>
+                    <StackPanel Grid.Column="1">
+
+                        <Grid ColumnDefinitions="Auto,Auto,*,Auto"
+                              Margin="20,0"
+                              Height="52">
+                            <TextBlock Grid.Column="0"
+                                       Text="02"
+                                       FontSize="24"
+                                       FontWeight="Bold"
+                                       Foreground="#4A88B8"
+                                       VerticalAlignment="Center"/>
+                            <Border Grid.Column="1"
+                                    Width="1" Height="18"
+                                    Background="#565656"
+                                    VerticalAlignment="Center"
+                                    Margin="14,0"/>
+                            <TextBlock Grid.Column="2"
+                                       x:Name="StatusBox"
+                                       Text="RESULTADO"
+                                       FontSize="11"
+                                       FontWeight="Bold"
+                                       Foreground="#9A9A9A"
+                                       LetterSpacing="1.5"
+                                       VerticalAlignment="Center"/>
+                            <!-- Badge "Copiado!" -->
+                            <Border Grid.Column="3"
+                                    x:Name="CopyBlock"
+                                    IsVisible="False"
+                                    Background="#142B1A"
+                                    BorderBrush="#245230"
+                                    BorderThickness="1"
+                                    CornerRadius="5"
+                                    Padding="10,4"
+                                    VerticalAlignment="Center">
+                                <StackPanel Orientation="Horizontal" Spacing="5">
+                                    <TextBlock Text="&#xE73E;"
+                                               FontFamily="Segoe MDL2 Assets"
+                                               FontSize="10"
+                                               Foreground="#52C97A"
+                                               VerticalAlignment="Center"/>
+                                    <TextBlock Text="Copiado!"
+                                               FontSize="11"
+                                               FontWeight="Medium"
+                                               Foreground="#52C97A"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+
+                        <Border Height="1" Background="#464646"/>
+
+                        <StackPanel Margin="20,16,20,20" Spacing="12">
+
+                            <!-- Nome -->
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Nome"
+                                           FontSize="12"
+                                           Foreground="#9A9A9A"
+                                           FontWeight="Medium"/>
+                                <Grid ColumnDefinitions="*,8,Auto">
+                                    <TextBox x:Name="NameOutput"
+                                             Grid.Column="0"
+                                             Classes="FormField"
+                                             IsReadOnly="True"
+                                             Height="38"
+                                             Padding="12,0"
+                                             VerticalContentAlignment="Center"
+                                             FontFamily="Consolas,Courier New,monospace"
+                                             FontSize="12"
+                                             Watermark="—"/>
+                                    <Button Grid.Column="2"
+                                            x:Name="CopyNameButton"
+                                            Click="CopyNameButton_OnClick"
+                                            Height="38"
+                                            Padding="14,0"
+                                            Theme="{StaticResource GhostButton}">
+                                        <TextBlock Text="&#xE8C8;"
+                                                   FontFamily="Segoe MDL2 Assets"
+                                                   FontSize="13"
+                                                   VerticalAlignment="Center"/>
+                                    </Button>
+                                </Grid>
+                            </StackPanel>
+
+                            <!-- Icon -->
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Icon"
+                                           FontSize="12"
+                                           Foreground="#9A9A9A"
+                                           FontWeight="Medium"/>
+                                <Grid ColumnDefinitions="*,8,Auto">
+                                    <TextBox x:Name="IconOutput"
+                                             Grid.Column="0"
+                                             Classes="FormField"
+                                             IsReadOnly="True"
+                                             Height="38"
+                                             Padding="12,0"
+                                             VerticalContentAlignment="Center"
+                                             FontFamily="Consolas,Courier New,monospace"
+                                             FontSize="12"
+                                             Watermark="—"/>
+                                    <Button Grid.Column="2"
+                                            x:Name="CopyIconButton"
+                                            Click="CopyIconButton_OnClick"
+                                            Height="38"
+                                            Padding="14,0"
+                                            Theme="{StaticResource GhostButton}">
+                                        <TextBlock Text="&#xE8C8;"
+                                                   FontFamily="Segoe MDL2 Assets"
+                                                   FontSize="13"
+                                                   VerticalAlignment="Center"/>
+                                    </Button>
+                                </Grid>
+                            </StackPanel>
+
+                            <!-- Icon Panel -->
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Icon Panel"
+                                           FontSize="12"
+                                           Foreground="#9A9A9A"
+                                           FontWeight="Medium"/>
+                                <Grid ColumnDefinitions="*,8,Auto">
+                                    <TextBox x:Name="IconPanelOutput"
+                                             Grid.Column="0"
+                                             Classes="FormField"
+                                             IsReadOnly="True"
+                                             Height="38"
+                                             Padding="12,0"
+                                             VerticalContentAlignment="Center"
+                                             FontFamily="Consolas,Courier New,monospace"
+                                             FontSize="12"
+                                             Watermark="—"/>
+                                    <Button Grid.Column="2"
+                                            x:Name="CopyIconPanelButton"
+                                            Click="CopyIconPanelButton_OnClick"
+                                            Height="38"
+                                            Padding="14,0"
+                                            Theme="{StaticResource GhostButton}">
+                                        <TextBlock Text="&#xE8C8;"
+                                                   FontFamily="Segoe MDL2 Assets"
+                                                   FontSize="13"
+                                                   VerticalAlignment="Center"/>
+                                    </Button>
+                                </Grid>
+                            </StackPanel>
+
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+        </StackPanel>
     </ScrollViewer>
 </UserControl>

@@ -8,11 +8,10 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
+using Avalonia.Threading;
 using L2Toolkit.database;
-using MsBox.Avalonia;
 
 namespace L2Toolkit.pages;
 
@@ -20,24 +19,61 @@ public partial class LogParse : UserControl
 {
     private readonly Queue<string> _logQueue = new();
     private readonly object _logLock = new();
+    private readonly DispatcherTimer _errorTimer;
     private int _totalLogs;
 
     public LogParse()
     {
+        _errorTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(6) };
+        _errorTimer.Tick += (s, e) => { NotificacaoBorder.IsVisible = false; _errorTimer.Stop(); };
+
         InitializeComponent();
+
+        SelecionarLogButton.Click += async (s, e) => await SelectLogFileAsync();
+        SelecionarOutputButton.Click += async (s, e) => await SelectOutputDirAsync();
 
         var lastLogFile = AppDatabase.GetInstance().GetValue("lastLogFile");
         var lastOutputDir = AppDatabase.GetInstance().GetValue("lastOutputDir");
 
-        if (!string.IsNullOrEmpty(lastOutputDir))
-        {
-            OutputDir.Text = lastOutputDir;
-        }
+        if (!string.IsNullOrEmpty(lastOutputDir)) OutputDir.Text = lastOutputDir;
+        if (!string.IsNullOrEmpty(lastLogFile)) LogFile.Text = lastLogFile;
+    }
 
-        if (!string.IsNullOrEmpty(lastLogFile))
+    private void ShowNotification(string message)
+    {
+        _errorTimer.Stop();
+        NotificacaoBorder.IsVisible = true;
+        StatusNotificacao.Text = !string.IsNullOrWhiteSpace(message) ? message : "Ocorreu um erro inesperado.";
+        _errorTimer.Start();
+    }
+
+    private async Task SelectLogFileAsync()
+    {
+        var topLevel = TopLevel.GetTopLevel(this);
+        if (topLevel == null) return;
+        var files = await topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
-            LogFile.Text = lastLogFile;
-        }
+            AllowMultiple = false,
+            FileTypeFilter = new[]
+            {
+                new FilePickerFileType("Log files") { Patterns = new[] { "*.log" } }
+            }
+        });
+        if (files.Count == 0) return;
+        var path = files[0].Path.LocalPath;
+        LogFile.Text = path;
+        AppDatabase.GetInstance().UpdateValue("lastLogFile", path);
+    }
+
+    private async Task SelectOutputDirAsync()
+    {
+        var topLevel = TopLevel.GetTopLevel(this);
+        if (topLevel == null) return;
+        var folders = await topLevel.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions());
+        if (folders.Count == 0) return;
+        var path = folders[0].Path.LocalPath;
+        OutputDir.Text = path;
+        AppDatabase.GetInstance().UpdateValue("lastOutputDir", path);
     }
 
     private void AddLog(string log)
@@ -49,26 +85,6 @@ public partial class LogParse : UserControl
                 _logQueue.Dequeue();
 
             LogContent.Text = string.Join("\n", _logQueue);
-        }
-    }
-
-    private async void LogFile_OnPreviewMouseDown(object sender, PointerPressedEventArgs e)
-    {
-        var topLevel = TopLevel.GetTopLevel(this);
-        var files = await topLevel!.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
-        {
-            AllowMultiple = false,
-            FileTypeFilter = new[]
-            {
-                new FilePickerFileType("Log files") { Patterns = new[] { "*.log" } }
-            }
-        });
-
-        if (files.Count > 0)
-        {
-            var path = files[0].Path.LocalPath;
-            LogFile.Text = path;
-            AppDatabase.GetInstance().UpdateValue("lastLogFile", path);
         }
     }
 
@@ -84,7 +100,6 @@ public partial class LogParse : UserControl
         Encoding encoding)
     {
         var playerLogs = new ConcurrentQueue<string>();
-
         var lines = File.ReadLines(fileLog, encoding);
 
         const string pattern = @"\[\d{2}\.\d{2}\.\d{2} \d{2}:\d{2}:\d{2}\]\s*";
@@ -125,26 +140,20 @@ public partial class LogParse : UserControl
             var outputDir = OutputDir.Text;
 
             if (string.IsNullOrEmpty(name))
-            {
                 throw new Exception("Insira a key de pesquisa");
-            }
+
+            if (string.IsNullOrEmpty(outputDir))
+                throw new Exception("Preencha a pasta de saída");
+
+            if (string.IsNullOrEmpty(fileLog))
+                throw new Exception("Selecione o arquivo de log");
 
             var encoding = Encoding.GetEncoding(1252);
             var fileName = $"Log-{name}";
 
-            if (string.IsNullOrEmpty(outputDir))
-            {
-                throw new Exception("Preencha a pasta de saída");
-            }
-
-            if (string.IsNullOrEmpty(fileLog))
-            {
-                throw new Exception("Selecione o arquivo de log");
-            }
-
             _logQueue.Clear();
             AddLog("Iniciando o processo...");
-            ButtonGenerate.Content = "Processando...";
+            ButtonGenerateText.Text = "Processando...";
 
             var matchedLines = await Task.Run(() =>
                 ProcessLog(fileLog, name, optionalEvent, encoding));
@@ -163,15 +172,9 @@ public partial class LogParse : UserControl
             _totalLogs = 0;
 
             if (!string.IsNullOrEmpty(optionalEvent))
-            {
                 fileName += $"-{optionalEvent}";
-            }
 
-            var date = DateTime.Now;
-            var dateString = date.ToString("dd-MM");
-
-            fileName += $"-{dateString}.log";
-
+            fileName += $"-{DateTime.Now:dd-MM}.log";
             fileName = fileName.ToLower();
 
             var saveFileDir = Path.Combine(outputDir, fileName);
@@ -190,23 +193,11 @@ public partial class LogParse : UserControl
         }
         catch (Exception ex)
         {
-            await MessageBoxManager.GetMessageBoxStandard("Error", ex.Message).ShowWindowAsync();
+            ShowNotification(ex.Message);
         }
         finally
         {
-            ButtonGenerate.Content = "Gerar Dados";
-        }
-    }
-
-    private async void OutputDir_OnPreviewMouseDown(object sender, PointerPressedEventArgs e)
-    {
-        var topLevel = TopLevel.GetTopLevel(this);
-        var folders = await topLevel!.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions());
-        if (folders.Count > 0)
-        {
-            var path = folders[0].Path.LocalPath;
-            OutputDir.Text = path;
-            AppDatabase.GetInstance().UpdateValue("lastOutputDir", path);
+            ButtonGenerateText.Text = "Gerar Dados";
         }
     }
 }

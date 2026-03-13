@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
@@ -14,7 +13,6 @@ using L2Toolkit.database;
 using L2Toolkit.DataMap;
 using L2Toolkit.ProcessData;
 using L2Toolkit.Utilities;
-using MsBox.Avalonia;
 
 namespace L2Toolkit.pages;
 
@@ -32,19 +30,44 @@ public partial class LiveData : UserControl
 
     private string _folderPath;
     private readonly GlobalLogs _log = new();
+    private readonly DispatcherTimer _errorTimer;
 
     private readonly ConcurrentDictionary<string, string> _itemsName = new();
     private readonly ConcurrentDictionary<string, CompleteStatusItems> _itemsStatus = new();
 
     public LiveData()
     {
+        _errorTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(6) };
+        _errorTimer.Tick += (s, e) => { NotificacaoBorder.IsVisible = false; _errorTimer.Stop(); };
+
         InitializeComponent();
         _log.RegisterBlock(LogContent);
+        SelecionarPastaButton.Click += async (s, e) => await SelectFolderAsync();
+
         var lastLiveFolder = AppDatabase.GetInstance().GetValue("lastLiveFolder");
         if (!string.IsNullOrEmpty(lastLiveFolder))
         {
             ClientFolder.Text = lastLiveFolder;
         }
+    }
+
+    private void ShowNotification(string message)
+    {
+        _errorTimer.Stop();
+        NotificacaoBorder.IsVisible = true;
+        StatusNotificacao.Text = !string.IsNullOrWhiteSpace(message) ? message : "Ocorreu um erro inesperado.";
+        _errorTimer.Start();
+    }
+
+    private async Task SelectFolderAsync()
+    {
+        var topLevel = TopLevel.GetTopLevel(this);
+        if (topLevel == null) return;
+        var folders = await topLevel.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions());
+        if (folders.Count == 0) return;
+        var path = folders[0].Path.LocalPath;
+        ClientFolder.Text = path;
+        AppDatabase.GetInstance().UpdateValue("lastLiveFolder", path);
     }
 
     private async Task CreateStatusData()
@@ -74,16 +97,6 @@ public partial class LiveData : UserControl
         {
             _log.AddLog($"Pronto, status recuperado, total de {_itemsStatus.Count:N0}");
         }
-    }
-
-    private async void ClientFolder_OnPreviewMouseDown(object sender, PointerPressedEventArgs e)
-    {
-        var topLevel = TopLevel.GetTopLevel(this);
-        var folders = await topLevel!.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions());
-        if (folders.Count == 0) return;
-        var path = folders[0].Path.LocalPath;
-        ClientFolder.Text = path;
-        AppDatabase.GetInstance().UpdateValue("lastLiveFolder", path);
     }
 
     #region DataSkillParse
@@ -976,7 +989,7 @@ public partial class LiveData : UserControl
         }
         catch (Exception ex)
         {
-            await MessageBoxManager.GetMessageBoxStandard("ERROR", ex.Message).ShowWindowAsync();
+            ShowNotification(ex.Message);
         }
     }
 
@@ -1004,6 +1017,7 @@ public partial class LiveData : UserControl
 
     private void TypeProcess_OnDropDownClosed(object sender, Avalonia.Controls.SelectionChangedEventArgs e)
     {
+        if (StackPanelXml == null) return;
         var textBox = ((ComboBoxItem)TypeProcess.SelectedItem)?.Content?.ToString();
         if (string.IsNullOrEmpty(textBox)) return;
 
@@ -1033,19 +1047,23 @@ public partial class LiveData : UserControl
 
     private async void CopyXml_OnClick(object sender, RoutedEventArgs e)
     {
-        try
-        {
-            var text = XmlData.Text;
-            if (string.IsNullOrEmpty(text)) return;
-            var topLevel = TopLevel.GetTopLevel(this);
-            await topLevel!.Clipboard!.SetTextAsync(text);
-            XmlCopied.IsVisible = true;
-            await Task.Delay(3000);
-            XmlCopied.IsVisible = false;
-        }
-        catch (Exception)
-        {
-            //ignore
-        }
+        var text = XmlData.Text;
+        if (string.IsNullOrEmpty(text)) return;
+        var topLevel = TopLevel.GetTopLevel(this);
+        await topLevel!.Clipboard!.SetTextAsync(text);
+        XmlCopied.IsVisible = true;
+        await Task.Delay(3000);
+        XmlCopied.IsVisible = false;
+    }
+
+    private async void CopiarItensButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        var text = LogContent.Text;
+        if (string.IsNullOrEmpty(text)) return;
+        var topLevel = TopLevel.GetTopLevel(this);
+        await topLevel!.Clipboard!.SetTextAsync(text);
+        ItensCopiadoTextBlock.IsVisible = true;
+        await Task.Delay(3000);
+        ItensCopiadoTextBlock.IsVisible = false;
     }
 }

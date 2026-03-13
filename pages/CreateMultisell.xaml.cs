@@ -1,25 +1,36 @@
 using System;
 using System.Collections.Concurrent;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Threading;
 using L2Toolkit.Parse;
 using L2Toolkit.Utilities;
-using MsBox.Avalonia;
 
 namespace L2Toolkit.pages;
 
 public partial class CreateMultisell : UserControl
 {
     private readonly GlobalLogs _log = new();
+    private readonly DispatcherTimer _errorTimer;
 
     public CreateMultisell()
     {
+        _errorTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(6) };
+        _errorTimer.Tick += (s, e) => { NotificacaoBorder.IsVisible = false; _errorTimer.Stop(); };
+
         InitializeComponent();
         _log.RegisterBlock(BoxLog);
+    }
+
+    private void ShowNotification(string message)
+    {
+        _errorTimer.Stop();
+        NotificacaoBorder.IsVisible = true;
+        StatusNotificacao.Text = !string.IsNullOrWhiteSpace(message) ? message : "Ocorreu um erro inesperado.";
+        _errorTimer.Start();
     }
 
     private readonly ConcurrentDictionary<string, ItemName> _listNames = new();
@@ -50,7 +61,7 @@ public partial class CreateMultisell : UserControl
 
             if (string.IsNullOrWhiteSpace(productionId) || string.IsNullOrWhiteSpace(materialId))
             {
-                await MessageBoxManager.GetMessageBoxStandard("ERRO", "Digite o Id e material").ShowWindowAsync();
+                ShowNotification("Digite o Id e material.");
                 return;
             }
 
@@ -110,5 +121,27 @@ public partial class CreateMultisell : UserControl
         {
             _log.AddLog($"Erro: {ex.Message}");
         }
+    }
+
+    private async void CopiarClienteButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        var text = XmlData.Text?.Trim() ?? string.Empty;
+        if (string.IsNullOrEmpty(text)) return;
+        var topLevel = TopLevel.GetTopLevel(this);
+        await topLevel!.Clipboard!.SetTextAsync(text);
+        ClienteCopiadoTextBlock.IsVisible = true;
+        await Task.Delay(3000);
+        ClienteCopiadoTextBlock.IsVisible = false;
+    }
+
+    private async void CopiarItensButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        var text = BoxLog.Text?.Trim() ?? string.Empty;
+        if (string.IsNullOrEmpty(text)) return;
+        var topLevel = TopLevel.GetTopLevel(this);
+        await topLevel!.Clipboard!.SetTextAsync(text);
+        CopyContentLog.IsVisible = true;
+        await Task.Delay(3000);
+        CopyContentLog.IsVisible = false;
     }
 }

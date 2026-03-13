@@ -7,7 +7,6 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
@@ -15,7 +14,6 @@ using L2Toolkit.database;
 using L2Toolkit.DataMap;
 using L2Toolkit.ProcessData;
 using L2Toolkit.Utilities;
-using MsBox.Avalonia;
 
 namespace L2Toolkit.pages;
 
@@ -30,19 +28,44 @@ public partial class SkinBuilder : UserControl
 
     private string _folderPath;
     private readonly GlobalLogs _log = new();
+    private readonly DispatcherTimer _errorTimer;
 
     private readonly ConcurrentDictionary<string, string> _itemsName = new();
     private readonly ConcurrentDictionary<string, CompleteStatusItems> _itemsStatus = new();
 
     public SkinBuilder()
     {
+        _errorTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(6) };
+        _errorTimer.Tick += (s, e) => { NotificacaoBorder.IsVisible = false; _errorTimer.Stop(); };
+
         InitializeComponent();
         _log.RegisterBlock(LogContent);
+        SelecionarPastaButton.Click += async (s, e) => await SelectFolderAsync();
+
         var lastLiveFolder = AppDatabase.GetInstance().GetValue("lastLiveFolder");
         if (!string.IsNullOrEmpty(lastLiveFolder))
         {
             ClientFolder.Text = lastLiveFolder;
         }
+    }
+
+    private void ShowNotification(string message)
+    {
+        _errorTimer.Stop();
+        NotificacaoBorder.IsVisible = true;
+        StatusNotificacao.Text = !string.IsNullOrWhiteSpace(message) ? message : "Ocorreu um erro inesperado.";
+        _errorTimer.Start();
+    }
+
+    private async Task SelectFolderAsync()
+    {
+        var topLevel = TopLevel.GetTopLevel(this);
+        if (topLevel == null) return;
+        var folders = await topLevel.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions());
+        if (folders.Count == 0) return;
+        var path = folders[0].Path.LocalPath;
+        ClientFolder.Text = path;
+        AppDatabase.GetInstance().UpdateValue("lastLiveFolder", path);
     }
 
     private async Task CreateStatusData()
@@ -72,16 +95,6 @@ public partial class SkinBuilder : UserControl
         {
             _log.AddLog($"Pronto, status recuperado, total de {_itemsStatus.Count:N0}");
         }
-    }
-
-    private async void ClientFolder_OnPreviewMouseDown(object sender, PointerPressedEventArgs e)
-    {
-        var topLevel = TopLevel.GetTopLevel(this);
-        var folders = await topLevel!.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions());
-        if (folders.Count == 0) return;
-        var path = folders[0].Path.LocalPath;
-        ClientFolder.Text = path;
-        AppDatabase.GetInstance().UpdateValue("lastLiveFolder", path);
     }
 
     private async Task<ConcurrentDictionary<string, string>> GetSkillNameAsync(string path)
@@ -591,7 +604,7 @@ public partial class SkinBuilder : UserControl
         }
         catch (Exception ex)
         {
-            await MessageBoxManager.GetMessageBoxStandard("ERROR", ex.Message).ShowWindowAsync();
+            ShowNotification(ex.Message);
             Console.WriteLine(ex);
         }
     }
@@ -725,19 +738,23 @@ public partial class SkinBuilder : UserControl
 
     private async void CopyStatus_OnClick(object sender, RoutedEventArgs e)
     {
-        try
-        {
-            var text = StatusData.Text;
-            if (string.IsNullOrEmpty(text)) return;
-            var topLevel = TopLevel.GetTopLevel(this);
-            await topLevel!.Clipboard!.SetTextAsync(text);
-            ButtonCopyStatus.IsVisible = true;
-            await Task.Delay(3000);
-            ButtonCopyStatus.IsVisible = false;
-        }
-        catch (Exception)
-        {
-            //ignore
-        }
+        var text = StatusData.Text;
+        if (string.IsNullOrEmpty(text)) return;
+        var topLevel = TopLevel.GetTopLevel(this);
+        await topLevel!.Clipboard!.SetTextAsync(text);
+        ButtonCopyStatus.IsVisible = true;
+        await Task.Delay(3000);
+        ButtonCopyStatus.IsVisible = false;
+    }
+
+    private async void CopiarItensButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        var text = LogContent.Text;
+        if (string.IsNullOrEmpty(text)) return;
+        var topLevel = TopLevel.GetTopLevel(this);
+        await topLevel!.Clipboard!.SetTextAsync(text);
+        ItensCopiadoTextBlock.IsVisible = true;
+        await Task.Delay(3000);
+        ItensCopiadoTextBlock.IsVisible = false;
     }
 }

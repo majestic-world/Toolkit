@@ -44,7 +44,7 @@ namespace L2Toolkit.pages
 
         private void GeneratePawnAnimData()
         {
-            string name = PawnNameTextBox.Text.Trim();
+            string name = PawnNameTextBox.Text?.Trim() ?? string.Empty;
             List<(int index, int variant, string anim)> textureParams = new List<(int, int, string)>();
 
             CollectAnimationEntries(textureParams);
@@ -63,7 +63,7 @@ namespace L2Toolkit.pages
                 TextBox entry = this.FindControl<TextBox>($"Entry_{idx}");
                 if (entry != null)
                 {
-                    string animText = entry.Text.Trim();
+                    string animText = entry.Text?.Trim() ?? string.Empty;
                     if (!string.IsNullOrEmpty(animText))
                     {
                         string[] animations = animText.Split(';')

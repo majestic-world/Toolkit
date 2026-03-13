@@ -4,19 +4,27 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
+using Avalonia.Threading;
 using L2Toolkit.database;
-using MsBox.Avalonia;
 
 namespace L2Toolkit.pages;
 
 public partial class UpgradeNormalSystem : UserControl
 {
+    private readonly DispatcherTimer _errorTimer;
+
     public UpgradeNormalSystem()
     {
+        _errorTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(6) };
+        _errorTimer.Tick += (s, e) => { NotificacaoBorder.IsVisible = false; _errorTimer.Stop(); };
+
         InitializeComponent();
+        SelecionarArquivoButton.Click += async (s, e) => await SelectFileAsync();
+        UpgradeGenerate.Click += UpgradeGenerate_OnClick;
+        UpgradeCopy.Click += UpgradeCopy_OnClick;
+
         var lastFile = AppDatabase.GetInstance().GetValue("lastUpgradeNormalFile");
         if (lastFile != "")
         {
@@ -24,10 +32,20 @@ public partial class UpgradeNormalSystem : UserControl
         }
     }
 
-    private async void UpgradeContent_OnPreviewMouseDown(object sender, PointerPressedEventArgs e)
+    private void ShowNotification(string message)
+    {
+        _errorTimer.Stop();
+        NotificacaoBorder.IsVisible = true;
+        StatusNotificacao.Text = !string.IsNullOrWhiteSpace(message) ? message : "Ocorreu um erro inesperado.";
+        _errorTimer.Start();
+    }
+
+    private async Task SelectFileAsync()
     {
         var topLevel = TopLevel.GetTopLevel(this);
-        var files = await topLevel!.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+        if (topLevel == null) return;
+
+        var files = await topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
             Title = "Selecione o arquivo",
             AllowMultiple = false,
@@ -40,16 +58,16 @@ public partial class UpgradeNormalSystem : UserControl
 
         if (files.Count == 0) return;
         var path = files[0].Path.LocalPath;
-        AppDatabase.GetInstance().UpdateValue("lastUpgradeNormalFile", path);
         UpgradeContent.Text = path;
+        AppDatabase.GetInstance().UpdateValue("lastUpgradeNormalFile", path);
     }
 
-    private async void UpgradeGenerate_OnClick(object sender, RoutedEventArgs e)
+    private void UpgradeGenerate_OnClick(object sender, RoutedEventArgs e)
     {
         try
         {
             var filePath = UpgradeContent.Text;
-            if (filePath == "")
+            if (string.IsNullOrEmpty(filePath))
             {
                 throw new Exception("Preencha o caminho até o arquivo.");
             }
@@ -145,24 +163,18 @@ public partial class UpgradeNormalSystem : UserControl
         }
         catch (Exception ex)
         {
-            await MessageBoxManager.GetMessageBoxStandard("Erro", ex.Message).ShowWindowAsync();
+            ShowNotification(ex.Message);
         }
     }
 
     private async void UpgradeCopy_OnClick(object sender, RoutedEventArgs e)
     {
-        try
-        {
-            var copyText = UpgradeOutput.Text;
-            var topLevel = TopLevel.GetTopLevel(this);
-            await topLevel!.Clipboard!.SetTextAsync(copyText);
-            CopyBlock.IsVisible = true;
-            await Task.Delay(3000);
-            CopyBlock.IsVisible = false;
-        }
-        catch (Exception)
-        {
-            //ignore
-        }
+        var content = UpgradeOutput.Text?.Trim() ?? string.Empty;
+        var topLevel = TopLevel.GetTopLevel(this);
+        await topLevel!.Clipboard!.SetTextAsync(content);
+        CopyBlock.IsVisible = true;
+        UpgradeOutput.Text = "";
+        await Task.Delay(3000);
+        CopyBlock.IsVisible = false;
     }
 }
