@@ -57,3 +57,5 @@ Pages use Avalonia's storage provider for folder/file selection, then pass paths
 
 ## UI Design Notes
 The app targets an enterprise/professional aesthetic: restrained dark theme inspired by Material Design / Fluent Design. Avoid decorative elements. When adding new pages, follow the layout of existing pages (header with title + subtitle, content area, log display).
+
+**Default skill for all UI/design work:** use `/avalonia-design` whenever creating, redesigning, or styling any UI element in this project.
