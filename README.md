@@ -28,8 +28,24 @@ Acesse a documentação completa em:
 
 Build:
 
-```csharp
+**Windows**
+```bash
 dotnet publish -r win-x64 -c Release -p:PublishAot=true -p:OptimizationPreference=Speed -p:StackTraceSupport=false -p:InvariantGlobalization=true
+```
+
+**Linux**
+```bash
+dotnet publish -r linux-x64 -c Release -p:PublishAot=true -p:OptimizationPreference=Speed -p:StackTraceSupport=false -p:InvariantGlobalization=true
+```
+
+**macOS (Intel)**
+```bash
+dotnet publish -r osx-x64 -c Release -p:PublishAot=true -p:OptimizationPreference=Speed -p:StackTraceSupport=false -p:InvariantGlobalization=true
+```
+
+**macOS (Apple Silicon)**
+```bash
+dotnet publish -r osx-arm64 -c Release -p:PublishAot=true -p:OptimizationPreference=Speed -p:StackTraceSupport=false -p:InvariantGlobalization=true
 ```
 
 Desenvolvido por **Mk**
