@@ -7,9 +7,106 @@
 
     <Application.Resources>
         <ResourceDictionary>
-            <!-- Cores do tema -->
-            <SolidColorBrush x:Key="ComboBoxBackground" Color="White"/>
-            <SolidColorBrush x:Key="ComboBoxForeground" Color="#333333"/>
+            <!-- ComboBoxItem default theme -->
+            <ControlTheme x:Key="{x:Type ComboBoxItem}" TargetType="ComboBoxItem">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Foreground" Value="#D4D4D4"/>
+                <Setter Property="Padding" Value="10,8"/>
+                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="Template">
+                    <ControlTemplate>
+                        <ContentPresenter x:Name="PART_ContentPresenter"
+                                          Background="{TemplateBinding Background}"
+                                          Foreground="{TemplateBinding Foreground}"
+                                          Content="{TemplateBinding Content}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                                          Padding="{TemplateBinding Padding}"
+                                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </ControlTemplate>
+                </Setter>
+                <Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                    <Setter Property="Background" Value="#414141"/>
+                </Style>
+                <Style Selector="^:selected /template/ ContentPresenter#PART_ContentPresenter">
+                    <Setter Property="Background" Value="#2A4A6A"/>
+                    <Setter Property="Foreground" Value="#E8E8E8"/>
+                </Style>
+                <Style Selector="^:selected:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                    <Setter Property="Background" Value="#3A5A7A"/>
+                </Style>
+            </ControlTheme>
+
+            <!-- ComboBox default theme -->
+            <ControlTheme x:Key="{x:Type ComboBox}" TargetType="ComboBox">
+                <Setter Property="Background" Value="#383838"/>
+                <Setter Property="Foreground" Value="#D4D4D4"/>
+                <Setter Property="BorderBrush" Value="#464646"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Padding" Value="10,7"/>
+                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="FontSize" Value="13"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="MaxDropDownHeight" Value="300"/>
+                <Setter Property="Template">
+                    <ControlTemplate>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Border Grid.ColumnSpan="2"
+                                    x:Name="PART_Border"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="5"
+                                    MinHeight="32"/>
+                            <ContentPresenter Grid.Column="0"
+                                              Margin="{TemplateBinding Padding}"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              Content="{TemplateBinding SelectionBoxItem}"
+                                              ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                              Foreground="{TemplateBinding Foreground}"/>
+                            <TextBlock Grid.Column="1"
+                                       Text="&#xE70D;"
+                                       FontFamily="Segoe MDL2 Assets"
+                                       FontSize="10"
+                                       Foreground="#9A9A9A"
+                                       Margin="0,0,10,0"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
+                            <Popup Grid.ColumnSpan="2"
+                                   x:Name="PART_Popup"
+                                   WindowManagerAddShadowHint="False"
+                                   IsOpen="{TemplateBinding IsDropDownOpen, Mode=TwoWay}"
+                                   MinWidth="{Binding Bounds.Width, RelativeSource={RelativeSource TemplatedParent}}"
+                                   MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                                   PlacementTarget="PART_Border"
+                                   IsLightDismissEnabled="True"
+                                   Placement="BottomEdgeAlignedLeft">
+                                <Border Background="#383838"
+                                        BorderBrush="#464646"
+                                        BorderThickness="1"
+                                        CornerRadius="5"
+                                        Padding="0,4">
+                                    <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                                                  VerticalScrollBarVisibility="Auto">
+                                        <ItemsPresenter ItemsPanel="{TemplateBinding ItemsPanel}"/>
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter>
+                <Style Selector="^:pointerover /template/ Border#PART_Border">
+                    <Setter Property="BorderBrush" Value="#5E5E5E"/>
+                </Style>
+                <Style Selector="^:focus /template/ Border#PART_Border">
+                    <Setter Property="BorderBrush" Value="#5B9BD5"/>
+                </Style>
+            </ControlTheme>
 
             <!-- Botão padrão -->
             <ControlTheme x:Key="{x:Type Button}" TargetType="Button">
