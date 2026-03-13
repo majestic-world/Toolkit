@@ -55,6 +55,10 @@ var val = db.Get("key");
 ### File Processing Pattern
 Pages use Avalonia's storage provider for folder/file selection, then pass paths to `ProcessData/` classes. Processing is async; results are logged via `GlobalLogs` and written to disk.
 
+## Documentation
+
+The app's documentation is the file `docs/index.html` — a single-page HTML site (Tailwind CSS + Font Awesome). Whenever the user asks to update, add, or change anything in the documentation, edit that file.
+
 ## UI Design Notes
 The app targets an enterprise/professional aesthetic: restrained dark theme inspired by Material Design / Fluent Design. Avoid decorative elements. When adding new pages, follow the layout of existing pages (header with title + subtitle, content area, log display).
 
