@@ -2,7 +2,7 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net10.0</TargetFramework>
-    <ApplicationIcon>images\favicon2.ico</ApplicationIcon>
+    <ApplicationIcon>images\4game_icon.ico</ApplicationIcon>
 
     <!-- Informações do executável -->
     <Company>Majestic World Studio</Company>
