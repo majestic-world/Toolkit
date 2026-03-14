@@ -161,6 +161,10 @@ public partial class GeodataConverterControl : UserControl
             _cts?.Dispose();
             _cts = null;
             ConvertButtonText.Text = "Iniciar Conversão";
+
+            GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
+            GC.WaitForPendingFinalizers();
+            GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
         }
     }
 }
