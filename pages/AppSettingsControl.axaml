@@ -207,6 +207,73 @@
                     </StackPanel>
                 </Grid>
             </Border>
+            
+            
+              <!-- Panel: L2Pack Converter -->
+            <Border Margin="32,20,32,0"
+                    CornerRadius="8"
+                    Background="#323232"
+                    BorderBrush="#464646"
+                    BorderThickness="1"
+                    ClipToBounds="True">
+                <Grid ColumnDefinitions="4,*">
+                    <Border Grid.Column="0" Background="#6B8E5B"/>
+                    <StackPanel Grid.Column="1">
+
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="20,14,20,14"
+                                    Spacing="14"
+                                    VerticalAlignment="Center">
+                            <TextBlock Text="&#xE8B7;"
+                                       FontFamily="Segoe MDL2 Assets"
+                                       FontSize="20"
+                                       Foreground="#6B8E5B"
+                                       VerticalAlignment="Center"/>
+                            <Border Width="1" Height="18" Background="#565656" VerticalAlignment="Center"/>
+                            <TextBlock Text="L2DAT CONVERTER"
+                                       FontSize="11"
+                                       FontWeight="Bold"
+                                       Foreground="#9A9A9A"
+                                       LetterSpacing="1.5"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <Border Height="1" Background="#464646"/>
+
+                        <StackPanel Margin="20,16,20,20" Spacing="14">
+                            <TextBlock TextWrapping="Wrap"
+                                       FontSize="13"
+                                       Foreground="#9A9A9A"
+                                       LineHeight="20">
+                                Selecione arquivos .txt para comprimir em formato .l2dat. Os arquivos são salvos na subpasta l2dat/ dentro da pasta de origem.
+                            </TextBlock>
+
+                            <StackPanel Orientation="Horizontal" Spacing="10">
+                                <Button x:Name="PackBtn"
+                                        Height="38"
+                                        Padding="16,0"
+                                        Theme="{StaticResource GhostButton}">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <TextBlock Text="&#xE8B7;"
+                                                   FontFamily="Segoe MDL2 Assets"
+                                                   FontSize="13"
+                                                   VerticalAlignment="Center"/>
+                                        <TextBlock Text="Selecionar e Compactar"
+                                                   FontSize="13"
+                                                   FontWeight="Medium"
+                                                   VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+                                <TextBlock x:Name="PackStatusText"
+                                           FontSize="12"
+                                           Foreground="#9A9A9A"
+                                           VerticalAlignment="Center"
+                                           IsVisible="False"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Border>
 
             <!-- Panel 02: Config file -->
             <Border Margin="32,16,32,32"
@@ -335,72 +402,6 @@
                                     </StackPanel>
                                 </Button>
                                 <TextBlock x:Name="DatStatusText"
-                                           FontSize="12"
-                                           Foreground="#9A9A9A"
-                                           VerticalAlignment="Center"
-                                           IsVisible="False"/>
-                            </StackPanel>
-                        </StackPanel>
-                    </StackPanel>
-                </Grid>
-            </Border>
-
-            <!-- Panel: L2Pack Converter (temporary) -->
-            <Border Margin="32,0,32,32"
-                    CornerRadius="8"
-                    Background="#323232"
-                    BorderBrush="#464646"
-                    BorderThickness="1"
-                    ClipToBounds="True">
-                <Grid ColumnDefinitions="4,*">
-                    <Border Grid.Column="0" Background="#6B8E5B"/>
-                    <StackPanel Grid.Column="1">
-
-                        <StackPanel Orientation="Horizontal"
-                                    Margin="20,14,20,14"
-                                    Spacing="14"
-                                    VerticalAlignment="Center">
-                            <TextBlock Text="&#xE8B7;"
-                                       FontFamily="Segoe MDL2 Assets"
-                                       FontSize="20"
-                                       Foreground="#6B8E5B"
-                                       VerticalAlignment="Center"/>
-                            <Border Width="1" Height="18" Background="#565656" VerticalAlignment="Center"/>
-                            <TextBlock Text="L2DAT CONVERTER"
-                                       FontSize="11"
-                                       FontWeight="Bold"
-                                       Foreground="#9A9A9A"
-                                       LetterSpacing="1.5"
-                                       VerticalAlignment="Center"/>
-                        </StackPanel>
-
-                        <Border Height="1" Background="#464646"/>
-
-                        <StackPanel Margin="20,16,20,20" Spacing="14">
-                            <TextBlock TextWrapping="Wrap"
-                                       FontSize="13"
-                                       Foreground="#9A9A9A"
-                                       LineHeight="20">
-                                Selecione arquivos .txt para comprimir em formato .l2dat. Os arquivos são salvos na subpasta l2dat/ dentro da pasta de origem.
-                            </TextBlock>
-
-                            <StackPanel Orientation="Horizontal" Spacing="10">
-                                <Button x:Name="PackBtn"
-                                        Height="38"
-                                        Padding="16,0"
-                                        Theme="{StaticResource GhostButton}">
-                                    <StackPanel Orientation="Horizontal" Spacing="8">
-                                        <TextBlock Text="&#xE8B7;"
-                                                   FontFamily="Segoe MDL2 Assets"
-                                                   FontSize="13"
-                                                   VerticalAlignment="Center"/>
-                                        <TextBlock Text="Selecionar e Compactar"
-                                                   FontSize="13"
-                                                   FontWeight="Medium"
-                                                   VerticalAlignment="Center"/>
-                                    </StackPanel>
-                                </Button>
-                                <TextBlock x:Name="PackStatusText"
                                            FontSize="12"
                                            Foreground="#9A9A9A"
                                            VerticalAlignment="Center"
