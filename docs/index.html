@@ -149,7 +149,7 @@
         <div class="relative z-10">
             <span class="text-sm font-medium">
                 <i class="fas fa-star mr-2"></i>
-                <strong>NOVA ATUALIZAÇÃO:</strong> Live Data agora gera XML automático para equipamentos!
+                <strong>NOVA ATUALIZAÇÃO:</strong> Live Data e Skin Builder agora utilizam dados embutidos — zero configuração!
                 <i class="fas fa-arrow-right ml-2"></i>
                 <a href="#live-data" class="text-white hover:text-yellow-300 transition-colors font-semibold">Ver detalhes</a>
             </span>
@@ -493,70 +493,80 @@
                         Live Data <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">(166)</span>
                     </h2>
                     <p class="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-                        Sistema avançado para obter arquivos .dat Live e convertê-los para uso no Classic com geração automática de XML. 
-                        Ideal para sincronizar skills, armas, armaduras e itens entre diferentes versões do Lineage 2, incluindo conversão automática de grades S+ para S.
+                        Sistema avançado para converter dados Live para uso no Classic com geração automática de XML.
+                        Os dados do cliente Live já vêm embutidos no aplicativo em formato comprimido — sem necessidade de configuração ou arquivos externos.
                     </p>
                 </div>
 
                 <!-- Main Features Grid -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
-                    <!-- Required Files -->
+                    <!-- Embedded Data -->
                     <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl p-8 card-hover">
                         <h3 class="text-2xl font-semibold mb-6 flex items-center">
-                            <i class="fas fa-folder-open mr-3 text-blue-400"></i>
-                            Arquivos Necessários
+                            <i class="fas fa-microchip mr-3 text-blue-400"></i>
+                            Dados Embutidos
                         </h3>
-                        <p class="text-gray-300 mb-6">A pasta selecionada deve conter os seguintes arquivos:</p>
+                        <p class="text-gray-300 mb-6">
+                            Os dados do cliente Live são comprimidos em formato <code class="text-blue-300">.l2dat</code> e embutidos diretamente no executável.
+                            Não é necessário selecionar pasta ou manter arquivos externos — tudo é carregado automaticamente na memória sob demanda.
+                        </p>
                         <div class="space-y-3">
                             <div class="bg-black bg-opacity-20 p-4 rounded-xl flex items-center">
                                 <i class="fas fa-magic mr-4 text-blue-400"></i>
                                 <div>
-                                    <code class="text-blue-300 font-mono">Skillgrp.txt</code>
+                                    <code class="text-blue-300 font-mono">Skillgrp.l2dat</code>
                                     <p class="text-sm text-gray-400">Dados de skills do jogo</p>
                                 </div>
                             </div>
                             <div class="bg-black bg-opacity-20 p-4 rounded-xl flex items-center">
                                 <i class="fas fa-tag mr-4 text-green-400"></i>
                                 <div>
-                                    <code class="text-green-300 font-mono">SkillName-eu.txt</code>
+                                    <code class="text-green-300 font-mono">SkillName-eu.l2dat</code>
                                     <p class="text-sm text-gray-400">Nomes das skills</p>
                                 </div>
                             </div>
                             <div class="bg-black bg-opacity-20 p-4 rounded-xl flex items-center">
                                 <i class="fas fa-tag mr-4 text-purple-400"></i>
                                 <div>
-                                    <code class="text-purple-300 font-mono">ItemName-eu.txt</code>
+                                    <code class="text-purple-300 font-mono">ItemName-eu.l2dat</code>
                                     <p class="text-sm text-gray-400">Nomes dos itens</p>
                                 </div>
                             </div>
                             <div class="bg-black bg-opacity-20 p-4 rounded-xl flex items-center">
-                                <i class="fas fa-sword mr-4 text-red-400"></i>
+                                <i class="fas fa-shield-alt mr-4 text-red-400"></i>
                                 <div>
-                                    <code class="text-red-300 font-mono">Weapongrp.txt</code>
+                                    <code class="text-red-300 font-mono">Weapongrp.l2dat</code>
                                     <p class="text-sm text-gray-400">Dados de armas</p>
                                 </div>
                             </div>
                             <div class="bg-black bg-opacity-20 p-4 rounded-xl flex items-center">
                                 <i class="fas fa-shield-alt mr-4 text-yellow-400"></i>
                                 <div>
-                                    <code class="text-yellow-300 font-mono">Armorgrp.txt</code>
+                                    <code class="text-yellow-300 font-mono">Armorgrp.l2dat</code>
                                     <p class="text-sm text-gray-400">Dados de armaduras</p>
                                 </div>
                             </div>
                             <div class="bg-black bg-opacity-20 p-4 rounded-xl flex items-center">
                                 <i class="fas fa-gem mr-4 text-indigo-400"></i>
                                 <div>
-                                    <code class="text-indigo-300 font-mono">EtcItemgrp.txt</code>
+                                    <code class="text-indigo-300 font-mono">EtcItemgrp.l2dat</code>
                                     <p class="text-sm text-gray-400">Dados de itens diversos</p>
                                 </div>
                             </div>
                             <div class="bg-black bg-opacity-20 p-4 rounded-xl flex items-center">
                                 <i class="fas fa-chart-bar mr-4 text-orange-400"></i>
                                 <div>
-                                    <code class="text-orange-300 font-mono">ItemStatData.txt</code>
-                                    <p class="text-sm text-gray-400">Dados de status dos equipamentos - <strong>Necessário para XML</strong></p>
+                                    <code class="text-orange-300 font-mono">ItemStatData.l2dat</code>
+                                    <p class="text-sm text-gray-400">Status dos equipamentos — necessário para geração de XML</p>
                                 </div>
                             </div>
+                        </div>
+                        <div class="mt-6 p-4 bg-blue-500 bg-opacity-20 rounded-xl border border-blue-400 border-opacity-30">
+                            <p class="text-sm text-blue-200">
+                                <i class="fas fa-compress-arrows-alt mr-2"></i>
+                                <strong>Compressão Brotli:</strong> ~190 MB de dados tabulares comprimidos para ~2.5 MB no executável (~98.5% de redução).
+                                Os dados são descomprimidos sob demanda e mantidos em cache na memória para acesso instantâneo.
+                            </p>
                         </div>
                     </div>
 
@@ -638,47 +648,38 @@
                         Como Usar o Live Data
                     </h3>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         <!-- Step 1 -->
                         <div class="text-center group">
-                            <div class="bg-gradient-to-br from-green-500 to-green-600 text-white rounded-2xl w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110">
-                                <span class="font-bold text-xl">1</span>
-                            </div>
-                            <h4 class="font-semibold mb-3 text-white">Selecionar Pasta</h4>
-                            <p class="text-gray-300 text-sm leading-relaxed">Escolha a pasta contendo os arquivos .dat convertidos para formato .txt</p>
-                        </div>
-
-                        <!-- Step 2 -->
-                        <div class="text-center group">
                             <div class="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-2xl w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110">
-                                <span class="font-bold text-xl">2</span>
+                                <span class="font-bold text-xl">1</span>
                             </div>
                             <h4 class="font-semibold mb-3 text-white">Escolher Tipo</h4>
                             <p class="text-gray-300 text-sm leading-relaxed">Selecione o tipo de processamento: Skills, Weapons, Armor ou Items</p>
                         </div>
 
-                        <!-- Step 3 -->
+                        <!-- Step 2 -->
                         <div class="text-center group">
                             <div class="bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-2xl w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110">
-                                <span class="font-bold text-xl">3</span>
+                                <span class="font-bold text-xl">2</span>
                             </div>
                             <h4 class="font-semibold mb-3 text-white">Inserir IDs</h4>
                             <p class="text-gray-300 text-sm leading-relaxed">Defina os IDs desejados usando diferentes formatos de entrada</p>
                         </div>
 
-                        <!-- Step 4 -->
+                        <!-- Step 3 -->
                         <div class="text-center group">
                             <div class="bg-gradient-to-br from-pink-500 to-pink-600 text-white rounded-2xl w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110">
-                                <span class="font-bold text-xl">4</span>
+                                <span class="font-bold text-xl">3</span>
                             </div>
                             <h4 class="font-semibold mb-3 text-white">Configurar Opções</h4>
                             <p class="text-gray-300 text-sm leading-relaxed">Configure a conversão S+ e o brilho do enchant para equipamentos</p>
                         </div>
 
-                        <!-- Step 5 -->
+                        <!-- Step 4 -->
                         <div class="text-center group">
                             <div class="bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-2xl w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110">
-                                <span class="font-bold text-xl">5</span>
+                                <span class="font-bold text-xl">4</span>
                             </div>
                             <h4 class="font-semibold mb-3 text-white">Gerar Dados</h4>
                             <p class="text-gray-300 text-sm leading-relaxed">Clique em "Gerar" para processar e obter os dados convertidos + XML</p>
@@ -993,14 +994,18 @@
                     <!-- Project Structure -->
                     <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-8 shadow-xl">
                         <h3 class="text-2xl font-semibold mb-6 text-gray-800"><i class="fas fa-folder-tree mr-3 text-gray-600"></i>Estrutura do Projeto</h3>
-                        <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-gray-400">
-                            <pre class="text-sm text-gray-700 leading-relaxed"><code>L2Toolkit/
-├── pages/           # Páginas/Controles UI
-├── database/        # Classes de BD
-├── DataMap/         # Modelos de dados
-├── Utilities/       # Utilitários
-├── images/          # Recursos de imagem
-└── Properties/      # Configurações</code></pre>
+                        <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-gray-400 overflow-x-auto">
+                            <pre class="text-xs text-gray-700 leading-relaxed whitespace-pre"><code>L2Toolkit/
+├── pages/        # Páginas UI (AXAML + code-behind)
+├── DatReader/    # Parser .dat e compressão .l2dat
+├── Tables/       # Recursos .l2dat embutidos
+├── database/     # Persistência (AppDatabase)
+├── DataMap/      # Modelos de dados
+├── Parse/        # Parsers de texto
+├── ProcessData/  # Transformação (game → XML)
+├── Utilities/    # Logs, Parser, MaterialType
+├── images/       # Recursos de imagem
+└── docs/         # Documentação</code></pre>
                         </div>
                     </div>
                 </div>
