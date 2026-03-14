@@ -91,6 +91,35 @@
                            Foreground="#E8E8E8"/>
             </StackPanel>
 
+            <!-- ── Aviso: pasta de assets não configurada ───────────── -->
+            <Border x:Name="AssetsWarnBorder"
+                    Margin="32,0,32,12"
+                    Background="#1A0C00"
+                    BorderBrush="#7A4A00"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Padding="14,10"
+                    Cursor="Hand"
+                    IsVisible="False">
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                    <TextBlock Text="&#xE7BA;"
+                               FontFamily="Segoe MDL2 Assets"
+                               FontSize="14"
+                               Foreground="#E07020"
+                               VerticalAlignment="Center"/>
+                    <TextBlock Text="Pasta de assets não configurada."
+                               Foreground="#E07020"
+                               FontSize="13"
+                               VerticalAlignment="Center"/>
+                    <TextBlock Text="Clique aqui para configurar."
+                               Foreground="#E07020"
+                               FontSize="13"
+                               FontWeight="SemiBold"
+                               TextDecorations="Underline"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+
             <!-- ── Banner de erro ────────────────────────────────────── -->
             <Border x:Name="NotificacaoBorder"
                     Margin="32,0,32,16"

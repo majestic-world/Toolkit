@@ -20,6 +20,13 @@ namespace L2Toolkit.pages
             _errorTimer.Tick += (s, e) => { NotificacaoBorder.IsVisible = false; _errorTimer.Stop(); };
 
             InitializeComponent();
+
+            if (string.IsNullOrEmpty(AssetsDir))
+            {
+                AssetsWarnBorder.IsVisible = true;
+                AssetsWarnBorder.PointerReleased += (_, _) => AppNavigator.RequestNavigateTo("settings");
+            }
+
             LoadName();
         }
 
@@ -37,11 +44,12 @@ namespace L2Toolkit.pages
         private readonly ConcurrentDictionary<string, IconModel> _skills = new();
         private readonly ConcurrentDictionary<string, ItemsNameModel> _name = new();
 
-        private const string FileArmor = "assets/Armorgrp_Classic.txt";
-        private const string FileWeapon = "assets/Weapongrp_Classic.txt";
-        private const string FileItens = "assets/EtcItemgrp_Classic.txt";
-        private const string FileSkills = "assets/Skillgrp_Classic.txt";
-        private const string FileName = "assets/ItemName_Classic-eu.txt";
+        private static string AssetsDir => L2Toolkit.database.AppDatabase.GetInstance().GetValue("assetsDir");
+        private static string FileArmor => Path.Combine(AssetsDir, "Armorgrp_Classic.txt");
+        private static string FileWeapon => Path.Combine(AssetsDir, "Weapongrp_Classic.txt");
+        private static string FileItens => Path.Combine(AssetsDir, "EtcItemgrp_Classic.txt");
+        private static string FileSkills => Path.Combine(AssetsDir, "Skillgrp_Classic.txt");
+        private static string FileName => Path.Combine(AssetsDir, "ItemName_Classic-eu.txt");
 
         private void LoadName()
         {

@@ -3,7 +3,8 @@
     "allow": [
       "Bash(cd \"C:/workspace/C#/Toolkit\" && dotnet build 2>&1 | tail -80)",
       "Bash(cd \"C:/workspace/C#/Toolkit\" && dotnet build 2>&1 | grep -E \"^.*Erro|^.*error CS|0 Erro|Build succeeded\" | tail -10)",
-      "Bash(cd \"C:/workspace/C#/Toolkit\" && dotnet build 2>&1 | grep -E \"0 Erro|error CS\" | tail -5)"
+      "Bash(cd \"C:/workspace/C#/Toolkit\" && dotnet build 2>&1 | grep -E \"0 Erro|error CS\" | tail -5)",
+      "Bash(cd \"C:\\\\workspace\\\\C#\\\\Toolkit\" && dotnet build 2>&1 | tail -30)"
     ]
   }
 }

@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using L2Toolkit.pages;
+using L2Toolkit.Utilities;
 
 namespace L2Toolkit
 {
@@ -12,6 +13,12 @@ namespace L2Toolkit
         {
             InitializeComponent();
             MainContent.Content = new DoorGenerateControl();
+
+            AppNavigator.NavigateTo += page =>
+            {
+                if (page == "settings")
+                    MainContent.Content = new AppSettingsControl();
+            };
 
             PropertyChanged += (_, e) =>
             {
@@ -112,5 +119,8 @@ namespace L2Toolkit
 
         private void BtnGeodataConverter_Click(object sender, RoutedEventArgs e)
             => MainContent.Content = new GeodataConverterControl();
+
+        private void BtnSettings_Click(object sender, RoutedEventArgs e)
+            => MainContent.Content = new AppSettingsControl();
     }
 }

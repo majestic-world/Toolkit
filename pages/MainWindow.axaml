@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         WindowState="Normal"
         Title="L2 Toolkit"
-        Height="850" Width="1200"
+        Height="850" Width="1240"
         WindowStartupLocation="CenterScreen"
         CanResize="True"
         Background="#2C2C2C"
@@ -160,6 +160,16 @@
 
                 <!-- Direita: botões de controle -->
                 <StackPanel Grid.Column="2" Orientation="Horizontal">
+                    <Button x:Name="BtnSettings"
+                            Theme="{StaticResource TitleBarButtonTheme}"
+                            Click="BtnSettings_Click"
+                            ToolTip.Tip="Configurações">
+                        <TextBlock Text="&#xE713;"
+                                   FontFamily="Segoe MDL2 Assets"
+                                   FontSize="13"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                    </Button>
                     <Button x:Name="BtnMinimize"
                             Theme="{StaticResource TitleBarButtonTheme}"
                             Click="BtnMinimize_Click">

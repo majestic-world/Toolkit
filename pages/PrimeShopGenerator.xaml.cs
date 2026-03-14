@@ -13,12 +13,14 @@ using Avalonia.Interactivity;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using L2Toolkit.database;
+using L2Toolkit.Utilities;
 
 namespace L2Toolkit.pages;
 
 public partial class PrimeShopGenerator : UserControl
 {
-    private const string ItemNameFile = "./assets/ItemName_Classic-eu.txt";
+    private static string AssetsDir => AppDatabase.GetInstance().GetValue("assetsDir");
+    private static string ItemNameFile => Path.Combine(AssetsDir, "ItemName_Classic-eu.txt");
 
     private static readonly FrozenDictionary<string, string> Categories = new Dictionary<string, string>
     {
@@ -29,12 +31,14 @@ public partial class PrimeShopGenerator : UserControl
         { "15", "Reward Coin" }
     }.ToFrozenDictionary();
 
-    private static readonly FrozenDictionary<string, string> FileType = new Dictionary<string, string>
+    private static readonly FrozenDictionary<string, string> FileNames = new Dictionary<string, string>
     {
-        { "Items", "./assets/EtcItemgrp_Classic.txt" },
-        { "Armor", "./assets/Armorgrp_Classic.txt" },
-        { "Weapon", "./assets/Weapongrp_Classic.txt" }
+        { "Items", "EtcItemgrp_Classic.txt" },
+        { "Armor", "Armorgrp_Classic.txt" },
+        { "Weapon", "Weapongrp_Classic.txt" }
     }.ToFrozenDictionary();
+
+    private static string GetAssetFile(string type) => Path.Combine(AssetsDir, FileNames[type]);
 
     private static readonly ConcurrentDictionary<string, string> ItemNameCache = new();
     private static readonly ConcurrentDictionary<string, ConcurrentDictionary<string, IconInfo>> IconCache = new();
@@ -68,6 +72,12 @@ public partial class PrimeShopGenerator : UserControl
         CopiarServidorButton.Click += async (s, e) => await CopyText(ServerTextBox, ServidorCopiadoTextBlock, _serverTimer);
         CopiarItensButton.Click += async (s, e) => await CopyText(ItemsGeneratedTextBox, ItensCopiadoTextBlock, _itemsTimer);
         DetachedFromVisualTree += UserControl_Unloaded;
+
+        if (string.IsNullOrEmpty(AssetsDir))
+        {
+            AssetsWarnBorder.IsVisible = true;
+            AssetsWarnBorder.PointerReleased += (_, _) => AppNavigator.RequestNavigateTo("settings");
+        }
     }
 
     private void CreateTimers()
@@ -99,7 +109,7 @@ public partial class PrimeShopGenerator : UserControl
         CategoryComboBox.ItemsSource = Categories.Select(c => $"{c.Key} - {c.Value}").ToArray();
         CategoryComboBox.SelectedIndex = 0;
 
-        TypeComboBox.ItemsSource = FileType.Keys.ToArray();
+        TypeComboBox.ItemsSource = FileNames.Keys.ToArray();
         TypeComboBox.SelectedIndex = 0;
     }
 
@@ -132,8 +142,8 @@ public partial class PrimeShopGenerator : UserControl
             SendNotify($"Atenção: Arquivo '{ItemNameFile}' não encontrado! Os nomes dos itens não serão exibidos corretamente.");
 
         string? selectedType = TypeComboBox.SelectedItem as string;
-        if (selectedType != null && FileType.ContainsKey(selectedType) && !File.Exists(FileType[selectedType]))
-            SendNotify($"Atenção: Arquivo '{FileType[selectedType]}' não encontrado! Os ícones podem não ser exibidos corretamente.");
+        if (selectedType != null && FileNames.ContainsKey(selectedType) && !File.Exists(GetAssetFile(selectedType)))
+            SendNotify($"Atenção: Arquivo '{GetAssetFile(selectedType)}' não encontrado! Os ícones podem não ser exibidos corretamente.");
     }
 
     private InputData ValidateInputs()
@@ -275,10 +285,10 @@ public partial class PrimeShopGenerator : UserControl
     {
         try
         {
-            if (!FileType.ContainsKey(type) || !File.Exists(FileType[type]))
+            if (!FileNames.ContainsKey(type) || !File.Exists(GetAssetFile(type)))
             {
-                if (FileType.ContainsKey(type))
-                    SendNotify($"Arquivo '{FileType[type]}' não encontrado!");
+                if (FileNames.ContainsKey(type))
+                    SendNotify($"Arquivo '{GetAssetFile(type)}' não encontrado!");
                 return new IconInfo("", "None");
             }
 
@@ -287,7 +297,7 @@ public partial class PrimeShopGenerator : UserControl
             if (typeCache.TryGetValue(objectId, out var cachedIcon))
                 return cachedIcon;
 
-            var content = await File.ReadAllTextAsync(FileType[type], Encoding.UTF8);
+            var content = await File.ReadAllTextAsync(GetAssetFile(type), Encoding.UTF8);
             var items = content.Split("item_begin", StringSplitOptions.RemoveEmptyEntries);
 
             var item = items.FirstOrDefault(i => i.Contains($"object_id={objectId}"));
@@ -403,9 +413,9 @@ public partial class PrimeShopGenerator : UserControl
 
     private async Task LoadIconCachesAsync()
     {
-        var tasks = FileType.Keys.Select(async type =>
+        var tasks = FileNames.Keys.Select(async type =>
         {
-            if (!File.Exists(FileType[type]) || IconCacheLoaded.GetValueOrDefault(type, false))
+            if (!File.Exists(GetAssetFile(type)) || IconCacheLoaded.GetValueOrDefault(type, false))
                 return;
 
             IconCache.TryAdd(type, new ConcurrentDictionary<string, IconInfo>());

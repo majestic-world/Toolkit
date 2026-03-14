@@ -23,6 +23,12 @@ public partial class CreateMultisell : UserControl
 
         InitializeComponent();
         _log.RegisterBlock(BoxLog);
+
+        if (string.IsNullOrEmpty(AssetsDir))
+        {
+            AssetsWarnBorder.IsVisible = true;
+            AssetsWarnBorder.PointerReleased += (_, _) => AppNavigator.RequestNavigateTo("settings");
+        }
     }
 
     private void ShowNotification(string message)
@@ -34,7 +40,8 @@ public partial class CreateMultisell : UserControl
     }
 
     private readonly ConcurrentDictionary<string, ItemName> _listNames = new();
-    private const string FileName = "assets/ItemName_Classic-eu.txt";
+    private static string AssetsDir => L2Toolkit.database.AppDatabase.GetInstance().GetValue("assetsDir");
+    private static string FileName => Path.Combine(AssetsDir, "ItemName_Classic-eu.txt");
 
     private Task LoadNames()
     {

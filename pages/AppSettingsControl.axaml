@@ -1,0 +1,284 @@
+<UserControl x:Class="L2Toolkit.pages.AppSettingsControl"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="#393939">
+
+    <UserControl.Resources>
+        <ControlTheme x:Key="GhostButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#B0B0B0"/>
+            <Setter Property="BorderBrush" Value="#565656"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border x:Name="PART_Border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="6"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Content="{TemplateBinding Content}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+            <Style Selector="^:pointerover /template/ Border#PART_Border">
+                <Setter Property="Background" Value="#3C3C3C"/>
+                <Setter Property="BorderBrush" Value="#646464"/>
+            </Style>
+            <Style Selector="^:pressed /template/ Border#PART_Border">
+                <Setter Property="Background" Value="#323232"/>
+            </Style>
+        </ControlTheme>
+    </UserControl.Resources>
+
+    <UserControl.Styles>
+        <Style Selector="TextBox.FormField">
+            <Setter Property="Background" Value="#383838"/>
+            <Setter Property="Foreground" Value="#D4D4D4"/>
+            <Setter Property="CaretBrush" Value="#5B9BD5"/>
+            <Setter Property="SelectionBrush" Value="#1E3A5A"/>
+            <Setter Property="BorderBrush" Value="#464646"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="Padding" Value="10,7"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+        <Style Selector="TextBox.FormField /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="#383838"/>
+            <Setter Property="CornerRadius" Value="5"/>
+        </Style>
+        <Style Selector="TextBox.FormField:focus /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="#5B9BD5"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+        <Style Selector="TextBox.FormField:pointerover /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="#5E5E5E"/>
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+
+            <!-- Page Header -->
+            <StackPanel Margin="32,28,32,24" Spacing="3">
+                <TextBlock Text="Configurações"
+                           FontSize="22"
+                           FontWeight="SemiBold"
+                           Foreground="#E8E8E8"/>
+                <TextBlock Text="Configure os caminhos e preferências do aplicativo"
+                           FontSize="13"
+                           Foreground="#E8E8E8"/>
+            </StackPanel>
+
+            <!-- Panel 01: Assets folder -->
+            <Border Margin="32,0"
+                    CornerRadius="8"
+                    Background="#323232"
+                    BorderBrush="#464646"
+                    BorderThickness="1"
+                    ClipToBounds="True">
+                <Grid ColumnDefinitions="4,*">
+                    <Border Grid.Column="0" Background="#5B9BD5"/>
+                    <StackPanel Grid.Column="1">
+
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="20,14,20,14"
+                                    Spacing="14"
+                                    VerticalAlignment="Center">
+                            <TextBlock Text="01"
+                                       FontSize="24"
+                                       FontWeight="Bold"
+                                       Foreground="#4A88B8"
+                                       VerticalAlignment="Center"/>
+                            <Border Width="1" Height="18" Background="#565656" VerticalAlignment="Center"/>
+                            <TextBlock Text="PASTA DE ASSETS"
+                                       FontSize="11"
+                                       FontWeight="Bold"
+                                       Foreground="#9A9A9A"
+                                       LetterSpacing="1.5"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <Border Height="1" Background="#464646"/>
+
+                        <StackPanel Margin="20,16,20,20" Spacing="14">
+                            <TextBlock TextWrapping="Wrap"
+                                       FontSize="13"
+                                       Foreground="#9A9A9A"
+                                       LineHeight="20">
+                                Alguns módulos dependem de arquivos de dados do cliente Lineage 2 (ex: ItemName, Armorgrp, Weapongrp).
+                                Selecione a pasta onde esses arquivos estão localizados.
+                            </TextBlock>
+
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Localização da pasta de assets"
+                                           FontSize="12"
+                                           Foreground="#9A9A9A"
+                                           FontWeight="Medium"/>
+                                <Grid ColumnDefinitions="*,12,Auto,8,Auto">
+                                    <TextBox x:Name="AssetsDirBox"
+                                             Grid.Column="0"
+                                             Classes="FormField"
+                                             IsReadOnly="True"
+                                             VerticalContentAlignment="Center"
+                                             Height="38"
+                                             Padding="12,0"
+                                             FontFamily="Consolas,Courier New,monospace"
+                                             FontSize="12"
+                                             Watermark="Nenhuma pasta selecionada..."/>
+                                    <Button x:Name="SelectAssetsBtn"
+                                            Grid.Column="2"
+                                            Height="38"
+                                            Padding="16,0"
+                                            Theme="{StaticResource GhostButton}">
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <TextBlock Text="&#xE838;"
+                                                       FontFamily="Segoe MDL2 Assets"
+                                                       FontSize="13"
+                                                       VerticalAlignment="Center"/>
+                                            <TextBlock Text="Selecionar"
+                                                       FontSize="13"
+                                                       FontWeight="Medium"
+                                                       VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button x:Name="ClearAssetsBtn"
+                                            Grid.Column="4"
+                                            Height="38"
+                                            Padding="14,0"
+                                            Theme="{StaticResource GhostButton}">
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <TextBlock Text="&#xE711;"
+                                                       FontFamily="Segoe MDL2 Assets"
+                                                       FontSize="13"
+                                                       VerticalAlignment="Center"/>
+                                            <TextBlock Text="Limpar"
+                                                       FontSize="13"
+                                                       FontWeight="Medium"
+                                                       VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+                                </Grid>
+                            </StackPanel>
+
+                            <!-- Modules that need assets -->
+                            <Border Background="#2A2A2A"
+                                    CornerRadius="6"
+                                    Padding="14,10">
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="Módulos que utilizam esta pasta:"
+                                               FontSize="12"
+                                               FontWeight="SemiBold"
+                                               Foreground="#9A9A9A"/>
+                                    <StackPanel Orientation="Horizontal" Spacing="6">
+                                        <Border Background="#3A3A3A" CornerRadius="4" Padding="8,4">
+                                            <TextBlock Text="Prime Shop" FontSize="12" Foreground="#B0B0B0"/>
+                                        </Border>
+                                        <Border Background="#3A3A3A" CornerRadius="4" Padding="8,4">
+                                            <TextBlock Text="Pesquisar Ícone" FontSize="12" Foreground="#B0B0B0"/>
+                                        </Border>
+                                        <Border Background="#3A3A3A" CornerRadius="4" Padding="8,4">
+                                            <TextBlock Text="Criar MultiSell" FontSize="12" Foreground="#B0B0B0"/>
+                                        </Border>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Files needed -->
+                            <Border Background="#2A2A2A"
+                                    CornerRadius="6"
+                                    Padding="14,10">
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="Arquivos necessários na pasta:"
+                                               FontSize="12"
+                                               FontWeight="SemiBold"
+                                               Foreground="#9A9A9A"/>
+                                    <StackPanel x:Name="FilesStatusPanel" Orientation="Horizontal" Spacing="6"/>
+                                </StackPanel>
+                            </Border>
+
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Panel 02: Config file -->
+            <Border Margin="32,16,32,32"
+                    CornerRadius="8"
+                    Background="#323232"
+                    BorderBrush="#464646"
+                    BorderThickness="1"
+                    ClipToBounds="True">
+                <Grid ColumnDefinitions="4,*">
+                    <Border Grid.Column="0" Background="#5B9BD5"/>
+                    <StackPanel Grid.Column="1">
+
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="20,14,20,14"
+                                    Spacing="14"
+                                    VerticalAlignment="Center">
+                            <TextBlock Text="02"
+                                       FontSize="24"
+                                       FontWeight="Bold"
+                                       Foreground="#4A88B8"
+                                       VerticalAlignment="Center"/>
+                            <Border Width="1" Height="18" Background="#565656" VerticalAlignment="Center"/>
+                            <TextBlock Text="ARQUIVO DE CONFIGURAÇÃO"
+                                       FontSize="11"
+                                       FontWeight="Bold"
+                                       Foreground="#9A9A9A"
+                                       LetterSpacing="1.5"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <Border Height="1" Background="#464646"/>
+
+                        <StackPanel Margin="20,16,20,20" Spacing="14">
+                            <TextBlock TextWrapping="Wrap"
+                                       FontSize="13"
+                                       Foreground="#9A9A9A">
+                                As configurações do aplicativo são salvas em um arquivo local no AppData.
+                            </TextBlock>
+
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Localização do arquivo"
+                                           FontSize="12"
+                                           Foreground="#9A9A9A"
+                                           FontWeight="Medium"/>
+                                <TextBlock x:Name="ConfigPathText"
+                                           FontSize="12"
+                                           Foreground="#D4D4D4"
+                                           FontFamily="Consolas,Courier New,monospace"
+                                           TextWrapping="Wrap"/>
+                            </StackPanel>
+
+                            <Button x:Name="OpenConfigFolderBtn"
+                                    Height="38"
+                                    Padding="16,0"
+                                    HorizontalAlignment="Left"
+                                    Theme="{StaticResource GhostButton}">
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <TextBlock Text="&#xE8B7;"
+                                               FontFamily="Segoe MDL2 Assets"
+                                               FontSize="13"
+                                               VerticalAlignment="Center"/>
+                                    <TextBlock Text="Abrir pasta no Explorer"
+                                               FontSize="13"
+                                               FontWeight="Medium"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
