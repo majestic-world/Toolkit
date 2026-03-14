@@ -242,60 +242,38 @@ public class L2MParser : GeodataParser
 
     protected override GeoBlock ReadMultiLevelBlock(GeoRegion region)
     {
+        int dataPos = 0;
         int totalDataSize = 0;
         var block = new GeoBlockMultiLevel(region);
         block.InitCells(8, 8);
-
-        int cellDataStart = Pos + 8 * 8 * 2; // after the cell header table
-        int layerDataPos = cellDataStart;
-
-        // First pass: read cell header table to determine layer counts and offsets
-        int headerPos = Pos;
-        var layerCounts = new int[8, 8];
-        var offsets = new int[8, 8];
 
         for (int x = 0; x < 8; x++)
         {
             for (int y = 0; y < 8; y++)
             {
                 totalDataSize += 2;
-                short headerValue = BitConverter.ToInt16(Data, headerPos);
-                headerPos += 2;
-                int count = headerValue & 0x1F;
-                int offset = ((headerValue & 0xFFFF) >> 5) << 1;
-                layerCounts[x, y] = count;
-                offsets[x, y] = offset;
-            }
-        }
+                short headerValue = BitConverter.ToInt16(Data, Pos);
+                Pos += 2;
+                int layerCount = headerValue & 0x1F;
+                dataPos = (short)(((headerValue & 0xFFFF) >> 5) << 1) + Pos;
+                block.SetLayers(x, y, layerCount);
 
-        // Calculate actual layer data position from first cell's offset
-        int baseDataPos = Pos + 8 * 8 * 2; // position after all headers
-
-        for (int x = 0; x < 8; x++)
-        {
-            for (int y = 0; y < 8; y++)
-            {
-                int count = layerCounts[x, y];
-                block.SetLayers(x, y, count);
-                int dataPos = baseDataPos + offsets[x, y];
-
-                for (int l = 0; l < count; l++)
+                for (int l = 0; l < layerCount; l++)
                 {
-                    totalDataSize += 2;
                     short raw = BitConverter.ToInt16(Data, dataPos);
                     dataPos += 2;
+                    totalDataSize += 2;
                     var cell = new GeoMainCell(block, x, y, l)
                     {
                         Height = GeoMainCell.DecodeHeight(raw),
                         Nswe = GeoMainCell.DecodeNswe(raw)
                     };
                     block.AddCell(cell);
-                    if (dataPos > layerDataPos) layerDataPos = dataPos;
                 }
             }
         }
 
-        Pos = layerDataPos;
+        Pos = dataPos;
         block.SetConvDatTypeFromSize(totalDataSize);
         return block;
     }
@@ -548,9 +526,8 @@ public class PathTxtParser : GeodataParser
                             block.SetLayers(cx, cy, layers);
                             for (int l = 0; l < layers; l++)
                             {
-                                if (!match.NextMatch().Success) continue;
-                                match = Pattern.Match(cellStr, match.Index + match.Length);
-                                if (!match.Success) continue;
+                                match = match.NextMatch();
+                                if (!match.Success) break;
 
                                 var values = ParseHeightAndNswe(match);
                                 var cell = new GeoMainCell(block, cx, cy, l)
