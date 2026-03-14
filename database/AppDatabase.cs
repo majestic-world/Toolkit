@@ -1,8 +1,8 @@
-﻿namespace L2Toolkit.database
+namespace L2Toolkit.database
 {
     public static class AppDatabase
     {
-        private static Database _database;
+        private static Database? _database;
 
         public static Database GetInstance()
         {

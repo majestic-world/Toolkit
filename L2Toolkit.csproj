@@ -14,6 +14,7 @@
     <AssemblyVersion>2.0.0.0</AssemblyVersion>
     <AssemblyName>L2 Toolkit</AssemblyName>
     <Nullable>enable</Nullable>
+    <NoWarn>$(NoWarn);IL2104</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,7 +24,6 @@
     <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.0" />
     <PackageReference Include="MsBox.Avalonia" Version="3.0.0-rc2" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.119" />
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
 

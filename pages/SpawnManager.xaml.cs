@@ -26,12 +26,12 @@ namespace L2Toolkit.pages
             };
         }
 
-        private void CreateSpawnsButton_Click(object sender, RoutedEventArgs e)
+        private void CreateSpawnsButton_Click(object? sender, RoutedEventArgs e)
         {
             ProcessSpawns();
         }
 
-        private async void CopyResultButton_Click(object sender, RoutedEventArgs e)
+        private async void CopyResultButton_Click(object? sender, RoutedEventArgs e)
         {
             try
             {

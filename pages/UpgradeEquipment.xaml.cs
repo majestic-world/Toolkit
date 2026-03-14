@@ -64,7 +64,7 @@ namespace L2Toolkit.pages
             AppDatabase.GetInstance().UpdateValue("lastUpgradeFile", path);
         }
 
-        private async void CopyContent(object sender, RoutedEventArgs e)
+        private async void CopyContent(object? sender, RoutedEventArgs e)
         {
             var content = UpgradeOutput.Text?.Trim() ?? string.Empty;
             var topLevel = TopLevel.GetTopLevel(this);
@@ -138,11 +138,11 @@ namespace L2Toolkit.pages
 
             foreach (var data in elements)
             {
-                var upgradeId = data.Attribute("upgrade_id")?.Value;
-                var upgradeItem = data.Attribute("upgrade_item")?.Value;
-                var materialItems = data.Attribute("material_items")?.Value;
-                var commission = data.Attribute("commission")?.Value;
-                var resultItem = data.Attribute("result_item")?.Value;
+                var upgradeId = data.Attribute("upgrade_id")?.Value ?? string.Empty;
+                var upgradeItem = data.Attribute("upgrade_item")?.Value ?? string.Empty;
+                var materialItems = data.Attribute("material_items")?.Value ?? string.Empty;
+                var commission = data.Attribute("commission")?.Value ?? string.Empty;
+                var resultItem = data.Attribute("result_item")?.Value ?? string.Empty;
                 arrayData.Add(new UpgradeLucera(upgradeId, upgradeItem, materialItems, commission, resultItem));
             }
 
@@ -169,7 +169,7 @@ namespace L2Toolkit.pages
             UpgradeOutput.Text = build.ToString();
         }
 
-        private void ProcessData(object sender, RoutedEventArgs e)
+        private void ProcessData(object? sender, RoutedEventArgs e)
         {
             try
             {
@@ -179,7 +179,8 @@ namespace L2Toolkit.pages
                     throw new Exception("Preencha o caminho até o arquivo.");
                 }
 
-                var systemType = ((ComboBoxItem)SystemVersion.SelectedItem)?.Content?.ToString();
+                var systemVersionItem = SystemVersion.SelectedItem as ComboBoxItem;
+                string? systemType = systemVersionItem?.Content?.ToString() ?? SystemVersion.SelectedItem as string;
                 if (systemType == "Majestic World")
                 {
                     CreateByCustom(filePath);

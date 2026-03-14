@@ -136,7 +136,7 @@ public partial class LogParse : UserControl
         {
             var name = PlayerName.Text;
             var fileLog = LogFile.Text;
-            var optionalEvent = SearchEvent.Text;
+            var optionalEvent = SearchEvent.Text ?? string.Empty;
             var outputDir = OutputDir.Text;
 
             if (string.IsNullOrEmpty(name))

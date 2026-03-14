@@ -17,14 +17,14 @@ namespace L2Toolkit.pages
             CopyButton.Click += CopyButton_Click;
         }
 
-        private void ConvertButton_Click(object sender, RoutedEventArgs e)
+        private void ConvertButton_Click(object? sender, RoutedEventArgs e)
         {
-            string content = InputTextBox.Text;
-            string xmlOutput = ConvertToXml(content);
+            string? content = InputTextBox.Text;
+            string xmlOutput = ConvertToXml(content ?? string.Empty);
             OutputTextBox.Text = xmlOutput;
         }
 
-        private async void CopyButton_Click(object sender, RoutedEventArgs e)
+        private async void CopyButton_Click(object? sender, RoutedEventArgs e)
         {
             var content = OutputTextBox.Text?.Trim();
             if (string.IsNullOrEmpty(content)) return;

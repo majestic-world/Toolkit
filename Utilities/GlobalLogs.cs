@@ -8,7 +8,7 @@ namespace L2Toolkit.Utilities;
 
 public class GlobalLogs
 {
-    private TextBox _textBlock;
+    private TextBox? _textBlock;
     private readonly Queue<string> _logQueue = new();
     private readonly object _locker = new();
 

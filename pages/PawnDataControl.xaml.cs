@@ -25,7 +25,7 @@ namespace L2Toolkit.pages
             CopiarButton.Click += CopiarButton_Click;
         }
 
-        private async void CopiarButton_Click(object sender, RoutedEventArgs e)
+        private async void CopiarButton_Click(object? sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(OutputTextBox.Text))
                 return;
@@ -37,7 +37,7 @@ namespace L2Toolkit.pages
             _dispatcherTimer.Start();
         }
 
-        private void GenerateButton_Click(object sender, RoutedEventArgs e)
+        private void GenerateButton_Click(object? sender, RoutedEventArgs e)
         {
             GeneratePawnAnimData();
         }
@@ -60,7 +60,7 @@ namespace L2Toolkit.pages
 
             foreach (int idx in indices)
             {
-                TextBox entry = this.FindControl<TextBox>($"Entry_{idx}");
+                TextBox? entry = this.FindControl<TextBox>($"Entry_{idx}");
                 if (entry != null)
                 {
                     string animText = entry.Text?.Trim() ?? string.Empty;

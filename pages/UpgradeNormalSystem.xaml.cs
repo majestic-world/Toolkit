@@ -62,7 +62,7 @@ public partial class UpgradeNormalSystem : UserControl
         AppDatabase.GetInstance().UpdateValue("lastUpgradeNormalFile", path);
     }
 
-    private void UpgradeGenerate_OnClick(object sender, RoutedEventArgs e)
+    private void UpgradeGenerate_OnClick(object? sender, RoutedEventArgs e)
     {
         try
         {
@@ -167,7 +167,7 @@ public partial class UpgradeNormalSystem : UserControl
         }
     }
 
-    private async void UpgradeCopy_OnClick(object sender, RoutedEventArgs e)
+    private async void UpgradeCopy_OnClick(object? sender, RoutedEventArgs e)
     {
         var content = UpgradeOutput.Text?.Trim() ?? string.Empty;
         var topLevel = TopLevel.GetTopLevel(this);

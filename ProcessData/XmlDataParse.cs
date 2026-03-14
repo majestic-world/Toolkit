@@ -1,4 +1,4 @@
-﻿using System.Xml.Linq;
+using System.Xml.Linq;
 
 namespace L2Toolkit.ProcessData;
 
@@ -74,7 +74,7 @@ public static class XmlDataParse
         };
     }
 
-    public static XElement GetEnchantData(string partyName)
+    public static XElement? GetEnchantData(string partyName)
     {
         return partyName switch
         {

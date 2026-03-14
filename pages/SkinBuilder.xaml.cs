@@ -26,7 +26,7 @@ public partial class SkinBuilder : UserControl
 
     private const string InvalidData = "Dados de parse inválidos!";
 
-    private string _folderPath;
+    private string? _folderPath;
     private readonly GlobalLogs _log = new();
     private readonly DispatcherTimer _errorTimer;
 
@@ -80,10 +80,9 @@ public partial class SkinBuilder : UserControl
         _log.AddLog("Recuperando status do equipamento...");
 
         using var render = new StreamReader(pathFile);
-        while (!render.EndOfStream)
+        string? line;
+        while ((line = await render.ReadLineAsync()) != null)
         {
-            var line = await render.ReadLineAsync();
-            if (line == null) continue;
             var status = StatusItems.GetStausByLine(line);
             if (status.Id != "0")
             {
@@ -101,17 +100,14 @@ public partial class SkinBuilder : UserControl
     {
         var names = new ConcurrentDictionary<string, string>();
         using var reader = new StreamReader(path);
-        while (!reader.EndOfStream)
+        string? line;
+        while ((line = await reader.ReadLineAsync()) != null)
         {
-            var line = await reader.ReadLineAsync();
-            if (line != null)
-            {
-                var parse = line.Split("\t");
-                var id = parse[1];
-                var level = parse[2];
-                var key = $"{id}-{level}";
-                names.TryAdd(key, line);
-            }
+            var parse = line.Split("\t");
+            var id = parse[1];
+            var level = parse[2];
+            var key = $"{id}-{level}";
+            names.TryAdd(key, line);
         }
 
         return names;
@@ -159,16 +155,15 @@ public partial class SkinBuilder : UserControl
 
     private async Task GetItemsName()
     {
-        var file = Path.Combine(_folderPath, ItemsName);
+        var file = Path.Combine(_folderPath ?? string.Empty, ItemsName);
 
         if (!File.Exists(file))
             throw new Exception($"O arquivo {file} não foi encontrado");
 
         using var reader = new StreamReader(file);
-        while (!reader.EndOfStream)
+        string? line;
+        while ((line = await reader.ReadLineAsync()) != null)
         {
-            var line = await reader.ReadLineAsync();
-            if (line == null) continue;
 
             var parse = line.Split("\t");
             var id = parse[1].Replace("id=", string.Empty);
@@ -212,7 +207,7 @@ public partial class SkinBuilder : UserControl
             _log.AddLog("Os nomes estão em cache!");
         }
 
-        var weaponFile = Path.Combine(_folderPath, WeaponsGrp);
+        var weaponFile = Path.Combine(_folderPath ?? string.Empty, WeaponsGrp);
 
         if (!File.Exists(weaponFile))
             throw new Exception($"O arquivo {weaponFile} não foi encontrado");
@@ -233,10 +228,9 @@ public partial class SkinBuilder : UserControl
         var skinIds = new List<string>();
 
         using var render = new StreamReader(weaponFile);
-        while (!render.EndOfStream)
+        string? line;
+        while ((line = await render.ReadLineAsync()) != null)
         {
-            var line = await render.ReadLineAsync();
-            if (line == null) continue;
 
             line = ConvertCrystal(line);
             line = ResetShotCounts(line);
@@ -463,7 +457,7 @@ public partial class SkinBuilder : UserControl
             _log.AddLog("Os nomes estão em cache!");
         }
 
-        var armorFile = Path.Combine(_folderPath, ArmorGrp);
+        var armorFile = Path.Combine(_folderPath ?? string.Empty, ArmorGrp);
 
         if (!File.Exists(armorFile))
             throw new Exception($"O arquivo {armorFile} não foi encontrado");
@@ -484,10 +478,9 @@ public partial class SkinBuilder : UserControl
         var saveIds = new List<string>();
 
         using var render = new StreamReader(armorFile);
-        while (!render.EndOfStream)
+        string? line;
+        while ((line = await render.ReadLineAsync()) != null)
         {
-            var line = await render.ReadLineAsync();
-            if (line == null) continue;
 
             line = ConvertCrystal(line);
             line = RemoveMpBonus(line);
@@ -567,12 +560,13 @@ public partial class SkinBuilder : UserControl
         }
     }
 
-    private async void GerarButton_OnClick(object sender, RoutedEventArgs e)
+    private async void GerarButton_OnClick(object? sender, RoutedEventArgs e)
     {
         try
         {
-            var folder = ClientFolder.Text;
-            var type = ((ComboBoxItem)TypeProcess.SelectedItem)?.Content?.ToString();
+            string? folder = ClientFolder.Text;
+            var typeItem = TypeProcess.SelectedItem as ComboBoxItem;
+            string? type = typeItem?.Content?.ToString() ?? TypeProcess.SelectedItem as string;
             var ids = ProcessClientId.Text;
 
             if (string.IsNullOrEmpty(folder) || string.IsNullOrEmpty(type) || string.IsNullOrEmpty(ids))

@@ -134,18 +134,18 @@ public partial class SkillsModify : UserControl
 
             foreach (var skill in skills)
             {
-                var id = skill.Attribute("id")?.Value;
-                var name = skill.Attribute("name")?.Value;
-                var levels = skill.Attribute("levels")?.Value;
+                var id = skill.Attribute("id")?.Value ?? string.Empty;
+                var name = skill.Attribute("name")?.Value ?? string.Empty;
+                var levels = skill.Attribute("levels")?.Value ?? string.Empty;
 
                 var enchantData = new List<EnchantData>
                 {
-                    new(1, skill.Element("enchant1")?.Attribute("levels")?.Value),
-                    new(2, skill.Element("enchant2")?.Attribute("levels")?.Value),
-                    new(3, skill.Element("enchant3")?.Attribute("levels")?.Value),
-                    new(4, skill.Element("enchant4")?.Attribute("levels")?.Value),
-                    new(5, skill.Element("enchant5")?.Attribute("levels")?.Value),
-                    new(6, skill.Element("enchant6")?.Attribute("levels")?.Value)
+                    new(1, skill.Element("enchant1")?.Attribute("levels")?.Value ?? string.Empty),
+                    new(2, skill.Element("enchant2")?.Attribute("levels")?.Value ?? string.Empty),
+                    new(3, skill.Element("enchant3")?.Attribute("levels")?.Value ?? string.Empty),
+                    new(4, skill.Element("enchant4")?.Attribute("levels")?.Value ?? string.Empty),
+                    new(5, skill.Element("enchant5")?.Attribute("levels")?.Value ?? string.Empty),
+                    new(6, skill.Element("enchant6")?.Attribute("levels")?.Value ?? string.Empty)
                 };
 
                 if (!enchantData.All(data => string.IsNullOrEmpty(data.Level)))
@@ -172,7 +172,7 @@ public partial class SkillsModify : UserControl
         return initial;
     }
 
-    private async void RewardGenerate_OnClick(object sender, RoutedEventArgs e)
+    private async void RewardGenerate_OnClick(object? sender, RoutedEventArgs e)
     {
         try
         {
@@ -265,7 +265,7 @@ public partial class SkillsModify : UserControl
         }
     }
 
-    private async void RewardCopy_OnClick(object sender, RoutedEventArgs e)
+    private async void RewardCopy_OnClick(object? sender, RoutedEventArgs e)
     {
         try
         {

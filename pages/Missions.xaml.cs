@@ -63,7 +63,7 @@ namespace L2Toolkit.pages
             _errorTimer.Start();
         }
 
-        private async void CopyRewardContent(object sender, RoutedEventArgs e)
+        private async void CopyRewardContent(object? sender, RoutedEventArgs e)
         {
             var text = RewardOutput.Text?.Trim() ?? string.Empty;
             var topLevel = TopLevel.GetTopLevel(this);
@@ -98,7 +98,7 @@ namespace L2Toolkit.pages
             }
         }
 
-        private async void RewardGenerate_Click(object sender, RoutedEventArgs e)
+        private async void RewardGenerate_Click(object? sender, RoutedEventArgs e)
         {
             try
             {

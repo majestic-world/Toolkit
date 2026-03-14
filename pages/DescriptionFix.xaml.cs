@@ -14,7 +14,7 @@ namespace L2Toolkit.pages
 {
     public partial class DescriptionFix : UserControl
     {
-        private string selectedFile = null;
+        private string? selectedFile = null;
 
         private readonly DispatcherTimer statusTimer = new DispatcherTimer();
         private readonly DispatcherTimer successTimer = new DispatcherTimer();
@@ -38,7 +38,7 @@ namespace L2Toolkit.pages
             successTimer.Tick += (s, e) => { SucessoBorder.IsVisible = false; successTimer.Stop(); };
         }
 
-        private async void SelectFileButton_Click(object sender, RoutedEventArgs e)
+        private async void SelectFileButton_Click(object? sender, RoutedEventArgs e)
         {
             var topLevel = TopLevel.GetTopLevel(this);
             var files = await topLevel!.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
@@ -59,7 +59,7 @@ namespace L2Toolkit.pages
             }
         }
 
-        private async void ProcessButton_Click(object sender, RoutedEventArgs e)
+        private async void ProcessButton_Click(object? sender, RoutedEventArgs e)
         {
             try
             {

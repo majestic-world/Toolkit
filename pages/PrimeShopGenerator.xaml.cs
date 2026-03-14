@@ -131,31 +131,35 @@ public partial class PrimeShopGenerator : UserControl
         if (!File.Exists(ItemNameFile))
             SendNotify($"Atenção: Arquivo '{ItemNameFile}' não encontrado! Os nomes dos itens não serão exibidos corretamente.");
 
-        string selectedType = (string)TypeComboBox.SelectedItem;
+        string? selectedType = TypeComboBox.SelectedItem as string;
         if (selectedType != null && FileType.ContainsKey(selectedType) && !File.Exists(FileType[selectedType]))
             SendNotify($"Atenção: Arquivo '{FileType[selectedType]}' não encontrado! Os ícones podem não ser exibidos corretamente.");
     }
 
     private InputData ValidateInputs()
     {
-        var category = ((string)CategoryComboBox.SelectedItem).Split('-')[0].Trim();
-        var type = (string)TypeComboBox.SelectedItem;
-        var idsRaw = IdsTextBox.Text.Trim();
-        var priceStr = PriceTextBox.Text.Trim();
+        var categoryItem = CategoryComboBox.SelectedItem as ComboBoxItem;
+        var categoryRaw = categoryItem?.Content?.ToString() ?? CategoryComboBox.SelectedItem as string;
+        var category = categoryRaw?.Split('-')[0].Trim() ?? string.Empty;
 
-        if (string.IsNullOrWhiteSpace(idsRaw) || string.IsNullOrWhiteSpace(priceStr))
+        var typeItem = TypeComboBox.SelectedItem as ComboBoxItem;
+        var type = typeItem?.Content?.ToString() ?? TypeComboBox.SelectedItem as string ?? string.Empty;
+        var idsRaw = IdsTextBox.Text?.Trim() ?? string.Empty;
+        var priceStr = PriceTextBox.Text?.Trim() ?? string.Empty;
+
+        if (string.IsNullOrWhiteSpace(idsRaw) || string.IsNullOrWhiteSpace(priceStr) || string.IsNullOrEmpty(category) || string.IsNullOrEmpty(type))
         {
             SendNotify("Preencha os campos de ID e Preço.");
-            return new InputData(null, null, 0, 0, []);
+            return new InputData(string.Empty, string.Empty, 0, 0, []);
         }
 
         if (!int.TryParse(priceStr, out int price))
         {
             SendNotify("O preço deve ser um número.");
-            return new InputData(null, null, 0, 0, []);
+            return new InputData(string.Empty, string.Empty, 0, 0, []);
         }
 
-        if (!int.TryParse(QuantidadeTextBox.Text.Trim(), out var quantity) || quantity < 1)
+        if (!int.TryParse(QuantidadeTextBox.Text?.Trim(), out var quantity) || quantity < 1)
         {
             SendNotify("Quantidade inválida. Usando valor padrão 1.");
             quantity = 1;
@@ -169,7 +173,7 @@ public partial class PrimeShopGenerator : UserControl
         if (ids.Count == 0)
         {
             SendNotify("Insira ao menos um ID válido.");
-            return new InputData(null, null, 0, 0, []);
+            return new InputData(string.Empty, string.Empty, 0, 0, []);
         }
 
         return new InputData(category, type, price, quantity, ids);
@@ -226,7 +230,7 @@ public partial class PrimeShopGenerator : UserControl
 
     private async Task<string> GetItemNameAsync(string objectId)
     {
-        if (ItemNameCache.TryGetValue(objectId, out string cachedName))
+        if (ItemNameCache.TryGetValue(objectId, out string? cachedName) && cachedName != null)
             return cachedName;
 
         try
@@ -242,7 +246,7 @@ public partial class PrimeShopGenerator : UserControl
             await using var fileStream = new FileStream(ItemNameFile, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var reader = new StreamReader(fileStream, Encoding.UTF8);
 
-            string line;
+            string? line;
             while ((line = await reader.ReadLineAsync()) != null)
             {
                 if (line.Contains($"id={objectId}"))
@@ -426,10 +430,10 @@ public record IconInfo(string Icon, string IconPanel);
 public record ItemOutput
 {
     public int ShopId { get; init; }
-    public string ItemId { get; init; }
-    public string Nome { get; init; }
-    public IconInfo IconInfo { get; init; }
-    public string Category { get; init; }
+    public required string ItemId { get; init; }
+    public required string Nome { get; init; }
+    public required IconInfo IconInfo { get; init; }
+    public required string Category { get; init; }
     public int Price { get; init; }
     public int Quantity { get; init; }
 }

@@ -80,7 +80,7 @@ public partial class Commission : UserControl
                     var attribute = el.Attribute("name")?.Value;
                     if (attribute != "commissionItemType") continue;
                     var commissionItemType = el.Attribute("val")?.Value;
-                    if (commissionItemType != null)
+                    if (id != null && commissionItemType != null)
                     {
                         _dictionary.TryAdd(id, commissionItemType);
                     }
@@ -113,7 +113,7 @@ public partial class Commission : UserControl
                 if (id == null) continue;
                 _dictionary.TryGetValue(id, out var value);
                 if (value == null) continue;
-                var alreadyHas = element.Elements("set").Any(e => (string)e.Attribute("name") == "commissionItemType");
+                var alreadyHas = element.Elements("set").Any(e => (string?)e.Attribute("name") == "commissionItemType");
                 if (alreadyHas) continue;
                 var commissionItemType = new XElement("set",
                     new XAttribute("name", "commissionItemType"),
@@ -133,7 +133,7 @@ public partial class Commission : UserControl
         _logs.AddLog($"Atualização concluída, {modify:N0} modificados");
     }
 
-    private async void GenerateData_OnClick(object sender, RoutedEventArgs e)
+    private async void GenerateData_OnClick(object? sender, RoutedEventArgs e)
     {
         try
         {
