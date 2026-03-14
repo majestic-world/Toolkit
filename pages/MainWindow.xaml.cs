@@ -109,5 +109,8 @@ namespace L2Toolkit
 
         private void SkinBuilder_OnClick(object sender, RoutedEventArgs e)
             => MainContent.Content = new SkinBuilder();
+
+        private void BtnGeodataConverter_Click(object sender, RoutedEventArgs e)
+            => MainContent.Content = new GeodataConverterControl();
     }
 }

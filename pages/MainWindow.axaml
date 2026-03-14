@@ -221,7 +221,7 @@
                             </StackPanel>
                         </Button>
                         
-                        <Button Theme="{StaticResource SidebarButtonStyle}">
+                        <Button Click="BtnGeodataConverter_Click" Theme="{StaticResource SidebarButtonStyle}">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="&#xE72C;" FontFamily="Segoe MDL2 Assets" FontSize="16" Foreground="#5B9BD5" VerticalAlignment="Center" Margin="0,0,12,0"/>
                                 <TextBlock Text="Converter Geodata"/>
