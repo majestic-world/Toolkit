@@ -230,6 +230,7 @@
                                           Height="38"
                                           HorizontalAlignment="Stretch"
                                           SelectedIndex="0">
+                                    <ComboBoxItem Content="Selecione um formato de saída" IsEnabled="False"/>
                                     <ComboBoxItem Content="L2J (.l2j)"/>
                                     <ComboBoxItem Content="CONV_DAT (_conv.dat)"/>
                                     <ComboBoxItem Content="L2G (.l2g)"/>

@@ -13,7 +13,7 @@ namespace L2Toolkit.pages;
 
 public partial class GeodataConverterControl : UserControl
 {
-    private readonly Queue<string> _logQueue = new();
+    private readonly LinkedList<string> _logList = new();
     private readonly object _logLock = new();
     private readonly DispatcherTimer _errorTimer;
     private CancellationTokenSource? _cts;
@@ -62,11 +62,11 @@ public partial class GeodataConverterControl : UserControl
     {
         lock (_logLock)
         {
-            _logQueue.Enqueue($"[{DateTime.Now:HH:mm:ss}] {log}");
-            if (_logQueue.Count > 120)
-                _logQueue.Dequeue();
+            _logList.AddFirst($"[{DateTime.Now:HH:mm:ss}] {log}");
+            if (_logList.Count > 120)
+                _logList.RemoveLast();
 
-            var text = string.Join("\n", _logQueue);
+            var text = string.Join("\n", _logList);
             Dispatcher.UIThread.Post(() => LogContent.Text = text);
         }
     }
@@ -109,11 +109,17 @@ public partial class GeodataConverterControl : UserControl
             return;
         }
 
-        var targetFormat = OutputFormats[FormatComboBox.SelectedIndex];
+        if (FormatComboBox.SelectedIndex <= 0)
+        {
+            ShowNotification("Selecione um formato de saída.");
+            return;
+        }
+
+        var targetFormat = OutputFormats[FormatComboBox.SelectedIndex - 1];
 
         _isProcessing = true;
         _cts = new CancellationTokenSource();
-        _logQueue.Clear();
+        _logList.Clear();
         LogContent.Text = "";
 
         ConvertButtonText.Text = "Cancelar";
