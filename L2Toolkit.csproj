@@ -31,4 +31,8 @@
     <Content Include=".gitignore" />
     <Content Include="README.md" />
   </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Tables\*.l2dat" />
+  </ItemGroup>
 </Project>

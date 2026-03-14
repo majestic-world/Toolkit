@@ -2,15 +2,15 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Platform.Storage;
 using Avalonia.Threading;
-using L2Toolkit.database;
 using L2Toolkit.DataMap;
+using L2Toolkit.DatReader;
 using L2Toolkit.ProcessData;
 using L2Toolkit.Utilities;
 
@@ -18,22 +18,16 @@ namespace L2Toolkit.pages;
 
 public partial class LiveData : UserControl
 {
-    private const string SkillGrp = "Skillgrp.txt";
-    private const string SkillName = "SkillName-eu.txt";
-    private const string ItemsName = "ItemName-eu.txt";
-    private const string WeaponsGrp = "Weapongrp.txt";
-    private const string ArmorGrp = "Armorgrp.txt";
-    private const string ItemsGrp = "EtcItemgrp.txt";
-    private const string ItemStatus = "ItemStatData.txt";
-
     private const string InvalidData = "Dados de parse inválidos!";
 
-    private string? _folderPath;
     private readonly GlobalLogs _log = new();
     private readonly DispatcherTimer _errorTimer;
 
     private readonly ConcurrentDictionary<string, string> _itemsName = new();
     private readonly ConcurrentDictionary<string, CompleteStatusItems> _itemsStatus = new();
+
+    /// <summary>Cache of unpacked .l2dat embedded resources (table name → text content).</summary>
+    private readonly ConcurrentDictionary<string, string> _tableCache = new();
 
     public LiveData()
     {
@@ -42,13 +36,25 @@ public partial class LiveData : UserControl
 
         InitializeComponent();
         _log.RegisterBlock(LogContent);
-        SelecionarPastaButton.Click += async (s, e) => await SelectFolderAsync();
+    }
 
-        var lastLiveFolder = AppDatabase.GetInstance().GetValue("lastLiveFolder");
-        if (!string.IsNullOrEmpty(lastLiveFolder))
+    /// <summary>
+    /// Loads an embedded .l2dat table by name, caching the result.
+    /// Example: LoadTable("Skillgrp") reads L2Toolkit.Tables.Skillgrp.l2dat
+    /// </summary>
+    private string LoadTable(string tableName)
+    {
+        return _tableCache.GetOrAdd(tableName, name =>
         {
-            ClientFolder.Text = lastLiveFolder;
-        }
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = $"L2Toolkit.Tables.{name}.l2dat";
+            using var stream = assembly.GetManifestResourceStream(resourceName)
+                ?? throw new FileNotFoundException($"Recurso embutido não encontrado: {resourceName}");
+            using var ms = new MemoryStream();
+            stream.CopyTo(ms);
+            var (_, content) = L2Pack.Unpack(ms.ToArray());
+            return content;
+        });
     }
 
     private void ShowNotification(string message)
@@ -59,29 +65,12 @@ public partial class LiveData : UserControl
         _errorTimer.Start();
     }
 
-    private async Task SelectFolderAsync()
-    {
-        var topLevel = TopLevel.GetTopLevel(this);
-        if (topLevel == null) return;
-        var folders = await topLevel.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions());
-        if (folders.Count == 0) return;
-        var path = folders[0].Path.LocalPath;
-        ClientFolder.Text = path;
-        AppDatabase.GetInstance().UpdateValue("lastLiveFolder", path);
-    }
-
     private async Task CreateStatusData()
     {
-        if (string.IsNullOrEmpty(_folderPath))
-            throw new NullReferenceException(InvalidData);
-
-        var pathFile = Path.Combine(_folderPath, ItemStatus);
-        if (!File.Exists(pathFile))
-            throw new FileNotFoundException($"O arquivo {pathFile} não foi localizado.");
-
         _log.AddLog("Recuperando status do equipamento...");
 
-        using var render = new StreamReader(pathFile);
+        var content = LoadTable("ItemStatData");
+        using var render = new StringReader(content);
         string? line;
         while ((line = await render.ReadLineAsync()) != null)
         {
@@ -105,23 +94,10 @@ public partial class LiveData : UserControl
         const string invalidData = "Dados de parse inválidos!";
         var list = new List<string>();
 
-        if (_folderPath == null)
-        {
-            throw new Exception("Erro ao recuperar pasta de arquivos");
-        }
-
         if (ids.Contains(';') && ids.Contains("..."))
         {
             throw new Exception(invalidData);
         }
-
-        var skillGrpFile = Path.Combine(_folderPath ?? string.Empty, SkillGrp);
-        if (!File.Exists(skillGrpFile))
-            throw new FileNotFoundException($"O arquivo {skillGrpFile} não foi encontrado");
-
-        var skillNameFile = Path.Combine(_folderPath ?? string.Empty, SkillName);
-        if (!File.Exists(skillNameFile))
-            throw new FileNotFoundException($"O arquivo {skillNameFile} não foi encontrado");
 
         if (ids.Contains("..."))
         {
@@ -161,13 +137,14 @@ public partial class LiveData : UserControl
 
         var buildGrp = new StringBuilder();
         var buildNames = new StringBuilder();
-        var names = await GetSkillNameAsync(skillNameFile);
+        var names = await GetSkillNameAsync();
         _log.AddLog($"Nomes carregados, total de: {names.Count:N0}");
         _log.AddLog("Separando os skills selecionados...");
 
         var idsSet = new HashSet<string>(list);
 
-        using var renderGrp = new StreamReader(skillGrpFile);
+        var skillGrpContent = LoadTable("Skillgrp");
+        using var renderGrp = new StringReader(skillGrpContent);
         string? line;
         while ((line = await renderGrp.ReadLineAsync()) != null)
         {
@@ -205,10 +182,11 @@ public partial class LiveData : UserControl
         names.Clear();
     }
 
-    private async Task<ConcurrentDictionary<string, string>> GetSkillNameAsync(string path)
+    private async Task<ConcurrentDictionary<string, string>> GetSkillNameAsync()
     {
         var names = new ConcurrentDictionary<string, string>();
-        using var reader = new StreamReader(path);
+        var content = LoadTable("SkillName-eu");
+        using var reader = new StringReader(content);
         string? line;
         while ((line = await reader.ReadLineAsync()) != null)
         {
@@ -270,16 +248,11 @@ public partial class LiveData : UserControl
 
     private async Task GetItemsName()
     {
-        var file = Path.Combine(_folderPath ?? string.Empty, ItemsName);
-
-        if (!File.Exists(file))
-            throw new Exception($"O arquivo {file} não foi encontrado");
-
-        using var reader = new StreamReader(file);
+        var content = LoadTable("ItemName-eu");
+        using var reader = new StringReader(content);
         string? line;
         while ((line = await reader.ReadLineAsync()) != null)
         {
-
             var parse = line.Split("\t");
             var id = parse[1].Replace("id=", string.Empty);
             _itemsName.TryAdd(id, line);
@@ -313,10 +286,7 @@ public partial class LiveData : UserControl
             _log.AddLog("Os nomes estão em cache!");
         }
 
-        var weaponFile = Path.Combine(_folderPath ?? string.Empty, WeaponsGrp);
-
-        if (!File.Exists(weaponFile))
-            throw new Exception($"O arquivo {weaponFile} não foi encontrado");
+        var weaponContent = LoadTable("Weapongrp");
 
         var listIds = ParseIds(ids);
         var hashSet = new HashSet<string>(listIds);
@@ -333,7 +303,7 @@ public partial class LiveData : UserControl
 
         var convertGrade = ConvertSPlusCheckBox.IsChecked;
 
-        using var render = new StreamReader(weaponFile);
+        using var render = new StringReader(weaponContent);
         string? line;
         while ((line = await render.ReadLineAsync()) != null)
         {
@@ -745,10 +715,7 @@ public partial class LiveData : UserControl
             _log.AddLog("Os nomes estão em cache!");
         }
 
-        var armorFile = Path.Combine(_folderPath ?? string.Empty, ArmorGrp);
-
-        if (!File.Exists(armorFile))
-            throw new Exception($"O arquivo {armorFile} não foi encontrado");
+        var armorContent = LoadTable("Armorgrp");
 
         var listIds = ParseIds(ids);
         var hashSet = new HashSet<string>(listIds);
@@ -766,7 +733,7 @@ public partial class LiveData : UserControl
 
         var recoveryArmors = new List<string>();
 
-        using var render = new StreamReader(armorFile);
+        using var render = new StringReader(armorContent);
         string? line;
         while ((line = await render.ReadLineAsync()) != null)
         {
@@ -835,10 +802,7 @@ public partial class LiveData : UserControl
             _log.AddLog("Os nomes estão em cache!");
         }
 
-        var itemsFile = Path.Combine(_folderPath ?? string.Empty, ItemsGrp);
-
-        if (!File.Exists(itemsFile))
-            throw new Exception($"O arquivo {itemsFile} não foi encontrado");
+        var itemsContent = LoadTable("EtcItemgrp");
 
         var listIds = ParseIds(ids);
         var hashSet = new HashSet<string>(listIds);
@@ -853,7 +817,7 @@ public partial class LiveData : UserControl
 
         var listAdded = new List<string>();
 
-        using var render = new StreamReader(itemsFile);
+        using var render = new StringReader(itemsContent);
         string? line;
         while ((line = await render.ReadLineAsync()) != null)
         {
@@ -941,12 +905,11 @@ public partial class LiveData : UserControl
     {
         try
         {
-            string? folder = ClientFolder.Text;
             var typeItem = TypeProcess.SelectedItem as ComboBoxItem;
             string? type = typeItem?.Content?.ToString() ?? TypeProcess.SelectedItem as string;
             var ids = ProcessClientId.Text;
 
-            if (string.IsNullOrEmpty(folder) || string.IsNullOrEmpty(type) || string.IsNullOrEmpty(ids))
+            if (string.IsNullOrEmpty(type) || string.IsNullOrEmpty(ids))
             {
                 throw new Exception("Preencha todos os campos");
             }
@@ -956,8 +919,6 @@ public partial class LiveData : UserControl
             ClientTextBox.Text = "";
             NameData.Text = "";
             XmlData.Text = "";
-
-            _folderPath = folder;
 
             switch (type)
             {
