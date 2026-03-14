@@ -95,6 +95,8 @@
             <Setter Property="Background" Value="#383838"/>
             <Setter Property="Foreground" Value="#D4D4D4"/>
             <Setter Property="FontSize" Value="13"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
         </Style>
         <Style Selector="ComboBoxItem:pointerover /template/ ContentPresenter">
             <Setter Property="Background" Value="#414141"/>
@@ -226,10 +228,10 @@
                                 <ComboBox x:Name="TypeProcess"
                                           SelectionChanged="TypeProcess_OnDropDownClosed"
                                           SelectedIndex="0">
-                                    <ComboBoxItem>Skills</ComboBoxItem>
-                                    <ComboBoxItem>Weapons</ComboBoxItem>
-                                    <ComboBoxItem>Armor</ComboBoxItem>
-                                    <ComboBoxItem>Items</ComboBoxItem>
+                                    <ComboBoxItem HorizontalAlignment="Stretch">Skills</ComboBoxItem>
+                                    <ComboBoxItem HorizontalAlignment="Stretch">Weapons</ComboBoxItem>
+                                    <ComboBoxItem HorizontalAlignment="Stretch">Armor</ComboBoxItem>
+                                    <ComboBoxItem HorizontalAlignment="Stretch">Items</ComboBoxItem>
                                 </ComboBox>
                             </StackPanel>
 

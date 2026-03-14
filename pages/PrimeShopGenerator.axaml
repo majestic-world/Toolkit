@@ -94,6 +94,8 @@
             <Setter Property="Background" Value="#383838"/>
             <Setter Property="Foreground" Value="#D4D4D4"/>
             <Setter Property="FontSize" Value="13"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
         </Style>
         <Style Selector="ComboBoxItem:pointerover /template/ ContentPresenter">
             <Setter Property="Background" Value="#414141"/>
@@ -192,14 +194,16 @@
                                                FontSize="12"
                                                FontWeight="Medium"
                                                Foreground="#9A9A9A"/>
-                                    <ComboBox x:Name="CategoryComboBox"/>
+                                    <ComboBox x:Name="CategoryComboBox"
+                                              ItemContainerTheme="{StaticResource ComboBoxItemTheme}"/>
                                 </StackPanel>
                                 <StackPanel Grid.Column="2" Spacing="6">
                                     <TextBlock Text="Tipo"
                                                FontSize="12"
                                                FontWeight="Medium"
                                                Foreground="#9A9A9A"/>
-                                    <ComboBox x:Name="TypeComboBox"/>
+                                    <ComboBox x:Name="TypeComboBox"
+                                              ItemContainerTheme="{StaticResource ComboBoxItemTheme}"/>
                                 </StackPanel>
                             </Grid>
 

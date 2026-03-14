@@ -111,6 +111,10 @@
                         Desenvolvimento
                         <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gray-600 group-hover:w-full transition-all duration-300"></span>
                     </a>
+                    <a href="#build" class="text-gray-600 hover:text-gray-800 transition-all duration-300 font-medium relative group">
+                        Build
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gray-600 group-hover:w-full transition-all duration-300"></span>
+                    </a>
                 </div>
                 <button class="md:hidden bg-gray-100 p-2 rounded-lg hover:bg-gray-200 transition-colors" onclick="toggleMenu()">
                     <i class="fas fa-bars text-xl text-gray-600"></i>
@@ -129,6 +133,7 @@
                 <a href="#live-data" class="text-gray-600 hover:text-primary transition-colors">Live Data</a>
                 <a href="#api" class="text-gray-600 hover:text-primary transition-colors">API</a>
                 <a href="#desenvolvimento" class="text-gray-600 hover:text-primary transition-colors">Desenvolvimento</a>
+                <a href="#build" class="text-gray-600 hover:text-primary transition-colors">Build</a>
             </div>
         </div>
     </div>
@@ -200,8 +205,8 @@
                     <div class="bg-gradient-to-br from-gray-700 to-gray-800 text-white rounded-2xl w-20 h-20 flex items-center justify-center mx-auto mb-6 shadow-xl group-hover:shadow-2xl transition-all duration-300 group-hover:scale-110 transform">
                         <i class="fas fa-desktop text-3xl group-hover:animate-pulse"></i>
                     </div>
-                    <h3 class="text-3xl font-bold text-gray-800 mb-2">WPF</h3>
-                    <p class="text-gray-600 font-medium">Interface Nativa</p>
+                    <h3 class="text-3xl font-bold text-gray-800 mb-2">Avalonia</h3>
+                    <p class="text-gray-600 font-medium">Interface Multiplataforma</p>
                 </div>
                 <div class="text-center group animate-slide-up" style="animation-delay: 0.3s;">
                     <div class="bg-gradient-to-br from-gray-800 to-gray-900 text-white rounded-2xl w-20 h-20 flex items-center justify-center mx-auto mb-6 shadow-xl group-hover:shadow-2xl transition-all duration-300 group-hover:scale-110 transform">
@@ -876,15 +881,15 @@ public void RegisterBlock(TextBox block)</code></pre>
                             </div>
                             <div class="flex items-center bg-white bg-opacity-10 p-3 rounded-lg">
                                 <i class="fas fa-dot-circle mr-4 text-blue-400"></i>
-                                <span><strong>WPF</strong> - Interface gráfica</span>
+                                <span><strong>Avalonia UI 11.2</strong> - Interface multiplataforma</span>
                             </div>
                             <div class="flex items-center bg-white bg-opacity-10 p-3 rounded-lg">
                                 <i class="fas fa-dot-circle mr-4 text-blue-400"></i>
-                                <span><strong>XAML</strong> - Markup da interface</span>
+                                <span><strong>Native AOT</strong> - Compilação nativa</span>
                             </div>
                             <div class="flex items-center bg-white bg-opacity-10 p-3 rounded-lg">
                                 <i class="fas fa-dot-circle mr-4 text-blue-400"></i>
-                                <span><strong>Visual Studio</strong> - IDE recomendada</span>
+                                <span><strong>Visual Studio / Rider</strong> - IDEs recomendadas</span>
                             </div>
                         </div>
                     </div>
@@ -985,6 +990,66 @@ public void RegisterBlock(TextBox block)</code></pre>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Build Section -->
+    <section id="build" class="bg-gradient-to-br from-gray-50 to-white py-20">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-bold text-gray-800 mb-4">Build</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Compilação com Native AOT para máxima performance e executável autossuficiente
+                </p>
+            </div>
+
+            <div class="max-w-4xl mx-auto space-y-6">
+
+                <!-- Windows -->
+                <div class="bg-white rounded-2xl shadow-lg p-8 border-l-4 border-blue-500 card-hover">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-blue-100 p-2 rounded-lg mr-4">
+                            <i class="fab fa-windows text-2xl text-blue-600"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800">Windows</h3>
+                    </div>
+                    <pre class="bg-gray-900 text-green-400 p-4 rounded-xl text-sm overflow-x-auto font-mono leading-relaxed">dotnet publish -r win-x64 -c Release -p:PublishAot=true -p:OptimizationPreference=Speed -p:StackTraceSupport=false -p:InvariantGlobalization=true</pre>
+                </div>
+
+                <!-- Linux -->
+                <div class="bg-white rounded-2xl shadow-lg p-8 border-l-4 border-orange-500 card-hover">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-orange-100 p-2 rounded-lg mr-4">
+                            <i class="fab fa-linux text-2xl text-orange-600"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800">Linux</h3>
+                    </div>
+                    <pre class="bg-gray-900 text-green-400 p-4 rounded-xl text-sm overflow-x-auto font-mono leading-relaxed">dotnet publish -r linux-x64 -c Release -p:PublishAot=true -p:OptimizationPreference=Speed -p:StackTraceSupport=false -p:InvariantGlobalization=true</pre>
+                </div>
+
+                <!-- macOS Intel -->
+                <div class="bg-white rounded-2xl shadow-lg p-8 border-l-4 border-gray-500 card-hover">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-gray-100 p-2 rounded-lg mr-4">
+                            <i class="fab fa-apple text-2xl text-gray-700"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800">macOS <span class="text-gray-500 font-normal text-base">Intel</span></h3>
+                    </div>
+                    <pre class="bg-gray-900 text-green-400 p-4 rounded-xl text-sm overflow-x-auto font-mono leading-relaxed">dotnet publish -r osx-x64 -c Release -p:PublishAot=true -p:OptimizationPreference=Speed -p:StackTraceSupport=false -p:InvariantGlobalization=true</pre>
+                </div>
+
+                <!-- macOS Apple Silicon -->
+                <div class="bg-white rounded-2xl shadow-lg p-8 border-l-4 border-gray-500 card-hover">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-gray-100 p-2 rounded-lg mr-4">
+                            <i class="fab fa-apple text-2xl text-gray-700"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800">macOS <span class="text-gray-500 font-normal text-base">Apple Silicon</span></h3>
+                    </div>
+                    <pre class="bg-gray-900 text-green-400 p-4 rounded-xl text-sm overflow-x-auto font-mono leading-relaxed">dotnet publish -r osx-arm64 -c Release -p:PublishAot=true -p:OptimizationPreference=Speed -p:StackTraceSupport=false -p:InvariantGlobalization=true</pre>
+                </div>
+
             </div>
         </div>
     </section>

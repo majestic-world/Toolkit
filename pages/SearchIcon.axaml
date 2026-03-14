@@ -82,6 +82,8 @@
             <Setter Property="Background" Value="#383838"/>
             <Setter Property="Foreground" Value="#D4D4D4"/>
             <Setter Property="FontSize" Value="13"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
         </Style>
         <Style Selector="ComboBoxItem:pointerover /template/ ContentPresenter">
             <Setter Property="Background" Value="#414141"/>
@@ -183,10 +185,10 @@
                                            Foreground="#9A9A9A"
                                            FontWeight="Medium"/>
                                 <ComboBox x:Name="ItemType" SelectedIndex="0">
-                                    <ComboBoxItem Content="Weapon"/>
-                                    <ComboBoxItem Content="Armor"/>
-                                    <ComboBoxItem Content="Items"/>
-                                    <ComboBoxItem Content="Skills"/>
+                                    <ComboBoxItem HorizontalAlignment="Stretch" Content="Weapon"/>
+                                    <ComboBoxItem HorizontalAlignment="Stretch" Content="Armor"/>
+                                    <ComboBoxItem HorizontalAlignment="Stretch" Content="Items"/>
+                                    <ComboBoxItem HorizontalAlignment="Stretch" Content="Skills"/>
                                 </ComboBox>
                             </StackPanel>
 
