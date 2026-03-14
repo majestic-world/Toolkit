@@ -81,7 +81,7 @@
         <StackPanel>
 
             <!-- ── Page Header ──────────────────────────────────────── -->
-            <StackPanel Margin="32,28,32,24" Spacing="3">
+            <StackPanel Margin="32,20,32,20" Spacing="3">
                 <TextBlock Text="Gerenciar Logs"
                            FontSize="22"
                            FontWeight="SemiBold"
@@ -325,7 +325,7 @@
                                  Classes="Code"
                                  AcceptsReturn="True"
                                  TextWrapping="Wrap"
-                                 Height="180"
+                                 Height="170"
                                  Padding="20,14"
                                  BorderThickness="0"
                                  Background="#383838"

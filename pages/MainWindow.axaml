@@ -241,14 +241,14 @@
                         <Button Click="BtnPawnData_Click" Theme="{StaticResource SidebarButtonStyle}">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="&#xE91B;" FontFamily="Segoe MDL2 Assets" FontSize="16" Foreground="#5B9BD5" VerticalAlignment="Center" Margin="0,0,12,0"/>
-                                <TextBlock Text="Animações"/>
+                                <TextBlock Text="Animações (PawnData)"/>
                             </StackPanel>
                         </Button>
 
                         <Button Click="BtnSpawnManager_Click" Theme="{StaticResource SidebarButtonStyle}">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="&#xE8B8;" FontFamily="Segoe MDL2 Assets" FontSize="16" Foreground="#5B9BD5" VerticalAlignment="Center" Margin="0,0,12,0"/>
-                                <TextBlock Text="Gerenciador de Spawn"/>
+                                <TextBlock Text="NPC Spawn XML"/>
                             </StackPanel>
                         </Button>
 
