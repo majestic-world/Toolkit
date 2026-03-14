@@ -103,6 +103,10 @@
                         Live Data
                         <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gray-600 group-hover:w-full transition-all duration-300"></span>
                     </a>
+                    <a href="#geodata-converter" class="text-gray-600 hover:text-gray-800 transition-all duration-300 font-medium relative group">
+                        Geodata
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gray-600 group-hover:w-full transition-all duration-300"></span>
+                    </a>
                     <a href="#api" class="text-gray-600 hover:text-gray-800 transition-all duration-300 font-medium relative group">
                         API
                         <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gray-600 group-hover:w-full transition-all duration-300"></span>
@@ -131,6 +135,7 @@
                 <a href="#instalacao" class="text-gray-600 hover:text-primary transition-colors">Instalação</a>
                 <a href="#funcionalidades" class="text-gray-600 hover:text-primary transition-colors">Funcionalidades</a>
                 <a href="#live-data" class="text-gray-600 hover:text-primary transition-colors">Live Data</a>
+                <a href="#geodata-converter" class="text-gray-600 hover:text-primary transition-colors">Geodata</a>
                 <a href="#api" class="text-gray-600 hover:text-primary transition-colors">API</a>
                 <a href="#desenvolvimento" class="text-gray-600 hover:text-primary transition-colors">Desenvolvimento</a>
                 <a href="#build" class="text-gray-600 hover:text-primary transition-colors">Build</a>
@@ -281,10 +286,6 @@
                                         <code class="bg-gray-100 px-2 py-1 rounded text-sm font-mono">Skillgrp_Classic.txt</code>
                                     </li>
                                     <li class="flex items-center">
-                                        <i class="fas fa-file-alt mr-3 text-gray-500"></i>
-                                        <code class="bg-gray-100 px-2 py-1 rounded text-sm font-mono">h5_names.txt</code>
-                                    </li>
-                                    <li class="flex items-center">
                                         <i class="fas fa-chart-bar mr-3 text-orange-500"></i>
                                         <code class="bg-orange-100 px-2 py-1 rounded text-sm font-mono">ItemStatData.txt</code>
                                         <span class="text-xs bg-orange-500 text-white px-2 py-1 rounded-full ml-2">Necessário para XML</span>
@@ -411,23 +412,27 @@
                     </a>
                 </div>
 
-                <!-- Skills Modify -->
-                <div class="bg-white rounded-2xl shadow-lg p-8 border-l-4 border-gray-600 card-hover group">
+                <!-- Geodata Converter -->
+                <div class="bg-white rounded-2xl shadow-lg p-8 border-l-4 border-teal-500 card-hover group">
                     <div class="flex items-center mb-6">
-                        <div class="bg-gray-100 p-3 rounded-xl mr-4 group-hover:bg-gray-200 transition-colors">
-                            <i class="fas fa-magic text-2xl text-gray-600"></i>
+                        <div class="bg-teal-50 p-3 rounded-xl mr-4 group-hover:bg-teal-100 transition-colors">
+                            <i class="fas fa-map text-2xl text-teal-600"></i>
                         </div>
-                        <h3 class="text-xl font-semibold text-gray-800">Enchant Skill (GF)</h3>
+                        <h3 class="text-xl font-semibold text-gray-800">Converter Geodata</h3>
                     </div>
-                    <p class="text-gray-600 mb-6 leading-relaxed">Cria arquivo skill_enchant_data.xml para Giran Forge com configuração avançada.</p>
-                    <div class="bg-gradient-to-r from-gray-50 to-gray-100 p-4 rounded-xl text-sm border-l-4 border-gray-300">
+                    <p class="text-gray-600 mb-6 leading-relaxed">Converte arquivos de geodata entre 8 formatos de entrada (L2J, CONV_DAT, L2D, L2G, L2S, L2M, RP, PATH_TXT) e 3 formatos de saída.</p>
+                    <div class="bg-gradient-to-r from-teal-50 to-green-50 p-4 rounded-xl text-sm border-l-4 border-teal-300">
                         <strong class="text-gray-800">Como usar:</strong><br>
                         <span class="text-gray-700">
-                            1. Selecione a pasta de skills<br>
-                            2. Configure itens necessários<br>
-                            3. Clique em "Gerar Dados"
+                            1. Selecione a pasta com os arquivos geodata<br>
+                            2. Selecione a pasta de saída<br>
+                            3. Escolha o formato e clique em "Iniciar Conversão"
                         </span>
                     </div>
+                    <a href="#geodata-converter" class="inline-flex items-center text-teal-600 hover:text-teal-800 font-medium transition-colors group mt-4">
+                        <span>Ver documentação completa</span>
+                        <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                    </a>
                 </div>
             </div>
 
@@ -782,76 +787,167 @@
         </div>
     </section>
 
-    <!-- API Documentation -->
-    <section id="api" class="bg-gradient-to-br from-gray-50 to-white py-20">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-5xl font-bold text-gray-800 mb-4">Documentação da API</h2>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                    Explore a arquitetura interna do L2Toolkit e compreenda como utilizar suas classes e métodos
-                </p>
-            </div>
-            
+    <!-- Geodata Converter Section -->
+    <section id="geodata-converter" class="bg-gradient-to-br from-slate-900 to-gray-900 text-white py-20 relative overflow-hidden">
+        <div class="absolute inset-0 bg-black bg-opacity-30"></div>
+        <div class="absolute top-10 left-10 w-72 h-72 bg-green-500 bg-opacity-10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-10 right-10 w-80 h-80 bg-teal-500 bg-opacity-10 rounded-full blur-3xl"></div>
+
+        <div class="container mx-auto px-6 relative z-10">
             <div class="max-w-6xl mx-auto">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <!-- Data Models -->
-                    <div class="bg-white rounded-lg shadow-lg p-6">
-                        <h3 class="text-2xl font-semibold mb-4"><i class="fas fa-cubes mr-2 text-gray-600"></i>Modelos de Dados</h3>
-                        <div class="space-y-4">
-                            <div class="bg-gray-50 p-4 rounded-lg">
-                                <h4 class="font-semibold text-gray-700">EnchantData</h4>
-                                <pre class="text-sm text-gray-700 mt-2"><code>public record EnchantData(
-    int Id,
-    string Level
-);</code></pre>
+                <!-- Header -->
+                <div class="text-center mb-16">
+                    <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-green-500 to-teal-600 rounded-2xl mb-6 shadow-2xl">
+                        <i class="fas fa-map text-3xl text-white"></i>
+                    </div>
+                    <h2 class="text-5xl font-bold mb-4">
+                        Converter <span class="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-teal-400">Geodata</span>
+                    </h2>
+                    <p class="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+                        Converta arquivos de geodata binários entre os principais formatos utilizados em servidores Lineage 2.
+                        Suporta 8 formatos de entrada e gera saída em L2J, CONV_DAT ou L2G com total fidelidade ao formato original.
+                    </p>
+                </div>
+
+                <!-- Formats Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+                    <!-- Input Formats -->
+                    <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl p-8 card-hover">
+                        <h3 class="text-2xl font-semibold mb-6 flex items-center">
+                            <i class="fas fa-file-import mr-3 text-green-400"></i>
+                            Formatos de Entrada
+                        </h3>
+                        <p class="text-gray-300 mb-6">Detectados automaticamente pela extensão do arquivo:</p>
+                        <div class="space-y-3">
+                            <div class="bg-black bg-opacity-20 p-4 rounded-xl flex items-center">
+                                <i class="fas fa-file-code mr-4 text-green-400"></i>
+                                <div>
+                                    <code class="text-green-300 font-mono">.l2j</code>
+                                    <p class="text-sm text-gray-400">Formato L2J — padrão Java aberto</p>
+                                </div>
                             </div>
-                            <div class="bg-gray-50 p-4 rounded-lg">
-                                <h4 class="font-semibold text-gray-700">IconModel</h4>
-                                <p class="text-sm text-gray-600">Modelo para representação de ícones de itens e skills</p>
+                            <div class="bg-black bg-opacity-20 p-4 rounded-xl flex items-center">
+                                <i class="fas fa-file-code mr-4 text-teal-400"></i>
+                                <div>
+                                    <code class="text-teal-300 font-mono">_conv.dat</code>
+                                    <p class="text-sm text-gray-400">Formato CONV_DAT — geodata com cabeçalho estendido</p>
+                                </div>
                             </div>
-                            <div class="bg-gray-50 p-4 rounded-lg">
-                                <h4 class="font-semibold text-gray-700">ItemsNameModel</h4>
-                                <p class="text-sm text-gray-600">Modelo para nomes de itens do jogo</p>
+                            <div class="bg-black bg-opacity-20 p-4 rounded-xl flex items-center">
+                                <i class="fas fa-file-code mr-4 text-blue-400"></i>
+                                <div>
+                                    <code class="text-blue-300 font-mono">.l2d</code>
+                                    <p class="text-sm text-gray-400">Formato L2D — geodata com NSWE separado</p>
+                                </div>
                             </div>
-                            <div class="bg-gray-50 p-4 rounded-lg">
-                                <h4 class="font-semibold text-gray-700">Skills</h4>
-                                <p class="text-sm text-gray-600">Dados de skills do jogo</p>
+                            <div class="bg-black bg-opacity-20 p-4 rounded-xl flex items-center">
+                                <i class="fas fa-lock mr-4 text-yellow-400"></i>
+                                <div>
+                                    <code class="text-yellow-300 font-mono">.l2g</code>
+                                    <p class="text-sm text-gray-400">Formato L2G — criptografado com chave XOR aleatória</p>
+                                </div>
+                            </div>
+                            <div class="bg-black bg-opacity-20 p-4 rounded-xl flex items-center">
+                                <i class="fas fa-lock mr-4 text-orange-400"></i>
+                                <div>
+                                    <code class="text-orange-300 font-mono">.l2s</code>
+                                    <p class="text-sm text-gray-400">Formato L2S — criptografado com chave derivada de IP</p>
+                                </div>
+                            </div>
+                            <div class="bg-black bg-opacity-20 p-4 rounded-xl flex items-center">
+                                <i class="fas fa-layer-group mr-4 text-purple-400"></i>
+                                <div>
+                                    <code class="text-purple-300 font-mono">.l2m</code>
+                                    <p class="text-sm text-gray-400">Formato L2M — multicamada com offset relativo por bloco</p>
+                                </div>
+                            </div>
+                            <div class="bg-black bg-opacity-20 p-4 rounded-xl flex items-center">
+                                <i class="fas fa-file-code mr-4 text-red-400"></i>
+                                <div>
+                                    <code class="text-red-300 font-mono">.rp</code>
+                                    <p class="text-sm text-gray-400">Formato RP — variante do L2D</p>
+                                </div>
+                            </div>
+                            <div class="bg-black bg-opacity-20 p-4 rounded-xl flex items-center">
+                                <i class="fas fa-file-alt mr-4 text-indigo-400"></i>
+                                <div>
+                                    <code class="text-indigo-300 font-mono">_path.txt</code>
+                                    <p class="text-sm text-gray-400">Formato PATH_TXT — texto estruturado com regex</p>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Utilities -->
-                    <div class="bg-white rounded-2xl shadow-xl p-8 card-hover">
-                        <h3 class="text-2xl font-semibold mb-6 text-gray-800"><i class="fas fa-tools mr-3 text-gray-600"></i>Utilitários</h3>
-                        <div class="space-y-6">
-                            <div class="bg-gradient-to-r from-gray-50 to-gray-100 p-6 rounded-xl border-l-4 border-gray-500">
-                                <h4 class="font-semibold text-gray-700 mb-2">GlobalLogs</h4>
-                                <p class="text-sm text-gray-600 mb-4">Sistema de logs thread-safe para monitoramento</p>
-                                <div class="bg-white p-4 rounded-lg shadow-sm">
-                                    <pre class="text-sm text-gray-700"><code>public void AddLog(string log)
-public void ClearLog()
-public void RegisterBlock(TextBox block)</code></pre>
+                    <!-- Output Formats + Behavior -->
+                    <div class="space-y-6">
+                        <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl p-8 card-hover">
+                            <h3 class="text-2xl font-semibold mb-6 flex items-center">
+                                <i class="fas fa-file-export mr-3 text-teal-400"></i>
+                                Formatos de Saída
+                            </h3>
+                            <div class="space-y-3">
+                                <div class="bg-black bg-opacity-20 p-4 rounded-xl flex items-center">
+                                    <i class="fas fa-check-circle mr-4 text-green-400"></i>
+                                    <div>
+                                        <code class="text-green-300 font-mono">.l2j</code>
+                                        <p class="text-sm text-gray-400">Padrão L2J — compatível com a maioria dos emuladores</p>
+                                    </div>
+                                </div>
+                                <div class="bg-black bg-opacity-20 p-4 rounded-xl flex items-center">
+                                    <i class="fas fa-check-circle mr-4 text-teal-400"></i>
+                                    <div>
+                                        <code class="text-teal-300 font-mono">_conv.dat</code>
+                                        <p class="text-sm text-gray-400">CONV_DAT — formato com cabeçalho estendido por região</p>
+                                    </div>
+                                </div>
+                                <div class="bg-black bg-opacity-20 p-4 rounded-xl flex items-center">
+                                    <i class="fas fa-check-circle mr-4 text-yellow-400"></i>
+                                    <div>
+                                        <code class="text-yellow-300 font-mono">.l2g</code>
+                                        <p class="text-sm text-gray-400">L2G — saída criptografada com chave XOR aleatória</p>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="bg-gradient-to-r from-gray-50 to-gray-100 p-6 rounded-xl border-l-4 border-gray-500">
-                                <h4 class="font-semibold text-gray-700 mb-2">Parser</h4>
-                                <p class="text-sm text-gray-600">Utilitários avançados de parsing de dados do jogo</p>
-                            </div>
+                        </div>
+
+                        <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl p-8 card-hover">
+                            <h3 class="text-xl font-semibold mb-4 flex items-center">
+                                <i class="fas fa-copy mr-3 text-blue-400"></i>
+                                Cópia Inteligente
+                            </h3>
+                            <p class="text-gray-300 leading-relaxed">
+                                Se o arquivo de entrada já estiver no formato de saída selecionado, ele é <strong class="text-white">copiado diretamente</strong> sem passar pelo processo de conversão. Isso preserva os dados originais com fidelidade total e economiza tempo de processamento.
+                            </p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Database -->
-                <div class="bg-white rounded-2xl shadow-xl p-8 mt-8 card-hover">
-                    <h3 class="text-2xl font-semibold mb-6 text-gray-800"><i class="fas fa-database mr-3 text-gray-600"></i>Sistema de Banco de Dados</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="bg-gradient-to-r from-gray-50 to-gray-100 p-6 rounded-xl border-l-4 border-gray-500 card-hover">
-                            <h4 class="font-semibold text-gray-700 mb-2">AppDatabase</h4>
-                            <p class="text-gray-600 leading-relaxed">Classe principal para acesso ao banco de dados e gerenciamento de conexões</p>
+                <!-- How to Use -->
+                <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl p-8 card-hover">
+                    <h3 class="text-2xl font-semibold mb-8 flex items-center">
+                        <i class="fas fa-play-circle mr-3 text-green-400"></i>
+                        Como Usar o Converter Geodata
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        <div class="text-center">
+                            <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-teal-500 rounded-full flex items-center justify-center text-white font-bold text-lg mx-auto mb-4">1</div>
+                            <h4 class="font-semibold mb-2">Pasta de Entrada</h4>
+                            <p class="text-sm text-gray-400">Selecione a pasta com os arquivos geodata a converter. O formato é detectado automaticamente pela extensão.</p>
                         </div>
-                        <div class="bg-gradient-to-r from-gray-50 to-gray-100 p-6 rounded-xl border-l-4 border-gray-500 card-hover">
-                            <h4 class="font-semibold text-gray-700 mb-2">Database</h4>
-                            <p class="text-gray-600 leading-relaxed">Operações de banco de dados e manipulação de dados</p>
+                        <div class="text-center">
+                            <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-teal-500 rounded-full flex items-center justify-center text-white font-bold text-lg mx-auto mb-4">2</div>
+                            <h4 class="font-semibold mb-2">Pasta de Saída</h4>
+                            <p class="text-sm text-gray-400">Selecione onde os arquivos convertidos serão salvos. Os arquivos de saída seguem a nomenclatura padrão <code class="text-green-300">X_Y.ext</code>.</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-teal-500 rounded-full flex items-center justify-center text-white font-bold text-lg mx-auto mb-4">3</div>
+                            <h4 class="font-semibold mb-2">Formato de Saída</h4>
+                            <p class="text-sm text-gray-400">Escolha o formato de destino: L2J, CONV_DAT ou L2G. Apenas arquivos em formato diferente serão convertidos.</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-teal-500 rounded-full flex items-center justify-center text-white font-bold text-lg mx-auto mb-4">4</div>
+                            <h4 class="font-semibold mb-2">Iniciar Conversão</h4>
+                            <p class="text-sm text-gray-400">Clique em <strong class="text-white">Iniciar Conversão</strong>. O progresso e os logs aparecem em tempo real. É possível cancelar a qualquer momento.</p>
                         </div>
                     </div>
                 </div>
@@ -1054,65 +1150,6 @@ public void RegisterBlock(TextBox block)</code></pre>
         </div>
     </section>
 
-    <!-- Changelog Section -->
-    <section class="bg-gradient-to-br from-blue-800 to-purple-900 text-white py-16 relative overflow-hidden">
-        <div class="absolute inset-0 bg-black bg-opacity-20"></div>
-        <div class="container mx-auto px-6 relative z-10">
-            <div class="max-w-4xl mx-auto text-center">
-                <h2 class="text-4xl font-bold mb-8">
-                    <i class="fas fa-rocket mr-3"></i>
-                    Changelog - Live Data XML
-                </h2>
-                <p class="text-xl text-blue-200 mb-12">
-                    Veja as últimas melhorias implementadas no módulo Live Data
-                </p>
-                
-                <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl p-8 shadow-2xl">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <div class="text-center">
-                            <div class="bg-green-500 bg-opacity-20 rounded-xl p-6 mb-4">
-                                <i class="fas fa-plus-circle text-3xl text-green-400 mb-4"></i>
-                                <h3 class="font-semibold text-green-300 mb-2">Adicionado</h3>
-                                <ul class="text-sm text-white space-y-1">
-                                    <li>Geração de XML automática</li>
-                                    <li>Arquivo ItemStatData.txt</li>
-                                    <li>Conversão S+ → S</li>
-                                    <li>Brilho do enchant</li>
-                                </ul>
-                            </div>
-                        </div>
-                        
-                        <div class="text-center">
-                            <div class="bg-blue-500 bg-opacity-20 rounded-xl p-6 mb-4">
-                                <i class="fas fa-cog text-3xl text-blue-400 mb-4"></i>
-                                <h3 class="font-semibold text-blue-300 mb-2">Melhorado</h3>
-                                <ul class="text-sm text-white space-y-1">
-                                    <li>Interface com checkboxes</li>
-                                    <li>Processamento de armas</li>
-                                    <li>Processamento de armaduras</li>
-                                    <li>Sistema de logs</li>
-                                </ul>
-                            </div>
-                        </div>
-                        
-                        <div class="text-center">
-                            <div class="bg-purple-500 bg-opacity-20 rounded-xl p-6 mb-4">
-                                <i class="fas fa-magic text-3xl text-purple-400 mb-4"></i>
-                                <h3 class="font-semibold text-purple-300 mb-2">Automático</h3>
-                                <ul class="text-sm text-white space-y-1">
-                                    <li>Conversão de grades</li>
-                                    <li>Geração de stats</li>
-                                    <li>Configuração de enchant</li>
-                                    <li>Formatação XML</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Footer -->
     <footer class="bg-dark text-white py-12">
         <div class="container mx-auto px-4">
@@ -1127,7 +1164,7 @@ public void RegisterBlock(TextBox block)</code></pre>
                         <li><a href="#instalacao" class="hover:text-white transition-colors">Instalação</a></li>
                         <li><a href="#funcionalidades" class="hover:text-white transition-colors">Funcionalidades</a></li>
                         <li><a href="#live-data" class="hover:text-white transition-colors">Live Data</a></li>
-                        <li><a href="#api" class="hover:text-white transition-colors">API</a></li>
+                        <li><a href="#geodata-converter" class="hover:text-white transition-colors">Geodata Converter</a></li>
                     </ul>
                 </div>
                 <div>
