@@ -247,7 +247,7 @@
 
                         <Button Click="BtnSpawnManager_Click" Theme="{StaticResource SidebarButtonStyle}">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="&#xE8B8;" FontFamily="Segoe MDL2 Assets" FontSize="16" Foreground="#5B9BD5" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                                <TextBlock Text="&#xE77F;" FontFamily="Segoe MDL2 Assets" FontSize="16" Foreground="#5B9BD5" VerticalAlignment="Center" Margin="0,0,12,0"/>
                                 <TextBlock Text="NPC Spawn XML"/>
                             </StackPanel>
                         </Button>
@@ -268,7 +268,7 @@
 
                         <Button Click="BtnMissions_Click" Theme="{StaticResource SidebarButtonStyle}">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="&#xE8FD;" FontFamily="Segoe MDL2 Assets" FontSize="16" Foreground="#5B9BD5" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                                <TextBlock Text="&#xE73E;" FontFamily="Segoe MDL2 Assets" FontSize="16" Foreground="#5B9BD5" VerticalAlignment="Center" Margin="0,0,12,0"/>
                                 <TextBlock Text="Missões Diárias"/>
                             </StackPanel>
                         </Button>
