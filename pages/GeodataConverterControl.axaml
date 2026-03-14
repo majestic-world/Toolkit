@@ -79,7 +79,7 @@
         <StackPanel>
 
             <!-- Page Header -->
-            <StackPanel Margin="32,28,32,24" Spacing="3">
+            <StackPanel Margin="32,10,32,16" Spacing="3">
                 <TextBlock Text="Converter Geodata"
                            FontSize="22"
                            FontWeight="SemiBold"
@@ -336,7 +336,7 @@
                                  Classes="Code"
                                  AcceptsReturn="True"
                                  TextWrapping="Wrap"
-                                 Height="220"
+                                 Height="200"
                                  Padding="20,14"
                                  BorderThickness="0"
                                  Background="#383838"
