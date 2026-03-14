@@ -195,18 +195,38 @@
                             </StackPanel>
 
                             <StackPanel Spacing="6">
-                                <TextBlock Text="IDs dos materiais (separados por ; ou intervalo com ...)"
+                                <TextBlock Text="Ingredientes (formato: id;quantidade)"
                                            FontSize="12"
                                            Foreground="#9A9A9A"
                                            FontWeight="Medium"/>
-                                <TextBox x:Name="MaterialId"
-                                         Classes="FormField"
-                                         Height="38"
-                                         Padding="12,0"
-                                         VerticalContentAlignment="Center"
-                                         FontFamily="Consolas,Courier New,monospace"
-                                         FontSize="12"
-                                         Watermark="Ex: 57 (Adena) ou 4356;4357"/>
+                                <Grid ColumnDefinitions="*,10,Auto">
+                                    <TextBox x:Name="MaterialInput"
+                                             Grid.Column="0"
+                                             Classes="FormField"
+                                             Height="38"
+                                             Padding="12,0"
+                                             VerticalContentAlignment="Center"
+                                             FontFamily="Consolas,Courier New,monospace"
+                                             FontSize="12"
+                                             Watermark="Ex: 57;500"/>
+                                    <Button x:Name="AddIngredientBtn"
+                                            Grid.Column="2"
+                                            Height="38"
+                                            Padding="16,0"
+                                            Theme="{StaticResource GhostButton}">
+                                        <StackPanel Orientation="Horizontal" Spacing="7">
+                                            <TextBlock Text="&#xE710;"
+                                                       FontFamily="Segoe MDL2 Assets"
+                                                       FontSize="13"
+                                                       VerticalAlignment="Center"/>
+                                            <TextBlock Text="Adicionar"
+                                                       FontSize="13"
+                                                       FontWeight="Medium"
+                                                       VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+                                </Grid>
+                                <WrapPanel x:Name="IngredientsPanel" IsVisible="False"/>
                             </StackPanel>
 
                         </StackPanel>

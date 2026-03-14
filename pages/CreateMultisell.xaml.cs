@@ -1,10 +1,14 @@
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Layout;
+using Avalonia.Media;
 using Avalonia.Threading;
 using L2Toolkit.Parse;
 using L2Toolkit.Utilities;
@@ -29,6 +33,78 @@ public partial class CreateMultisell : UserControl
             AssetsWarnBorder.IsVisible = true;
             AssetsWarnBorder.PointerReleased += (_, _) => AppNavigator.RequestNavigateTo("settings");
         }
+
+        AddIngredientBtn.Click += (_, _) => AddIngredient();
+        MaterialInput.KeyDown += (_, e) => { if (e.Key == Key.Enter) AddIngredient(); };
+    }
+
+    private void AddIngredient()
+    {
+        var text = MaterialInput.Text?.Trim() ?? "";
+        if (string.IsNullOrEmpty(text)) return;
+
+        var parts = text.Split(';');
+        if (parts.Length != 2 || !long.TryParse(parts[0].Trim(), out _) || !long.TryParse(parts[1].Trim(), out _))
+        {
+            ShowNotification("Formato inválido. Use id;quantidade — ex: 57;500");
+            return;
+        }
+
+        var id = parts[0].Trim();
+        var count = parts[1].Trim();
+
+        _ingredients.Add((id, count));
+        AddIngredientTag(id, count);
+        MaterialInput.Text = string.Empty;
+        MaterialInput.Focus();
+        IngredientsPanel.IsVisible = true;
+    }
+
+    private void AddIngredientTag(string id, string count)
+    {
+        var label = new TextBlock
+        {
+            Text = $"{id}-{count}",
+            FontFamily = new FontFamily("Consolas,Courier New,monospace"),
+            FontSize = 12,
+            Foreground = new SolidColorBrush(Color.Parse("#B0B0B0")),
+            VerticalAlignment = VerticalAlignment.Center
+        };
+
+        var closeIcon = new TextBlock
+        {
+            Text = "\uE711",
+            FontFamily = new FontFamily("Segoe MDL2 Assets"),
+            FontSize = 10,
+            Foreground = new SolidColorBrush(Color.Parse("#707070")),
+            VerticalAlignment = VerticalAlignment.Center,
+            Margin = new Avalonia.Thickness(4, 0, 0, 0)
+        };
+
+        var inner = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 0 };
+        inner.Children.Add(label);
+        inner.Children.Add(closeIcon);
+
+        var pill = new Border
+        {
+            Background = new SolidColorBrush(Color.Parse("#2E2E2E")),
+            BorderBrush = new SolidColorBrush(Color.Parse("#505050")),
+            BorderThickness = new Avalonia.Thickness(1),
+            CornerRadius = new Avalonia.CornerRadius(4),
+            Padding = new Avalonia.Thickness(8, 4),
+            Margin = new Avalonia.Thickness(0, 0, 6, 4),
+            Cursor = new Avalonia.Input.Cursor(Avalonia.Input.StandardCursorType.Hand),
+            Child = inner
+        };
+
+        pill.PointerReleased += (_, _) =>
+        {
+            _ingredients.Remove((id, count));
+            IngredientsPanel.Children.Remove(pill);
+            IngredientsPanel.IsVisible = IngredientsPanel.Children.Count > 0;
+        };
+
+        IngredientsPanel.Children.Add(pill);
     }
 
     private void ShowNotification(string message)
@@ -40,6 +116,7 @@ public partial class CreateMultisell : UserControl
     }
 
     private readonly ConcurrentDictionary<string, ItemName> _listNames = new();
+    private readonly List<(string Id, string Count)> _ingredients = new();
     private static string AssetsDir => L2Toolkit.database.AppDatabase.GetInstance().GetValue("assetsDir");
     private static string FileName => Path.Combine(AssetsDir, "ItemName_Classic-eu.txt");
 
@@ -64,11 +141,16 @@ public partial class CreateMultisell : UserControl
         try
         {
             var productionId = ProductionId.Text;
-            var materialId = MaterialId.Text;
 
-            if (string.IsNullOrWhiteSpace(productionId) || string.IsNullOrWhiteSpace(materialId))
+            if (string.IsNullOrWhiteSpace(productionId))
             {
-                ShowNotification("Digite o Id e material.");
+                ShowNotification("Digite os IDs de produção.");
+                return;
+            }
+
+            if (_ingredients.Count == 0)
+            {
+                ShowNotification("Adicione pelo menos um ingrediente.");
                 return;
             }
 
@@ -79,7 +161,6 @@ public partial class CreateMultisell : UserControl
             }
 
             var listId = Parser.ParseId(productionId);
-            var listMaterial = Parser.ParseId(materialId);
 
             var root = new XElement("list");
             root.Add(new XElement("config",
@@ -94,17 +175,15 @@ public partial class CreateMultisell : UserControl
                 _listNames.TryGetValue(item, out var model);
                 var name = model?.Name ?? "Production";
                 if (!string.IsNullOrWhiteSpace(model?.AdditionalName))
-                {
                     name += $" {model.AdditionalName}";
-                }
 
                 var el = new XElement("item");
                 el.Add(new XComment("Ingredients"));
-                foreach (var material in listMaterial)
+                foreach (var (ingId, ingCount) in _ingredients)
                 {
                     el.Add(new XElement("ingredient",
-                        new XAttribute("id", material),
-                        new XAttribute("count", "500")
+                        new XAttribute("id", ingId),
+                        new XAttribute("count", ingCount)
                     ));
                 }
 
