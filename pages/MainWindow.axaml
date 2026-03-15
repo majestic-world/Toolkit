@@ -138,7 +138,7 @@
                                Foreground="#5B9BD5"
                                VerticalAlignment="Center"
                                Margin="0,0,8,0"/>
-                    <TextBlock Text="L2 Toolkit"
+                    <TextBlock Text="L2 Toolkit By Mk"
                                Foreground="#E8E8E8"
                                FontSize="12"
                                FontWeight="SemiBold"
