@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Avalonia.Controls;
@@ -741,12 +742,83 @@ public partial class LiveData : UserControl
         }
 
         Dispatcher.UIThread.Invoke(() => ClientTextBox.Text = itemGrpBuild.ToString());
-        Dispatcher.UIThread.Invoke(() => NameData.Text = itemNameBuild.ToString());
+
+        var (updatedNames, setGrpOutput) = await ProcessSetItemGrp(itemNameBuild.ToString());
+
+        Dispatcher.UIThread.Invoke(() => NameData.Text = updatedNames);
+        Dispatcher.UIThread.Invoke(() => SetItemGrpData.Text = setGrpOutput);
 
         await ProcessXmlArmors(recoveryArmors);
 
         itemGrpBuild.Clear();
         itemNameBuild.Clear();
+    }
+
+    private async Task<(string names, string setGrp)> ProcessSetItemGrp(string namesText)
+    {
+        var nextIdText = string.Empty;
+        Dispatcher.UIThread.Invoke(() => nextIdText = SetItemNextId.Text ?? string.Empty);
+
+        if (!int.TryParse(nextIdText.Trim(), out var nextId) || nextId <= 0)
+            return (namesText, string.Empty);
+
+        // Coleta todos os name_class positivos únicos das linhas de nomes
+        var classIds = new SortedSet<int>();
+        using (var namesReader = new StringReader(namesText))
+        {
+            string? l;
+            while ((l = namesReader.ReadLine()) != null)
+            {
+                var match = Regex.Match(l, @"name_class=(-?\d+)");
+                if (!match.Success) continue;
+                if (int.TryParse(match.Groups[1].Value, out var val) && val > 0)
+                    classIds.Add(val);
+            }
+        }
+
+        if (classIds.Count == 0) return (namesText, string.Empty);
+
+        // Monta o mapeamento antigo → novo sequencial
+        var mapping = new Dictionary<int, int>();
+        var counter = nextId;
+        foreach (var oldId in classIds)
+            mapping[oldId] = counter++;
+
+        // Atualiza as linhas de nomes com os novos IDs
+        var updatedNames = new StringBuilder();
+        using (var namesReader2 = new StringReader(namesText))
+        {
+            string? l;
+            while ((l = namesReader2.ReadLine()) != null)
+            {
+                if (string.IsNullOrWhiteSpace(l)) continue;
+                var updated = Regex.Replace(l, @"name_class=(-?\d+)", m =>
+                {
+                    if (int.TryParse(m.Groups[1].Value, out var val) && mapping.TryGetValue(val, out var newVal))
+                        return $"name_class={newVal}";
+                    return m.Value;
+                });
+                updatedNames.AppendLine(updated);
+            }
+        }
+
+        // Lê SetItemGrp e filtra as linhas cujo num original está no mapeamento
+        var setContent = LoadTable("SetItemGrp-eu");
+        var result = new StringBuilder();
+        using var reader = new StringReader(setContent);
+        string? line2;
+        while ((line2 = await reader.ReadLineAsync()) != null)
+        {
+            var numMatch = Regex.Match(line2, @"\bnum=(\d+)\b");
+            if (!numMatch.Success) continue;
+            if (!int.TryParse(numMatch.Groups[1].Value, out var numVal)) continue;
+            if (!mapping.TryGetValue(numVal, out var newNum)) continue;
+
+            var newLine = Regex.Replace(line2, @"\bnum=\d+\b", $"num={newNum}");
+            result.AppendLine(newLine);
+        }
+
+        return (updatedNames.ToString(), result.ToString());
     }
 
     #endregion
@@ -865,6 +937,11 @@ public partial class LiveData : UserControl
                 throw new Exception("Preencha todos os campos");
             }
 
+            if (type == "Armor" && !int.TryParse(SetItemNextId.Text?.Trim(), out _))
+            {
+                throw new Exception("Informe o próximo ID do Item Set para processar armaduras");
+            }
+
             ClientTextBox.Text = "";
             NameData.Text = "";
             XmlData.Text = "";
@@ -928,22 +1005,26 @@ public partial class LiveData : UserControl
                 StackPanelXml.IsVisible = true;
                 ConvertSPlusCheckBox.IsVisible = true;
                 EnableEnchantGlowCheckBox.IsVisible = true;
+                SetItemIdPanel.IsVisible = true;
                 return;
             case "Items":
                 StackPanelXml.IsVisible = true;
                 ConvertSPlusCheckBox.IsVisible = false;
                 EnableEnchantGlowCheckBox.IsVisible = false;
+                SetItemIdPanel.IsVisible = false;
                 return;
             case "Weapons":
                 StackPanelXml.IsVisible = true;
                 ConvertSPlusCheckBox.IsVisible = true;
                 EnableEnchantGlowCheckBox.IsVisible = false;
+                SetItemIdPanel.IsVisible = false;
                 return;
         }
 
         StackPanelXml.IsVisible = false;
         ConvertSPlusCheckBox.IsVisible = false;
         EnableEnchantGlowCheckBox.IsVisible = false;
+        SetItemIdPanel.IsVisible = false;
     }
 
     private async void CopyXml_OnClick(object sender, RoutedEventArgs e)
@@ -955,6 +1036,17 @@ public partial class LiveData : UserControl
         XmlCopied.IsVisible = true;
         await Task.Delay(3000);
         XmlCopied.IsVisible = false;
+    }
+
+    private async void CopiarSetItemGrpButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        var text = SetItemGrpData.Text;
+        if (string.IsNullOrEmpty(text)) return;
+        var topLevel = TopLevel.GetTopLevel(this);
+        await topLevel!.Clipboard!.SetTextAsync(text);
+        SetItemGrpCopyData.IsVisible = true;
+        await Task.Delay(3000);
+        SetItemGrpCopyData.IsVisible = false;
     }
 
 }
