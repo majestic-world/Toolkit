@@ -330,15 +330,12 @@ public partial class AppSettingsControl : UserControl
 
     private static void OpenFolder(string path)
     {
-        ProcessStartInfo psi;
-        if (OperatingSystem.IsWindows())
-            psi = new ProcessStartInfo("explorer.exe", path);
-        else if (OperatingSystem.IsMacOS())
-            psi = new ProcessStartInfo("open", path);
-        else
-            psi = new ProcessStartInfo("xdg-open", path);
+        string exe = OperatingSystem.IsWindows() ? "explorer.exe"
+                   : OperatingSystem.IsMacOS()   ? "open"
+                                                  : "xdg-open";
 
-        psi.UseShellExecute = true;
+        var psi = new ProcessStartInfo(exe) { UseShellExecute = false };
+        psi.ArgumentList.Add(path);
         Process.Start(psi);
     }
 
