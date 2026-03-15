@@ -88,13 +88,7 @@
                     Padding="14,10"
                     IsVisible="False">
                 <Grid ColumnDefinitions="Auto,*" HorizontalAlignment="Stretch">
-                    <TextBlock Grid.Column="0"
-                               Text="&#xE7BA;"
-                               FontFamily="Segoe MDL2 Assets"
-                               FontSize="14"
-                               Foreground="#D4A017"
-                               VerticalAlignment="Center"
-                               Margin="0,0,10,0"/>
+                    <PathIcon Grid.Column="0" Data="M12 2L1 21h22L12 2zm1 16h-2v-2h2v2zm0-4h-2V9h2v5z" Width="14" Height="14" Foreground="#D4A017" VerticalAlignment="Center" Margin="0,0,10,0"/>
                     <TextBlock Grid.Column="1"
                                x:Name="StatusNotificacao"
                                Foreground="#D4A017"
@@ -158,10 +152,7 @@
                                     Padding="16,0"
                                     Theme="{StaticResource GhostButton}">
                                 <StackPanel Orientation="Horizontal" Spacing="8">
-                                    <TextBlock Text="&#xE838;"
-                                               FontFamily="Segoe MDL2 Assets"
-                                               FontSize="13"
-                                               VerticalAlignment="Center"/>
+                                    <PathIcon Data="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" Foreground="#9A9A9A" Width="14" Height="14" VerticalAlignment="Center"/>
                                     <TextBlock Text="Selecionar"
                                                FontSize="13"
                                                FontWeight="Medium"
@@ -187,10 +178,7 @@
                         Margin="20,0"
                         Theme="{StaticResource SecondaryButton}">
                     <StackPanel Orientation="Horizontal" Spacing="9">
-                        <TextBlock Text="&#xE72D;"
-                                   FontFamily="Segoe MDL2 Assets"
-                                   FontSize="13"
-                                   VerticalAlignment="Center"/>
+                        <PathIcon Data="M8 5v14l11-7z" Width="14" Height="14" VerticalAlignment="Center"/>
                         <TextBlock Text="Gerar Dados"
                                    FontSize="13"
                                    FontWeight="SemiBold"
@@ -251,11 +239,7 @@
                                     VerticalAlignment="Center"
                                     Margin="0,0,10,0">
                                 <StackPanel Orientation="Horizontal" Spacing="5">
-                                    <TextBlock Text="&#xE73E;"
-                                               FontFamily="Segoe MDL2 Assets"
-                                               FontSize="10"
-                                               Foreground="#52C97A"
-                                               VerticalAlignment="Center"/>
+                                    <PathIcon Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Width="10" Height="10" Foreground="#52C97A" VerticalAlignment="Center"/>
                                     <TextBlock Text="Copiado!"
                                                FontSize="11"
                                                FontWeight="Medium"
@@ -272,10 +256,7 @@
                                     VerticalAlignment="Center"
                                     Theme="{StaticResource GhostButton}">
                                 <StackPanel Orientation="Horizontal" Spacing="7">
-                                    <TextBlock Text="&#xE8C8;"
-                                               FontFamily="Segoe MDL2 Assets"
-                                               FontSize="12"
-                                               VerticalAlignment="Center"/>
+                                    <PathIcon Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" Foreground="#9A9A9A" Width="12" Height="12" VerticalAlignment="Center"/>
                                     <TextBlock Text="Copiar"
                                                FontSize="12"
                                                FontWeight="Medium"

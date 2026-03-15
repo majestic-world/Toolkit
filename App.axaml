@@ -76,14 +76,7 @@
                                               Content="{TemplateBinding SelectionBoxItem}"
                                               ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
                                               Foreground="{TemplateBinding Foreground}"/>
-                            <TextBlock Grid.Column="1"
-                                       Text="&#xE70D;"
-                                       FontFamily="Segoe MDL2 Assets"
-                                       FontSize="10"
-                                       Foreground="#9A9A9A"
-                                       Margin="0,0,10,0"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"/>
+                            <PathIcon Grid.Column="1" Data="M7 10l5 5 5-5z" Width="10" Height="10" Foreground="#9A9A9A" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,10,0"/>
                             <Popup Grid.ColumnSpan="2"
                                    x:Name="PART_Popup"
                                    WindowManagerAddShadowHint="False"

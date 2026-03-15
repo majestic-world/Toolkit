@@ -135,10 +135,7 @@
                         Margin="20,0"
                         Theme="{StaticResource SecondaryButton}">
                     <StackPanel Orientation="Horizontal" Spacing="9">
-                        <TextBlock Text="&#xE72D;"
-                                   FontFamily="Segoe MDL2 Assets"
-                                   FontSize="13"
-                                   VerticalAlignment="Center"/>
+                        <PathIcon Data="M8 5v14l11-7z" Width="14" Height="14" VerticalAlignment="Center"/>
                         <TextBlock Text="Converter para XML"
                                    FontSize="13"
                                    FontWeight="SemiBold"
@@ -203,11 +200,7 @@
                                     VerticalAlignment="Center"
                                     Margin="0,0,10,0">
                                 <StackPanel Orientation="Horizontal" Spacing="5">
-                                    <TextBlock Text="&#xE73E;"
-                                               FontFamily="Segoe MDL2 Assets"
-                                               FontSize="10"
-                                               Foreground="#52C97A"
-                                               VerticalAlignment="Center"/>
+                                    <PathIcon Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Width="10" Height="10" Foreground="#52C97A" VerticalAlignment="Center"/>
                                     <TextBlock Text="Copiado!"
                                                FontSize="11"
                                                FontWeight="Medium"
@@ -224,10 +217,7 @@
                                     VerticalAlignment="Center"
                                     Theme="{StaticResource GhostButton}">
                                 <StackPanel Orientation="Horizontal" Spacing="7">
-                                    <TextBlock Text="&#xE8C8;"
-                                               FontFamily="Segoe MDL2 Assets"
-                                               FontSize="12"
-                                               VerticalAlignment="Center"/>
+                                    <PathIcon Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" Foreground="#9A9A9A" Width="12" Height="12" VerticalAlignment="Center"/>
                                     <TextBlock Text="Copiar"
                                                FontSize="12"
                                                FontWeight="Medium"
