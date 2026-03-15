@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+
+    <!-- ═══ Identidade ═══ -->
+    <key>CFBundleIdentifier</key>
+    <string>com.majesticworld.l2toolkit</string>
+
+    <key>CFBundleName</key>
+    <string>L2 Toolkit</string>
+
+    <key>CFBundleDisplayName</key>
+    <string>L2 Toolkit</string>
+
+    <!-- Deve bater com AssemblyName no .csproj -->
+    <key>CFBundleExecutable</key>
+    <string>L2 Toolkit</string>
+
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+
+    <key>CFBundleSignature</key>
+    <string>????</string>
+
+    <!-- ═══ Versão ═══ -->
+    <key>CFBundleShortVersionString</key>
+    <string>3.0</string>
+
+    <key>CFBundleVersion</key>
+    <string>3.0.0</string>
+
+    <!-- ═══ Ícone ═══ -->
+    <key>CFBundleIconFile</key>
+    <string>favicon</string>
+
+    <key>CFBundleIconName</key>
+    <string>favicon</string>
+
+    <!-- ═══ Requisitos de sistema ═══ -->
+    <!-- .NET 10 exige macOS 12.0 (Monterey) ou superior -->
+    <key>LSMinimumSystemVersion</key>
+    <string>12.0</string>
+
+    <!-- ═══ Categoria na App Store ═══ -->
+    <key>LSApplicationCategoryType</key>
+    <string>public.app-category.developer-tools</string>
+
+    <!-- ═══ Exibição ═══ -->
+    <!-- Suporte a telas Retina -->
+    <key>NSHighResolutionCapable</key>
+    <true/>
+
+    <!-- Permite modo escuro/claro do sistema -->
+    <key>NSRequiresAquaSystemAppearance</key>
+    <false/>
+
+    <!-- Troca automática de GPU discreta/integrada -->
+    <key>NSSupportsAutomaticGraphicsSwitching</key>
+    <true/>
+
+    <!-- ═══ Copyright ═══ -->
+    <key>NSHumanReadableCopyright</key>
+    <string>Copyright © 2025 Majestic World Studio</string>
+
+    <!-- ═══ Permissões de acesso a arquivos ═══ -->
+    <!-- Necessário para o file/folder picker do Avalonia funcionar no macOS -->
+    <key>NSDesktopFolderUsageDescription</key>
+    <string>L2 Toolkit precisa acessar arquivos de dados do jogo na Área de Trabalho.</string>
+
+    <key>NSDocumentsFolderUsageDescription</key>
+    <string>L2 Toolkit precisa acessar arquivos de dados do jogo em Documentos.</string>
+
+    <key>NSDownloadsFolderUsageDescription</key>
+    <string>L2 Toolkit precisa acessar arquivos de dados do jogo em Downloads.</string>
+
+</dict>
+</plist>

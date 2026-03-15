@@ -17,6 +17,23 @@
     <NoWarn>$(NoWarn);IL2104</NoWarn>
   </PropertyGroup>
 
+  <!-- ═══ macOS App Bundle ═══ -->
+  <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+    <CFBundleIdentifier>com.majesticworld.l2toolkit</CFBundleIdentifier>
+    <CFBundleName>L2 Toolkit</CFBundleName>
+    <CFBundleDisplayName>L2 Toolkit</CFBundleDisplayName>
+    <CFBundleShortVersionString>3.0</CFBundleShortVersionString>
+    <CFBundleVersion>3.0.0</CFBundleVersion>
+    <ApplicationIcon>images/favicon.icns</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+    <!-- Ícone copiado para Contents/Resources/ do bundle -->
+    <BundleResource Include="images\favicon.icns">
+      <Link>favicon.icns</Link>
+    </BundleResource>
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.2.0" />
     <PackageReference Include="Avalonia.Desktop" Version="11.2.0" />
