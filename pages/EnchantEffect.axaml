@@ -196,7 +196,7 @@
                             </Grid.ColumnDefinitions>
 
                             <!-- Gerar Ring -->
-                            <Button Grid.Column="0" Click="GenerateRing_Click"
+                            <Button Grid.Column="0" Click="GenerateRing_Click" IsEnabled="False"
                                     Theme="{StaticResource GhostButton}" Height="36" Padding="14,0">
                                 <StackPanel Orientation="Horizontal" Spacing="8">
                                     <PathIcon Width="13" Height="13" VerticalAlignment="Center"

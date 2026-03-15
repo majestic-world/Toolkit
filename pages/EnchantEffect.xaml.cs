@@ -246,7 +246,8 @@ public partial class EnchantEffect : UserControl
 
             // Radiance picker
             var (radPanel, radSwatch, radHex) = MakeColorPicker();
-            radHex.TextChanged  += (_, _) => OnHexChanged(radSwatch, radHex, "radiance", idx);
+            radHex.TextChanged   += (_, _) => OnHexChanged(radSwatch, radHex, "radiance", idx);
+            radHex.LostFocus     += (_, _) => OnRadHexLostFocus(radSwatch, radHex, idx);
             radSwatch.PointerPressed += (_, _) => ShowColorPicker(radSwatch, radHex);
             _radSwatches.Add(radSwatch);
             _radHexBoxes.Add(radHex);
@@ -376,6 +377,30 @@ public partial class EnchantEffect : UserControl
         }
 
         RefreshPreview();
+    }
+
+    private void OnRadHexLostFocus(Border swatch, TextBox box, int idx)
+    {
+        // Normalize: strip optional '#', trim whitespace, uppercase
+        var raw = (box.Text?.Trim().TrimStart('#') ?? "").ToUpper();
+
+        if (TryParseHex(raw, out _))
+        {
+            // Valid hex — update box text; if it changed, TextChanged fires → OnHexChanged handles the rest
+            if (box.Text != raw)
+                box.Text = raw;
+            // If text was already normalized TextChanged won't re-fire, but OnHexChanged
+            // already ran when the 6th character was typed — nothing extra needed
+        }
+        else
+        {
+            // Invalid input — silently reset to last known good value from the model
+            var fallback = _currentEntry?.Levels[idx].Radiance.Primary ?? "000000";
+            _suppressHexUpdate = true;
+            box.Text = fallback;
+            SetSwatchColor(swatch, fallback);
+            _suppressHexUpdate = false;
+        }
     }
 
     // ─── Color picker popup ───────────────────────────────────────────────────
