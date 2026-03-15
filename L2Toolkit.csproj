@@ -44,5 +44,6 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Tables\*.l2dat" />
+    <EmbeddedResource Include="Data\Presets.json" />
   </ItemGroup>
 </Project>

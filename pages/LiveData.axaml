@@ -193,6 +193,17 @@
                                 </ComboBox>
                             </StackPanel>
 
+                            <!-- Preset -->
+                            <StackPanel x:Name="PresetPanel" Spacing="6" IsVisible="False">
+                                <TextBlock Text="Preset"
+                                           FontSize="12"
+                                           Foreground="#9A9A9A"
+                                           FontWeight="Medium"/>
+                                <ComboBox x:Name="PresetComboBox"
+                                          PlaceholderText="Selecione um preset..."
+                                          SelectionChanged="PresetComboBox_OnSelectionChanged"/>
+                            </StackPanel>
+
                             <!-- IDs dos itens -->
                             <StackPanel Spacing="6">
                                 <TextBlock Text="IDs dos itens (separados por ; ou intervalo com ...)"

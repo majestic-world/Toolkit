@@ -2,8 +2,10 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Avalonia.Controls;
@@ -29,6 +31,10 @@ public partial class LiveData : UserControl
     /// <summary>Cache of unpacked .l2dat embedded resources (table name → text content).</summary>
     private readonly ConcurrentDictionary<string, string> _tableCache = new();
 
+    private sealed record Preset(string Name, string Category, string Ids);
+    private List<Preset> _allPresets = [];
+    private List<Preset> _currentPresets = [];
+
     public LiveData()
     {
         _errorTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(6) };
@@ -36,6 +42,38 @@ public partial class LiveData : UserControl
 
         InitializeComponent();
         _log.RegisterBlock(LogContent);
+        LoadPresets();
+        UpdatePresets("Skills");
+    }
+
+    private void LoadPresets()
+    {
+        try
+        {
+            var stream = Assembly.GetExecutingAssembly()
+                .GetManifestResourceStream("L2Toolkit.Data.Presets.json");
+            if (stream == null) return;
+            using var reader = new StreamReader(stream);
+            var json = reader.ReadToEnd();
+            _allPresets = JsonSerializer.Deserialize<List<Preset>>(json,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? [];
+        }
+        catch { }
+    }
+
+    private void UpdatePresets(string category)
+    {
+        _currentPresets = _allPresets.Where(p => p.Category == category).ToList();
+        PresetComboBox.ItemsSource = _currentPresets.Select(p => p.Name).ToList();
+        PresetComboBox.SelectedIndex = -1;
+        PresetPanel.IsVisible = _currentPresets.Count > 0;
+    }
+
+    private void PresetComboBox_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        var idx = PresetComboBox.SelectedIndex;
+        if (idx < 0 || idx >= _currentPresets.Count) return;
+        ProcessClientId.Text = _currentPresets[idx].Ids;
     }
 
     /// <summary>
@@ -951,6 +989,8 @@ public partial class LiveData : UserControl
         var typeItem = TypeProcess.SelectedItem as ComboBoxItem;
         string? textBox = typeItem?.Content?.ToString() ?? TypeProcess.SelectedItem as string;
         if (string.IsNullOrEmpty(textBox)) return;
+
+        UpdatePresets(textBox);
 
         switch (textBox)
         {

@@ -1,0 +1,37 @@
+﻿[
+  {
+    "name": "Dynasty Weapons",
+    "category": "Weapons",
+    "ids": "9441...9450;10004;9854...9880;10252;10527...10529;10253;10530...10532"
+  },
+  {
+    "name": "Icarus Weapons",
+    "category": "Weapons",
+    "ids": "10215...10226;10415;10434...10469"
+  },
+  {
+    "name": "Vesper Weapons",
+    "category": "Weapons",
+    "ids": "52;13457...13470;13884;14118...14159"
+  },
+  {
+    "name": "Boss Weapons (Low)",
+    "category": "Weapons",
+    "ids": "36417...36440;80066...80071;80315"
+  },
+  {
+    "name": "Boss Weapons (Mid)",
+    "category": "Weapons",
+    "ids": "36441...36464;80078...80083;80317"
+  },
+  {
+    "name": "Boss Weapons (High)",
+    "category": "Weapons",
+    "ids": "36465...36488;80078...80083;80317"
+  },
+  {
+    "name": "Boss Weapons (Top)",
+    "category": "Weapons",
+    "ids": "36489...36512;80084...80089;80318"
+  }
+]
