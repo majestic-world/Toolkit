@@ -679,9 +679,6 @@ public partial class EnchantEffect : UserControl
 
     // ─── Generator ────────────────────────────────────────────────────────────
 
-    private void GenerateRing_Click(object? sender, RoutedEventArgs e)
-        => ApplyRingFromRadiance(_currentEntry);
-
     private void ApplyAll_Click(object? sender, RoutedEventArgs e)
     {
         if (_currentEntry == null) return;

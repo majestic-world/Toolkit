@@ -195,19 +195,8 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <!-- Gerar Ring -->
-                            <Button Grid.Column="0" Click="GenerateRing_Click" IsEnabled="False"
-                                    Theme="{StaticResource GhostButton}" Height="36" Padding="14,0">
-                                <StackPanel Orientation="Horizontal" Spacing="8">
-                                    <PathIcon Width="13" Height="13" VerticalAlignment="Center"
-                                              Foreground="#5B9BD5"
-                                              Data="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm0-3c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.65 0-3 1.35-3 3s1.35 3 3 3 3-1.35 3-3-1.35-3-3-3z"/>
-                                    <TextBlock Text="Gerar Ring" VerticalAlignment="Center" FontSize="13"/>
-                                </StackPanel>
-                            </Button>
-
                             <!-- Aplicar a todos -->
-                            <Button Grid.Column="2" Click="ApplyAll_Click"
+                            <Button Grid.Column="0" Click="ApplyAll_Click"
                                     Theme="{StaticResource GhostButton}" Height="36" Padding="14,0">
                                 <StackPanel Orientation="Horizontal" Spacing="8">
                                     <PathIcon Width="13" Height="13" VerticalAlignment="Center"
