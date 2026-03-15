@@ -23,9 +23,9 @@
 
             <!-- Botão da sidebar -->
             <ControlTheme x:Key="SidebarButtonStyle" TargetType="Button">
-                <Setter Property="Height" Value="40"/>
-                <Setter Property="Margin" Value="8,4"/>
-                <Setter Property="Padding" Value="16,0"/>
+                <Setter Property="Height" Value="34"/>
+                <Setter Property="Margin" Value="6,2"/>
+                <Setter Property="Padding" Value="14,0"/>
                 <Setter Property="Cursor" Value="Hand"/>
                 <Setter Property="FontSize" Value="14"/>
                 <Setter Property="FontWeight" Value="Medium"/>
@@ -207,7 +207,7 @@
         <!-- ═══ CONTEÚDO PRINCIPAL ═══ -->
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="280"/>
+                <ColumnDefinition Width="240"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
@@ -217,14 +217,14 @@
                     BorderThickness="0,0,1,0"
                     BoxShadow="2 0 8 0 #4D000000">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                    <StackPanel Margin="0,8,0,0">
+                    <StackPanel Margin="0,4,0,0">
 
                         <TextBlock Text="FERRAMENTAS"
                                    Foreground="{StaticResource SubTextColor}"
                                    FontSize="10"
                                    FontWeight="Bold"
                                    LetterSpacing="1"
-                                   Margin="24,12,16,6"/>
+                                   Margin="20,8,12,4"/>
 
                         <Button Click="BtnDoor_Click" Theme="{StaticResource SidebarButtonStyle}">
                             <StackPanel Orientation="Horizontal">
@@ -353,20 +353,19 @@
                         <Button Click="BtnEnchantEffect_Click" Theme="{StaticResource SidebarButtonStyle}">
                             <StackPanel Orientation="Horizontal">
                                 <!-- Sparkle / enchant glow icon -->
-                                <PathIcon Data="M12 2C12 2 13.5 7 16 9.5C18.5 12 22 12 22 12C22 12 18.5 12 16 14.5C13.5 17 12 22 12 22C12 22 10.5 17 8 14.5C5.5 12 2 12 2 12C2 12 5.5 12 8 9.5C10.5 7 12 2 12 2Z"
-                                          Width="16" Height="16" Foreground="#5B9BD5" VerticalAlignment="Center" Margin="0,0,12,0"/>
-                                <TextBlock Text="Efeito de Encantamento"/>
+                                <PathIcon Data="M551-800H280v-80h351l-80 80ZM391-640H160v-80h311l-80 80ZM231-480H40v-80h271l-80 80Zm353 80L480-504 280-304l104 104 200-200Zm-47-161 104 104 199-199-104-104-199 199Zm-84-28 216 216-229 229q-24 24-56 24t-56-24l-2-2-26 26H100l126-126-2-2q-24-24-24-56t24-56l229-229Zm0 0 227-227q24-24 56-24t56 24l104 104q24 24 24 56t-24 56L669-373 453-589Z" Width="16" Height="16" Foreground="#5B9BD5" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                                <TextBlock Text="Enchant Effect"/>
                             </StackPanel>
                         </Button>
 
-                        <Border Height="1" Background="#2C2C2C" Margin="16,8,16,0"/>
+                        <Border Height="1" Background="#2C2C2C" Margin="12,6,12,0"/>
 
                         <TextBlock Text="UTILITÁRIOS"
                                    Foreground="{StaticResource SubTextColor}"
                                    FontSize="10"
                                    FontWeight="Bold"
                                    LetterSpacing="1"
-                                   Margin="24,12,16,6"/>
+                                   Margin="20,8,12,4"/>
 
                         <Button Click="BtnSearchIcon_Click" Theme="{StaticResource SidebarButtonStyle}">
                             <StackPanel Orientation="Horizontal">
