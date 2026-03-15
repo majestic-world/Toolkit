@@ -243,6 +243,29 @@
         </StackPanel>
     </ScrollViewer>
 
+    <!-- Success toast notification -->
+    <Border x:Name="SuccessToast"
+            IsVisible="False"
+            Background="#162A1E"
+            BorderBrush="#2D6A4A"
+            BorderThickness="1"
+            CornerRadius="6"
+            Padding="14,10"
+            Margin="24,0,24,24"
+            VerticalAlignment="Bottom"
+            ZIndex="100">
+        <StackPanel Orientation="Horizontal" Spacing="10">
+            <PathIcon Width="14" Height="14"
+                      Foreground="#4CAF82"
+                      VerticalAlignment="Center"
+                      Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+            <TextBlock x:Name="SuccessToastText"
+                       Foreground="#A8D5B8"
+                       FontSize="13"
+                       VerticalAlignment="Center"/>
+        </StackPanel>
+    </Border>
+
     <!-- Color picker popup (shared, shown on swatch click) -->
     <Popup x:Name="ColorPickerPopup"
            IsLightDismissEnabled="True"

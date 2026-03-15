@@ -698,6 +698,16 @@ public partial class EnchantEffect : UserControl
                 entry.Levels[i].Ring.Opacity   = src.Ring.Opacity;
             }
         }
+
+        ShowSuccessToast($"Cores aplicadas a {targets.Count} grau(s) do tipo {_currentEntry.Type}.");
+    }
+
+    private async void ShowSuccessToast(string message)
+    {
+        SuccessToastText.Text  = message;
+        SuccessToast.IsVisible = true;
+        await Task.Delay(2800);
+        SuccessToast.IsVisible = false;
     }
 
     /// <summary>
