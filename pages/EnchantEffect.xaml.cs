@@ -64,7 +64,10 @@ public partial class EnchantEffect : UserControl
     private readonly List<TextBox>  _radHexBoxes  = [];
     private readonly List<Border>   _ringSwatches = [];
     private readonly List<TextBox>  _ringHexBoxes = [];
-    private readonly List<TextBlock> _particleLabels = [];
+    private readonly List<TextBlock>  _particleLabels = [];
+    private readonly HashSet<TextBox> _editingBoxes   = [];
+    private readonly List<Button>     _radEditBtns    = [];
+    private readonly List<Button>     _ringEditBtns   = [];
 
     // ─── Init ─────────────────────────────────────────────────────────────────
 
@@ -202,6 +205,9 @@ public partial class EnchantEffect : UserControl
         _ringSwatches.Clear();
         _ringHexBoxes.Clear();
         _particleLabels.Clear();
+        _radEditBtns.Clear();
+        _ringEditBtns.Clear();
+        _editingBoxes.Clear();
         RowsPanel.Children.Clear();
 
         for (int i = 0; i < 20; i++)
@@ -245,20 +251,23 @@ public partial class EnchantEffect : UserControl
             Grid.SetColumn(badge, 0);
 
             // Radiance picker
-            var (radPanel, radSwatch, radHex) = MakeColorPicker();
-            radHex.TextChanged   += (_, _) => OnHexChanged(radSwatch, radHex, "radiance", idx);
-            radHex.LostFocus     += (_, _) => OnRadHexLostFocus(radSwatch, radHex, idx);
+            var (radPanel, radSwatch, radHex, radEditBtn) = MakeColorPicker();
+            radHex.TextChanged       += (_, _) => OnHexChanged(radSwatch, radHex, "radiance", idx);
             radSwatch.PointerPressed += (_, _) => ShowColorPicker(radSwatch, radHex);
+            radEditBtn.Click         += (_, _) => ToggleEdit(radSwatch, radHex, radEditBtn, "radiance", idx);
             _radSwatches.Add(radSwatch);
             _radHexBoxes.Add(radHex);
+            _radEditBtns.Add(radEditBtn);
             Grid.SetColumn(radPanel, 2);
 
             // Ring picker
-            var (ringPanel, ringSwatch, ringHex) = MakeColorPicker();
-            ringHex.TextChanged  += (_, _) => OnHexChanged(ringSwatch, ringHex, "ring", idx);
+            var (ringPanel, ringSwatch, ringHex, ringEditBtn) = MakeColorPicker();
+            ringHex.TextChanged       += (_, _) => OnHexChanged(ringSwatch, ringHex, "ring", idx);
             ringSwatch.PointerPressed += (_, _) => ShowColorPicker(ringSwatch, ringHex);
+            ringEditBtn.Click         += (_, _) => ToggleEdit(ringSwatch, ringHex, ringEditBtn, "ring", idx);
             _ringSwatches.Add(ringSwatch);
             _ringHexBoxes.Add(ringHex);
+            _ringEditBtns.Add(ringEditBtn);
             Grid.SetColumn(ringPanel, 4);
 
             // Particle label
@@ -283,7 +292,7 @@ public partial class EnchantEffect : UserControl
         }
     }
 
-    private static (Panel panel, Border swatch, TextBox hex) MakeColorPicker()
+    private static (Panel panel, Border swatch, TextBox hex, Button editBtn) MakeColorPicker()
     {
         var swatch = new Border
         {
@@ -299,17 +308,31 @@ public partial class EnchantEffect : UserControl
         {
             Width                    = 76,
             MaxLength                = 6,
+            IsReadOnly               = true,
+            IsHitTestVisible         = false,
             FontFamily               = new FontFamily("Consolas,Courier New,monospace"),
             FontSize                 = 12,
             Height                   = 28,
             VerticalContentAlignment = VerticalAlignment.Center,
             Background               = new SolidColorBrush(Color.Parse("#2A2A2A")),
             Foreground               = new SolidColorBrush(Color.Parse("#D4D4D4")),
-            BorderBrush     = new SolidColorBrush(Color.Parse("#464646")),
-            BorderThickness = new Thickness(1),
-            CornerRadius    = new CornerRadius(4),
-            Padding         = new Thickness(6, 4),
-            VerticalAlignment = VerticalAlignment.Center
+            BorderBrush              = new SolidColorBrush(Color.Parse("#464646")),
+            BorderThickness          = new Thickness(1),
+            CornerRadius             = new CornerRadius(4),
+            Padding                  = new Thickness(6, 4),
+            VerticalAlignment        = VerticalAlignment.Center
+        };
+
+        var editBtn = new Button
+        {
+            Width             = 26,
+            Height            = 26,
+            Padding           = new Thickness(0),
+            Background        = new SolidColorBrush(Colors.Transparent),
+            BorderThickness   = new Thickness(0),
+            Cursor            = new Cursor(StandardCursorType.Hand),
+            VerticalAlignment = VerticalAlignment.Center,
+            Content           = MakePencilIcon()
         };
 
         var panel = new StackPanel
@@ -320,13 +343,15 @@ public partial class EnchantEffect : UserControl
         };
         panel.Children.Add(swatch);
         panel.Children.Add(hex);
-        return (panel, swatch, hex);
+        panel.Children.Add(editBtn);
+        return (panel, swatch, hex, editBtn);
     }
 
     // ─── Load entry into rows ─────────────────────────────────────────────────
 
     private void LoadEntryIntoRows(WeaponEnchantEntry entry)
     {
+        ExitAllEditModes();
         _suppressHexUpdate = true;
         for (int i = 0; i < 20; i++)
         {
@@ -352,6 +377,9 @@ public partial class EnchantEffect : UserControl
         if (hex.Length != 6) return;
 
         SetSwatchColor(swatch, hex);
+
+        // Skip model/ring update while user is manually editing — only update swatch visually
+        if (_editingBoxes.Contains(box) && !_pickerUpdating) return;
 
         var secondary = DeriveSecondary(hex);
         var slot = channel == "radiance"
@@ -402,6 +430,85 @@ public partial class EnchantEffect : UserControl
             _suppressHexUpdate = false;
         }
     }
+
+    // ─── Edit-mode toggle ─────────────────────────────────────────────────────
+
+    private void ToggleEdit(Border swatch, TextBox hex, Button editBtn, string channel, int idx)
+    {
+        if (_editingBoxes.Contains(hex))
+        {
+            // CONFIRM: save value, calculate ring, exit edit mode
+            _editingBoxes.Remove(hex);
+            hex.IsReadOnly       = true;
+            hex.IsHitTestVisible = false;
+            hex.BorderBrush      = new SolidColorBrush(Color.Parse("#464646"));
+            editBtn.Content = MakePencilIcon();
+
+            var raw = (hex.Text?.Trim().TrimStart('#') ?? "").ToUpper();
+            if (TryParseHex(raw, out _))
+            {
+                if (hex.Text != raw)
+                    hex.Text = raw; // normalize → TextChanged → OnHexChanged (not in _editingBoxes → updates model+ring)
+                else
+                    OnHexChanged(swatch, hex, channel, idx); // already normalized, force update
+            }
+            else
+            {
+                // Invalid: reset to last known good model value
+                var fallback = (channel == "radiance"
+                    ? _currentEntry?.Levels[idx].Radiance.Primary
+                    : _currentEntry?.Levels[idx].Ring.Primary) ?? "000000";
+                _suppressHexUpdate = true;
+                hex.Text = fallback.ToUpper();
+                SetSwatchColor(swatch, fallback);
+                _suppressHexUpdate = false;
+            }
+        }
+        else
+        {
+            // START EDIT: make editable, highlight border
+            _editingBoxes.Add(hex);
+            hex.IsReadOnly       = false;
+            hex.IsHitTestVisible = true;
+            hex.BorderBrush      = new SolidColorBrush(Color.Parse("#5B9BD5"));
+            editBtn.Content = MakeCheckIcon();
+            hex.Focus();
+            hex.SelectAll();
+        }
+    }
+
+    private void ExitAllEditModes()
+    {
+        if (_radHexBoxes.Count == 0) return;
+        _editingBoxes.Clear();
+        for (int i = 0; i < _radHexBoxes.Count; i++)
+        {
+            _radHexBoxes[i].IsReadOnly       = true;
+            _radHexBoxes[i].IsHitTestVisible = false;
+            _radHexBoxes[i].BorderBrush      = new SolidColorBrush(Color.Parse("#464646"));
+            _ringHexBoxes[i].IsReadOnly       = true;
+            _ringHexBoxes[i].IsHitTestVisible = false;
+            _ringHexBoxes[i].BorderBrush      = new SolidColorBrush(Color.Parse("#464646"));
+            if (i < _radEditBtns.Count)  _radEditBtns[i].Content  = MakePencilIcon();
+            if (i < _ringEditBtns.Count) _ringEditBtns[i].Content = MakePencilIcon();
+        }
+    }
+
+    private static PathIcon MakePencilIcon() => new PathIcon
+    {
+        Width      = 12,
+        Height     = 12,
+        Foreground = new SolidColorBrush(Colors.White),
+        Data       = Geometry.Parse("M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z")
+    };
+
+    private static PathIcon MakeCheckIcon() => new PathIcon
+    {
+        Width      = 12,
+        Height     = 12,
+        Foreground = new SolidColorBrush(Colors.White),
+        Data       = Geometry.Parse("M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z")
+    };
 
     // ─── Color picker popup ───────────────────────────────────────────────────
 

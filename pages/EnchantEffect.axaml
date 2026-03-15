@@ -257,7 +257,7 @@
     <!-- Color picker popup (shared, shown on swatch click) -->
     <Popup x:Name="ColorPickerPopup"
            IsLightDismissEnabled="True"
-           PlacementMode="Bottom"
+           Placement="Bottom"
            VerticalOffset="6">
         <Border Background="#252525"
                 BorderBrush="#505050"
