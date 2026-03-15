@@ -205,7 +205,7 @@
                                             Padding="16,0"
                                             Theme="{StaticResource GhostButton}">
                                         <StackPanel Orientation="Horizontal" Spacing="7">
-                                            <PathIcon Data="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" Width="14" Height="14" VerticalAlignment="Center"/>
+                                            <PathIcon Foreground="#9A9A9A" Data="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" Width="14" Height="14" VerticalAlignment="Center"/>
                                             <TextBlock Text="Adicionar"
                                                        FontSize="13"
                                                        FontWeight="Medium"
@@ -235,8 +235,8 @@
                         Margin="20,0"
                         Theme="{StaticResource SecondaryButton}">
                     <StackPanel Orientation="Horizontal" Spacing="9">
-                        <PathIcon Data="M8 5v14l11-7z" Width="14" Height="14" VerticalAlignment="Center"/>
-                        <TextBlock Text="Gerar Multisell"
+                        <PathIcon Data="M8 5v14l11-7z" Width="14" Height="14" VerticalAlignment="Center" Foreground="White"/>
+                        <TextBlock Text="Gerar MultiSell"
                                    FontSize="13"
                                    FontWeight="SemiBold"
                                    VerticalAlignment="Center"/>

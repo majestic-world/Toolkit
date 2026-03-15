@@ -266,7 +266,7 @@
                         Margin="20,0"
                         Theme="{StaticResource SecondaryButton}">
                     <StackPanel Orientation="Horizontal" Spacing="9">
-                        <PathIcon Data="M8 5v14l11-7z" Width="14" Height="14" VerticalAlignment="Center"/>
+                        <PathIcon Foreground="White" Data="M8 5v14l11-7z" Width="14" Height="14" VerticalAlignment="Center"/>
                         <TextBlock Text="Gerar"
                                    FontSize="13"
                                    FontWeight="SemiBold"

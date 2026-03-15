@@ -135,7 +135,7 @@
                         Margin="20,0"
                         Theme="{StaticResource SecondaryButton}">
                     <StackPanel Orientation="Horizontal" Spacing="9">
-                        <PathIcon Data="M8 5v14l11-7z" Width="14" Height="14" VerticalAlignment="Center"/>
+                        <PathIcon Data="M8 5v14l11-7z" Width="14" Height="14" VerticalAlignment="Center" Foreground="White"/>
                         <TextBlock Text="Converter para XML"
                                    FontSize="13"
                                    FontWeight="SemiBold"

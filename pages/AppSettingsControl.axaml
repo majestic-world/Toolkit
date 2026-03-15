@@ -151,7 +151,7 @@
                                             Padding="14,0"
                                             Theme="{StaticResource GhostButton}">
                                         <StackPanel Orientation="Horizontal" Spacing="8">
-                                            <PathIcon Data="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" Width="14" Height="14" VerticalAlignment="Center"/>
+                                            <PathIcon Data="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" Width="14" Height="14" VerticalAlignment="Center" Foreground="#9A9A9A"/>
                                             <TextBlock Text="Limpar"
                                                        FontSize="13"
                                                        FontWeight="Medium"
@@ -244,7 +244,7 @@
                                         Padding="16,0"
                                         Theme="{StaticResource GhostButton}">
                                     <StackPanel Orientation="Horizontal" Spacing="8">
-                                        <PathIcon Data="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" Width="14" Height="14" VerticalAlignment="Center"/>
+                                        <PathIcon Data="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" Width="14" Height="14" Foreground="#9A9A9A" VerticalAlignment="Center"/>
                                         <TextBlock Text="Selecionar e Compactar"
                                                    FontSize="13"
                                                    FontWeight="Medium"
@@ -318,7 +318,7 @@
                                         Padding="16,0"
                                         Theme="{StaticResource GhostButton}">
                                     <StackPanel Orientation="Horizontal" Spacing="8">
-                                        <PathIcon Data="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" Width="14" Height="14" VerticalAlignment="Center"/>
+                                        <PathIcon Data="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" Width="14" Height="14" Foreground="#9A9A9A" VerticalAlignment="Center"/>
                                         <TextBlock Text="Abrir pasta de configuração"
                                                    FontSize="13"
                                                    FontWeight="Medium"
@@ -384,7 +384,7 @@
                                         Padding="16,0"
                                         Theme="{StaticResource GhostButton}">
                                     <StackPanel Orientation="Horizontal" Spacing="8">
-                                        <PathIcon Data="M14 6l-1-2H5v17h2v-7h5l1 2h7V6h-6zm4 8h-4l-1-2H7V6h5l1 2h5v6z" Width="14" Height="14" VerticalAlignment="Center"/>
+                                        <PathIcon Data="M14 6l-1-2H5v17h2v-7h5l1 2h7V6h-6zm4 8h-4l-1-2H7V6h5l1 2h5v6z" Width="14" Height="14" VerticalAlignment="Center" Foreground="#9A9A9A"/>
                                         <TextBlock Text="Test DAT"
                                                    FontSize="13"
                                                    FontWeight="Medium"

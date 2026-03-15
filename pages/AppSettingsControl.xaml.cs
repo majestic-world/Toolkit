@@ -340,11 +340,13 @@ public partial class AppSettingsControl : UserControl
             var color = Color.Parse(exists ? "#5DBF6A" : "#BF5D5D");
             var bg    = Color.Parse(exists ? "#182A1A" : "#2A1818");
 
-            var icon = new TextBlock
+            var icon = new PathIcon
             {
-                Text = exists ? "\uE73E" : "\uE711",
-                FontFamily = new FontFamily("Segoe MDL2 Assets"),
-                FontSize = 10,
+                Data = Geometry.Parse(exists
+                    ? "M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"
+                    : "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"),
+                Width = 10,
+                Height = 10,
                 Foreground = new SolidColorBrush(color),
                 VerticalAlignment = VerticalAlignment.Center
             };
