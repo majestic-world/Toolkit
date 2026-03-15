@@ -213,10 +213,12 @@
                             <StackPanel Spacing="8">
                                 <CheckBox x:Name="ConvertSPlusCheckBox"
                                           IsVisible="False"
+                                          Foreground="White"
                                           Content="Converter S+ em S?"
                                           IsChecked="True"/>
                                 <CheckBox x:Name="EnableEnchantGlowCheckBox"
                                           IsVisible="False"
+                                          Foreground="White"
                                           Content="Habilitar brilho no enchant?"
                                           IsChecked="True"/>
                             </StackPanel>
