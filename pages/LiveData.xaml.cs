@@ -1006,18 +1006,23 @@ public partial class LiveData : UserControl
                 ConvertSPlusCheckBox.IsVisible = true;
                 EnableEnchantGlowCheckBox.IsVisible = true;
                 SetItemIdPanel.IsVisible = true;
+                SetItemGrpPanel.IsVisible = true;
                 return;
             case "Items":
                 StackPanelXml.IsVisible = true;
                 ConvertSPlusCheckBox.IsVisible = false;
                 EnableEnchantGlowCheckBox.IsVisible = false;
                 SetItemIdPanel.IsVisible = false;
+                SetItemGrpPanel.IsVisible = false;
+                SetItemGrpData.Text = "";
                 return;
             case "Weapons":
                 StackPanelXml.IsVisible = true;
                 ConvertSPlusCheckBox.IsVisible = true;
                 EnableEnchantGlowCheckBox.IsVisible = false;
                 SetItemIdPanel.IsVisible = false;
+                SetItemGrpPanel.IsVisible = false;
+                SetItemGrpData.Text = "";
                 return;
         }
 
@@ -1025,6 +1030,8 @@ public partial class LiveData : UserControl
         ConvertSPlusCheckBox.IsVisible = false;
         EnableEnchantGlowCheckBox.IsVisible = false;
         SetItemIdPanel.IsVisible = false;
+        SetItemGrpPanel.IsVisible = false;
+        SetItemGrpData.Text = "";
     }
 
     private async void CopyXml_OnClick(object sender, RoutedEventArgs e)

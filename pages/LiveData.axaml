@@ -220,20 +220,6 @@
                                          Watermark="Ex: 100;101;102 ou 100...150"/>
                             </StackPanel>
 
-                            <!-- Checkboxes -->
-                            <StackPanel Spacing="8">
-                                <CheckBox x:Name="ConvertSPlusCheckBox"
-                                          IsVisible="False"
-                                          Foreground="White"
-                                          Content="Converter S+ em S?"
-                                          IsChecked="True"/>
-                                <CheckBox x:Name="EnableEnchantGlowCheckBox"
-                                          IsVisible="False"
-                                          Foreground="White"
-                                          Content="Habilitar brilho no enchant?"
-                                          IsChecked="True"/>
-                            </StackPanel>
-
                             <!-- Próximo ID do Item Set -->
                             <StackPanel x:Name="SetItemIdPanel" Spacing="6" IsVisible="False">
                                 <TextBlock Text="Próximo ID do Item Set"
@@ -248,6 +234,20 @@
                                          FontFamily="Consolas,Courier New,monospace"
                                          FontSize="12"
                                          Watermark="Ex: 30 (os IDs serão atribuídos sequencialmente)"/>
+                            </StackPanel>
+
+                            <!-- Checkboxes -->
+                            <StackPanel Spacing="8">
+                                <CheckBox x:Name="ConvertSPlusCheckBox"
+                                          IsVisible="False"
+                                          Foreground="White"
+                                          Content="Converter S+ em S?"
+                                          IsChecked="True"/>
+                                <CheckBox x:Name="EnableEnchantGlowCheckBox"
+                                          IsVisible="False"
+                                          Foreground="White"
+                                          Content="Habilitar brilho no enchant?"
+                                          IsChecked="True"/>
                             </StackPanel>
 
                         </StackPanel>
@@ -438,7 +438,7 @@
                             </StackPanel>
 
                             <!-- Set Item GRP -->
-                            <StackPanel Spacing="8">
+                            <StackPanel x:Name="SetItemGrpPanel" Spacing="8" IsVisible="False">
                                 <Grid ColumnDefinitions="*,Auto,Auto" Height="28">
                                     <TextBlock Grid.Column="0"
                                                Text="Set Item GRP"
