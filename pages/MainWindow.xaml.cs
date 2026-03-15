@@ -29,9 +29,8 @@ namespace L2Toolkit
 
         private void UpdateMaximizeIcon()
         {
-            MaximizeIcon.Text = WindowState == WindowState.Maximized
-                ? "\uE923"  // ChromeRestore
-                : "\uE739"; // ChromeMaximize
+            MaximizeIcon.IsVisible = WindowState != WindowState.Maximized;
+            RestoreIcon.IsVisible = WindowState == WindowState.Maximized;
         }
 
         // ── Titlebar drag e double-click ──────────────────────────────────
