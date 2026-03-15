@@ -51,13 +51,13 @@ public partial class AppSettingsControl : UserControl
         {
             var folder = Path.GetDirectoryName(ConfigFilePath);
             if (folder != null && Directory.Exists(folder))
-                Process.Start(new ProcessStartInfo("explorer.exe", folder) { UseShellExecute = true });
+                OpenFolder(folder);
         };
         OpenAppFolderBtn.Click += (_, _) =>
         {
             var appFolder = AppContext.BaseDirectory;
             if (Directory.Exists(appFolder))
-                Process.Start(new ProcessStartInfo("explorer.exe", appFolder) { UseShellExecute = true });
+                OpenFolder(appFolder);
         };
 
         TestDatBtn.Click += async (_, _) => await TestDatFileAsync();
@@ -326,6 +326,20 @@ public partial class AppSettingsControl : UserControl
         AssetsDirBox.Text = path;
         AppDatabase.GetInstance().UpdateValue("assetsDir", path);
         RefreshFileStatus();
+    }
+
+    private static void OpenFolder(string path)
+    {
+        ProcessStartInfo psi;
+        if (OperatingSystem.IsWindows())
+            psi = new ProcessStartInfo("explorer.exe", path);
+        else if (OperatingSystem.IsMacOS())
+            psi = new ProcessStartInfo("open", path);
+        else
+            psi = new ProcessStartInfo("xdg-open", path);
+
+        psi.UseShellExecute = true;
+        Process.Start(psi);
     }
 
     private void RefreshFileStatus()
