@@ -12,7 +12,8 @@
       "Bash(cd 'C:\\\\workspace\\\\C#\\\\Toolkit' && dotnet build 2>&1 | tail -5)",
       "Bash(find \"/c/Users/Mk/Desktop/geodata\" -type f -name \"*.txt\" 2>/dev/null | head -20)",
       "Bash(__NEW_LINE_d2ef692f8e7aef4b__ echo:*)",
-      "Bash(__NEW_LINE_0f8f2308a48492ff__ echo:*)"
+      "Bash(__NEW_LINE_0f8f2308a48492ff__ echo:*)",
+      "Bash(cd:*)"
     ]
   }
 }

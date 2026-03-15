@@ -350,6 +350,15 @@
                             </StackPanel>
                         </Button>
 
+                        <Button Click="BtnEnchantEffect_Click" Theme="{StaticResource SidebarButtonStyle}">
+                            <StackPanel Orientation="Horizontal">
+                                <!-- Sparkle / enchant glow icon -->
+                                <PathIcon Data="M12 2C12 2 13.5 7 16 9.5C18.5 12 22 12 22 12C22 12 18.5 12 16 14.5C13.5 17 12 22 12 22C12 22 10.5 17 8 14.5C5.5 12 2 12 2 12C2 12 5.5 12 8 9.5C10.5 7 12 2 12 2Z"
+                                          Width="16" Height="16" Foreground="#5B9BD5" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                                <TextBlock Text="Efeito de Encantamento"/>
+                            </StackPanel>
+                        </Button>
+
                         <Border Height="1" Background="#2C2C2C" Margin="16,8,16,0"/>
 
                         <TextBlock Text="UTILITÁRIOS"

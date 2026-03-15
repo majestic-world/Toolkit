@@ -121,5 +121,8 @@ namespace L2Toolkit
 
         private void BtnSettings_Click(object sender, RoutedEventArgs e)
             => MainContent.Content = new AppSettingsControl();
+
+        private void BtnEnchantEffect_Click(object sender, RoutedEventArgs e)
+            => MainContent.Content = new EnchantEffect();
     }
 }
