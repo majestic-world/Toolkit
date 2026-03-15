@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -30,6 +31,10 @@ public partial class SkinBuilder : UserControl
     /// <summary>Cache of unpacked .l2dat embedded resources (table name → text content).</summary>
     private readonly ConcurrentDictionary<string, string> _tableCache = new();
 
+    private sealed record Preset(string Name, string Category, string Ids);
+    private List<Preset> _allPresets = [];
+    private List<Preset> _currentPresets = [];
+
     public SkinBuilder()
     {
         _errorTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(6) };
@@ -37,6 +42,51 @@ public partial class SkinBuilder : UserControl
 
         InitializeComponent();
         _log.RegisterBlock(LogContent);
+        LoadPresets();
+        UpdatePresets("Weapons");
+    }
+
+    private void LoadPresets()
+    {
+        try
+        {
+            var stream = Assembly.GetExecutingAssembly()
+                .GetManifestResourceStream("L2Toolkit.Data.Presets.dat");
+            if (stream == null) return;
+            using var reader = new StreamReader(stream);
+            string? line;
+            while ((line = reader.ReadLine()) != null)
+            {
+                var parts = line.Split('|');
+                if (parts.Length == 3)
+                    _allPresets.Add(new Preset(parts[0], parts[1], parts[2]));
+            }
+        }
+        catch { }
+    }
+
+    private void UpdatePresets(string category)
+    {
+        _currentPresets = _allPresets.Where(p => p.Category == category).ToList();
+        PresetComboBox.ItemsSource = _currentPresets.Select(p => p.Name).ToList();
+        PresetComboBox.SelectedIndex = -1;
+        PresetPanel.IsVisible = _currentPresets.Count > 0;
+    }
+
+    private void TypeProcess_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        if (PresetPanel == null) return;
+        var typeItem = TypeProcess.SelectedItem as ComboBoxItem;
+        var type = typeItem?.Content?.ToString() ?? TypeProcess.SelectedItem as string;
+        if (!string.IsNullOrEmpty(type))
+            UpdatePresets(type);
+    }
+
+    private void PresetComboBox_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        var idx = PresetComboBox.SelectedIndex;
+        if (idx < 0 || idx >= _currentPresets.Count) return;
+        ProcessClientId.Text = _currentPresets[idx].Ids;
     }
 
     /// <summary>

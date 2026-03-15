@@ -177,10 +177,23 @@
                                            FontSize="12"
                                            Foreground="#9A9A9A"
                                            FontWeight="Medium"/>
-                                <ComboBox x:Name="TypeProcess" SelectedIndex="0">
+                                <ComboBox x:Name="TypeProcess"
+                                          SelectedIndex="0"
+                                          SelectionChanged="TypeProcess_OnSelectionChanged">
                                     <ComboBoxItem HorizontalAlignment="Stretch">Weapons</ComboBoxItem>
                                     <ComboBoxItem HorizontalAlignment="Stretch">Armor</ComboBoxItem>
                                 </ComboBox>
+                            </StackPanel>
+
+                            <!-- Preset -->
+                            <StackPanel x:Name="PresetPanel" Spacing="6" IsVisible="False">
+                                <TextBlock Text="Preset"
+                                           FontSize="12"
+                                           Foreground="#9A9A9A"
+                                           FontWeight="Medium"/>
+                                <ComboBox x:Name="PresetComboBox"
+                                          PlaceholderText="Selecione um preset..."
+                                          SelectionChanged="PresetComboBox_OnSelectionChanged"/>
                             </StackPanel>
 
                             <!-- IDs dos itens -->
