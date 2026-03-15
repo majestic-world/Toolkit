@@ -53,6 +53,12 @@ public partial class AppSettingsControl : UserControl
             if (folder != null && Directory.Exists(folder))
                 Process.Start(new ProcessStartInfo("explorer.exe", folder) { UseShellExecute = true });
         };
+        OpenAppFolderBtn.Click += (_, _) =>
+        {
+            var appFolder = AppContext.BaseDirectory;
+            if (Directory.Exists(appFolder))
+                Process.Start(new ProcessStartInfo("explorer.exe", appFolder) { UseShellExecute = true });
+        };
 
         TestDatBtn.Click += async (_, _) => await TestDatFileAsync();
         PackBtn.Click += async (_, _) => await PackFilesAsync();
