@@ -91,46 +91,31 @@ public partial class LiveData : UserControl
 
     private async Task ProcessSkill(string ids)
     {
-        const string invalidData = "Dados de parse inválidos!";
         var list = new List<string>();
 
-        if (ids.Contains(';') && ids.Contains("..."))
-        {
-            throw new Exception(invalidData);
-        }
+        var segments = ids.Contains(';') ? ids.Split(';') : [ids];
 
-        if (ids.Contains("..."))
+        foreach (var segment in segments)
         {
-            var parse = ids.Split("...");
-            if (parse.Length != 2)
+            var trimmed = segment.Trim();
+            if (trimmed.Contains("..."))
             {
-                throw new Exception(invalidData);
-            }
+                var parts = trimmed.Split("...");
+                if (parts.Length != 2 ||
+                    !int.TryParse(parts[0], out var initial) ||
+                    !int.TryParse(parts[1], out var max) ||
+                    initial == 0 || max == 0)
+                {
+                    throw new Exception(InvalidData);
+                }
 
-            int.TryParse(parse[0], out var initial);
-            int.TryParse(parse[1], out var max);
-
-            if (initial == 0 || max == 0)
-            {
-                throw new Exception(invalidData);
+                for (var i = initial; i <= max; i++)
+                    list.Add($"skill_id={i}");
             }
-
-            for (var i = initial; i <= max; i++)
+            else
             {
-                list.Add($"skill_id={i.ToString()}");
+                list.Add($"skill_id={trimmed}");
             }
-        }
-        else if (ids.Contains(';'))
-        {
-            var parse = ids.Split(";");
-            foreach (var id in parse)
-            {
-                list.Add($"skill_id={id}");
-            }
-        }
-        else
-        {
-            list.Add($"skill_id={ids}");
         }
 
         _log.AddLog("Carregando o nome das skills...");
@@ -207,38 +192,30 @@ public partial class LiveData : UserControl
     private List<string> ParseIds(string ids)
     {
         var list = new List<string>();
-        if (ids.Contains("..."))
-        {
-            var parse = ids.Split("...");
-            if (parse.Length != 2)
-            {
-                throw new Exception(InvalidData);
-            }
 
-            int.TryParse(parse[0], out var initial);
-            int.TryParse(parse[1], out var max);
+        var segments = ids.Contains(';') ? ids.Split(';') : [ids];
 
-            if (initial == 0 || max == 0)
+        foreach (var segment in segments)
+        {
+            var trimmed = segment.Trim();
+            if (trimmed.Contains("..."))
             {
-                throw new Exception(InvalidData);
-            }
+                var parts = trimmed.Split("...");
+                if (parts.Length != 2 ||
+                    !int.TryParse(parts[0], out var initial) ||
+                    !int.TryParse(parts[1], out var max) ||
+                    initial == 0 || max == 0)
+                {
+                    throw new Exception(InvalidData);
+                }
 
-            for (var i = initial; i <= max; i++)
-            {
-                list.Add(i.ToString());
+                for (var i = initial; i <= max; i++)
+                    list.Add(i.ToString());
             }
-        }
-        else if (ids.Contains(';'))
-        {
-            var parse = ids.Split(";");
-            foreach (var id in parse)
+            else
             {
-                list.Add(id);
+                list.Add(trimmed);
             }
-        }
-        else
-        {
-            list.Add(ids);
         }
 
         return list;

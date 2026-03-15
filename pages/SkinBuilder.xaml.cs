@@ -107,38 +107,30 @@ public partial class SkinBuilder : UserControl
     private List<string> ParseIds(string ids)
     {
         var list = new List<string>();
-        if (ids.Contains("..."))
-        {
-            var parse = ids.Split("...");
-            if (parse.Length != 2)
-            {
-                throw new Exception(InvalidData);
-            }
 
-            int.TryParse(parse[0], out var initial);
-            int.TryParse(parse[1], out var max);
+        var segments = ids.Contains(';') ? ids.Split(';') : [ids];
 
-            if (initial == 0 || max == 0)
+        foreach (var segment in segments)
+        {
+            var trimmed = segment.Trim();
+            if (trimmed.Contains("..."))
             {
-                throw new Exception(InvalidData);
-            }
+                var parts = trimmed.Split("...");
+                if (parts.Length != 2 ||
+                    !int.TryParse(parts[0], out var initial) ||
+                    !int.TryParse(parts[1], out var max) ||
+                    initial == 0 || max == 0)
+                {
+                    throw new Exception(InvalidData);
+                }
 
-            for (var i = initial; i <= max; i++)
-            {
-                list.Add(i.ToString());
+                for (var i = initial; i <= max; i++)
+                    list.Add(i.ToString());
             }
-        }
-        else if (ids.Contains(';'))
-        {
-            var parse = ids.Split(";");
-            foreach (var id in parse)
+            else
             {
-                list.Add(id);
+                list.Add(trimmed);
             }
-        }
-        else
-        {
-            list.Add(ids);
         }
 
         return list;

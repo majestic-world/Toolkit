@@ -3,7 +3,7 @@
 ; Non-commercial use only
 
 #define MyAppName "L2 Toolkit"
-#define MyAppVersion "3.0"
+#define MyAppVersion "3.1"
 #define MyAppPublisher "Majestic World Studio"
 #define MyAppURL "https://majestic-world.studio"
 #define MyAppExeName "L2 Toolkit.exe"
