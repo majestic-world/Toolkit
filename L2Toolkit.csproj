@@ -26,12 +26,6 @@
     <CFBundleVersion>3.0.0</CFBundleVersion>
   </PropertyGroup>
 
-  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
-    <!-- Ícone copiado para Contents/Resources/ do bundle -->
-    <BundleResource Include="images\favicon.icns">
-      <Link>favicon.icns</Link>
-    </BundleResource>
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.2.0" />
