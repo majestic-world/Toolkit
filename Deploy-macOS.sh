@@ -2,8 +2,6 @@
 set -e
 
 APP_NAME="L2 Toolkit"
-BUNDLE_ID="com.majesticworld.l2toolkit"
-VERSION="3.0.0"
 RID="osx-arm64"
 CONFIG="Release"
 FRAMEWORK="net10.0"
@@ -20,26 +18,31 @@ dotnet publish -r $RID -c $CONFIG \
 
 echo "▶ Montando bundle .app..."
 
-# Remove bundle anterior se existir
 rm -rf "$BUNDLE_DIR"
-
-# Cria estrutura do bundle
 mkdir -p "$BUNDLE_DIR/Contents/MacOS"
 mkdir -p "$BUNDLE_DIR/Contents/Resources"
 
-# Copia o binário AOT e garante permissão de execução
-cp "$PUBLISH_DIR/$APP_NAME" "$BUNDLE_DIR/Contents/MacOS/$APP_NAME"
+# Copia todos os arquivos do publish para Contents/MacOS/
+# (inclui o binário AOT + quaisquer .dylib nativas, ex: e_sqlite3.dylib)
+find "$PUBLISH_DIR" -maxdepth 1 -type f | while read f; do
+    cp "$f" "$BUNDLE_DIR/Contents/MacOS/"
+done
+
+# Garante permissão de execução no binário principal
 chmod +x "$BUNDLE_DIR/Contents/MacOS/$APP_NAME"
 
 # Copia Info.plist
 cp "Info.plist" "$BUNDLE_DIR/Contents/Info.plist"
 
-# Copia ícone para Resources/
+# Copia ícone
 cp "images/favicon.icns" "$BUNDLE_DIR/Contents/Resources/favicon.icns"
+
+# Assinatura ad-hoc (necessária no macOS para apps não distribuídos pela App Store)
+echo "▶ Assinando bundle (ad-hoc)..."
+codesign --deep --force --sign - "$BUNDLE_DIR"
 
 echo ""
 echo "✓ Bundle gerado em: $BUNDLE_DIR"
 echo ""
 
-# Abre a pasta de saída no Finder
 open "$PUBLISH_DIR"
