@@ -267,7 +267,7 @@
             </Grid>
 
             <!-- ── Painel 02: Dados GRP + Nomes (2 colunas) ──────────── -->
-            <Border Margin="32,0"
+            <Border Margin="32,0,32,32"
                     CornerRadius="8"
                     Background="#323232"
                     BorderBrush="#464646"
@@ -297,10 +297,10 @@
 
                         <Border Height="1" Background="#464646"/>
 
-                        <Grid Margin="20,16,20,20" ColumnDefinitions="*,16,*">
+                        <StackPanel Margin="20,16,20,20" Spacing="16">
 
-                            <!-- Coluna esquerda: Dados GRP -->
-                            <StackPanel Grid.Column="0" Spacing="8">
+                            <!-- Dados GRP -->
+                            <StackPanel Spacing="8">
                                 <Grid ColumnDefinitions="*,Auto,Auto" Height="28">
                                     <TextBlock Grid.Column="0"
                                                Text="Dados GRP"
@@ -360,8 +360,8 @@
                                          Watermark="Dados GRP aparecerão aqui..."/>
                             </StackPanel>
 
-                            <!-- Coluna direita: Nomes -->
-                            <StackPanel Grid.Column="2" Spacing="8">
+                            <!-- Nomes -->
+                            <StackPanel Spacing="8">
                                 <Grid ColumnDefinitions="*,Auto,Auto" Height="28">
                                     <TextBlock Grid.Column="0"
                                                Text="Nomes"
@@ -421,14 +421,14 @@
                                          Watermark="Nomes aparecerão aqui..."/>
                             </StackPanel>
 
-                        </Grid>
+                        </StackPanel>
                     </StackPanel>
                 </Grid>
             </Border>
 
             <!-- ── Painel 03: Dados XML (condicional) ────────────────── -->
             <Border x:Name="StackPanelXml"
-                    Margin="32,16,32,0"
+                    Margin="32,16,32,32"
                     CornerRadius="8"
                     Background="#323232"
                     BorderBrush="#464646"
@@ -518,95 +518,6 @@
                 </Grid>
             </Border>
 
-            <!-- ── Painel 04: Logs ───────────────────────────────────── -->
-            <Border Margin="32,16,32,32"
-                    CornerRadius="8"
-                    Background="#323232"
-                    BorderBrush="#464646"
-                    BorderThickness="1"
-                    ClipToBounds="True">
-                <Grid ColumnDefinitions="4,*">
-                    <Border Grid.Column="0" Background="#5B9BD5"/>
-                    <StackPanel Grid.Column="1">
-
-                        <Grid ColumnDefinitions="Auto,Auto,*,Auto,Auto"
-                              Margin="20,0"
-                              Height="52">
-                            <TextBlock Grid.Column="0"
-                                       Text="04"
-                                       FontSize="24"
-                                       FontWeight="Bold"
-                                       Foreground="#4A88B8"
-                                       VerticalAlignment="Center"/>
-                            <Border Grid.Column="1"
-                                    Width="1" Height="18"
-                                    Background="#565656"
-                                    VerticalAlignment="Center"
-                                    Margin="14,0"/>
-                            <TextBlock Grid.Column="2"
-                                       Text="LOGS"
-                                       FontSize="11"
-                                       FontWeight="Bold"
-                                       Foreground="#9A9A9A"
-                                       LetterSpacing="1.5"
-                                       VerticalAlignment="Center"/>
-                            <Border Grid.Column="3"
-                                    x:Name="ItensCopiadoTextBlock"
-                                    IsVisible="False"
-                                    Background="#142B1A"
-                                    BorderBrush="#245230"
-                                    BorderThickness="1"
-                                    CornerRadius="5"
-                                    Padding="10,4"
-                                    VerticalAlignment="Center"
-                                    Margin="0,0,10,0">
-                                <StackPanel Orientation="Horizontal" Spacing="5">
-                                    <PathIcon Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Width="10" Height="10" Foreground="#52C97A" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Copiado!"
-                                               FontSize="11"
-                                               FontWeight="Medium"
-                                               Foreground="#52C97A"
-                                               VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </Border>
-                            <Button Grid.Column="4"
-                                    x:Name="CopiarItensButton"
-                                    Click="CopiarItensButton_OnClick"
-                                    Height="30"
-                                    Padding="14,0"
-                                    VerticalAlignment="Center"
-                                    Theme="{StaticResource GhostButton}">
-                                <StackPanel Orientation="Horizontal" Spacing="7">
-                                    <PathIcon Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" Foreground="#9A9A9A" Width="12" Height="12" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Copiar"
-                                               FontSize="12"
-                                               FontWeight="Medium"
-                                               VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </Button>
-                        </Grid>
-
-                        <Border Height="1" Background="#464646"/>
-
-                        <TextBox x:Name="LogContent"
-                                 Classes="Code"
-                                 AcceptsReturn="True"
-                                 TextWrapping="Wrap"
-                                 Height="160"
-                                 Padding="20,14"
-                                 BorderThickness="0"
-                                 Background="#383838"
-                                 Foreground="#B0C4B1"
-                                 CaretBrush="#5B9BD5"
-                                 SelectionBrush="#1E3A5A"
-                                 FontFamily="Consolas,Courier New,monospace"
-                                 FontSize="12"
-                                 IsReadOnly="True"
-                                 Watermark="Logs de processamento aparecerão aqui..."/>
-
-                    </StackPanel>
-                </Grid>
-            </Border>
 
         </StackPanel>
     </ScrollViewer>

@@ -21,7 +21,6 @@ public partial class LiveData : UserControl
 {
     private const string InvalidData = "Dados de parse inválidos!";
 
-    private readonly GlobalLogs _log = new();
     private readonly DispatcherTimer _errorTimer;
 
     private readonly ConcurrentDictionary<string, string> _itemsName = new();
@@ -40,7 +39,6 @@ public partial class LiveData : UserControl
         _errorTimer.Tick += (s, e) => { NotificacaoBorder.IsVisible = false; _errorTimer.Stop(); };
 
         InitializeComponent();
-        _log.RegisterBlock(LogContent);
         LoadPresets();
         UpdatePresets("Skills");
     }
@@ -108,8 +106,6 @@ public partial class LiveData : UserControl
 
     private async Task CreateStatusData()
     {
-        _log.AddLog("Recuperando status do equipamento...");
-
         var content = LoadTable("ItemStatData");
         using var render = new StringReader(content);
         string? line;
@@ -122,10 +118,6 @@ public partial class LiveData : UserControl
             }
         }
 
-        if (!_itemsStatus.IsEmpty)
-        {
-            _log.AddLog($"Pronto, status recuperado, total de {_itemsStatus.Count:N0}");
-        }
     }
 
     #region DataSkillParse
@@ -159,13 +151,9 @@ public partial class LiveData : UserControl
             }
         }
 
-        _log.AddLog("Carregando o nome das skills...");
-
         var buildGrp = new StringBuilder();
         var buildNames = new StringBuilder();
         var names = await GetSkillNameAsync();
-        _log.AddLog($"Nomes carregados, total de: {names.Count:N0}");
-        _log.AddLog("Separando os skills selecionados...");
 
         var idsSet = new HashSet<string>(list);
 
@@ -193,15 +181,6 @@ public partial class LiveData : UserControl
 
         Dispatcher.UIThread.Invoke(() => ClientTextBox.Text = buildGrp.ToString());
         Dispatcher.UIThread.Invoke(() => NameData.Text = buildNames.ToString());
-
-        if (buildGrp.Length == 0 && buildNames.Length == 0)
-        {
-            _log.AddLog("Sem skills encontradas");
-        }
-        else
-        {
-            _log.AddLog("Pronto, as skills foram importadas!");
-        }
 
         buildGrp.Clear();
         buildNames.Clear();
@@ -295,21 +274,13 @@ public partial class LiveData : UserControl
     {
         if (_itemsName.IsEmpty)
         {
-            _log.AddLog("Criando cache de nomes");
             await GetItemsName();
-            _log.AddLog($"Cache de nomes criados, {_itemsName.Count:N0} nomes");
-        }
-        else
-        {
-            _log.AddLog("Os nomes estão em cache!");
         }
 
         var weaponContent = LoadTable("Weapongrp");
 
         var listIds = ParseIds(ids);
         var hashSet = new HashSet<string>(listIds);
-
-        _log.AddLog("Verificando as weapons no arquivo...");
 
         var itemGrpBuild = new StringBuilder();
         var itemNameBuild = new StringBuilder();
@@ -349,22 +320,13 @@ public partial class LiveData : UserControl
 
         if (itemGrpBuild.Length == 0 && itemNameBuild.Length == 0)
         {
-            _log.AddLog("Nada foi encontrado");
             return;
         }
 
         if (_itemsStatus.IsEmpty)
         {
-            _log.AddLog("Carregando status das armas...");
             await CreateStatusData();
-            _log.AddLog($"Status das armas carregadas,  {_itemsName.Count:N0} items");
         }
-
-        _log.AddLog($"Dados GRP recuperados: {successId}");
-        _log.AddLog($"Dados de nomes recuperados: {successName}");
-        _log.AddLog("Pronto, os dados foram processados!");
-
-        _log.AddLog("Criando XML das armas...");
 
         var root = new XElement("list");
 
@@ -603,7 +565,6 @@ public partial class LiveData : UserControl
     {
         if (_itemsStatus.IsEmpty)
         {
-            _log.AddLog("Carregando status de itens");
             await CreateStatusData();
         }
 
@@ -724,21 +685,13 @@ public partial class LiveData : UserControl
     {
         if (_itemsName.IsEmpty)
         {
-            _log.AddLog("Criando cache de nomes");
             await GetItemsName();
-            _log.AddLog($"Cache de nomes criados, {_itemsName.Count:N0} nomes");
-        }
-        else
-        {
-            _log.AddLog("Os nomes estão em cache!");
         }
 
         var armorContent = LoadTable("Armorgrp");
 
         var listIds = ParseIds(ids);
         var hashSet = new HashSet<string>(listIds);
-
-        _log.AddLog("Verificando as armaduras no arquivo...");
 
         var itemGrpBuild = new StringBuilder();
         var itemNameBuild = new StringBuilder();
@@ -784,20 +737,13 @@ public partial class LiveData : UserControl
 
         if (itemGrpBuild.Length == 0 && itemNameBuild.Length == 0)
         {
-            _log.AddLog("Nada foi encontrado");
             return;
         }
 
         Dispatcher.UIThread.Invoke(() => ClientTextBox.Text = itemGrpBuild.ToString());
         Dispatcher.UIThread.Invoke(() => NameData.Text = itemNameBuild.ToString());
 
-        _log.AddLog($"Dados GRP recuperados: {successId}");
-        _log.AddLog($"Dados de nomes recuperados: {successName}");
-        _log.AddLog("Gerando xml das armaduras...");
-
         await ProcessXmlArmors(recoveryArmors);
-
-        _log.AddLog("Pronto, os dados foram processados!");
 
         itemGrpBuild.Clear();
         itemNameBuild.Clear();
@@ -811,21 +757,13 @@ public partial class LiveData : UserControl
     {
         if (_itemsName.IsEmpty)
         {
-            _log.AddLog("Criando cache de nomes");
             await GetItemsName();
-            _log.AddLog($"Cache de nomes criados, {_itemsName.Count:N0} nomes");
-        }
-        else
-        {
-            _log.AddLog("Os nomes estão em cache!");
         }
 
         var itemsContent = LoadTable("EtcItemgrp");
 
         var listIds = ParseIds(ids);
         var hashSet = new HashSet<string>(listIds);
-
-        _log.AddLog("Verificando os itens no arquivo...");
 
         var itemGrpBuild = new StringBuilder();
         var itemNameBuild = new StringBuilder();
@@ -859,13 +797,8 @@ public partial class LiveData : UserControl
 
         if (itemGrpBuild.Length == 0 && itemNameBuild.Length == 0)
         {
-            _log.AddLog("Nada foi encontrado");
             return;
         }
-
-        _log.AddLog($"Dados GRP recuperados: {successId}");
-        _log.AddLog($"Dados de nomes recuperados: {successName}");
-        _log.AddLog("Pronto, os dados foram processados!");
 
         var elements = new List<XElement>();
 
@@ -932,8 +865,6 @@ public partial class LiveData : UserControl
                 throw new Exception("Preencha todos os campos");
             }
 
-            _log.ClearLog();
-
             ClientTextBox.Text = "";
             NameData.Text = "";
             XmlData.Text = "";
@@ -941,19 +872,15 @@ public partial class LiveData : UserControl
             switch (type)
             {
                 case "Skills":
-                    _log.AddLog("Processando skills...");
                     await ProcessSkill(ids);
                     break;
                 case "Weapons":
-                    _log.AddLog("Processando weapons...");
                     await ProcessWeapons(ids);
                     break;
                 case "Armor":
-                    _log.AddLog("Processando armors...");
                     await ProcessArmors(ids);
                     break;
                 case "Items":
-                    _log.AddLog("Processando items...");
                     await ProcessItems(ids);
                     break;
             }
@@ -1030,14 +957,4 @@ public partial class LiveData : UserControl
         XmlCopied.IsVisible = false;
     }
 
-    private async void CopiarItensButton_OnClick(object sender, RoutedEventArgs e)
-    {
-        var text = LogContent.Text;
-        if (string.IsNullOrEmpty(text)) return;
-        var topLevel = TopLevel.GetTopLevel(this);
-        await topLevel!.Clipboard!.SetTextAsync(text);
-        ItensCopiadoTextBlock.IsVisible = true;
-        await Task.Delay(3000);
-        ItensCopiadoTextBlock.IsVisible = false;
-    }
 }
