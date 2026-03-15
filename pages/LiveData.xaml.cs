@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Avalonia.Controls;
@@ -51,12 +50,16 @@ public partial class LiveData : UserControl
         try
         {
             var stream = Assembly.GetExecutingAssembly()
-                .GetManifestResourceStream("L2Toolkit.Data.Presets.json");
+                .GetManifestResourceStream("L2Toolkit.Data.Presets.dat");
             if (stream == null) return;
             using var reader = new StreamReader(stream);
-            var json = reader.ReadToEnd();
-            _allPresets = JsonSerializer.Deserialize<List<Preset>>(json,
-                new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? [];
+            string? line;
+            while ((line = reader.ReadLine()) != null)
+            {
+                var parts = line.Split('|');
+                if (parts.Length == 3)
+                    _allPresets.Add(new Preset(parts[0], parts[1], parts[2]));
+            }
         }
         catch { }
     }
