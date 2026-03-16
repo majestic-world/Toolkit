@@ -32,9 +32,11 @@ public partial class SystemMsgColor : UserControl
 
     private const int MaxRows = 100;
 
-    private List<SysMsgEntry>  _entries        = [];
-    private string             _loadedFilePath = "";
-    private readonly HashSet<int> _selectedIds = [];
+    private List<SysMsgEntry>     _entries        = [];
+    private List<SysMsgEntry>     _visibleEntries = [];
+    private string                _loadedFilePath = "";
+    private readonly HashSet<int> _selectedIds    = [];
+    private int                   _lastClickedId  = -1;
 
     // Shared color picker
     private bool      _pickerBuilt;
@@ -137,6 +139,7 @@ public partial class SystemMsgColor : UserControl
     private void ClearSelection_Click(object? sender, RoutedEventArgs e)
     {
         _selectedIds.Clear();
+        _lastClickedId = -1;
         ApplyFilter();
     }
 
@@ -183,18 +186,16 @@ public partial class SystemMsgColor : UserControl
 
     private void BuildMsgRows(List<SysMsgEntry> entries)
     {
+        _visibleEntries = entries;
         MsgRowsPanel.Children.Clear();
 
-        foreach (var entry in entries)
-        {
-            var row = BuildMsgRow(entry);
-            MsgRowsPanel.Children.Add(row);
-        }
+        for (int i = 0; i < entries.Count; i++)
+            MsgRowsPanel.Children.Add(BuildMsgRow(entries, i));
     }
 
-    private Border BuildMsgRow(SysMsgEntry entry)
+    private Border BuildMsgRow(List<SysMsgEntry> visibleEntries, int index)
     {
-        // Per-row state (closure)
+        var entry   = visibleEntries[index];
         bool editing = false;
 
         // ID badge
@@ -369,6 +370,25 @@ public partial class SystemMsgColor : UserControl
         rowBorder.PointerPressed += (_, e) =>
         {
             if (e.Handled || e.Source is TextBox || e.Source is Button) return;
+
+            var shiftHeld = (e.KeyModifiers & Avalonia.Input.KeyModifiers.Shift) != 0;
+
+            if (shiftHeld && _lastClickedId >= 0)
+            {
+                var lastIdx = visibleEntries.FindIndex(en => en.Id == _lastClickedId);
+                if (lastIdx >= 0)
+                {
+                    var from = Math.Min(lastIdx, index);
+                    var to   = Math.Max(lastIdx, index);
+                    for (int i = from; i <= to; i++)
+                        _selectedIds.Add(visibleEntries[i].Id);
+                    _lastClickedId = entry.Id;
+                    BuildMsgRows(_visibleEntries);
+                    UpdateSelectionUI();
+                    return;
+                }
+            }
+
             if (_selectedIds.Contains(entry.Id))
             {
                 _selectedIds.Remove(entry.Id);
@@ -379,6 +399,7 @@ public partial class SystemMsgColor : UserControl
                 _selectedIds.Add(entry.Id);
                 rowBorder.Background = new SolidColorBrush(Color.Parse("#1C3350"));
             }
+            _lastClickedId = entry.Id;
             UpdateSelectionUI();
         };
 
