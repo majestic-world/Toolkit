@@ -1,19 +1,28 @@
 {
   "permissions": {
     "allow": [
-      "Bash(cd \"C:/workspace/C#/Toolkit\" && dotnet build 2>&1 | tail -80)",
-      "Bash(cd \"C:/workspace/C#/Toolkit\" && dotnet build 2>&1 | grep -E \"^.*Erro|^.*error CS|0 Erro|Build succeeded\" | tail -10)",
-      "Bash(cd \"C:/workspace/C#/Toolkit\" && dotnet build 2>&1 | grep -E \"0 Erro|error CS\" | tail -5)",
-      "Bash(cd \"C:\\\\workspace\\\\C#\\\\Toolkit\" && dotnet build 2>&1 | tail -30)",
+      "Bash(dotnet build:*)",
+      "Bash(dotnet restore:*)",
       "Bash(dotnet run:*)",
-      "Bash(sed -n 1163p /c/Users/Mk/Desktop/geodata/Armorgrp_Classic.txt)",
-      "Read(//c/workspace/**)",
-      "Bash(grep \"body_part=\" /c/workspace/C\\\\#/Toolkit/documents/dump/java/Armorgrp_Classic.txt | grep -o \"body_part=[^[:space:]]*\" | grep -v \"body_part=$\" | sort | uniq -c | head -10)",
-      "Bash(cd 'C:\\\\workspace\\\\C#\\\\Toolkit' && dotnet build 2>&1 | tail -5)",
-      "Bash(find \"/c/Users/Mk/Desktop/geodata\" -type f -name \"*.txt\" 2>/dev/null | head -20)",
-      "Bash(__NEW_LINE_d2ef692f8e7aef4b__ echo:*)",
-      "Bash(__NEW_LINE_0f8f2308a48492ff__ echo:*)",
-      "Bash(cd:*)"
+      "Bash(dotnet test:*)",
+      "Bash(dotnet publish:*)",
+      "Bash(dotnet clean:*)",
+      "Bash(dotnet pack:*)",
+      "Bash(dotnet format:*)",
+      "Bash(dotnet list:*)",
+      "Bash(dotnet tool:*)",
+      "Bash(dotnet --version)",
+      "Bash(dotnet --info)",
+      "Bash(cat:*)",
+      "Bash(ls:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(echo:*)",
+      "Bash(pwd)",
+      "Bash(git status)",
+      "Bash(git log:*)",
+      "Bash(git diff:*)",
+      "Read(**)"
     ]
   }
 }

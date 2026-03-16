@@ -11,13 +11,14 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
+using Avalonia.Styling;
 using MsBox.Avalonia;
 
 namespace L2Toolkit.pages;
 
 public partial class EnchantEffect : UserControl
 {
-    // ─── Model ───────────────────────────────────────────────────────────────
+    // ─── Weapon Model ─────────────────────────────────────────────────────────
 
     private sealed class ColorSlot
     {
@@ -49,7 +50,28 @@ public partial class EnchantEffect : UserControl
         public string GradeLabel => Grade.Trim('[', ']').ToUpperInvariant();
     }
 
-    // ─── State ───────────────────────────────────────────────────────────────
+    // ─── Armor Model ──────────────────────────────────────────────────────────
+
+    private sealed class ArmorColorEntry
+    {
+        public int    EffectType    { get; set; }
+        public int    Unk           { get; set; } = 1;
+        public int    MinEnchantNum { get; set; }
+        public string NoiseScale    { get; set; } = "0.1";
+        public string NoisePanSpeed { get; set; } = "0.25";
+        public string NoiseRate     { get; set; } = "0.5";
+        public string ExtrudeScale  { get; set; } = "0.5";
+        public string EdgePeak      { get; set; } = "1.0";
+        public string EdgeSharp     { get; set; } = "0.25";
+        // Colors stored as RRGGBB + AA separately (file format is RRGGBBAA)
+        public string MinColorRgb   { get; set; } = "FFFFFF";
+        public string MinColorAlpha { get; set; } = "FF";
+        public string MaxColorRgb   { get; set; } = "000000";
+        public string MaxColorAlpha { get; set; } = "FF";
+        public int    ShowType      { get; set; } = 1;
+    }
+
+    // ─── Weapon State ─────────────────────────────────────────────────────────
 
     private List<WeaponEnchantEntry> _entries = [];
     private WeaponEnchantEntry?      _currentEntry;
@@ -59,19 +81,37 @@ public partial class EnchantEffect : UserControl
     private TextBox?                 _activeHexBox;
     private bool                     _pickerBuilt;
 
-    // Row control references (indexed 0-19)
-    private readonly List<Border>   _radSwatches  = [];
-    private readonly List<TextBox>  _radHexBoxes  = [];
-    private readonly List<Border>   _ringSwatches = [];
-    private readonly List<TextBox>  _ringHexBoxes = [];
+    // Weapon row control references (indexed 0-19)
+    private readonly List<Border>     _radSwatches    = [];
+    private readonly List<TextBox>    _radHexBoxes    = [];
+    private readonly List<Border>     _ringSwatches   = [];
+    private readonly List<TextBox>    _ringHexBoxes   = [];
     private readonly List<TextBlock>  _particleLabels = [];
     private readonly HashSet<TextBox> _editingBoxes   = [];
     private readonly List<Button>     _radEditBtns    = [];
     private readonly List<Button>     _ringEditBtns   = [];
 
-    // ─── Init ─────────────────────────────────────────────────────────────────
+    // ─── Armor State ──────────────────────────────────────────────────────────
 
-    // Picker controls (built lazily on first open)
+    private List<ArmorColorEntry>    _armorEntries       = [];
+    private string                   _armorLoadedFilePath = "";
+    private bool                     _armorSuppressHex;
+
+    // Armor row control references (indexed per entry)
+    private readonly List<Border>     _armorMinSwatches  = [];
+    private readonly List<TextBox>    _armorMinHexBoxes  = [];
+    private readonly List<Border>     _armorMaxSwatches  = [];
+    private readonly List<TextBox>    _armorMaxHexBoxes  = [];
+    private readonly List<Button>     _armorMinEditBtns  = [];
+    private readonly List<Button>     _armorMaxEditBtns  = [];
+    private readonly HashSet<TextBox> _armorEditingBoxes = [];
+
+    // ─── Mode State ───────────────────────────────────────────────────────────
+
+    private bool _isWeaponMode = true;
+
+    // ─── Picker shared state ──────────────────────────────────────────────────
+
     private Border    _pickerPreview = null!;
     private Slider    _rSlider       = null!;
     private Slider    _gSlider       = null!;
@@ -79,13 +119,34 @@ public partial class EnchantEffect : UserControl
     private TextBlock _hexDisplay    = null!;
     private bool      _sliderUpdating;
 
+    // ─── Init ─────────────────────────────────────────────────────────────────
+
     public EnchantEffect()
     {
         InitializeComponent();
         BuildRows();
     }
 
-    // ─── File I/O ─────────────────────────────────────────────────────────────
+    // ─── Mode toggle ──────────────────────────────────────────────────────────
+
+    private void WeaponMode_Click(object? sender, RoutedEventArgs e) => SetMode(true);
+    private void ArmorMode_Click(object? sender, RoutedEventArgs e)  => SetMode(false);
+
+    private void SetMode(bool weaponMode)
+    {
+        _isWeaponMode = weaponMode;
+        WeaponSection.IsVisible = weaponMode;
+        ArmorSection.IsVisible  = !weaponMode;
+
+        if (this.TryFindResource("ModeButtonActive",   out var active)   && active   is ControlTheme activeTheme &&
+            this.TryFindResource("ModeButtonInactive", out var inactive) && inactive is ControlTheme inactiveTheme)
+        {
+            WeaponModeBtn.Theme = weaponMode ? activeTheme : inactiveTheme;
+            ArmorModeBtn.Theme  = weaponMode ? inactiveTheme : activeTheme;
+        }
+    }
+
+    // ─── Weapon File I/O ──────────────────────────────────────────────────────
 
     private async void FilePath_OnClick(object? sender, PointerPressedEventArgs e)
         => await PickAndLoadFile();
@@ -129,9 +190,9 @@ public partial class EnchantEffect : UserControl
         var topLevel = TopLevel.GetTopLevel(this);
         var file = await topLevel!.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
         {
-            Title           = "Salvar WeaponEnchantEffect.txt",
+            Title             = "Salvar WeaponEnchantEffect.txt",
             SuggestedFileName = Path.GetFileName(_loadedFilePath),
-            FileTypeChoices =
+            FileTypeChoices   =
             [
                 new FilePickerFileType("Text") { Patterns = ["*.txt"] }
             ]
@@ -155,7 +216,78 @@ public partial class EnchantEffect : UserControl
         }
     }
 
-    // ─── Selectors ────────────────────────────────────────────────────────────
+    // ─── Armor File I/O ───────────────────────────────────────────────────────
+
+    private async void ArmorFilePath_OnClick(object? sender, PointerPressedEventArgs e)
+        => await PickAndLoadArmorFile();
+
+    private async void ArmorLoadFile_Click(object? sender, RoutedEventArgs e)
+        => await PickAndLoadArmorFile();
+
+    private async Task PickAndLoadArmorFile()
+    {
+        var topLevel = TopLevel.GetTopLevel(this);
+        var files = await topLevel!.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+        {
+            Title = "Selecionar FullArmorEnchantEffectData.txt",
+            AllowMultiple = false,
+            FileTypeFilter =
+            [
+                new FilePickerFileType("Text") { Patterns = ["*.txt"] },
+                new FilePickerFileType("All")  { Patterns = ["*.*"] }
+            ]
+        });
+        if (files.Count == 0) return;
+
+        _armorLoadedFilePath = files[0].Path.LocalPath;
+        ArmorFilePath.Text   = _armorLoadedFilePath;
+
+        try
+        {
+            _armorEntries = ParseArmorFile(_armorLoadedFilePath);
+            BuildArmorRows();
+            LoadArmorEntriesIntoRows();
+            RefreshArmorPreview();
+            ArmorContentPanel.IsVisible = true;
+        }
+        catch (Exception ex)
+        {
+            await MessageBoxManager.GetMessageBoxStandard("Erro", ex.Message).ShowWindowAsync();
+        }
+    }
+
+    private async void ArmorSaveFile_Click(object? sender, RoutedEventArgs e)
+    {
+        var topLevel = TopLevel.GetTopLevel(this);
+        var file = await topLevel!.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+        {
+            Title             = "Salvar FullArmorEnchantEffectData.txt",
+            SuggestedFileName = Path.GetFileName(_armorLoadedFilePath),
+            FileTypeChoices   =
+            [
+                new FilePickerFileType("Text") { Patterns = ["*.txt"] }
+            ]
+        });
+        if (file == null) return;
+
+        try
+        {
+            var content = SerializeArmorEntries(_armorEntries);
+            await File.WriteAllTextAsync(file.Path.LocalPath, content, new UTF8Encoding(true));
+
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+            {
+                FileName        = file.Path.LocalPath,
+                UseShellExecute = true
+            });
+        }
+        catch (Exception ex)
+        {
+            await MessageBoxManager.GetMessageBoxStandard("Erro ao salvar", ex.Message).ShowWindowAsync();
+        }
+    }
+
+    // ─── Weapon Selectors ─────────────────────────────────────────────────────
 
     private static string TypeLabel(string type) => type switch
     {
@@ -183,7 +315,6 @@ public partial class EnchantEffect : UserControl
         var grade = GradeCombo.SelectedItem as string;
         if (label == null || grade == null) return;
 
-        // Extract raw type value from label (last token inside parentheses, or the label itself)
         var type = label.Contains('(')
             ? label[(label.LastIndexOf('(') + 1)..label.LastIndexOf(')')]
             : label;
@@ -196,7 +327,7 @@ public partial class EnchantEffect : UserControl
         RefreshPreview();
     }
 
-    // ─── Row builder ─────────────────────────────────────────────────────────
+    // ─── Weapon Row Builder ───────────────────────────────────────────────────
 
     private void BuildRows()
     {
@@ -292,6 +423,87 @@ public partial class EnchantEffect : UserControl
         }
     }
 
+    // ─── Armor Row Builder ────────────────────────────────────────────────────
+
+    private void BuildArmorRows()
+    {
+        _armorMinSwatches.Clear();
+        _armorMinHexBoxes.Clear();
+        _armorMaxSwatches.Clear();
+        _armorMaxHexBoxes.Clear();
+        _armorMinEditBtns.Clear();
+        _armorMaxEditBtns.Clear();
+        _armorEditingBoxes.Clear();
+        ArmorRowsPanel.Children.Clear();
+
+        for (int i = 0; i < _armorEntries.Count; i++)
+        {
+            var idx   = i;
+            var entry = _armorEntries[i];
+
+            var row = new Border
+            {
+                Background   = new SolidColorBrush(Color.Parse("#2C2C2C")),
+                CornerRadius = new CornerRadius(6),
+                Padding      = new Thickness(12, 7)
+            };
+
+            var grid = new Grid();
+            grid.ColumnDefinitions.Add(new ColumnDefinition(60, GridUnitType.Pixel));
+            grid.ColumnDefinitions.Add(new ColumnDefinition(8,  GridUnitType.Pixel));
+            grid.ColumnDefinitions.Add(new ColumnDefinition(1,  GridUnitType.Star));
+            grid.ColumnDefinitions.Add(new ColumnDefinition(12, GridUnitType.Pixel));
+            grid.ColumnDefinitions.Add(new ColumnDefinition(1,  GridUnitType.Star));
+
+            // Enchant level badge (min_enchant_num)
+            var badge = new Border
+            {
+                Background          = new SolidColorBrush(Color.Parse("#2A3A2A")),
+                CornerRadius        = new CornerRadius(4),
+                Padding             = new Thickness(8, 3),
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment   = VerticalAlignment.Center
+            };
+            badge.Child = new TextBlock
+            {
+                Text       = $"+{entry.MinEnchantNum}",
+                FontSize   = 12,
+                FontWeight = FontWeight.SemiBold,
+                Foreground = new SolidColorBrush(Color.Parse("#6EC87A"))
+            };
+            Grid.SetColumn(badge, 0);
+
+            // Min Color picker
+            var (minPanel, minSwatch, minHex, minEditBtn) = MakeColorPicker();
+            minHex.TextChanged       += (_, _) => OnArmorHexChanged(minSwatch, minHex, "min", idx);
+            minSwatch.PointerPressed += (_, _) => ShowColorPicker(minSwatch, minHex);
+            minEditBtn.Click         += (_, _) => ToggleArmorEdit(minSwatch, minHex, minEditBtn, "min", idx);
+            _armorMinSwatches.Add(minSwatch);
+            _armorMinHexBoxes.Add(minHex);
+            _armorMinEditBtns.Add(minEditBtn);
+            Grid.SetColumn(minPanel, 2);
+
+            // Max Color picker
+            var (maxPanel, maxSwatch, maxHex, maxEditBtn) = MakeColorPicker();
+            maxHex.TextChanged       += (_, _) => OnArmorHexChanged(maxSwatch, maxHex, "max", idx);
+            maxSwatch.PointerPressed += (_, _) => ShowColorPicker(maxSwatch, maxHex);
+            maxEditBtn.Click         += (_, _) => ToggleArmorEdit(maxSwatch, maxHex, maxEditBtn, "max", idx);
+            _armorMaxSwatches.Add(maxSwatch);
+            _armorMaxHexBoxes.Add(maxHex);
+            _armorMaxEditBtns.Add(maxEditBtn);
+            Grid.SetColumn(maxPanel, 4);
+
+            grid.Children.Add(badge);
+            grid.Children.Add(minPanel);
+            grid.Children.Add(maxPanel);
+            row.Child = grid;
+
+            ArmorRowsPanel.Children.Add(row);
+        }
+    }
+
+    // ─── Shared color picker factory ──────────────────────────────────────────
+
     private static (Panel panel, Border swatch, TextBox hex, Button editBtn) MakeColorPicker()
     {
         var swatch = new Border
@@ -347,7 +559,7 @@ public partial class EnchantEffect : UserControl
         return (panel, swatch, hex, editBtn);
     }
 
-    // ─── Load entry into rows ─────────────────────────────────────────────────
+    // ─── Weapon: load entry into rows ─────────────────────────────────────────
 
     private void LoadEntryIntoRows(WeaponEnchantEntry entry)
     {
@@ -368,7 +580,26 @@ public partial class EnchantEffect : UserControl
         _suppressHexUpdate = false;
     }
 
-    // ─── Hex change handler ───────────────────────────────────────────────────
+    // ─── Armor: load entries into rows ────────────────────────────────────────
+
+    private void LoadArmorEntriesIntoRows()
+    {
+        ExitAllArmorEditModes();
+        _armorSuppressHex = true;
+        for (int i = 0; i < _armorEntries.Count; i++)
+        {
+            var entry = _armorEntries[i];
+
+            _armorMinHexBoxes[i].Text = entry.MinColorRgb.ToUpper();
+            _armorMaxHexBoxes[i].Text = entry.MaxColorRgb.ToUpper();
+
+            SetSwatchColor(_armorMinSwatches[i], entry.MinColorRgb);
+            SetSwatchColor(_armorMaxSwatches[i], entry.MaxColorRgb);
+        }
+        _armorSuppressHex = false;
+    }
+
+    // ─── Weapon: hex change handler ───────────────────────────────────────────
 
     private void OnHexChanged(Border swatch, TextBox box, string channel, int idx)
     {
@@ -378,7 +609,6 @@ public partial class EnchantEffect : UserControl
 
         SetSwatchColor(swatch, hex);
 
-        // Skip model/ring update while user is manually editing — only update swatch visually
         if (_editingBoxes.Contains(box) && !_pickerUpdating) return;
 
         var secondary = DeriveSecondary(hex);
@@ -389,7 +619,6 @@ public partial class EnchantEffect : UserControl
         slot.Primary   = hex.ToUpper();
         slot.Secondary = secondary.ToUpper();
 
-        // Auto-update ring when radiance changes
         if (channel == "radiance")
         {
             var ringPrimary = ScaleColor(hex, 0.18f).ToUpper();
@@ -407,37 +636,33 @@ public partial class EnchantEffect : UserControl
         RefreshPreview();
     }
 
-    private void OnRadHexLostFocus(Border swatch, TextBox box, int idx)
-    {
-        // Normalize: strip optional '#', trim whitespace, uppercase
-        var raw = (box.Text?.Trim().TrimStart('#') ?? "").ToUpper();
+    // ─── Armor: hex change handler ────────────────────────────────────────────
 
-        if (TryParseHex(raw, out _))
-        {
-            // Valid hex — update box text; if it changed, TextChanged fires → OnHexChanged handles the rest
-            if (box.Text != raw)
-                box.Text = raw;
-            // If text was already normalized TextChanged won't re-fire, but OnHexChanged
-            // already ran when the 6th character was typed — nothing extra needed
-        }
+    private void OnArmorHexChanged(Border swatch, TextBox box, string channel, int idx)
+    {
+        if (_armorSuppressHex || idx >= _armorEntries.Count) return;
+        var hex = box.Text?.Trim() ?? "";
+        if (hex.Length != 6) return;
+
+        SetSwatchColor(swatch, hex);
+
+        if (_armorEditingBoxes.Contains(box) && !_pickerUpdating) return;
+
+        var entry = _armorEntries[idx];
+        if (channel == "min")
+            entry.MinColorRgb = hex.ToUpper();
         else
-        {
-            // Invalid input — silently reset to last known good value from the model
-            var fallback = _currentEntry?.Levels[idx].Radiance.Primary ?? "000000";
-            _suppressHexUpdate = true;
-            box.Text = fallback;
-            SetSwatchColor(swatch, fallback);
-            _suppressHexUpdate = false;
-        }
+            entry.MaxColorRgb = hex.ToUpper();
+
+        RefreshArmorPreview();
     }
 
-    // ─── Edit-mode toggle ─────────────────────────────────────────────────────
+    // ─── Weapon: edit-mode toggle ─────────────────────────────────────────────
 
     private void ToggleEdit(Border swatch, TextBox hex, Button editBtn, string channel, int idx)
     {
         if (_editingBoxes.Contains(hex))
         {
-            // CONFIRM: save value, calculate ring, exit edit mode
             _editingBoxes.Remove(hex);
             hex.IsReadOnly       = true;
             hex.IsHitTestVisible = false;
@@ -448,13 +673,12 @@ public partial class EnchantEffect : UserControl
             if (TryParseHex(raw, out _))
             {
                 if (hex.Text != raw)
-                    hex.Text = raw; // normalize → TextChanged → OnHexChanged (not in _editingBoxes → updates model+ring)
+                    hex.Text = raw;
                 else
-                    OnHexChanged(swatch, hex, channel, idx); // already normalized, force update
+                    OnHexChanged(swatch, hex, channel, idx);
             }
             else
             {
-                // Invalid: reset to last known good model value
                 var fallback = (channel == "radiance"
                     ? _currentEntry?.Levels[idx].Radiance.Primary
                     : _currentEntry?.Levels[idx].Ring.Primary) ?? "000000";
@@ -466,7 +690,6 @@ public partial class EnchantEffect : UserControl
         }
         else
         {
-            // START EDIT: make editable, highlight border
             _editingBoxes.Add(hex);
             hex.IsReadOnly       = false;
             hex.IsHitTestVisible = true;
@@ -494,6 +717,67 @@ public partial class EnchantEffect : UserControl
         }
     }
 
+    // ─── Armor: edit-mode toggle ──────────────────────────────────────────────
+
+    private void ToggleArmorEdit(Border swatch, TextBox hex, Button editBtn, string channel, int idx)
+    {
+        if (_armorEditingBoxes.Contains(hex))
+        {
+            _armorEditingBoxes.Remove(hex);
+            hex.IsReadOnly       = true;
+            hex.IsHitTestVisible = false;
+            hex.BorderBrush      = new SolidColorBrush(Color.Parse("#464646"));
+            editBtn.Content = MakePencilIcon();
+
+            var raw = (hex.Text?.Trim().TrimStart('#') ?? "").ToUpper();
+            if (TryParseHex(raw, out _))
+            {
+                if (hex.Text != raw)
+                    hex.Text = raw;
+                else
+                    OnArmorHexChanged(swatch, hex, channel, idx);
+            }
+            else
+            {
+                var entry = idx < _armorEntries.Count ? _armorEntries[idx] : null;
+                var fallback = (channel == "min" ? entry?.MinColorRgb : entry?.MaxColorRgb) ?? "000000";
+                _armorSuppressHex = true;
+                hex.Text = fallback.ToUpper();
+                SetSwatchColor(swatch, fallback);
+                _armorSuppressHex = false;
+            }
+        }
+        else
+        {
+            _armorEditingBoxes.Add(hex);
+            hex.IsReadOnly       = false;
+            hex.IsHitTestVisible = true;
+            hex.BorderBrush      = new SolidColorBrush(Color.Parse("#5B9BD5"));
+            editBtn.Content = MakeCheckIcon();
+            hex.Focus();
+            hex.SelectAll();
+        }
+    }
+
+    private void ExitAllArmorEditModes()
+    {
+        if (_armorMinHexBoxes.Count == 0) return;
+        _armorEditingBoxes.Clear();
+        for (int i = 0; i < _armorMinHexBoxes.Count; i++)
+        {
+            _armorMinHexBoxes[i].IsReadOnly       = true;
+            _armorMinHexBoxes[i].IsHitTestVisible = false;
+            _armorMinHexBoxes[i].BorderBrush      = new SolidColorBrush(Color.Parse("#464646"));
+            _armorMaxHexBoxes[i].IsReadOnly       = true;
+            _armorMaxHexBoxes[i].IsHitTestVisible = false;
+            _armorMaxHexBoxes[i].BorderBrush      = new SolidColorBrush(Color.Parse("#464646"));
+            if (i < _armorMinEditBtns.Count) _armorMinEditBtns[i].Content = MakePencilIcon();
+            if (i < _armorMaxEditBtns.Count) _armorMaxEditBtns[i].Content = MakePencilIcon();
+        }
+    }
+
+    // ─── Icons ────────────────────────────────────────────────────────────────
+
     private static PathIcon MakePencilIcon() => new PathIcon
     {
         Width      = 12,
@@ -517,7 +801,6 @@ public partial class EnchantEffect : UserControl
         if (_pickerBuilt) return;
         _pickerBuilt = true;
 
-        // Preview swatch
         _pickerPreview = new Border
         {
             Height       = 52,
@@ -552,10 +835,10 @@ public partial class EnchantEffect : UserControl
     {
         return new Slider
         {
-            Classes   = { "PickerSlider" },
-            Minimum   = 0,
-            Maximum   = 255,
-            Value     = 0,
+            Classes    = { "PickerSlider" },
+            Minimum    = 0,
+            Maximum    = 255,
+            Value      = 0,
             Foreground = new SolidColorBrush(Color.Parse(accentHex))
         };
     }
@@ -578,7 +861,6 @@ public partial class EnchantEffect : UserControl
             VerticalAlignment = VerticalAlignment.Center
         };
         Grid.SetColumn(lbl, 0);
-
         Grid.SetColumn(slider, 2);
 
         var val = new TextBlock
@@ -591,7 +873,6 @@ public partial class EnchantEffect : UserControl
         };
         Grid.SetColumn(val, 4);
 
-        // Keep val in sync with slider
         slider.PropertyChanged += (_, e) =>
         {
             if (e.Property.Name == "Value")
@@ -642,7 +923,7 @@ public partial class EnchantEffect : UserControl
         ColorPickerPopup.IsOpen          = true;
     }
 
-    // ─── Gradient preview ─────────────────────────────────────────────────────
+    // ─── Weapon gradient preview ──────────────────────────────────────────────
 
     private void RefreshPreview()
     {
@@ -677,7 +958,42 @@ public partial class EnchantEffect : UserControl
         }
     }
 
-    // ─── Generator ────────────────────────────────────────────────────────────
+    // ─── Armor preview ────────────────────────────────────────────────────────
+
+    private void RefreshArmorPreview()
+    {
+        if (_armorEntries.Count == 0) return;
+
+        ArmorPreviewGrid.Children.Clear();
+        ArmorPreviewGrid.ColumnDefinitions.Clear();
+        ArmorPreviewLabelsGrid.Children.Clear();
+        ArmorPreviewLabelsGrid.ColumnDefinitions.Clear();
+
+        for (int i = 0; i < _armorEntries.Count; i++)
+        {
+            ArmorPreviewGrid.ColumnDefinitions.Add(new ColumnDefinition(1, GridUnitType.Star));
+            ArmorPreviewLabelsGrid.ColumnDefinitions.Add(new ColumnDefinition(1, GridUnitType.Star));
+
+            var entry = _armorEntries[i];
+            var color = TryParseHex(entry.MinColorRgb, out var c) ? c : Colors.Black;
+
+            var cell = new Border { Background = new SolidColorBrush(color) };
+            Grid.SetColumn(cell, i);
+            ArmorPreviewGrid.Children.Add(cell);
+
+            var lbl = new TextBlock
+            {
+                Text                = $"+{entry.MinEnchantNum}",
+                FontSize            = 9,
+                Foreground          = new SolidColorBrush(Color.Parse("#6B7280")),
+                HorizontalAlignment = HorizontalAlignment.Center
+            };
+            Grid.SetColumn(lbl, i);
+            ArmorPreviewLabelsGrid.Children.Add(lbl);
+        }
+    }
+
+    // ─── Weapon: Apply All ────────────────────────────────────────────────────
 
     private void ApplyAll_Click(object? sender, RoutedEventArgs e)
     {
@@ -702,6 +1018,8 @@ public partial class EnchantEffect : UserControl
         ShowSuccessToast($"Cores aplicadas a {targets.Count} grau(s) do tipo {_currentEntry.Type}.");
     }
 
+    // ─── Toast ────────────────────────────────────────────────────────────────
+
     private async void ShowSuccessToast(string message)
     {
         SuccessToastText.Text  = message;
@@ -710,34 +1028,7 @@ public partial class EnchantEffect : UserControl
         SuccessToast.IsVisible = false;
     }
 
-    /// <summary>
-    /// Derives ring colors from the entry's current Radiance primaries.
-    /// Each level: ring = radiance darkened to ~18%, preserving the same opacity.
-    /// </summary>
-    private void ApplyRingFromRadiance(WeaponEnchantEntry? entry)
-    {
-        if (entry == null) return;
-
-        _suppressHexUpdate = true;
-        for (int i = 0; i < 20; i++)
-        {
-            var radHex  = entry.Levels[i].Radiance.Primary;
-            var primary = ScaleColor(radHex, 0.18f);
-            var ring    = entry.Levels[i].Ring;
-            ring.Primary   = primary.ToUpper();
-            ring.Secondary = DeriveSecondary(primary).ToUpper();
-            ring.Opacity   = entry.Levels[i].Radiance.Opacity;
-
-            if (entry == _currentEntry)
-            {
-                _ringHexBoxes[i].Text = ring.Primary;
-                SetSwatchColor(_ringSwatches[i], ring.Primary);
-            }
-        }
-        _suppressHexUpdate = false;
-    }
-
-    // ─── Parser ───────────────────────────────────────────────────────────────
+    // ─── Weapon Parser ────────────────────────────────────────────────────────
 
     private static List<WeaponEnchantEntry> ParseFile(string path)
     {
@@ -760,15 +1051,15 @@ public partial class EnchantEffect : UserControl
 
             var entry = new WeaponEnchantEntry
             {
-                Type               = lookup.GetValueOrDefault("type",                       "00000000"),
-                Grade              = lookup.GetValueOrDefault("grade",                      "[none]"),
-                RadianceEffectName = lookup.GetValueOrDefault("radiance_effect_name",       ""),
-                RadianceShowValue  = lookup.GetValueOrDefault("radiance_effect_show_value", "{4}"),
+                Type               = lookup.GetValueOrDefault("type",                        "00000000"),
+                Grade              = lookup.GetValueOrDefault("grade",                       "[none]"),
+                RadianceEffectName = lookup.GetValueOrDefault("radiance_effect_name",        ""),
+                RadianceShowValue  = lookup.GetValueOrDefault("radiance_effect_show_value",  "{4}"),
                 SwordFlowShowValue = lookup.GetValueOrDefault("sword_flow_effect_show_value","7"),
-                ParticleEffectName = lookup.GetValueOrDefault("particle_effect_name",       ""),
-                ParticleShowValue  = lookup.GetValueOrDefault("particle_effect_show_value", "{9999}"),
-                RingEffectName     = lookup.GetValueOrDefault("ring_effect_name",           ""),
-                RingShowValue      = lookup.GetValueOrDefault("ring_effect_show_value",     "{9999}")
+                ParticleEffectName = lookup.GetValueOrDefault("particle_effect_name",        ""),
+                ParticleShowValue  = lookup.GetValueOrDefault("particle_effect_show_value",  "{9999}"),
+                RingEffectName     = lookup.GetValueOrDefault("ring_effect_name",            ""),
+                RingShowValue      = lookup.GetValueOrDefault("ring_effect_show_value",      "{9999}")
             };
 
             for (int i = 1; i <= 20; i++)
@@ -792,7 +1083,6 @@ public partial class EnchantEffect : UserControl
 
     private static void ParseSlot(string raw, ColorSlot slot)
     {
-        // raw = {RRGGBBAA;RRGGBBAA;opacity}  — last 2 hex chars are always 00 (padding)
         raw = raw.Trim('{', '}');
         var parts = raw.Split(';');
         slot.Primary   = parts.Length > 0 && parts[0].Length >= 6 ? parts[0][..6] : "000000";
@@ -800,7 +1090,65 @@ public partial class EnchantEffect : UserControl
         slot.Opacity   = parts.Length > 2 ? parts[2] : "1.0";
     }
 
-    // ─── Serializer ───────────────────────────────────────────────────────────
+    // ─── Armor Parser ─────────────────────────────────────────────────────────
+
+    private static List<ArmorColorEntry> ParseArmorFile(string path)
+    {
+        var entries = new List<ArmorColorEntry>();
+        var lines   = File.ReadLines(path);
+
+        foreach (var rawLine in lines)
+        {
+            var line = rawLine.TrimStart('\uFEFF').Trim();
+            if (!line.StartsWith("full_armor_enchant_effect_data_begin", StringComparison.Ordinal))
+                continue;
+
+            var lookup = new Dictionary<string, string>(StringComparer.Ordinal);
+            foreach (var field in line.Split('\t'))
+            {
+                var eq = field.IndexOf('=');
+                if (eq < 0) continue;
+                lookup[field[..eq]] = field[(eq + 1)..];
+            }
+
+            var entry = new ArmorColorEntry
+            {
+                NoiseScale    = lookup.GetValueOrDefault("noise_scale",     "0.1"),
+                NoisePanSpeed = lookup.GetValueOrDefault("noise_pan_speed", "0.25"),
+                NoiseRate     = lookup.GetValueOrDefault("noise_rate",      "0.5"),
+                ExtrudeScale  = lookup.GetValueOrDefault("extrude_scale",   "0.5"),
+                EdgePeak      = lookup.GetValueOrDefault("edge_peak",       "1.0"),
+                EdgeSharp     = lookup.GetValueOrDefault("edge_sharp",      "0.25"),
+            };
+
+            if (int.TryParse(lookup.GetValueOrDefault("effect_type", "0"), out var et))
+                entry.EffectType = et;
+            if (int.TryParse(lookup.GetValueOrDefault("unk", "1"), out var unk))
+                entry.Unk = unk;
+            if (int.TryParse(lookup.GetValueOrDefault("min_enchant_num", "0"), out var men))
+                entry.MinEnchantNum = men;
+            if (int.TryParse(lookup.GetValueOrDefault("show_type", "1"), out var st))
+                entry.ShowType = st;
+
+            // min_color / max_color are RRGGBBAA (8 hex chars)
+            if (lookup.TryGetValue("min_color", out var minColor) && minColor.Length >= 8)
+            {
+                entry.MinColorRgb   = minColor[..6].ToUpper();
+                entry.MinColorAlpha = minColor[6..8].ToUpper();
+            }
+            if (lookup.TryGetValue("max_color", out var maxColor) && maxColor.Length >= 8)
+            {
+                entry.MaxColorRgb   = maxColor[..6].ToUpper();
+                entry.MaxColorAlpha = maxColor[6..8].ToUpper();
+            }
+
+            entries.Add(entry);
+        }
+
+        return entries;
+    }
+
+    // ─── Weapon Serializer ────────────────────────────────────────────────────
 
     private static string SerializeEntries(List<WeaponEnchantEntry> entries)
     {
@@ -845,6 +1193,39 @@ public partial class EnchantEffect : UserControl
         }
 
         sb.Append("\tweapon_enchant_effect_data_end");
+        return sb.ToString();
+    }
+
+    // ─── Armor Serializer ─────────────────────────────────────────────────────
+
+    private static string SerializeArmorEntries(List<ArmorColorEntry> entries)
+    {
+        var sb = new StringBuilder();
+        for (int i = 0; i < entries.Count; i++)
+        {
+            if (i > 0) sb.Append('\n');
+            sb.Append(SerializeArmorEntry(entries[i]));
+        }
+        return sb.ToString();
+    }
+
+    private static string SerializeArmorEntry(ArmorColorEntry entry)
+    {
+        var sb = new StringBuilder();
+        sb.Append("full_armor_enchant_effect_data_begin");
+        sb.Append($"\teffect_type={entry.EffectType}");
+        sb.Append($"\tunk={entry.Unk}");
+        sb.Append($"\tmin_enchant_num={entry.MinEnchantNum}");
+        sb.Append($"\tnoise_scale={entry.NoiseScale}");
+        sb.Append($"\tnoise_pan_speed={entry.NoisePanSpeed}");
+        sb.Append($"\tnoise_rate={entry.NoiseRate}");
+        sb.Append($"\textrude_scale={entry.ExtrudeScale}");
+        sb.Append($"\tedge_peak={entry.EdgePeak}");
+        sb.Append($"\tedge_sharp={entry.EdgeSharp}");
+        sb.Append($"\tmin_color={entry.MinColorRgb}{entry.MinColorAlpha}");
+        sb.Append($"\tmax_color={entry.MaxColorRgb}{entry.MaxColorAlpha}");
+        sb.Append($"\tshow_type={entry.ShowType}");
+        sb.Append("\tfull_armor_enchant_effect_data_end");
         return sb.ToString();
     }
 
