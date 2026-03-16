@@ -95,8 +95,9 @@ public partial class SystemMsgColor : UserControl
 
         try
         {
-            _entries               = ParseFile(_loadedFilePath);
-            ContentPanel.IsVisible = true;
+            _entries                    = ParseFile(_loadedFilePath);
+            ContentPanel.IsVisible      = true;
+            MsgScrollViewer.IsVisible   = true;
             ApplyFilter();
         }
         catch (Exception ex)
@@ -125,6 +126,19 @@ public partial class SystemMsgColor : UserControl
     }
 
     // ─── Search filter ────────────────────────────────────────────────────────
+
+    private void UpdateSelectionUI()
+    {
+        var count = _selectedIds.Count;
+        ClearSelectionBtn.IsVisible  = count > 0;
+        ClearSelectionLabel.Text     = $"Remover seleção ({count})";
+    }
+
+    private void ClearSelection_Click(object? sender, RoutedEventArgs e)
+    {
+        _selectedIds.Clear();
+        ApplyFilter();
+    }
 
     private void SearchBox_TextChanged(object? sender, TextChangedEventArgs e) { /* search on button click only */ }
 
@@ -161,6 +175,8 @@ public partial class SystemMsgColor : UserControl
         OverflowLabel.IsVisible = total > MaxRows;
         if (total > MaxRows)
             OverflowLabel.Text = $"Mostrando {MaxRows} de {total}. Use a busca para encontrar mensagens específicas.";
+
+        UpdateSelectionUI();
     }
 
     // ─── Row builder ──────────────────────────────────────────────────────────
@@ -363,6 +379,7 @@ public partial class SystemMsgColor : UserControl
                 _selectedIds.Add(entry.Id);
                 rowBorder.Background = new SolidColorBrush(Color.Parse("#1C3350"));
             }
+            UpdateSelectionUI();
         };
 
         return rowBorder;
