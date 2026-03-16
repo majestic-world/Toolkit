@@ -665,10 +665,12 @@ public partial class SystemMsgColor : UserControl
 
         if (_selectedIds.Count > 0)
         {
+            var count = _selectedIds.Count;
             foreach (var entry in _entries.Where(e => _selectedIds.Contains(e.Id)))
                 entry.ColorRgb = hex6;
+            _selectedIds.Clear();
             ApplyFilter();
-            ShowSuccessToast($"Cor aplicada em {_selectedIds.Count} mensagem(ns) selecionada(s).");
+            ShowSuccessToast($"Cor aplicada em {count} mensagem(ns).");
         }
         else if (_activeHexBox != null && !_activeHexBox.IsReadOnly)
         {
