@@ -22,7 +22,8 @@
       "Bash(git status)",
       "Bash(git log:*)",
       "Bash(git diff:*)",
-      "Read(**)"
+      "Read(**)",
+      "Bash(sed:*)"
     ]
   }
 }

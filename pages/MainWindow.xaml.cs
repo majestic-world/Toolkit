@@ -124,5 +124,8 @@ namespace L2Toolkit
 
         private void BtnEnchantEffect_Click(object sender, RoutedEventArgs e)
             => MainContent.Content = new EnchantEffect();
+
+        private void BtnSystemMsgColor_Click(object sender, RoutedEventArgs e)
+            => MainContent.Content = new SystemMsgColor();
     }
 }

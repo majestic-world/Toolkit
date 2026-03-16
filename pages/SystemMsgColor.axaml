@@ -1,0 +1,235 @@
+<UserControl x:Class="L2Toolkit.pages.SystemMsgColor"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="#393939">
+
+    <UserControl.Resources>
+        <ControlTheme x:Key="GhostButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#B0B0B0"/>
+            <Setter Property="BorderBrush" Value="#565656"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border x:Name="PART_Border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="6"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Content="{TemplateBinding Content}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+            <Style Selector="^:pointerover /template/ Border#PART_Border">
+                <Setter Property="Background" Value="#3C3C3C"/>
+                <Setter Property="BorderBrush" Value="#646464"/>
+            </Style>
+            <Style Selector="^:pressed /template/ Border#PART_Border">
+                <Setter Property="Background" Value="#323232"/>
+            </Style>
+        </ControlTheme>
+
+        <ControlTheme x:Key="SaveButton" TargetType="Button">
+            <Setter Property="Background" Value="#303030"/>
+            <Setter Property="Foreground" Value="#C0C0C0"/>
+            <Setter Property="BorderBrush" Value="#505050"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border x:Name="PART_Border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding CornerRadius}"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Content="{TemplateBinding Content}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+            <Style Selector="^:pointerover /template/ Border#PART_Border">
+                <Setter Property="Background" Value="#3A3A3A"/>
+                <Setter Property="BorderBrush" Value="#606060"/>
+            </Style>
+            <Style Selector="^:pressed /template/ Border#PART_Border">
+                <Setter Property="Background" Value="#282828"/>
+            </Style>
+        </ControlTheme>
+    </UserControl.Resources>
+
+    <UserControl.Styles>
+        <Style Selector="Slider.PickerSlider">
+            <Setter Property="Minimum" Value="0"/>
+            <Setter Property="Maximum" Value="255"/>
+            <Setter Property="Height" Value="20"/>
+        </Style>
+        <Style Selector="Slider.PickerSlider /template/ Track">
+            <Setter Property="Height" Value="6"/>
+        </Style>
+        <Style Selector="Slider.PickerSlider /template/ Track#PART_Track Thumb">
+            <Setter Property="Width" Value="14"/>
+            <Setter Property="Height" Value="14"/>
+            <Setter Property="Background" Value="#E8E8E8"/>
+            <Setter Property="CornerRadius" Value="7"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Grid>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="30,28,30,40" Spacing="20">
+
+            <!-- Header -->
+            <StackPanel Spacing="4">
+                <TextBlock Text="Cores de Mensagens do Sistema"
+                           FontSize="28" FontWeight="Light" Foreground="#E8E8E8"/>
+                <TextBlock Text="Editor de text-color individual por mensagem"
+                           FontSize="14" Foreground="#9CA3AF"/>
+            </StackPanel>
+
+            <!-- File loader -->
+            <StackPanel Spacing="8">
+                <TextBlock Text="ARQUIVO" Foreground="#6B7280" FontSize="10"
+                           FontWeight="Bold" LetterSpacing="1"/>
+                <Grid ColumnDefinitions="*,12,Auto">
+                    <Border Grid.Column="0" Background="#2C2C2C" CornerRadius="6"
+                            BorderBrush="#464646" BorderThickness="1" Height="34">
+                        <TextBox x:Name="FilePath" IsReadOnly="True"
+                                 Background="Transparent" BorderThickness="0"
+                                 Foreground="#D4D4D4" Padding="10,6" FontSize="13"
+                                 Cursor="Hand" PointerPressed="FilePath_OnClick"
+                                 VerticalAlignment="Center"
+                                 Watermark="Selecione o arquivo SystemMsg.txt..."/>
+                    </Border>
+                    <Button Grid.Column="2" Click="LoadFile_Click"
+                            Theme="{StaticResource PrimaryButton}" Height="34" Padding="16,0"
+                            BorderBrush="#505050" BorderThickness="1">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <PathIcon Width="14" Height="14" VerticalAlignment="Center" Foreground="White"
+                                      Data="M9 16 L9 10 L5 10 L12 3 L19 10 L15 10 L15 16 Z M5 18 L19 18 L19 20 L5 20 Z"/>
+                            <TextBlock Text="Carregar Arquivo" VerticalAlignment="Center" FontSize="13"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </StackPanel>
+
+            <!-- Content (hidden until loaded) -->
+            <StackPanel x:Name="ContentPanel" IsVisible="False" Spacing="16">
+
+                <!-- Stats + Save -->
+                <Grid ColumnDefinitions="*,Auto">
+                    <TextBlock x:Name="StatsLabel" Grid.Column="0"
+                               Foreground="#6B7280" FontSize="12" VerticalAlignment="Center"/>
+                    <Button Grid.Column="1" Click="SaveFile_Click"
+                            Theme="{StaticResource SaveButton}" Height="36" Padding="16,0">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <PathIcon Width="14" Height="14" VerticalAlignment="Center" Foreground="#C0C0C0"
+                                      Data="M12 16L6 10h4V4h4v6h4l-6 6z M4 18h16v2H4z"/>
+                            <TextBlock Text="Salvar Arquivo" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+
+                <!-- Presets -->
+                <Border Background="#2C2C2C" CornerRadius="8" Padding="16">
+                    <StackPanel Spacing="10">
+                        <TextBlock Text="PRESETS" Foreground="#6B7280" FontSize="10"
+                                   FontWeight="Bold" LetterSpacing="1"/>
+                        <WrapPanel x:Name="PresetWrapPanel"/>
+                        <Border Height="1" Background="#3A3A3A"/>
+                        <!-- Add preset row -->
+                        <Grid ColumnDefinitions="Auto,10,160,12,Auto,12,Auto">
+                            <TextBlock Grid.Column="0" Text="NOME" Foreground="#6B7280" FontSize="10"
+                                       FontWeight="Bold" LetterSpacing="1" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="2" x:Name="PresetNameBox"
+                                     Background="#2A2A2A" Foreground="#D4D4D4" BorderBrush="#464646"
+                                     BorderThickness="1" CornerRadius="4" Padding="8,0" Height="28"
+                                     FontSize="13" VerticalContentAlignment="Center"
+                                     Watermark="Nome do preset..."/>
+                            <StackPanel Grid.Column="4" x:Name="PresetAddPickerHost"
+                                        Orientation="Horizontal" VerticalAlignment="Center"/>
+                            <Button Grid.Column="6" Click="AddPreset_Click"
+                                    Theme="{StaticResource GhostButton}" Height="28" Padding="12,0">
+                                <TextBlock Text="Salvar Preset" FontSize="12" VerticalAlignment="Center"/>
+                            </Button>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Search bar -->
+                <Grid ColumnDefinitions="*,8,Auto">
+                    <Border Grid.Column="0" Background="#2C2C2C" CornerRadius="6" BorderBrush="#464646" BorderThickness="1" Height="34">
+                        <TextBox x:Name="SearchBox"
+                                 Background="Transparent" BorderThickness="0"
+                                 Foreground="#D4D4D4" Padding="12,0" FontSize="13"
+                                 VerticalContentAlignment="Center"
+                                 Watermark="Buscar por ID ou texto da mensagem..."
+                                 TextChanged="SearchBox_TextChanged"
+                                 KeyDown="SearchBox_KeyDown"/>
+                    </Border>
+                    <Button Grid.Column="2" Click="SearchBtn_Click"
+                            Theme="{StaticResource PrimaryButton}" Height="34" Padding="16,0">
+                        <TextBlock Text="Pesquisar" FontSize="13" VerticalAlignment="Center"/>
+                    </Button>
+                </Grid>
+
+                <!-- Column headers -->
+                <Grid ColumnDefinitions="52,8,22,6,76,6,26,12,*" Margin="12,0,0,-6">
+                    <TextBlock Grid.Column="0" Text="ID"
+                               Foreground="#6B7280" FontSize="10" FontWeight="Bold" LetterSpacing="1"/>
+                    <TextBlock Grid.Column="2" Text="COR"
+                               Foreground="#6B7280" FontSize="10" FontWeight="Bold" LetterSpacing="1"/>
+                    <TextBlock Grid.Column="4" Text="HEX"
+                               Foreground="#6B7280" FontSize="10" FontWeight="Bold" LetterSpacing="1"/>
+                    <TextBlock Grid.Column="8" Text="MENSAGEM"
+                               Foreground="#6B7280" FontSize="10" FontWeight="Bold" LetterSpacing="1"/>
+                </Grid>
+
+                <!-- Message rows (populated in code) -->
+                <StackPanel x:Name="MsgRowsPanel" Spacing="2"/>
+
+                <!-- Overflow hint -->
+                <TextBlock x:Name="OverflowLabel" IsVisible="False"
+                           Text="" Foreground="#6B7280" FontSize="12"
+                           HorizontalAlignment="Center" Margin="0,4,0,0"/>
+
+            </StackPanel>
+
+        </StackPanel>
+    </ScrollViewer>
+
+    <!-- Success toast -->
+    <Border x:Name="SuccessToast" IsVisible="False"
+            Background="#162A1E" BorderBrush="#2D6A4A" BorderThickness="1"
+            CornerRadius="6" Padding="14,10" Margin="24,0,24,24"
+            VerticalAlignment="Bottom" ZIndex="100">
+        <StackPanel Orientation="Horizontal" Spacing="10">
+            <PathIcon Width="14" Height="14" Foreground="#4CAF82" VerticalAlignment="Center"
+                      Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+            <TextBlock x:Name="SuccessToastText" Foreground="#A8D5B8"
+                       FontSize="13" VerticalAlignment="Center"/>
+        </StackPanel>
+    </Border>
+
+    <!-- Color picker popup (shared) -->
+    <Popup x:Name="ColorPickerPopup" IsLightDismissEnabled="True"
+           Placement="Bottom" VerticalOffset="6">
+        <Border Background="#252525" BorderBrush="#505050" BorderThickness="1"
+                CornerRadius="10" Padding="14" BoxShadow="0 8 32 4 #AA000000">
+            <StackPanel x:Name="PickerPanel" Width="230" Spacing="10"/>
+        </Border>
+    </Popup>
+
+    </Grid>
+</UserControl>
