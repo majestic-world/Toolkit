@@ -179,8 +179,13 @@
                                  KeyDown="SearchBox_KeyDown"/>
                     </Border>
                     <Button Grid.Column="2" Click="SearchBtn_Click"
-                            Theme="{StaticResource PrimaryButton}" Height="34" Padding="16,0">
-                        <TextBlock Text="Pesquisar" FontSize="13" VerticalAlignment="Center"/>
+                            Theme="{StaticResource PrimaryButton}" Height="34" Padding="14,0"
+                            BorderBrush="#505050" BorderThickness="1">
+                        <StackPanel Orientation="Horizontal" Spacing="7">
+                            <PathIcon Width="13" Height="13" VerticalAlignment="Center" Foreground="White"
+                                      Data="M4 10 C4 6.69 6.69 4 10 4 C13.31 4 16 6.69 16 10 C16 13.31 13.31 16 10 16 C6.69 16 4 13.31 4 10 Z M14.24 14.24 L20 20"/>
+                            <TextBlock Text="Pesquisar" FontSize="13" VerticalAlignment="Center"/>
+                        </StackPanel>
                     </Button>
                 </Grid>
 

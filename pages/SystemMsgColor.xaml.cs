@@ -32,8 +32,9 @@ public partial class SystemMsgColor : UserControl
 
     private const int MaxRows = 100;
 
-    private List<SysMsgEntry> _entries        = [];
-    private string            _loadedFilePath = "";
+    private List<SysMsgEntry>  _entries        = [];
+    private string             _loadedFilePath = "";
+    private readonly HashSet<int> _selectedIds = [];
 
     // Shared color picker
     private bool      _pickerBuilt;
@@ -252,16 +253,15 @@ public partial class SystemMsgColor : UserControl
             Foreground        = new SolidColorBrush(Color.Parse("#C0C0C0")),
             VerticalAlignment = VerticalAlignment.Center,
             TextTrimming      = TextTrimming.CharacterEllipsis,
-            // Render the message with the actual color as the text foreground
-            // so the user can visualize how it'll look
+            Cursor            = new Cursor(StandardCursorType.Hand)
         };
-        // Tint the message text with its own color (visual preview)
         if (TryParseHex(entry.ColorRgb, out var textColor))
             msgText.Foreground = new SolidColorBrush(textColor);
 
-        // Wire swatch → picker
-        swatch.PointerPressed += (_, _) =>
+        // Wire swatch → picker (mark handled to prevent row selection toggle)
+        swatch.PointerPressed += (_, e) =>
         {
+            e.Handled     = true;
             _activeHexBox = hexBox;
             ShowColorPicker(swatch, hexBox);
         };
@@ -341,13 +341,31 @@ public partial class SystemMsgColor : UserControl
         grid.Children.Add(editBtn);
         grid.Children.Add(msgText);
 
-        return new Border
+        var rowBorder = new Border
         {
-            Background   = new SolidColorBrush(Color.Parse("#2C2C2C")),
+            Background   = new SolidColorBrush(Color.Parse(_selectedIds.Contains(entry.Id) ? "#1C3350" : "#2C2C2C")),
             CornerRadius = new CornerRadius(6),
             Padding      = new Thickness(12, 6),
+            Cursor       = new Cursor(StandardCursorType.Hand),
             Child        = grid
         };
+
+        rowBorder.PointerPressed += (_, e) =>
+        {
+            if (e.Handled || e.Source is TextBox || e.Source is Button) return;
+            if (_selectedIds.Contains(entry.Id))
+            {
+                _selectedIds.Remove(entry.Id);
+                rowBorder.Background = new SolidColorBrush(Color.Parse("#2C2C2C"));
+            }
+            else
+            {
+                _selectedIds.Add(entry.Id);
+                rowBorder.Background = new SolidColorBrush(Color.Parse("#1C3350"));
+            }
+        };
+
+        return rowBorder;
     }
 
     // ─── Parser ───────────────────────────────────────────────────────────────
@@ -506,14 +524,20 @@ public partial class SystemMsgColor : UserControl
         var capturedName = name;
         var delBtn = new Button
         {
-            Content         = "×",
-            FontSize        = 13,
-            Foreground      = new SolidColorBrush(Color.Parse("#6B7280")),
-            Background      = Brushes.Transparent,
-            BorderThickness = new Thickness(0),
-            Padding         = new Thickness(3, 0),
-            Cursor          = new Cursor(StandardCursorType.Hand),
-            VerticalAlignment = VerticalAlignment.Center
+            Width             = 16,
+            Height            = 16,
+            Padding           = new Thickness(0),
+            Background        = Brushes.Transparent,
+            BorderThickness   = new Thickness(0),
+            Cursor            = new Cursor(StandardCursorType.Hand),
+            VerticalAlignment = VerticalAlignment.Center,
+            Content           = new PathIcon
+            {
+                Width      = 9,
+                Height     = 9,
+                Foreground = new SolidColorBrush(Color.Parse("#6B7280")),
+                Data       = Geometry.Parse("M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z")
+            }
         };
         delBtn.Click += (_, _) =>
         {
@@ -539,9 +563,19 @@ public partial class SystemMsgColor : UserControl
 
     private void ApplyPreset(string hex8)
     {
-        // Applies preset to whatever hex box is currently in edit mode
-        if (_activeHexBox != null && !_activeHexBox.IsReadOnly && hex8.Length >= 6)
-            _activeHexBox.Text = hex8[..6].ToUpper();
+        var hex6 = (hex8.Length >= 6 ? hex8[..6] : "799BB0").ToUpper();
+
+        if (_selectedIds.Count > 0)
+        {
+            foreach (var entry in _entries.Where(e => _selectedIds.Contains(e.Id)))
+                entry.ColorRgb = hex6;
+            ApplyFilter();
+            ShowSuccessToast($"Cor aplicada em {_selectedIds.Count} mensagem(ns) selecionada(s).");
+        }
+        else if (_activeHexBox != null && !_activeHexBox.IsReadOnly)
+        {
+            _activeHexBox.Text = hex6;
+        }
     }
 
     // ─── Preset add picker ────────────────────────────────────────────────────
