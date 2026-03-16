@@ -578,6 +578,87 @@ public partial class SystemMsgColor : UserControl
         };
     }
 
+    // ─── Colors modal ─────────────────────────────────────────────────────────
+
+    private void OpenColorsModal_Click(object? sender, RoutedEventArgs e)
+    {
+        var unique = _entries
+            .Select(en => en.ColorRgb.ToUpper())
+            .Distinct()
+            .OrderBy(c => c)
+            .ToList();
+
+        ModalSubtitle.Text = $"{unique.Count} cor(es) única(s) no arquivo";
+        ModalColorsPanel.Children.Clear();
+
+        foreach (var hex in unique)
+            ModalColorsPanel.Children.Add(BuildModalColorItem(hex));
+
+        ColorsModal.IsVisible = true;
+    }
+
+    private Control BuildModalColorItem(string hex6)
+    {
+        var swatch = new Border
+        {
+            Width        = 44,
+            Height       = 44,
+            CornerRadius = new CornerRadius(6),
+            Background   = TryParseHex(hex6, out var c)
+                               ? new SolidColorBrush(c)
+                               : new SolidColorBrush(Colors.Black)
+        };
+
+        var label = new TextBlock
+        {
+            Text                = $"#{hex6}",
+            FontFamily          = new FontFamily("Consolas,Courier New,monospace"),
+            FontSize            = 10,
+            Foreground          = new SolidColorBrush(Color.Parse("#C0C0C0")),
+            HorizontalAlignment = HorizontalAlignment.Center
+        };
+
+        var inner = new StackPanel { Spacing = 5, HorizontalAlignment = HorizontalAlignment.Center };
+        inner.Children.Add(swatch);
+        inner.Children.Add(label);
+
+        var card = new Border
+        {
+            Background   = new SolidColorBrush(Color.Parse("#333333")),
+            CornerRadius = new CornerRadius(8),
+            Padding      = new Thickness(10, 8),
+            Margin       = new Thickness(0, 0, 8, 8),
+            Cursor       = new Cursor(StandardCursorType.Hand),
+            Width        = 80,
+            Child        = inner
+        };
+
+        ToolTip.SetTip(card, $"Clique para usar como cor do novo preset");
+
+        card.PointerPressed += (_, ev) =>
+        {
+            ev.Handled = true;
+            _presetNewHexBox.Text = hex6;
+            SetSwatchColor(_presetNewSwatch, hex6);
+            ColorsModal.IsVisible = false;
+        };
+
+        card.PointerEntered += (_, _) =>
+            card.Background = new SolidColorBrush(Color.Parse("#3E3E3E"));
+        card.PointerExited += (_, _) =>
+            card.Background = new SolidColorBrush(Color.Parse("#333333"));
+
+        return card;
+    }
+
+    private void CloseColorsModal_Click(object? sender, RoutedEventArgs e)
+        => ColorsModal.IsVisible = false;
+
+    private void ColorsModal_OverlayClick(object? sender, PointerPressedEventArgs e)
+    {
+        if (e.Source == ColorsModal) ColorsModal.IsVisible = false;
+    }
+
     private void ApplyPreset(string hex8)
     {
         var hex6 = (hex8.Length >= 6 ? hex8[..6] : "799BB0").ToUpper();

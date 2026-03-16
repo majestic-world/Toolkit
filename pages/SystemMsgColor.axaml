@@ -165,7 +165,7 @@
                                    FontWeight="Bold" LetterSpacing="1"/>
                         <WrapPanel x:Name="PresetWrapPanel"/>
                         <Border Height="1" Background="#3A3A3A"/>
-                        <Grid ColumnDefinitions="Auto,10,150,10,Auto,10,Auto">
+                        <Grid ColumnDefinitions="Auto,10,150,10,Auto,10,Auto,8,Auto">
                             <TextBlock Grid.Column="0" Text="NOME" Foreground="#6B7280" FontSize="10"
                                        FontWeight="Bold" LetterSpacing="1" VerticalAlignment="Center"/>
                             <TextBox Grid.Column="2" x:Name="PresetNameBox"
@@ -178,6 +178,14 @@
                             <Button Grid.Column="6" Click="AddPreset_Click"
                                     Theme="{StaticResource GhostButton}" Height="26" Padding="10,0">
                                 <TextBlock Text="Salvar Preset" FontSize="12" VerticalAlignment="Center"/>
+                            </Button>
+                            <Button Grid.Column="8" Click="OpenColorsModal_Click"
+                                    Theme="{StaticResource GhostButton}" Height="26" Padding="10,0">
+                                <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                                    <PathIcon Width="11" Height="11" VerticalAlignment="Center"
+                                              Data="M12 3 L21 7 L21 17 L12 21 L3 17 L3 7 Z M12 3 L12 21 M3 7 L21 7 M3 17 L21 17"/>
+                                    <TextBlock Text="Cores do Arquivo" FontSize="12" VerticalAlignment="Center"/>
+                                </StackPanel>
                             </Button>
                         </Grid>
                     </StackPanel>
@@ -255,6 +263,42 @@
                 <StackPanel x:Name="PickerPanel" Width="230" Spacing="10"/>
             </Border>
         </Popup>
+
+        <!-- Colors from file modal -->
+        <Grid x:Name="ColorsModal" Grid.RowSpan="2" IsVisible="False" ZIndex="300"
+              Background="#CC000000" PointerPressed="ColorsModal_OverlayClick">
+            <Border Background="#2A2A2A" BorderBrush="#505050" BorderThickness="1"
+                    CornerRadius="10" Padding="20" Width="520" MaxHeight="520"
+                    VerticalAlignment="Center" HorizontalAlignment="Center"
+                    BoxShadow="0 12 48 8 #BB000000">
+                <Grid RowDefinitions="Auto,12,Auto,12,*">
+
+                    <!-- Modal header -->
+                    <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
+                        <StackPanel Grid.Column="0" Spacing="2">
+                            <TextBlock Text="Cores no Arquivo" FontSize="16" FontWeight="SemiBold" Foreground="#E8E8E8"/>
+                            <TextBlock x:Name="ModalSubtitle" FontSize="12" Foreground="#6B7280"/>
+                        </StackPanel>
+                        <Button Grid.Column="1" Click="CloseColorsModal_Click"
+                                Background="Transparent" BorderThickness="0"
+                                Width="28" Height="28" Padding="0"
+                                Cursor="Hand" VerticalAlignment="Top">
+                            <PathIcon Width="12" Height="12" Foreground="#9CA3AF"
+                                      Data="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                        </Button>
+                    </Grid>
+
+                    <!-- Divider -->
+                    <Border Grid.Row="2" Height="1" Background="#3A3A3A"/>
+
+                    <!-- Color swatches -->
+                    <ScrollViewer Grid.Row="4" VerticalScrollBarVisibility="Auto">
+                        <WrapPanel x:Name="ModalColorsPanel" Margin="0,4,0,0"/>
+                    </ScrollViewer>
+
+                </Grid>
+            </Border>
+        </Grid>
 
     </Grid>
 </UserControl>
