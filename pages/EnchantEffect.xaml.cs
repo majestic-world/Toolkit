@@ -187,26 +187,14 @@ public partial class EnchantEffect : UserControl
 
     private async void SaveFile_Click(object? sender, RoutedEventArgs e)
     {
-        var topLevel = TopLevel.GetTopLevel(this);
-        var file = await topLevel!.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
-        {
-            Title             = "Salvar WeaponEnchantEffect.txt",
-            SuggestedFileName = Path.GetFileName(_loadedFilePath),
-            FileTypeChoices   =
-            [
-                new FilePickerFileType("Text") { Patterns = ["*.txt"] }
-            ]
-        });
-        if (file == null) return;
-
         try
         {
             var content = SerializeEntries(_entries);
-            await File.WriteAllTextAsync(file.Path.LocalPath, content, new UTF8Encoding(true));
+            await File.WriteAllTextAsync(_loadedFilePath, content, new UTF8Encoding(true));
 
             System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
             {
-                FileName        = file.Path.LocalPath,
+                FileName        = _loadedFilePath,
                 UseShellExecute = true
             });
         }
@@ -258,26 +246,14 @@ public partial class EnchantEffect : UserControl
 
     private async void ArmorSaveFile_Click(object? sender, RoutedEventArgs e)
     {
-        var topLevel = TopLevel.GetTopLevel(this);
-        var file = await topLevel!.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
-        {
-            Title             = "Salvar FullArmorEnchantEffectData.txt",
-            SuggestedFileName = Path.GetFileName(_armorLoadedFilePath),
-            FileTypeChoices   =
-            [
-                new FilePickerFileType("Text") { Patterns = ["*.txt"] }
-            ]
-        });
-        if (file == null) return;
-
         try
         {
             var content = SerializeArmorEntries(_armorEntries);
-            await File.WriteAllTextAsync(file.Path.LocalPath, content, new UTF8Encoding(true));
+            await File.WriteAllTextAsync(_armorLoadedFilePath, content, new UTF8Encoding(true));
 
             System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
             {
-                FileName        = file.Path.LocalPath,
+                FileName        = _armorLoadedFilePath,
                 UseShellExecute = true
             });
         }
