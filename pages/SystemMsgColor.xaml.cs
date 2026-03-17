@@ -65,6 +65,8 @@ public partial class SystemMsgColor : UserControl
 
     // ─── Init ─────────────────────────────────────────────────────────────────
 
+    private const string LastPathKey = "systemmsg_last_path";
+
     public SystemMsgColor()
     {
         InitializeComponent();
@@ -72,23 +74,44 @@ public partial class SystemMsgColor : UserControl
         LoadPresets();
         BuildPresetNewPicker();
         RefreshPresetsUI();
+
+        // Pre-fill input with last used path
+        var lastPath = database.AppDatabase.GetInstance().GetValue(LastPathKey);
+        if (!string.IsNullOrEmpty(lastPath))
+        {
+            _loadedFilePath = lastPath;
+            FilePath.Text   = lastPath;
+        }
     }
 
     // ─── File I/O ─────────────────────────────────────────────────────────────
 
+    // Click on the input → open file picker
     private async void FilePath_OnClick(object? sender, PointerPressedEventArgs e)
-        => await PickAndLoadFile();
+        => await PickFileAsync();
 
-    private async void LoadFile_Click(object? sender, RoutedEventArgs e)
-        => await PickAndLoadFile();
+    // "Abrir" button → load the path already in the input, or open picker if none
+    private async void OpenFile_Click(object? sender, RoutedEventArgs e)
+    {
+        if (string.IsNullOrEmpty(_loadedFilePath))
+        {
+            await PickFileAsync();
+            return;
+        }
+        await LoadFromPath();
+    }
 
-    private async Task PickAndLoadFile()
+    private async Task PickFileAsync()
     {
         var topLevel = TopLevel.GetTopLevel(this);
         var files = await topLevel!.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
             Title          = "Selecionar SystemMsg.dat",
             AllowMultiple  = false,
+            SuggestedStartLocation = !string.IsNullOrEmpty(_loadedFilePath)
+                ? await topLevel.StorageProvider.TryGetFolderFromPathAsync(
+                      Path.GetDirectoryName(_loadedFilePath)!)
+                : null,
             FileTypeFilter =
             [
                 new FilePickerFileType("Lineage 2 DAT") { Patterns = ["*.dat"] },
@@ -99,8 +122,14 @@ public partial class SystemMsgColor : UserControl
 
         _loadedFilePath = files[0].Path.LocalPath;
         FilePath.Text   = _loadedFilePath;
-        SearchBox.Text  = "";
+        database.AppDatabase.GetInstance().UpdateValue(LastPathKey, _loadedFilePath);
 
+        await LoadFromPath();
+    }
+
+    private async Task LoadFromPath()
+    {
+        SearchBox.Text = "";
         try
         {
             _entries = await Task.Run(() =>
@@ -117,7 +146,7 @@ public partial class SystemMsgColor : UserControl
                     {
                         Id          = (int)msg.Id,
                         MessageText = msg.Message,
-                        ColorRgb    = (rr + gg + bb).ToUpper(), // convert to RRGGBB for display
+                        ColorRgb    = (rr + gg + bb).ToUpper(),
                         ColorAlpha  = aa.ToUpper(),
                         Source      = msg
                     };

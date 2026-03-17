@@ -112,22 +112,23 @@
             <!-- File loader -->
             <Grid ColumnDefinitions="*,10,Auto">
                 <Border Grid.Column="0" Background="#2C2C2C" CornerRadius="6"
-                        BorderBrush="#464646" BorderThickness="1" Height="32">
-                    <TextBox x:Name="FilePath" IsReadOnly="True"
+                        BorderBrush="#464646" BorderThickness="1" Height="32"
+                        Cursor="Hand" PointerPressed="FilePath_OnClick">
+                    <TextBox x:Name="FilePath" IsReadOnly="True" Focusable="False"
                              Background="Transparent" BorderThickness="0"
                              Foreground="#D4D4D4" Padding="10,0" FontSize="13"
-                             Cursor="Hand" PointerPressed="FilePath_OnClick"
+                             IsHitTestVisible="False"
                              VerticalAlignment="Stretch"
                              VerticalContentAlignment="Center"
-                             Watermark="Selecione o arquivo SystemMsg.dat do cliente..."/>
+                             Watermark="Clique para selecionar o arquivo SystemMsg.dat..."/>
                 </Border>
-                <Button Grid.Column="2" Click="LoadFile_Click"
+                <Button Grid.Column="2" Click="OpenFile_Click"
                         Theme="{StaticResource PrimaryButton}" Height="32" Padding="14,0"
                         BorderBrush="#505050" BorderThickness="1">
                     <StackPanel Orientation="Horizontal" Spacing="7" VerticalAlignment="Center">
                         <PathIcon Width="13" Height="13" VerticalAlignment="Center" Foreground="White"
-                                  Data="M9 16 L9 10 L5 10 L12 3 L19 10 L15 10 L15 16 Z M5 18 L19 18 L19 20 L5 20 Z"/>
-                        <TextBlock Text="Carregar" VerticalAlignment="Center" FontSize="13"/>
+                                  Data="M20 6h-8l-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2z"/>
+                        <TextBlock Text="Abrir" VerticalAlignment="Center" FontSize="13"/>
                     </StackPanel>
                 </Button>
             </Grid>
