@@ -597,6 +597,25 @@ public partial class SystemMsgColor : UserControl
 
     // ─── Colors modal ─────────────────────────────────────────────────────────
 
+    private void StartL2_Click(object? sender, RoutedEventArgs e)
+    {
+        if (string.IsNullOrEmpty(_loadedFilePath)) return;
+
+        var l2Exe = Path.Combine(Path.GetDirectoryName(_loadedFilePath)!, "l2.exe");
+        if (!File.Exists(l2Exe))
+        {
+            MessageBoxManager.GetMessageBoxStandard("Erro", $"l2.exe não encontrado em:\n{l2Exe}").ShowWindowAsync();
+            return;
+        }
+
+        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+        {
+            FileName        = l2Exe,
+            WorkingDirectory = Path.GetDirectoryName(l2Exe)!,
+            UseShellExecute = true
+        });
+    }
+
     private void OpenColorsModal_Click(object? sender, RoutedEventArgs e)
     {
         var unique = _entries
