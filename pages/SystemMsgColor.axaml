@@ -123,10 +123,9 @@
                              Watermark="Clique para selecionar o arquivo SystemMsg.dat..."/>
                 </Border>
                 <Button Grid.Column="2" Click="OpenFile_Click"
-                        Theme="{StaticResource PrimaryButton}" Height="32" Padding="14,0"
-                        BorderBrush="#505050" BorderThickness="1">
+                        Theme="{StaticResource SaveButton}" Height="30" Padding="14,0">
                     <StackPanel Orientation="Horizontal" Spacing="7" VerticalAlignment="Center">
-                        <PathIcon Width="13" Height="13" VerticalAlignment="Center" Foreground="White"
+                        <PathIcon Width="13" Height="13" VerticalAlignment="Center" Foreground="#C0C0C0"
                                   Data="M20 6h-8l-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2z"/>
                         <TextBlock Text="Abrir" VerticalAlignment="Center" FontSize="13"/>
                     </StackPanel>
@@ -207,21 +206,25 @@
                                         Orientation="Horizontal" VerticalAlignment="Center"/>
                             <Button Grid.Column="6" Click="AddPreset_Click"
                                     Theme="{StaticResource GhostButton}" Height="26" Padding="10,0">
-                                <TextBlock Text="Salvar Preset" FontSize="12" VerticalAlignment="Center"/>
+                                <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                                    <PathIcon Width="11" Height="11" VerticalAlignment="Center" Foreground="#C0C0C0"
+                                              Data="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/>
+                                    <TextBlock Text="Salvar Preset" FontSize="12" VerticalAlignment="Center"/>
+                                </StackPanel>
                             </Button>
                             <Button Grid.Column="8" Click="OpenColorsModal_Click"
                                     Theme="{StaticResource GhostButton}" Height="26" Padding="10,0">
                                 <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
-                                    <PathIcon Width="11" Height="11" VerticalAlignment="Center"
+                                    <PathIcon Width="11" Height="11" VerticalAlignment="Center" Foreground="#C0C0C0"
                                               Data="M12 3 L21 7 L21 17 L12 21 L3 17 L3 7 Z M12 3 L12 21 M3 7 L21 7 M3 17 L21 17"/>
-                                    <TextBlock Text="Cores do Arquivo" FontSize="12" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Cores que já existem" FontSize="12" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
                             <Button Grid.Column="10" Click="StartL2_Click"
                                     Theme="{StaticResource GhostButton}" Height="26" Padding="10,0">
                                 <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
                                     <PathIcon Width="11" Height="11" VerticalAlignment="Center"
-                                              Data="M8 5v14l11-7z"/>
+                                              Data="M8 5v14l11-7z" Foreground="#C0C0C0"/>
                                     <TextBlock Text="Start L2" FontSize="12" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
@@ -242,10 +245,9 @@
                                  KeyDown="SearchBox_KeyDown"/>
                     </Border>
                     <Button Grid.Column="2" Click="SearchBtn_Click"
-                            Theme="{StaticResource PrimaryButton}" Height="32" Padding="14,0"
-                            BorderBrush="#505050" BorderThickness="1">
+                            Theme="{StaticResource SaveButton}" Height="32" Padding="14,0">
                         <StackPanel Orientation="Horizontal" Spacing="7" VerticalAlignment="Center">
-                            <PathIcon Width="13" Height="13" VerticalAlignment="Center" Foreground="White"
+                            <PathIcon Width="13" Height="13" VerticalAlignment="Center" Foreground="#C0C0C0"
                                       Data="F0 M10 3 L15 5 L17 10 L15 15 L10 17 L5 15 L3 10 L5 5 Z M10 6 L12.83 7.17 L13.83 10 L12.83 12.83 L10 13.83 L7.17 12.83 L6.17 10 L7.17 7.17 Z M13.5 15.5 L15.5 13.5 L19.5 17.5 L17.5 19.5 Z"/>
                             <TextBlock Text="Pesquisar" FontSize="13" VerticalAlignment="Center"/>
                         </StackPanel>
