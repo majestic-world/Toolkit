@@ -165,12 +165,24 @@
                             <TextBlock x:Name="ClearSelectionLabel" FontSize="12" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
-                    <Button Grid.Column="3" Click="SaveFile_Click"
+                    <Button x:Name="SaveBtn" Grid.Column="3" Click="SaveFile_Click"
                             Theme="{StaticResource SaveButton}" Height="30" Padding="14,0">
                         <StackPanel Orientation="Horizontal" Spacing="7">
-                            <PathIcon Width="13" Height="13" VerticalAlignment="Center" Foreground="#C0C0C0"
+                            <PathIcon x:Name="SaveIcon" Width="13" Height="13" VerticalAlignment="Center" Foreground="#C0C0C0"
                                       Data="M12 16L6 10h4V4h4v6h4l-6 6z M4 18h16v2H4z"/>
-                            <TextBlock Text="Salvar Arquivo" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                            <Grid x:Name="SaveSpinner" Width="14" Height="14"
+                                  IsVisible="False" VerticalAlignment="Center">
+                                <Ellipse Stroke="#3A3A3A" StrokeThickness="2" Fill="Transparent" Margin="1"/>
+                                <Ellipse x:Name="SpinnerArc"
+                                         Stroke="#C0C0C0" StrokeThickness="2" Fill="Transparent" Margin="1"
+                                         StrokeDashArray="26,9"
+                                         RenderTransformOrigin="50%,50%">
+                                    <Ellipse.RenderTransform>
+                                        <RotateTransform Angle="0"/>
+                                    </Ellipse.RenderTransform>
+                                </Ellipse>
+                            </Grid>
+                            <TextBlock x:Name="SaveLabel" Text="Salvar Arquivo" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
                 </Grid>

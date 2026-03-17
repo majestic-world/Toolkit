@@ -11,6 +11,7 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
+using Avalonia.Threading;
 using L2Toolkit.DatReader;
 using MsBox.Avalonia;
 
@@ -38,6 +39,10 @@ public partial class SystemMsgColor : UserControl
     private string                _loadedFilePath = "";
     private readonly HashSet<int> _selectedIds    = [];
     private int                   _lastClickedId  = -1;
+
+    // Save spinner
+    private DispatcherTimer? _spinTimer;
+    private double           _spinAngle;
 
     // Shared color picker
     private bool      _pickerBuilt;
@@ -135,6 +140,8 @@ public partial class SystemMsgColor : UserControl
         if (string.IsNullOrEmpty(_loadedFilePath)) return;
         try
         {
+            StartSaveSpinner();
+
             // Sync edited colors back — convert RRGGBB display → BBGGRR+AA file format
             foreach (var entry in _entries)
             {
@@ -158,6 +165,38 @@ public partial class SystemMsgColor : UserControl
         {
             await MessageBoxManager.GetMessageBoxStandard("Erro ao salvar", ex.Message).ShowWindowAsync();
         }
+        finally
+        {
+            StopSaveSpinner();
+        }
+    }
+
+    private void StartSaveSpinner()
+    {
+        SaveBtn.IsEnabled    = false;
+        SaveIcon.IsVisible   = false;
+        SaveSpinner.IsVisible = true;
+        SaveLabel.Text       = "Salvando...";
+
+        _spinAngle = 0;
+        var rotation = (RotateTransform)SpinnerArc.RenderTransform!;
+        _spinTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(16) };
+        _spinTimer.Tick += (_, _) =>
+        {
+            _spinAngle = (_spinAngle + 8) % 360;
+            rotation.Angle = _spinAngle;
+        };
+        _spinTimer.Start();
+    }
+
+    private void StopSaveSpinner()
+    {
+        _spinTimer?.Stop();
+        _spinTimer = null;
+        SaveBtn.IsEnabled     = true;
+        SaveSpinner.IsVisible = false;
+        SaveIcon.IsVisible    = true;
+        SaveLabel.Text        = "Salvar Arquivo";
     }
 
     // ─── Search filter ────────────────────────────────────────────────────────
