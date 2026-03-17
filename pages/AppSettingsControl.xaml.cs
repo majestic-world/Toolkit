@@ -71,7 +71,7 @@ public partial class AppSettingsControl : UserControl
         };
         OpenAppFolderBtn.Click += (_, _) =>
         {
-            var appFolder = AppContext.BaseDirectory;
+            var appFolder = Path.GetDirectoryName(Environment.ProcessPath) ?? AppContext.BaseDirectory;
             if (Directory.Exists(appFolder))
                 OpenFolder(appFolder);
         };
