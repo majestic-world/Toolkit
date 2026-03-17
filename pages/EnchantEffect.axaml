@@ -409,7 +409,7 @@
            BorderThickness="1"
            CornerRadius="6"
            Padding="14,10"
-           Margin="24,0,24,24"
+           Margin="24,0,24,60"
            VerticalAlignment="Bottom"
            ZIndex="100">
        <StackPanel Orientation="Horizontal" Spacing="10">
@@ -422,6 +422,44 @@
                       FontSize="13"
                       VerticalAlignment="Center"/>
        </StackPanel>
+   </Border>
+
+   <!-- Error alert banner -->
+   <Border x:Name="ErrorBanner"
+           IsVisible="False"
+           Background="#2A0A0A"
+           BorderBrush="#6B1A1A"
+           BorderThickness="1"
+           CornerRadius="6"
+           Padding="14,10"
+           Margin="24,0,24,24"
+           VerticalAlignment="Bottom"
+           ZIndex="101">
+       <Grid ColumnDefinitions="16,10,*,10,24">
+           <PathIcon Grid.Column="0" Width="14" Height="14"
+                     Foreground="#E57373"
+                     VerticalAlignment="Center"
+                     Data="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+           <TextBlock x:Name="ErrorBannerText"
+                      Grid.Column="2"
+                      Foreground="#FFAAAA"
+                      FontSize="13"
+                      TextWrapping="Wrap"
+                      VerticalAlignment="Center"/>
+           <Border Grid.Column="4"
+                   Width="24" Height="24"
+                   CornerRadius="4"
+                   Cursor="Hand"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+                   PointerPressed="ErrorBanner_Close">
+               <PathIcon Width="11" Height="11"
+                         Foreground="#E57373"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"
+                         Data="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+           </Border>
+       </Grid>
    </Border>
 
    <!-- Color picker popup (shared, shown on swatch click) -->

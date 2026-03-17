@@ -198,7 +198,7 @@ public partial class EnchantEffect : UserControl
     {
         if (string.IsNullOrEmpty(path) || !File.Exists(path))
         {
-            await MessageBoxManager.GetMessageBoxStandard("Erro", "Arquivo não encontrado.").ShowWindowAsync();
+            ShowErrorBanner("Arquivo não encontrado.");
             return;
         }
 
@@ -214,13 +214,14 @@ public partial class EnchantEffect : UserControl
             _loadedFilePath   = path;
             FilePath.Text     = path;
 
+            ErrorBanner.IsVisible   = false;
             PopulateSelectors();
             SelectorPanel.IsVisible = true;
             SaveButton.IsVisible    = true;
         }
         catch (Exception ex)
         {
-            await MessageBoxManager.GetMessageBoxStandard("Erro", ex.Message).ShowWindowAsync();
+            ShowErrorBanner(ex.Message);
         }
     }
 
@@ -239,7 +240,7 @@ public partial class EnchantEffect : UserControl
         }
         catch (Exception ex)
         {
-            await MessageBoxManager.GetMessageBoxStandard("Erro ao salvar", ex.Message).ShowWindowAsync();
+            ShowErrorBanner($"Erro ao salvar: {ex.Message}");
         }
     }
 
@@ -281,7 +282,7 @@ public partial class EnchantEffect : UserControl
     {
         if (string.IsNullOrEmpty(path) || !File.Exists(path))
         {
-            await MessageBoxManager.GetMessageBoxStandard("Erro", "Arquivo não encontrado.").ShowWindowAsync();
+            ShowErrorBanner("Arquivo não encontrado.");
             return;
         }
 
@@ -293,6 +294,7 @@ public partial class EnchantEffect : UserControl
             _armorLoadedFilePath = path;
             ArmorFilePath.Text   = path;
 
+            ErrorBanner.IsVisible = false;
             BuildArmorRows();
             LoadArmorEntriesIntoRows();
             RefreshArmorPreview();
@@ -300,7 +302,7 @@ public partial class EnchantEffect : UserControl
         }
         catch (Exception ex)
         {
-            await MessageBoxManager.GetMessageBoxStandard("Erro", ex.Message).ShowWindowAsync();
+            ShowErrorBanner(ex.Message);
         }
     }
 
@@ -319,7 +321,7 @@ public partial class EnchantEffect : UserControl
         }
         catch (Exception ex)
         {
-            await MessageBoxManager.GetMessageBoxStandard("Erro ao salvar", ex.Message).ShowWindowAsync();
+            ShowErrorBanner($"Erro ao salvar: {ex.Message}");
         }
     }
 
@@ -1157,6 +1159,17 @@ public partial class EnchantEffect : UserControl
         await Task.Delay(2800);
         SuccessToast.IsVisible = false;
     }
+
+    private async void ShowErrorBanner(string message)
+    {
+        ErrorBannerText.Text  = message;
+        ErrorBanner.IsVisible = true;
+        await Task.Delay(5000);
+        ErrorBanner.IsVisible = false;
+    }
+
+    private void ErrorBanner_Close(object? sender, PointerPressedEventArgs e)
+        => ErrorBanner.IsVisible = false;
 
 
     // ─── Color helpers ────────────────────────────────────────────────────────
