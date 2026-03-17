@@ -166,7 +166,13 @@ public partial class EnchantEffect : UserControl
         => await PickWeaponFileAsync();
 
     private async void LoadFile_Click(object? sender, RoutedEventArgs e)
-        => await PickWeaponFileAsync();
+    {
+        var path = FilePath.Text?.Trim();
+        if (!string.IsNullOrEmpty(path))
+            await LoadWeaponFromPathAsync(path);
+        else
+            await PickWeaponFileAsync();
+    }
 
     private async Task PickWeaponFileAsync()
     {
@@ -243,7 +249,13 @@ public partial class EnchantEffect : UserControl
         => await PickArmorFileAsync();
 
     private async void ArmorLoadFile_Click(object? sender, RoutedEventArgs e)
-        => await PickArmorFileAsync();
+    {
+        var path = ArmorFilePath.Text?.Trim();
+        if (!string.IsNullOrEmpty(path))
+            await LoadArmorFromPathAsync(path);
+        else
+            await PickArmorFileAsync();
+    }
 
     private async Task PickArmorFileAsync()
     {
