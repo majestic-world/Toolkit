@@ -1056,6 +1056,75 @@ public sealed class L2DatFile
         return sb.ToString().TrimEnd();
     }
 
+    // ── SystemMsg Parser (Helios) ────────────────────────────────────────
+
+    /// <summary>
+    /// Parses SystemMsg records from a decrypted .dat binary buffer.
+    /// Uses the Helios structure (Fafurion - Classic Secret of Empire).
+    /// Fields: UINT id, UINT UNK_0, ASCF message, UINT group, RGBA color,
+    /// MAP_INT sound, MAP_INT voice, UINT win, UINT font, UINT lftime,
+    /// UINT bkg, UINT anim, ASCF scrnmsg, ASCF gfxscrnmsg, ASCF gfxscrnparam, ASCF type.
+    /// </summary>
+    public List<DatSystemMsg> ParseSystemMsg(byte[] decryptedData)
+    {
+        var reader = new L2BinaryReader(decryptedData);
+        var count = (int)reader.ReadUInt();
+        var items = new List<DatSystemMsg>(count);
+
+        for (int i = 0; i < count; i++)
+        {
+            items.Add(new DatSystemMsg
+            {
+                Id           = reader.ReadUInt(),
+                Unk0         = reader.ReadUInt(),
+                Message      = reader.ReadAscfString(),
+                Group        = reader.ReadUInt(),
+                Color        = reader.ReadRgba(),
+                Sound        = ResolveMapInt(reader.ReadMapInt()),
+                Voice        = ResolveMapInt(reader.ReadMapInt()),
+                Win          = reader.ReadUInt(),
+                Font         = reader.ReadUInt(),
+                LfTime       = reader.ReadUInt(),
+                Bkg          = reader.ReadUInt(),
+                Anim         = reader.ReadUInt(),
+                ScrnMsg      = reader.ReadAscfString(),
+                GfxScrnMsg   = reader.ReadAscfString(),
+                GfxScrnParam = reader.ReadAscfString(),
+                Type         = reader.ReadAscfString()
+            });
+        }
+
+        return items;
+    }
+
+    public static string ToTextFormat(List<DatSystemMsg> items)
+    {
+        var sb = new StringBuilder();
+        foreach (var item in items)
+        {
+            sb.Append("msg_begin");
+            sb.Append($"\tid={item.Id}");
+            sb.Append($"\tUNK_0={item.Unk0}");
+            sb.Append($"\tmessage=[{item.Message}]");
+            sb.Append($"\tgroup={item.Group}");
+            sb.Append($"\tcolor={item.Color}");
+            sb.Append($"\tsound=[{item.Sound}]");
+            sb.Append($"\tvoice=[{item.Voice}]");
+            sb.Append($"\twin={item.Win}");
+            sb.Append($"\tfont={item.Font}");
+            sb.Append($"\tlftime={item.LfTime}");
+            sb.Append($"\tbkg={item.Bkg}");
+            sb.Append($"\tanim={item.Anim}");
+            sb.Append($"\tscrnmsg=[{item.ScrnMsg}]");
+            sb.Append($"\tgfxscrnmsg=[{item.GfxScrnMsg}]");
+            sb.Append($"\tgfxscrnparam=[{item.GfxScrnParam}]");
+            sb.Append($"\ttype=[{item.Type}]");
+            sb.Append("\tmsg_end");
+            sb.AppendLine();
+        }
+        return sb.ToString().TrimEnd();
+    }
+
     // ── Shared formatting helpers ────────────────────────────────────────
 
     /// <summary>Format: drop_texture={{[mesh1];{[tex1];[tex2]}};{[mesh2];{[tex3]}}}</summary>

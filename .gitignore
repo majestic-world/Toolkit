@@ -5,3 +5,5 @@ bin
 *.zip
 *.DotSettings.user
 .vs
+docs/color-palette.md
+example/

@@ -76,7 +76,8 @@ public partial class AppSettingsControl : UserControl
         "SkillName",
         "Armorgrp",
         "Weapongrp",
-        "EtcItemgrp"
+        "EtcItemgrp",
+        "SystemMsg"
     ];
 
     private async Task TestDatFileAsync()
@@ -222,6 +223,12 @@ public partial class AppSettingsControl : UserControl
             var datFile = new L2DatFile(nameTable);
             var etcItems = await Task.Run(() => datFile.ParseEtcItemGrp(decrypted));
             await File.WriteAllTextAsync(outputPath, L2DatFile.ToTextFormat(etcItems));
+        }
+        else if (fileNameLower.Contains("systemmsg"))
+        {
+            var datFile = new L2DatFile(nameTable);
+            var msgs = await Task.Run(() => datFile.ParseSystemMsg(decrypted));
+            await File.WriteAllTextAsync(outputPath, L2DatFile.ToTextFormat(msgs));
         }
         else
         {
