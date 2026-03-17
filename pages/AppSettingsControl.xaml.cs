@@ -10,6 +10,7 @@ using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using L2Toolkit.database;
 using L2Toolkit.DatReader;
+using L2Toolkit.Utilities;
 
 namespace L2Toolkit.pages;
 
@@ -28,17 +29,32 @@ public partial class AppSettingsControl : UserControl
         "Skillgrp_Classic.txt"
     ];
 
+    private const string BuildSourceDirKey = "build_source_dir";
+    private const string BuildOutputDirKey = "build_output_dir";
+
     public AppSettingsControl()
     {
         InitializeComponent();
 
-        var saved = AppDatabase.GetInstance().GetValue("assetsDir");
+        var db = AppDatabase.GetInstance();
+
+        var saved = db.GetValue("assetsDir");
         if (!string.IsNullOrEmpty(saved))
             AssetsDirBox.Text = saved;
 
         ConfigPathText.Text = ConfigFilePath;
 
         RefreshFileStatus();
+
+        // Build panel: pre-fill from DB
+        var savedSource = db.GetValue(BuildSourceDirKey);
+        if (!string.IsNullOrEmpty(savedSource))
+            BuildSourceBox.Text = savedSource;
+
+        var savedOutput = db.GetValue(BuildOutputDirKey);
+        BuildOutputBox.Text = !string.IsNullOrEmpty(savedOutput)
+            ? savedOutput
+            : TableManager.TablesFolder;
 
         SelectAssetsBtn.Click += async (_, _) => await SelectAssetsFolderAsync();
         ClearAssetsBtn.Click += (_, _) =>
@@ -60,8 +76,21 @@ public partial class AppSettingsControl : UserControl
                 OpenFolder(appFolder);
         };
 
+        BuildSelectSourceBtn.Click += async (_, _) => await SelectBuildSourceAsync();
+        BuildClearSourceBtn.Click += (_, _) =>
+        {
+            BuildSourceBox.Text = string.Empty;
+            AppDatabase.GetInstance().UpdateValue(BuildSourceDirKey, string.Empty);
+        };
+        BuildSelectOutputBtn.Click += async (_, _) => await SelectBuildOutputAsync();
+        BuildResetOutputBtn.Click += (_, _) =>
+        {
+            BuildOutputBox.Text = TableManager.TablesFolder;
+            AppDatabase.GetInstance().UpdateValue(BuildOutputDirKey, string.Empty);
+        };
+
         TestDatBtn.Click += async (_, _) => await TestDatFileAsync();
-        PackBtn.Click += async (_, _) => await PackFilesAsync();
+        BuildBtn.Click  += async (_, _) => await BuildTablesAsync();
     }
 
     /// <summary>
@@ -249,28 +278,81 @@ public partial class AppSettingsControl : UserControl
         }
     }
 
-    private async Task PackFilesAsync()
+    private async Task SelectBuildSourceAsync()
     {
         var topLevel = TopLevel.GetTopLevel(this);
         if (topLevel == null) return;
-
-        var files = await topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+        var folders = await topLevel.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
         {
-            Title = "Selecione arquivos .txt para compactar",
-            AllowMultiple = true,
-            FileTypeFilter = [new FilePickerFileType("Text Files") { Patterns = ["*.txt"] }]
+            Title = "Selecionar pasta de origem (.txt)"
         });
+        if (folders.Count == 0) return;
+        var path = folders[0].Path.LocalPath;
+        BuildSourceBox.Text = path;
+        AppDatabase.GetInstance().UpdateValue(BuildSourceDirKey, path);
+    }
 
-        if (files.Count == 0) return;
+    private async Task SelectBuildOutputAsync()
+    {
+        var topLevel = TopLevel.GetTopLevel(this);
+        if (topLevel == null) return;
+        var folders = await topLevel.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
+        {
+            Title = "Selecionar pasta de saída (.l2dat)"
+        });
+        if (folders.Count == 0) return;
+        var path = folders[0].Path.LocalPath;
+        BuildOutputBox.Text = path;
+        AppDatabase.GetInstance().UpdateValue(BuildOutputDirKey, path);
+    }
 
-        PackStatusText.Foreground = new SolidColorBrush(Color.Parse("#D4A54A"));
-        PackStatusText.IsVisible = true;
-        PackBtn.IsEnabled = false;
+    private async Task BuildTablesAsync()
+    {
+        var sourceDir = BuildSourceBox.Text?.Trim();
+        if (string.IsNullOrEmpty(sourceDir) || !Directory.Exists(sourceDir))
+        {
+            BuildStatusText.Text = "Selecione uma pasta de origem válida.";
+            BuildStatusText.Foreground = new SolidColorBrush(Color.Parse("#BF5D5D"));
+            BuildStatusText.IsVisible = true;
+            return;
+        }
 
-        // Output goes to "l2dat" subfolder inside the source folder
-        var inputDir = Path.GetDirectoryName(files[0].Path.LocalPath) ?? ".";
-        var outputDir = Path.Combine(inputDir, "l2dat");
+        var outputDir = string.IsNullOrEmpty(BuildOutputBox.Text?.Trim())
+            ? TableManager.TablesFolder
+            : BuildOutputBox.Text.Trim();
+
         Directory.CreateDirectory(outputDir);
+
+        // Only root-level .txt files — no subdirectories
+        var txtFiles = Directory.GetFiles(sourceDir, "*.txt", SearchOption.TopDirectoryOnly)
+            .OrderBy(f => f)
+            .ToArray();
+
+        if (txtFiles.Length == 0)
+        {
+            BuildStatusText.Text = "Nenhum arquivo .txt encontrado na pasta de origem.";
+            BuildStatusText.Foreground = new SolidColorBrush(Color.Parse("#BF5D5D"));
+            BuildStatusText.IsVisible = true;
+            return;
+        }
+
+        BuildBtn.IsEnabled = false;
+        BuildProgressBar.Value = 0;
+        BuildProgressBar.Maximum = txtFiles.Length;
+        BuildProgressLabel.Text = $"0 / {txtFiles.Length}";
+        BuildCurrentFile.Text = string.Empty;
+        BuildProgressPanel.IsVisible = true;
+        BuildStatusText.Text = "Compilando...";
+        BuildStatusText.Foreground = new SolidColorBrush(Color.Parse("#D4A54A"));
+        BuildStatusText.IsVisible = true;
+
+        int quality = BuildQualityBox.SelectedIndex switch
+        {
+            0 => 1,
+            1 => 5,
+            2 => 8,
+            _ => 11
+        };
 
         int success = 0;
         int failed = 0;
@@ -280,21 +362,22 @@ public partial class AppSettingsControl : UserControl
 
         try
         {
-            for (int i = 0; i < files.Count; i++)
+            for (int i = 0; i < txtFiles.Length; i++)
             {
-                var inputPath = files[i].Path.LocalPath;
-                var fileName = Path.GetFileNameWithoutExtension(inputPath);
+                var inputPath = txtFiles[i];
+                var fileName  = Path.GetFileNameWithoutExtension(inputPath);
 
-                PackStatusText.Text = $"Compactando {i + 1}/{files.Count}: {fileName}...";
+                BuildCurrentFile.Text  = fileName + ".txt";
+                BuildProgressLabel.Text = $"{i + 1} / {txtFiles.Length}";
 
                 try
                 {
                     var outputPath = Path.Combine(outputDir, fileName + ".l2dat");
                     await Task.Run(() =>
                     {
-                        L2Pack.Pack(inputPath, outputPath);
+                        L2Pack.Pack(inputPath, outputPath, quality);
 
-                        // Round-trip verification: unpack and compare byte-by-byte
+                        // Round-trip verification
                         var original = File.ReadAllBytes(inputPath);
                         var (_, content) = L2Pack.Unpack(outputPath);
                         var restored = System.Text.Encoding.UTF8.GetBytes(content);
@@ -303,7 +386,7 @@ public partial class AppSettingsControl : UserControl
                     });
 
                     totalOriginal += new FileInfo(inputPath).Length;
-                    totalPacked += new FileInfo(outputPath).Length;
+                    totalPacked   += new FileInfo(outputPath).Length;
                     success++;
                 }
                 catch (Exception ex)
@@ -311,28 +394,34 @@ public partial class AppSettingsControl : UserControl
                     failed++;
                     errors.Add($"{fileName}: {ex.Message}");
                 }
+
+                BuildProgressBar.Value = i + 1;
             }
+
+            TableManager.InvalidateCache();
 
             var ratio = totalOriginal > 0 ? (double)totalPacked / totalOriginal : 0;
             if (failed == 0)
             {
-                PackStatusText.Text = $"Concluído: {success} arquivo(s) verificado(s) — {totalOriginal / 1024:N0} KB → {totalPacked / 1024:N0} KB ({ratio:P1}) → {outputDir}";
-                PackStatusText.Foreground = new SolidColorBrush(Color.Parse("#5DBF6A"));
+                BuildStatusText.Text = $"Build concluído: {success} arquivo(s) — {totalOriginal / 1024:N0} KB → {totalPacked / 1024:N0} KB ({ratio:P1})";
+                BuildStatusText.Foreground = new SolidColorBrush(Color.Parse("#5DBF6A"));
             }
             else
             {
-                PackStatusText.Text = $"{success} ok, {failed} erro(s) — {string.Join(" | ", errors)}";
-                PackStatusText.Foreground = new SolidColorBrush(Color.Parse("#BF5D5D"));
+                BuildStatusText.Text = $"{success} ok, {failed} erro(s) — {string.Join(" | ", errors)}";
+                BuildStatusText.Foreground = new SolidColorBrush(Color.Parse("#BF5D5D"));
             }
+
+            BuildCurrentFile.Text = string.Empty;
         }
         catch (Exception ex)
         {
-            PackStatusText.Text = $"Erro: {ex.Message}";
-            PackStatusText.Foreground = new SolidColorBrush(Color.Parse("#BF5D5D"));
+            BuildStatusText.Text = $"Erro: {ex.Message}";
+            BuildStatusText.Foreground = new SolidColorBrush(Color.Parse("#BF5D5D"));
         }
         finally
         {
-            PackBtn.IsEnabled = true;
+            BuildBtn.IsEnabled = true;
         }
     }
 

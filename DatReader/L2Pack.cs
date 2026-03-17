@@ -15,21 +15,31 @@ public static class L2Pack
     private static readonly byte[] Magic = "L2DT"u8.ToArray();
 
     /// <summary>
+    /// Packs a text file into a compressed .l2dat file using maximum compression (quality 11).
+    /// </summary>
+    public static void Pack(string inputPath, string outputPath) =>
+        Pack(inputPath, outputPath, quality: 11);
+
+    /// <summary>
     /// Packs a text file into a compressed .l2dat file.
     /// </summary>
-    public static void Pack(string inputPath, string outputPath)
+    /// <param name="quality">Brotli quality level: 1 (fastest) to 11 (smallest).</param>
+    public static void Pack(string inputPath, string outputPath, int quality)
     {
         var fileName = Path.GetFileName(inputPath);
         var fileNameBytes = Encoding.UTF8.GetBytes(fileName);
         var content = File.ReadAllBytes(inputPath);
 
+        var maxSize   = BrotliEncoder.GetMaxCompressedLength(content.Length);
+        var compressed = new byte[maxSize];
+        if (!BrotliEncoder.TryCompress(content, compressed, out int written, quality, window: 22))
+            throw new InvalidOperationException($"Brotli compression failed (quality={quality}).");
+
         using var output = File.Create(outputPath);
         output.Write(Magic);
         output.Write(BitConverter.GetBytes((ushort)fileNameBytes.Length));
         output.Write(fileNameBytes);
-
-        using var brotli = new BrotliStream(output, CompressionLevel.SmallestSize);
-        brotli.Write(content);
+        output.Write(compressed, 0, written);
     }
 
     /// <summary>

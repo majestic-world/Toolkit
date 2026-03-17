@@ -203,7 +203,7 @@
             </Border>
             
             
-              <!-- Panel: L2Pack Converter -->
+            <!-- Panel: L2DAT Build -->
             <Border Margin="32,20,32,0"
                     CornerRadius="8"
                     Background="#323232"
@@ -220,7 +220,7 @@
                                     VerticalAlignment="Center">
                             <PathIcon Data="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" Width="18" Height="18" Foreground="#6B8E5B" VerticalAlignment="Center"/>
                             <Border Width="1" Height="18" Background="#565656" VerticalAlignment="Center"/>
-                            <TextBlock Text="L2DAT CONVERTER"
+                            <TextBlock Text="L2DAT BUILD"
                                        FontSize="11"
                                        FontWeight="Bold"
                                        Foreground="#9A9A9A"
@@ -231,32 +231,161 @@
                         <Border Height="1" Background="#464646"/>
 
                         <StackPanel Margin="20,16,20,20" Spacing="14">
+
                             <TextBlock TextWrapping="Wrap"
                                        FontSize="13"
                                        Foreground="#9A9A9A"
                                        LineHeight="20">
-                                Selecione arquivos .txt para comprimir em formato .l2dat. Os arquivos são salvos na subpasta l2dat/ dentro da pasta de origem.
+                                Compila arquivos .txt da pasta de origem em .l2dat na pasta de saída. Somente arquivos na raiz da pasta são processados.
                             </TextBlock>
 
-                            <StackPanel Orientation="Horizontal" Spacing="10">
-                                <Button x:Name="PackBtn"
+                            <!-- Source folder -->
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Pasta de origem (.txt)"
+                                           FontSize="12"
+                                           Foreground="#9A9A9A"
+                                           FontWeight="Medium"/>
+                                <Grid ColumnDefinitions="*,8,Auto,8,Auto">
+                                    <TextBox x:Name="BuildSourceBox"
+                                             Grid.Column="0"
+                                             Classes="FormField"
+                                             IsReadOnly="True"
+                                             Focusable="False"
+                                             IsHitTestVisible="False"
+                                             VerticalContentAlignment="Center"
+                                             Height="34"
+                                             Padding="10,0"
+                                             FontFamily="Consolas,Courier New,monospace"
+                                             FontSize="12"
+                                             Watermark="Nenhuma pasta selecionada..."/>
+                                    <Button x:Name="BuildSelectSourceBtn"
+                                            Grid.Column="2"
+                                            Height="34"
+                                            Padding="14,0"
+                                            Theme="{StaticResource GhostButton}">
+                                        <StackPanel Orientation="Horizontal" Spacing="7">
+                                            <PathIcon Data="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" Foreground="#9A9A9A" Width="13" Height="13" VerticalAlignment="Center"/>
+                                            <TextBlock Text="Selecionar" FontSize="13" FontWeight="Medium" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button x:Name="BuildClearSourceBtn"
+                                            Grid.Column="4"
+                                            Height="34"
+                                            Padding="12,0"
+                                            Theme="{StaticResource GhostButton}">
+                                        <PathIcon Data="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" Width="13" Height="13" Foreground="#9A9A9A"/>
+                                    </Button>
+                                </Grid>
+                            </StackPanel>
+
+                            <!-- Output folder -->
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Pasta de saída (.l2dat)"
+                                           FontSize="12"
+                                           Foreground="#9A9A9A"
+                                           FontWeight="Medium"/>
+                                <Grid ColumnDefinitions="*,8,Auto,8,Auto">
+                                    <TextBox x:Name="BuildOutputBox"
+                                             Grid.Column="0"
+                                             Classes="FormField"
+                                             IsReadOnly="True"
+                                             Focusable="False"
+                                             IsHitTestVisible="False"
+                                             VerticalContentAlignment="Center"
+                                             Height="34"
+                                             Padding="10,0"
+                                             FontFamily="Consolas,Courier New,monospace"
+                                             FontSize="12"
+                                             Watermark="Padrão: exePath/tables"/>
+                                    <Button x:Name="BuildSelectOutputBtn"
+                                            Grid.Column="2"
+                                            Height="34"
+                                            Padding="14,0"
+                                            Theme="{StaticResource GhostButton}">
+                                        <StackPanel Orientation="Horizontal" Spacing="7">
+                                            <PathIcon Data="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" Foreground="#9A9A9A" Width="13" Height="13" VerticalAlignment="Center"/>
+                                            <TextBlock Text="Selecionar" FontSize="13" FontWeight="Medium" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button x:Name="BuildResetOutputBtn"
+                                            Grid.Column="4"
+                                            Height="34"
+                                            Padding="12,0"
+                                            Theme="{StaticResource GhostButton}">
+                                        <StackPanel Orientation="Horizontal" Spacing="7">
+                                            <PathIcon Data="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z" Foreground="#9A9A9A" Width="13" Height="13" VerticalAlignment="Center"/>
+                                            <TextBlock Text="Padrão" FontSize="13" FontWeight="Medium" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+                                </Grid>
+                            </StackPanel>
+
+                            <!-- Compression level -->
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Nível de compressão"
+                                           FontSize="12"
+                                           Foreground="#9A9A9A"
+                                           FontWeight="Medium"/>
+                                <ComboBox x:Name="BuildQualityBox"
+                                          Height="34"
+                                          MinWidth="180"
+                                          HorizontalAlignment="Left"
+                                          SelectedIndex="1">
+                                    <ComboBoxItem Content="Minimum"/>
+                                    <ComboBoxItem Content="Medium"/>
+                                    <ComboBoxItem Content="High"/>
+                                    <ComboBoxItem Content="Maximum"/>
+                                </ComboBox>
+                            </StackPanel>
+
+                            <!-- Progress bar -->
+                            <StackPanel x:Name="BuildProgressPanel" IsVisible="False" Spacing="6">
+                                <Grid ColumnDefinitions="*,8,Auto">
+                                    <ProgressBar x:Name="BuildProgressBar"
+                                                 Grid.Column="0"
+                                                 Minimum="0" Maximum="100" Value="0"
+                                                 Height="6"
+                                                 Foreground="#6B8E5B"
+                                                 Background="#2A2A2A"
+                                                 VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="BuildProgressLabel"
+                                               Grid.Column="2"
+                                               Text="0 / 0"
+                                               FontSize="11"
+                                               Foreground="#6B7280"
+                                               VerticalAlignment="Center"/>
+                                </Grid>
+                                <TextBlock x:Name="BuildCurrentFile"
+                                           FontSize="11"
+                                           FontFamily="Consolas,Courier New,monospace"
+                                           Foreground="#6B7280"
+                                           TextTrimming="CharacterEllipsis"/>
+                            </StackPanel>
+
+                            <!-- Build button + status -->
+                            <Grid ColumnDefinitions="Auto,12,*">
+                                <Button x:Name="BuildBtn"
+                                        Grid.Column="0"
                                         Height="38"
-                                        Padding="16,0"
+                                        Padding="20,0"
                                         Theme="{StaticResource GhostButton}">
                                     <StackPanel Orientation="Horizontal" Spacing="8">
-                                        <PathIcon Data="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" Width="14" Height="14" Foreground="#9A9A9A" VerticalAlignment="Center"/>
-                                        <TextBlock Text="Selecionar e Compactar"
+                                        <PathIcon Data="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" Width="14" Height="14" Foreground="#6B8E5B" VerticalAlignment="Center"/>
+                                        <TextBlock Text="Build"
                                                    FontSize="13"
-                                                   FontWeight="Medium"
+                                                   FontWeight="SemiBold"
                                                    VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Button>
-                                <TextBlock x:Name="PackStatusText"
+                                <TextBlock x:Name="BuildStatusText"
+                                           Grid.Column="2"
                                            FontSize="12"
                                            Foreground="#9A9A9A"
                                            VerticalAlignment="Center"
+                                           TextWrapping="Wrap"
                                            IsVisible="False"/>
-                            </StackPanel>
+                            </Grid>
+
                         </StackPanel>
                     </StackPanel>
                 </Grid>
