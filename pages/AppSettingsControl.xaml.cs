@@ -400,10 +400,10 @@ public partial class AppSettingsControl : UserControl
 
             TableManager.InvalidateCache();
 
-            var ratio = totalOriginal > 0 ? (double)totalPacked / totalOriginal : 0;
+            var savings = totalOriginal > 0 ? 1.0 - (double)totalPacked / totalOriginal : 0;
             if (failed == 0)
             {
-                BuildStatusText.Text = $"Build concluído: {success} arquivo(s) — {totalOriginal / 1024:N0} KB → {totalPacked / 1024:N0} KB ({ratio:P1})";
+                BuildStatusText.Text = $"Build concluído: {success} arquivo(s) — {FormatSize(totalOriginal)} → {FormatSize(totalPacked)} → {savings:P1}";
                 BuildStatusText.Foreground = new SolidColorBrush(Color.Parse("#5DBF6A"));
             }
             else
@@ -424,6 +424,13 @@ public partial class AppSettingsControl : UserControl
             BuildBtn.IsEnabled = true;
         }
     }
+
+    private static string FormatSize(long bytes) => bytes switch
+    {
+        >= 1024L * 1024 * 1024 => $"{bytes / (1024.0 * 1024 * 1024):N2} GB",
+        >= 1024L * 1024        => $"{bytes / (1024.0 * 1024):N2} MB",
+        _                      => $"{bytes / 1024.0:N1} KB"
+    };
 
     private async Task SelectAssetsFolderAsync()
     {
