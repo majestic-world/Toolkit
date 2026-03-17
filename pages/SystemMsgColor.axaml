@@ -119,7 +119,7 @@
                              Cursor="Hand" PointerPressed="FilePath_OnClick"
                              VerticalAlignment="Stretch"
                              VerticalContentAlignment="Center"
-                             Watermark="Selecione o arquivo SystemMsg.txt..."/>
+                             Watermark="Selecione o arquivo SystemMsg.dat do cliente..."/>
                 </Border>
                 <Button Grid.Column="2" Click="LoadFile_Click"
                         Theme="{StaticResource PrimaryButton}" Height="32" Padding="14,0"
@@ -131,6 +131,23 @@
                     </StackPanel>
                 </Button>
             </Grid>
+
+            <!-- Backup warning banner — hidden after file is loaded -->
+            <Border x:Name="BackupWarningBanner"
+                    Background="#1E1800" BorderBrush="#4A3800" BorderThickness="1"
+                    CornerRadius="6" Padding="14,12">
+                <StackPanel Spacing="4">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <PathIcon Width="14" Height="14" VerticalAlignment="Center" Foreground="#D4A017"
+                                  Data="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                        <TextBlock Foreground="#D4A017" FontSize="13" FontWeight="SemiBold"
+                                   VerticalAlignment="Center"
+                                   Text="Faça um backup antes de editar"/>
+                    </StackPanel>
+                    <TextBlock Foreground="#9A7510" FontSize="12" TextWrapping="Wrap"
+                               Text="Edições incorretas podem corromper o arquivo do cliente. Ao salvar, um backup automático é gerado na mesma pasta com a extensão .dat.bak — mas recomendamos manter uma cópia manual em local seguro."/>
+                </StackPanel>
+            </Border>
 
             <!-- Content controls (hidden until loaded) -->
             <StackPanel x:Name="ContentPanel" IsVisible="False" Spacing="8">

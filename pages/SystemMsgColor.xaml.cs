@@ -11,6 +11,7 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
+using L2Toolkit.DatReader;
 using MsBox.Avalonia;
 
 namespace L2Toolkit.pages;
@@ -22,10 +23,10 @@ public partial class SystemMsgColor : UserControl
     private sealed class SysMsgEntry
     {
         public int          Id          { get; set; }
-        public string       MessageText { get; set; } = ""; // for display only
-        public string       ColorRgb    { get; set; } = "799BB0"; // 6 chars
-        public string       ColorAlpha  { get; set; } = "FF";     // 2 chars
-        public List<string> RawFields   { get; }      = new();    // all tab-sep fields without msg_begin/end
+        public string       MessageText { get; set; } = "";       // for display only
+        public string       ColorRgb    { get; set; } = "9BB0FF"; // RRGGBB (6 chars)
+        public string       ColorAlpha  { get; set; } = "79";     // AA (2 chars)
+        public DatSystemMsg Source      { get; init; } = null!;   // backing binary record
     }
 
     // ─── State ────────────────────────────────────────────────────────────────
@@ -81,25 +82,46 @@ public partial class SystemMsgColor : UserControl
         var topLevel = TopLevel.GetTopLevel(this);
         var files = await topLevel!.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
-            Title          = "Selecionar SystemMsg.txt",
+            Title          = "Selecionar SystemMsg.dat",
             AllowMultiple  = false,
             FileTypeFilter =
             [
-                new FilePickerFileType("Text") { Patterns = ["*.txt"] },
-                new FilePickerFileType("All")  { Patterns = ["*.*"]  }
+                new FilePickerFileType("Lineage 2 DAT") { Patterns = ["*.dat"] },
+                new FilePickerFileType("All")            { Patterns = ["*.*"]  }
             ]
         });
         if (files.Count == 0) return;
 
-        _loadedFilePath  = files[0].Path.LocalPath;
-        FilePath.Text    = _loadedFilePath;
-        SearchBox.Text   = "";
+        _loadedFilePath = files[0].Path.LocalPath;
+        FilePath.Text   = _loadedFilePath;
+        SearchBox.Text  = "";
 
         try
         {
-            _entries                    = ParseFile(_loadedFilePath);
-            ContentPanel.IsVisible      = true;
-            MsgScrollViewer.IsVisible   = true;
+            _entries = await Task.Run(() =>
+            {
+                var decrypted = DatCrypto.DecryptFile(_loadedFilePath);
+                var datFile   = new L2DatFile();
+                var msgs      = datFile.ParseSystemMsg(decrypted);
+                return msgs.Select(msg =>
+                {
+                    // .dat stores color bytes as [B, G, R, A] — ReadRgba outputs BBGGRR+AA
+                    var c  = msg.Color.PadLeft(8, '0');
+                    var bb = c[0..2]; var gg = c[2..4]; var rr = c[4..6]; var aa = c[6..8];
+                    return new SysMsgEntry
+                    {
+                        Id          = (int)msg.Id,
+                        MessageText = msg.Message,
+                        ColorRgb    = (rr + gg + bb).ToUpper(), // convert to RRGGBB for display
+                        ColorAlpha  = aa.ToUpper(),
+                        Source      = msg
+                    };
+                }).ToList();
+            });
+
+            BackupWarningBanner.IsVisible = false;
+            ContentPanel.IsVisible        = true;
+            MsgScrollViewer.IsVisible     = true;
             ApplyFilter();
         }
         catch (Exception ex)
@@ -110,16 +132,27 @@ public partial class SystemMsgColor : UserControl
 
     private async void SaveFile_Click(object? sender, RoutedEventArgs e)
     {
+        if (string.IsNullOrEmpty(_loadedFilePath)) return;
         try
         {
-            var content = SerializeEntries(_entries);
-            await File.WriteAllTextAsync(_loadedFilePath, content, new UTF8Encoding(true));
-            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+            // Sync edited colors back — convert RRGGBB display → BBGGRR+AA file format
+            foreach (var entry in _entries)
             {
-                FileName        = _loadedFilePath,
-                UseShellExecute = true
-            });
-            ShowSuccessToast("Arquivo salvo com sucesso.");
+                var rr = entry.ColorRgb[0..2];
+                var gg = entry.ColorRgb[2..4];
+                var bb = entry.ColorRgb[4..6];
+                entry.Source.Color = (bb + gg + rr + entry.ColorAlpha).ToUpper();
+            }
+
+            // Backup original before overwriting
+            var backupPath = _loadedFilePath + ".bak";
+            File.Copy(_loadedFilePath, backupPath, overwrite: true);
+
+            var msgs      = _entries.Select(e => e.Source).ToList();
+            var binary    = await Task.Run(() => L2DatFile.SerializeSystemMsg(msgs));
+            var encrypted = await Task.Run(() => DatCrypto.EncryptFile(binary));
+            await File.WriteAllBytesAsync(_loadedFilePath, encrypted);
+            ShowSuccessToast("Arquivo salvo com sucesso. Backup criado em .dat.bak");
         }
         catch (Exception ex)
         {
@@ -406,82 +439,6 @@ public partial class SystemMsgColor : UserControl
         return rowBorder;
     }
 
-    // ─── Parser ───────────────────────────────────────────────────────────────
-
-    private static List<SysMsgEntry> ParseFile(string path)
-    {
-        var entries = new List<SysMsgEntry>();
-        foreach (var rawLine in File.ReadLines(path))
-        {
-            var line = rawLine.TrimStart('\uFEFF').Trim();
-            if (!line.StartsWith("msg_begin", StringComparison.Ordinal)) continue;
-
-            var fields = line.Split('\t').ToList();
-            fields.RemoveAll(f => f is "msg_begin" or "msg_end");
-
-            var entry = new SysMsgEntry();
-            entry.RawFields.AddRange(fields);
-
-            foreach (var f in fields)
-            {
-                if (f.StartsWith("id=", StringComparison.Ordinal) &&
-                    int.TryParse(f[3..], out var id))
-                    entry.Id = id;
-
-                else if (f.StartsWith("message=", StringComparison.Ordinal))
-                {
-                    var msg = f[8..].Trim('[', ']');
-                    entry.MessageText = msg;
-                }
-
-                else if (f.StartsWith("color=", StringComparison.Ordinal))
-                {
-                    var hex = f[6..];
-                    if (hex.Length >= 6)
-                    {
-                        // L2 stores color as BBGGRR (Windows COLORREF) — convert to RRGGBB for display
-                        var bb = hex[0..2];
-                        var gg = hex[2..4];
-                        var rr = hex[4..6];
-                        entry.ColorRgb   = (rr + gg + bb).ToUpper();
-                        entry.ColorAlpha = hex.Length >= 8 ? hex[6..8].ToUpper() : "FF";
-                    }
-                }
-            }
-
-            entries.Add(entry);
-        }
-        return entries;
-    }
-
-    // ─── Serializer ───────────────────────────────────────────────────────────
-
-    private static string SerializeEntries(List<SysMsgEntry> entries)
-    {
-        var sb = new StringBuilder();
-        for (int i = 0; i < entries.Count; i++)
-        {
-            if (i > 0) sb.Append('\n');
-            var entry = entries[i];
-            sb.Append("msg_begin");
-            foreach (var field in entry.RawFields)
-            {
-                if (field.StartsWith("color=", StringComparison.Ordinal))
-                {
-                    // Convert RRGGBB back to BBGGRR (L2 COLORREF format) before writing
-                    var rgb = entry.ColorRgb;
-                    var rr  = rgb[0..2];
-                    var gg  = rgb[2..4];
-                    var bb  = rgb[4..6];
-                    sb.Append($"\tcolor={bb}{gg}{rr}{entry.ColorAlpha}");
-                }
-                else
-                    sb.Append($"\t{field}");
-            }
-            sb.Append("\tmsg_end");
-        }
-        return sb.ToString();
-    }
 
     // ─── Presets ──────────────────────────────────────────────────────────────
 

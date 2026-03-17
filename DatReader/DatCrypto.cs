@@ -16,6 +16,83 @@ public static class DatCrypto
     private const int FooterSize = 20;
     private const int RsaBlockSize = 128;
 
+    // v413_encdec private key (RSA private exponent for re-encryption)
+    private static readonly BigInteger V413EncModulus = ParseHex(
+        "75B4D6DE5C016544068A1ACF125869F43D2E09FC55B8B1E289556DAF9B8757635593446288B3653DA1CE91C87BB1A5C18F16323495C55D7D72C0890A83F69BFD1FD9434EB1C02F3E4679EDFA43309319070129C267C85604D87BB65BAE205DE3707AF1D2108881ABB567C3B3D069AE67C3A4C6A3AA93D26413D4C66094AE2039");
+    private static readonly BigInteger V413EncPrivateExp = ParseHex(
+        "30b4c2d798d47086145c75063c8e841e719776e400291d7838d3e6c4405b504c6a07f8fca27f32b86643d2649d1d5f124cdd0bf272f0909dd7352fe10a77b34d831043d9ae541f8263c6fe3d1c14c2f04e43a7253a6dda9a8c1562cbd493c1b631a1957618ad5dfe5ca28553f746e2fc6f2db816c7db223ec91e955081c1de65");
+
+    /// <summary>
+    /// Encrypts raw binary data using the v413_encdec RSA private key + zlib.
+    /// Produces a valid Lineage2Ver413 .dat file readable by a client with the matching public key.
+    /// </summary>
+    public static byte[] EncryptFile(byte[] decryptedData)
+    {
+        // Step 1: zlib compress with 4-byte LE size prefix
+        byte[] compressed;
+        using (var ms = new MemoryStream())
+        {
+            var sizePrefix = new byte[4];
+            System.Buffers.Binary.BinaryPrimitives.WriteInt32LittleEndian(sizePrefix, decryptedData.Length);
+            ms.Write(sizePrefix);
+            using (var zlib = new ZLibStream(ms, CompressionLevel.Optimal, leaveOpen: true))
+                zlib.Write(decryptedData);
+            compressed = ms.ToArray();
+        }
+
+        // Step 2: RSA encrypt in 128-byte blocks (mirrors Java RSADatCrypter.encryptResult)
+        using var rsaOut = new MemoryStream();
+        var buffer = new byte[124];
+        var block  = new byte[128];
+        int offset = 0;
+
+        while (offset < compressed.Length)
+        {
+            int len = Math.Min(124, compressed.Length - offset);
+            Buffer.BlockCopy(compressed, offset, buffer, 0, len);
+            offset += len;
+
+            Array.Clear(block, 0, 128);
+            block[0] = (byte)((len >> 24) & 0xFF);
+            block[1] = (byte)((len >> 16) & 0xFF);
+            block[2] = (byte)((len >> 8)  & 0xFF);
+            block[3] = (byte)(len         & 0xFF);
+
+            // Right-align data with 4-byte alignment padding at the end
+            int pad = (-len) & 3;
+            int pos = 128 - len - pad;
+            Buffer.BlockCopy(buffer, 0, block, pos, len);
+
+            rsaOut.Write(RsaEncryptBlock(block, V413EncPrivateExp, V413EncModulus));
+        }
+
+        // Step 3: assemble: header (28 bytes) + RSA payload + footer (20 bytes)
+        var header  = Encoding.Unicode.GetBytes("Lineage2Ver413");
+        var footer  = new byte[] { 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,100 };
+        var payload = rsaOut.ToArray();
+
+        var result = new byte[header.Length + payload.Length + footer.Length];
+        Buffer.BlockCopy(header,  0, result, 0,                                   header.Length);
+        Buffer.BlockCopy(payload, 0, result, header.Length,                       payload.Length);
+        Buffer.BlockCopy(footer,  0, result, header.Length + payload.Length,      footer.Length);
+        return result;
+    }
+
+    private static byte[] RsaEncryptBlock(byte[] block, BigInteger privateExp, BigInteger modulus)
+    {
+        var plain     = new BigInteger(block, isUnsigned: true, isBigEndian: true);
+        var encrypted = BigInteger.ModPow(plain, privateExp, modulus);
+        var enc       = encrypted.ToByteArray(isUnsigned: true, isBigEndian: true);
+
+        var result = new byte[RsaBlockSize];
+        int off = RsaBlockSize - enc.Length;
+        if (off >= 0)
+            Buffer.BlockCopy(enc, 0,    result, off,  enc.Length);
+        else
+            Buffer.BlockCopy(enc, -off, result, 0,    RsaBlockSize);
+        return result;
+    }
+
     public static byte[] DecryptFile(string filePath)
     {
         var data = File.ReadAllBytes(filePath);

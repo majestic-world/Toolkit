@@ -1,6 +1,8 @@
 using System;
+using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -515,6 +517,124 @@ public sealed class L2DatFile
             sb.AppendLine();
         }
         return sb.ToString().TrimEnd();
+    }
+
+    // ── SystemMsg Binary Serializer ──────────────────────────────────────
+
+    /// <summary>
+    /// Serializes a list of DatSystemMsg records back to the Helios binary format.
+    /// Mirrors ParseSystemMsg exactly — must be kept in sync with the parser.
+    /// </summary>
+    public static byte[] SerializeSystemMsg(List<DatSystemMsg> items)
+    {
+        using var ms = new MemoryStream();
+
+        WriteUInt32(ms, (uint)items.Count);
+
+        foreach (var item in items)
+        {
+            WriteUInt32(ms, item.Id);
+            WriteUInt32(ms, item.Unk0);
+            WriteAscf(ms, item.Message);
+            WriteUInt32(ms, item.Group);
+
+            // RGBA: 4 bytes from AARRGGBB hex string
+            var c = item.Color.PadLeft(8, '0');
+            ms.WriteByte(Convert.ToByte(c[0..2], 16)); // A
+            ms.WriteByte(Convert.ToByte(c[2..4], 16)); // R
+            ms.WriteByte(Convert.ToByte(c[4..6], 16)); // G
+            ms.WriteByte(Convert.ToByte(c[6..8], 16)); // B
+
+            WriteInt32(ms, item.SoundIndex); // MAP_INT raw index
+            WriteInt32(ms, item.VoiceIndex); // MAP_INT raw index
+            WriteUInt32(ms, item.Win);
+            WriteUInt32(ms, item.Font);
+            WriteUInt32(ms, item.LfTime);
+            WriteUInt32(ms, item.Bkg);
+            WriteUInt32(ms, item.Anim);
+            WriteAscf(ms, item.ScrnMsg);
+            WriteAscf(ms, item.GfxScrnMsg);
+            WriteAscf(ms, item.GfxScrnParam);
+            WriteAscf(ms, item.Type);
+        }
+
+        // SafePackage footer — required for isSafePackage="true" .dat files.
+        // Equivalent to Java's DescriptorWriter.END_FILE_BYTES:
+        // ASCF string "SafePackage" = compact-int 12 + "SafePackage\0" (11 chars + null)
+        ms.Write(new byte[] { 12, 83, 97, 102, 101, 80, 97, 99, 107, 97, 103, 101, 0 });
+
+        return ms.ToArray();
+    }
+
+    private static void WriteUInt32(MemoryStream ms, uint value)
+    {
+        Span<byte> buf = stackalloc byte[4];
+        BinaryPrimitives.WriteUInt32LittleEndian(buf, value);
+        ms.Write(buf);
+    }
+
+    private static void WriteInt32(MemoryStream ms, int value)
+    {
+        Span<byte> buf = stackalloc byte[4];
+        BinaryPrimitives.WriteInt32LittleEndian(buf, value);
+        ms.Write(buf);
+    }
+
+    /// <summary>
+    /// Writes an ASCF string: compact-int length prefix + encoded bytes + null terminator.
+    /// Positive length = Latin1 (cp1252). Negative length = UTF-16LE.
+    /// </summary>
+    private static void WriteAscf(MemoryStream ms, string s)
+    {
+        if (s.Length == 0)
+        {
+            WriteCompactInt(ms, 0);
+            return;
+        }
+
+        if (s.All(c => c <= 0xFF))
+        {
+            // Latin1 path: length includes null terminator
+            var bytes = Encoding.Latin1.GetBytes(s);
+            WriteCompactInt(ms, bytes.Length + 1);
+            ms.Write(bytes);
+            ms.WriteByte(0);
+        }
+        else
+        {
+            // UTF-16LE path: negative length = char count + 1 null char
+            var bytes = Encoding.Unicode.GetBytes(s);
+            WriteCompactInt(ms, -(s.Length + 1));
+            ms.Write(bytes);
+            ms.WriteByte(0); ms.WriteByte(0);
+        }
+    }
+
+    /// <summary>
+    /// Writes a compact variable-length integer (inverse of ReadCompactInt).
+    /// Byte 0: bit7=sign, bit6=continuation, bits5-0=value[5:0].
+    /// Subsequent bytes: bit7=continuation, bits6-0=value[N:N-6].
+    /// </summary>
+    private static void WriteCompactInt(MemoryStream ms, int value)
+    {
+        bool negative = value < 0;
+        int abs = Math.Abs(value);
+
+        if (abs < 64)
+        {
+            ms.WriteByte((byte)((abs & 0x3F) | (negative ? 0x80 : 0)));
+            return;
+        }
+
+        ms.WriteByte((byte)((abs & 0x3F) | 0x40 | (negative ? 0x80 : 0)));
+        abs >>= 6;
+
+        while (abs >= 128)
+        {
+            ms.WriteByte((byte)((abs & 0x7F) | 0x80));
+            abs >>= 7;
+        }
+        ms.WriteByte((byte)(abs & 0x7F));
     }
 
     // ── EtcItemgrp Parser (Helios) ───────────────────────────────────────
@@ -1073,24 +1193,43 @@ public sealed class L2DatFile
 
         for (int i = 0; i < count; i++)
         {
+            var id           = reader.ReadUInt();
+            var unk0         = reader.ReadUInt();
+            var message      = reader.ReadAscfString();
+            var group        = reader.ReadUInt();
+            var color        = reader.ReadRgba();
+            var soundIdx     = reader.ReadMapInt();
+            var voiceIdx     = reader.ReadMapInt();
+            var win          = reader.ReadUInt();
+            var font         = reader.ReadUInt();
+            var lfTime       = reader.ReadUInt();
+            var bkg          = reader.ReadUInt();
+            var anim         = reader.ReadUInt();
+            var scrnMsg      = reader.ReadAscfString();
+            var gfxScrnMsg   = reader.ReadAscfString();
+            var gfxScrnParam = reader.ReadAscfString();
+            var type         = reader.ReadAscfString();
+
             items.Add(new DatSystemMsg
             {
-                Id           = reader.ReadUInt(),
-                Unk0         = reader.ReadUInt(),
-                Message      = reader.ReadAscfString(),
-                Group        = reader.ReadUInt(),
-                Color        = reader.ReadRgba(),
-                Sound        = ResolveMapInt(reader.ReadMapInt()),
-                Voice        = ResolveMapInt(reader.ReadMapInt()),
-                Win          = reader.ReadUInt(),
-                Font         = reader.ReadUInt(),
-                LfTime       = reader.ReadUInt(),
-                Bkg          = reader.ReadUInt(),
-                Anim         = reader.ReadUInt(),
-                ScrnMsg      = reader.ReadAscfString(),
-                GfxScrnMsg   = reader.ReadAscfString(),
-                GfxScrnParam = reader.ReadAscfString(),
-                Type         = reader.ReadAscfString()
+                Id           = id,
+                Unk0         = unk0,
+                Message      = message,
+                Group        = group,
+                Color        = color,
+                SoundIndex   = soundIdx,
+                Sound        = ResolveMapInt(soundIdx),
+                VoiceIndex   = voiceIdx,
+                Voice        = ResolveMapInt(voiceIdx),
+                Win          = win,
+                Font         = font,
+                LfTime       = lfTime,
+                Bkg          = bkg,
+                Anim         = anim,
+                ScrnMsg      = scrnMsg,
+                GfxScrnMsg   = gfxScrnMsg,
+                GfxScrnParam = gfxScrnParam,
+                Type         = type
             });
         }
 
