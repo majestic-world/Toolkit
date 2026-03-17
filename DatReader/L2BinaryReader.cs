@@ -194,6 +194,19 @@ public sealed class L2BinaryReader
         return $"{a:X2}{r:X2}{g:X2}{b:X2}";
     }
 
+    /// <summary>
+    /// Reads an RGB_TEST compound: R (RGBA, 4 bytes) + R1 (RGBA, 4 bytes) + B (FLOAT, 4 bytes) = 12 bytes.
+    /// </summary>
+    public RgbTest ReadRgbTest()
+    {
+        return new RgbTest
+        {
+            R  = ReadRgba(),
+            R1 = ReadRgba(),
+            B  = ReadFloat()
+        };
+    }
+
     public void Skip(int bytes)
     {
         _position += bytes;

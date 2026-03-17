@@ -77,7 +77,9 @@ public partial class AppSettingsControl : UserControl
         "Armorgrp",
         "Weapongrp",
         "EtcItemgrp",
-        "SystemMsg"
+        "SystemMsg",
+        "WeaponEnchantEffect",
+        "FullArmorEnchantEffect"
     ];
 
     private async Task TestDatFileAsync()
@@ -229,6 +231,17 @@ public partial class AppSettingsControl : UserControl
             var datFile = new L2DatFile(nameTable);
             var msgs = await Task.Run(() => datFile.ParseSystemMsg(decrypted));
             await File.WriteAllTextAsync(outputPath, L2DatFile.ToTextFormat(msgs));
+        }
+        else if (fileNameLower.Contains("weaponenchanteffect"))
+        {
+            var datFile = new L2DatFile(nameTable);
+            var effects = await Task.Run(() => datFile.ParseWeaponEnchantEffectData(decrypted));
+            await File.WriteAllTextAsync(outputPath, L2DatFile.ToTextFormat(effects));
+        }
+        else if (fileNameLower.Contains("fullarmorenchanteffect"))
+        {
+            var effects = await Task.Run(() => L2DatFile.ParseFullArmorEnchantEffectData(decrypted));
+            await File.WriteAllTextAsync(outputPath, L2DatFile.ToTextFormat(effects));
         }
         else
         {

@@ -538,12 +538,7 @@ public sealed class L2DatFile
             WriteAscf(ms, item.Message);
             WriteUInt32(ms, item.Group);
 
-            // RGBA: 4 bytes from AARRGGBB hex string
-            var c = item.Color.PadLeft(8, '0');
-            ms.WriteByte(Convert.ToByte(c[0..2], 16)); // A
-            ms.WriteByte(Convert.ToByte(c[2..4], 16)); // R
-            ms.WriteByte(Convert.ToByte(c[4..6], 16)); // G
-            ms.WriteByte(Convert.ToByte(c[6..8], 16)); // B
+            WriteRgba(ms, item.Color);
 
             WriteInt32(ms, item.SoundIndex); // MAP_INT raw index
             WriteInt32(ms, item.VoiceIndex); // MAP_INT raw index
@@ -615,6 +610,29 @@ public sealed class L2DatFile
     /// Byte 0: bit7=sign, bit6=continuation, bits5-0=value[5:0].
     /// Subsequent bytes: bit7=continuation, bits6-0=value[N:N-6].
     /// </summary>
+    private static void WriteFloat(MemoryStream ms, float value)
+    {
+        Span<byte> buf = stackalloc byte[4];
+        BinaryPrimitives.WriteSingleLittleEndian(buf, value);
+        ms.Write(buf);
+    }
+
+    private static void WriteRgba(MemoryStream ms, string rgba)
+    {
+        var c = rgba.PadLeft(8, '0');
+        ms.WriteByte(Convert.ToByte(c[0..2], 16)); // A
+        ms.WriteByte(Convert.ToByte(c[2..4], 16)); // R
+        ms.WriteByte(Convert.ToByte(c[4..6], 16)); // G
+        ms.WriteByte(Convert.ToByte(c[6..8], 16)); // B
+    }
+
+    private static void WriteRgbTest(MemoryStream ms, RgbTest rgb)
+    {
+        WriteRgba(ms, rgb.R);
+        WriteRgba(ms, rgb.R1);
+        WriteFloat(ms, rgb.B);
+    }
+
     private static void WriteCompactInt(MemoryStream ms, int value)
     {
         bool negative = value < 0;
@@ -1370,5 +1388,337 @@ public sealed class L2DatFile
                 $"{{[{e.Effect}];{{{e.OffsetX:0.0###};{e.OffsetY:0.0###};{e.OffsetZ:0.0###}}};{{{e.MeshOffsetX:0.0###};{e.MeshOffsetY:0.0###};{e.MeshOffsetZ:0.0###}}};{{{e.MeshScaleX:0.0###};{e.MeshScaleY:0.0###};{e.MeshScaleZ:0.0###}}};{e.Velocity:0.0###};{e.ParticleScale:0.0###};{e.EffectScale:0.0###};{{{e.ParticleOffsetX:0.0###};{e.ParticleOffsetY:0.0###};{e.ParticleOffsetZ:0.0###}}};{{{e.RingOffsetX:0.0###};{e.RingOffsetY:0.0###};{e.RingOffsetZ:0.0###}}};{{{e.RingScaleX:0.0###};{e.RingScaleY:0.0###};{e.RingScaleZ:0.0###}}}}}"));
         }
         sb.Append('}');
+    }
+
+    // ── WeaponEnchantEffectData Parser/Serializer (Helios) ────────────────
+
+    /// <summary>
+    /// Parses WeaponEnchantEffectData records from a decrypted .dat binary buffer.
+    /// Uses the Helios structure. isSafePackage="true".
+    /// </summary>
+    public List<DatWeaponEnchantEffect> ParseWeaponEnchantEffectData(byte[] decryptedData)
+    {
+        var reader = new L2BinaryReader(decryptedData);
+        var count  = (int)reader.ReadUInt();
+        var items  = new List<DatWeaponEnchantEffect>(count);
+
+        for (int i = 0; i < count; i++)
+        {
+            var type  = reader.ReadRgba();
+            var grade = reader.ReadAscfString();
+
+            // radiance_effect_name: UINT count + MAP_INT[] array
+            var radianceNameCount = (int)reader.ReadUInt();
+            var radianceNameIdx   = new int[radianceNameCount];
+            var radianceNames     = new string[radianceNameCount];
+            for (int j = 0; j < radianceNameCount; j++)
+            {
+                radianceNameIdx[j] = reader.ReadMapInt();
+                radianceNames[j]   = ResolveMapInt(radianceNameIdx[j]);
+            }
+
+            // radiance_effect_show_value: UINT count + UINT[] array
+            var radianceShowCount  = (int)reader.ReadUInt();
+            var radianceShowValues = new uint[radianceShowCount];
+            for (int j = 0; j < radianceShowCount; j++)
+                radianceShowValues[j] = reader.ReadUInt();
+
+            // radiance_effect_RGB_opacity_e1..e20: 20 × RGB_TEST
+            var radianceRgb = new RgbTest[20];
+            for (int j = 0; j < 20; j++)
+                radianceRgb[j] = reader.ReadRgbTest();
+
+            // sword_flow_effect_show_value: UINT
+            var swordFlowShowValue = reader.ReadUInt();
+
+            // sword_flow_effect_max_particle_e1..e20: 20 × FLOAT
+            var swordFlowParticle = new float[20];
+            for (int j = 0; j < 20; j++)
+                swordFlowParticle[j] = reader.ReadFloat();
+
+            // particle_effect_name: UINT count + MAP_INT[] array
+            var particleNameCount = (int)reader.ReadUInt();
+            var particleNameIdx   = new int[particleNameCount];
+            var particleNames     = new string[particleNameCount];
+            for (int j = 0; j < particleNameCount; j++)
+            {
+                particleNameIdx[j] = reader.ReadMapInt();
+                particleNames[j]   = ResolveMapInt(particleNameIdx[j]);
+            }
+
+            // particle_effect_show_value: UINT count + UINT[] array
+            var particleShowCount  = (int)reader.ReadUInt();
+            var particleShowValues = new uint[particleShowCount];
+            for (int j = 0; j < particleShowCount; j++)
+                particleShowValues[j] = reader.ReadUInt();
+
+            // ring_effect_name: UINT count + MAP_INT[] array
+            var ringNameCount = (int)reader.ReadUInt();
+            var ringNameIdx   = new int[ringNameCount];
+            var ringNames     = new string[ringNameCount];
+            for (int j = 0; j < ringNameCount; j++)
+            {
+                ringNameIdx[j] = reader.ReadMapInt();
+                ringNames[j]   = ResolveMapInt(ringNameIdx[j]);
+            }
+
+            // ring_effect_show_value: UINT count + UINT[] array
+            var ringShowCount  = (int)reader.ReadUInt();
+            var ringShowValues = new uint[ringShowCount];
+            for (int j = 0; j < ringShowCount; j++)
+                ringShowValues[j] = reader.ReadUInt();
+
+            // ring_effect_RGB_e1..e20: 20 × RGB_TEST
+            var ringRgb = new RgbTest[20];
+            for (int j = 0; j < 20; j++)
+                ringRgb[j] = reader.ReadRgbTest();
+
+            items.Add(new DatWeaponEnchantEffect
+            {
+                Type                 = type,
+                Grade                = grade,
+                RadianceNameIndices  = radianceNameIdx,
+                RadianceNames        = radianceNames,
+                RadianceShowValues   = radianceShowValues,
+                RadianceRgb          = radianceRgb,
+                SwordFlowShowValue   = swordFlowShowValue,
+                SwordFlowMaxParticle = swordFlowParticle,
+                ParticleNameIndices  = particleNameIdx,
+                ParticleNames        = particleNames,
+                ParticleShowValues   = particleShowValues,
+                RingNameIndices      = ringNameIdx,
+                RingNames            = ringNames,
+                RingShowValues       = ringShowValues,
+                RingRgb              = ringRgb
+            });
+        }
+
+        return items;
+    }
+
+    /// <summary>
+    /// Serializes WeaponEnchantEffectData records back to the Helios binary format.
+    /// Mirrors ParseWeaponEnchantEffectData exactly. Appends SafePackage footer.
+    /// </summary>
+    public static byte[] SerializeWeaponEnchantEffectData(List<DatWeaponEnchantEffect> items)
+    {
+        using var ms = new MemoryStream();
+        WriteUInt32(ms, (uint)items.Count);
+
+        foreach (var item in items)
+        {
+            WriteRgba(ms, item.Type);
+            WriteAscf(ms, item.Grade);
+
+            // radiance_effect_name
+            WriteUInt32(ms, (uint)item.RadianceNameIndices.Length);
+            foreach (var idx in item.RadianceNameIndices)
+                WriteInt32(ms, idx);
+
+            // radiance_effect_show_value
+            WriteUInt32(ms, (uint)item.RadianceShowValues.Length);
+            foreach (var v in item.RadianceShowValues)
+                WriteUInt32(ms, v);
+
+            // 20 × RGB_TEST
+            foreach (var rgb in item.RadianceRgb)
+                WriteRgbTest(ms, rgb);
+
+            WriteUInt32(ms, item.SwordFlowShowValue);
+
+            // 20 × FLOAT
+            foreach (var f in item.SwordFlowMaxParticle)
+                WriteFloat(ms, f);
+
+            // particle_effect_name
+            WriteUInt32(ms, (uint)item.ParticleNameIndices.Length);
+            foreach (var idx in item.ParticleNameIndices)
+                WriteInt32(ms, idx);
+
+            // particle_effect_show_value
+            WriteUInt32(ms, (uint)item.ParticleShowValues.Length);
+            foreach (var v in item.ParticleShowValues)
+                WriteUInt32(ms, v);
+
+            // ring_effect_name
+            WriteUInt32(ms, (uint)item.RingNameIndices.Length);
+            foreach (var idx in item.RingNameIndices)
+                WriteInt32(ms, idx);
+
+            // ring_effect_show_value
+            WriteUInt32(ms, (uint)item.RingShowValues.Length);
+            foreach (var v in item.RingShowValues)
+                WriteUInt32(ms, v);
+
+            // 20 × RGB_TEST
+            foreach (var rgb in item.RingRgb)
+                WriteRgbTest(ms, rgb);
+        }
+
+        // SafePackage footer — required for isSafePackage="true" .dat files.
+        ms.Write(new byte[] { 12, 83, 97, 102, 101, 80, 97, 99, 107, 97, 103, 101, 0 });
+        return ms.ToArray();
+    }
+
+    public static string ToTextFormat(List<DatWeaponEnchantEffect> items)
+    {
+        var sb = new StringBuilder();
+        foreach (var item in items)
+        {
+            sb.Append("weapon_enchant_effect_data_begin");
+            sb.Append($"\ttype={item.Type}");
+            sb.Append($"\tgrade=[{item.Grade}]");
+
+            sb.Append("\tradiance_effect_name={");
+            for (int i = 0; i < item.RadianceNames.Length; i++)
+            {
+                if (i > 0) sb.Append(';');
+                sb.Append($"[{item.RadianceNames[i]}]");
+            }
+            sb.Append('}');
+
+            sb.Append("\tradiance_effect_show_value={");
+            sb.Append(string.Join(";", item.RadianceShowValues));
+            sb.Append('}');
+
+            // 20 individual fields: radiance_effect_RGB_opacity_e1 .. e20
+            for (int i = 0; i < item.RadianceRgb.Length; i++)
+            {
+                var r = item.RadianceRgb[i];
+                sb.Append(string.Create(CultureInfo.InvariantCulture,
+                    $"\tradiance_effect_RGB_opacity_e{i + 1}={{{r.R};{r.R1};{r.B:0.0###}}}"));
+            }
+
+            sb.Append($"\tsword_flow_effect_show_value={item.SwordFlowShowValue}");
+
+            // 20 individual fields: sword_flow_effect_max_particle_e1 .. e20
+            for (int i = 0; i < item.SwordFlowMaxParticle.Length; i++)
+                sb.Append(string.Create(CultureInfo.InvariantCulture,
+                    $"\tsword_flow_effect_max_particle_e{i + 1}={item.SwordFlowMaxParticle[i]:0.0###}"));
+
+            sb.Append("\tparticle_effect_name={");
+            for (int i = 0; i < item.ParticleNames.Length; i++)
+            {
+                if (i > 0) sb.Append(';');
+                sb.Append($"[{item.ParticleNames[i]}]");
+            }
+            sb.Append('}');
+
+            sb.Append("\tparticle_effect_show_value={");
+            sb.Append(string.Join(";", item.ParticleShowValues));
+            sb.Append('}');
+
+            sb.Append("\tring_effect_name={");
+            for (int i = 0; i < item.RingNames.Length; i++)
+            {
+                if (i > 0) sb.Append(';');
+                sb.Append($"[{item.RingNames[i]}]");
+            }
+            sb.Append('}');
+
+            sb.Append("\tring_effect_show_value={");
+            sb.Append(string.Join(";", item.RingShowValues));
+            sb.Append('}');
+
+            // 20 individual fields: ring_effect_RGB_e1 .. e20
+            for (int i = 0; i < item.RingRgb.Length; i++)
+            {
+                var r = item.RingRgb[i];
+                sb.Append(string.Create(CultureInfo.InvariantCulture,
+                    $"\tring_effect_RGB_e{i + 1}={{{r.R};{r.R1};{r.B:0.0###}}}"));
+            }
+
+            sb.Append("\tweapon_enchant_effect_data_end");
+            sb.AppendLine();
+        }
+        return sb.ToString().TrimEnd();
+    }
+
+    // ── FullArmorEnchantEffectData Parser/Serializer (Valiance) ──────────
+
+    /// <summary>
+    /// Parses FullArmorEnchantEffectData records from a decrypted .dat binary buffer.
+    /// Uses the Valiance structure. isSafePackage="true".
+    /// </summary>
+    public static List<DatFullArmorEnchantEffect> ParseFullArmorEnchantEffectData(byte[] decryptedData)
+    {
+        var reader = new L2BinaryReader(decryptedData);
+        var count  = (int)reader.ReadUInt();
+        var items  = new List<DatFullArmorEnchantEffect>(count);
+
+        for (int i = 0; i < count; i++)
+        {
+            items.Add(new DatFullArmorEnchantEffect
+            {
+                EffectType    = reader.ReadUInt(),
+                Unk           = reader.ReadUInt(),
+                MinEnchantNum = reader.ReadUInt(),
+                NoiseScale    = reader.ReadFloat(),
+                NoisePanSpeed = reader.ReadFloat(),
+                NoiseRate     = reader.ReadFloat(),
+                ExtrudeScale  = reader.ReadFloat(),
+                EdgePeak      = reader.ReadFloat(),
+                EdgeSharp     = reader.ReadFloat(),
+                MinColor      = reader.ReadRgba(),
+                MaxColor      = reader.ReadRgba(),
+                ShowType      = reader.ReadUInt()
+            });
+        }
+
+        return items;
+    }
+
+    /// <summary>
+    /// Serializes FullArmorEnchantEffectData records back to the Valiance binary format.
+    /// Mirrors ParseFullArmorEnchantEffectData exactly. Appends SafePackage footer.
+    /// </summary>
+    public static byte[] SerializeFullArmorEnchantEffectData(List<DatFullArmorEnchantEffect> items)
+    {
+        using var ms = new MemoryStream();
+        WriteUInt32(ms, (uint)items.Count);
+
+        foreach (var item in items)
+        {
+            WriteUInt32(ms, item.EffectType);
+            WriteUInt32(ms, item.Unk);
+            WriteUInt32(ms, item.MinEnchantNum);
+            WriteFloat(ms,  item.NoiseScale);
+            WriteFloat(ms,  item.NoisePanSpeed);
+            WriteFloat(ms,  item.NoiseRate);
+            WriteFloat(ms,  item.ExtrudeScale);
+            WriteFloat(ms,  item.EdgePeak);
+            WriteFloat(ms,  item.EdgeSharp);
+            WriteRgba(ms,   item.MinColor);
+            WriteRgba(ms,   item.MaxColor);
+            WriteUInt32(ms, item.ShowType);
+        }
+
+        // SafePackage footer — required for isSafePackage="true" .dat files.
+        ms.Write(new byte[] { 12, 83, 97, 102, 101, 80, 97, 99, 107, 97, 103, 101, 0 });
+        return ms.ToArray();
+    }
+
+    public static string ToTextFormat(List<DatFullArmorEnchantEffect> items)
+    {
+        var sb = new StringBuilder();
+        foreach (var item in items)
+        {
+            sb.Append("full_armor_enchant_effect_data_begin");
+            sb.Append($"\teffect_type={item.EffectType}");
+            sb.Append($"\tunk={item.Unk}");
+            sb.Append($"\tmin_enchant_num={item.MinEnchantNum}");
+            sb.Append(string.Create(CultureInfo.InvariantCulture, $"\tnoise_scale={item.NoiseScale:0.0###}"));
+            sb.Append(string.Create(CultureInfo.InvariantCulture, $"\tnoise_pan_speed={item.NoisePanSpeed:0.0###}"));
+            sb.Append(string.Create(CultureInfo.InvariantCulture, $"\tnoise_rate={item.NoiseRate:0.0###}"));
+            sb.Append(string.Create(CultureInfo.InvariantCulture, $"\textrude_scale={item.ExtrudeScale:0.0###}"));
+            sb.Append(string.Create(CultureInfo.InvariantCulture, $"\tedge_peak={item.EdgePeak:0.0###}"));
+            sb.Append(string.Create(CultureInfo.InvariantCulture, $"\tedge_sharp={item.EdgeSharp:0.0###}"));
+            sb.Append($"\tmin_color={item.MinColor}");
+            sb.Append($"\tmax_color={item.MaxColor}");
+            sb.Append($"\tshow_type={item.ShowType}");
+            sb.Append("\tfull_armor_enchant_effect_data_end");
+            sb.AppendLine();
+        }
+        return sb.ToString().TrimEnd();
     }
 }
