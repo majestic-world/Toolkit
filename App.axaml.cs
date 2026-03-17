@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using L2Toolkit.Utilities;
 using System.Text;
 
 namespace L2Toolkit
@@ -15,6 +16,8 @@ namespace L2Toolkit
 
         public override void OnFrameworkInitializationCompleted()
         {
+            TableManager.EnsureTables();
+
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 desktop.MainWindow = new MainWindow();

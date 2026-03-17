@@ -28,8 +28,6 @@ public partial class SkinBuilder : UserControl
     private readonly ConcurrentDictionary<string, string> _itemsName = new();
     private readonly ConcurrentDictionary<string, CompleteStatusItems> _itemsStatus = new();
 
-    /// <summary>Cache of unpacked .l2dat embedded resources (table name → text content).</summary>
-    private readonly ConcurrentDictionary<string, string> _tableCache = new();
 
     private sealed record Preset(string Name, string Category, string Ids);
     private List<Preset> _allPresets = [];
@@ -89,23 +87,7 @@ public partial class SkinBuilder : UserControl
         ProcessClientId.Text = _currentPresets[idx].Ids;
     }
 
-    /// <summary>
-    /// Loads an embedded .l2dat table by name, caching the result.
-    /// </summary>
-    private string LoadTable(string tableName)
-    {
-        return _tableCache.GetOrAdd(tableName, name =>
-        {
-            var assembly = Assembly.GetExecutingAssembly();
-            var resourceName = $"L2Toolkit.Tables.{name}.l2dat";
-            using var stream = assembly.GetManifestResourceStream(resourceName)
-                ?? throw new FileNotFoundException($"Recurso embutido não encontrado: {resourceName}");
-            using var ms = new MemoryStream();
-            stream.CopyTo(ms);
-            var (_, content) = L2Pack.Unpack(ms.ToArray());
-            return content;
-        });
-    }
+    private static string LoadTable(string tableName) => TableManager.LoadTable(tableName);
 
     private void ShowNotification(string message)
     {

@@ -32,7 +32,7 @@ dotnet publish -c Release  # Release build
 | `ProcessData/` | Data transformation logic (game formats → XML/text) |
 | `DatReader/` | Binary `.dat` file parsing and `.l2dat` compression (see below) |
 | `Tables/` | Embedded `.l2dat` resources — pre-compressed game data shipped with the app |
-| `Utilities/` | `GlobalLogs`, `Parser`, `MaterialType` |
+| `Utilities/` | `GlobalLogs`, `Parser`, `MaterialType`, `TableManager` |
 | `database/` | `AppDatabase` singleton — key-value settings persisted to `%APPDATA%/L2Toolkit/settings.properties` |
 
 ### Logging
@@ -87,12 +87,32 @@ L2Pack.Pack("input.txt", "output.l2dat");
 // Unpack .l2dat back to text
 var (fileName, content) = L2Pack.Unpack("file.l2dat");
 
-// Read embedded .l2dat resource
-var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("L2Toolkit.Tables.Skillgrp.l2dat");
+// Load a table (disk-first, falls back to embedded resource)
+var content = TableManager.LoadTable("Skillgrp");
 ```
 
-### Embedded Tables
-The `Tables/` folder contains 7 `.l2dat` files registered as `<EmbeddedResource>` in `.csproj`. The `LiveData` page reads these via `Assembly.GetManifestResourceStream()` with a `ConcurrentDictionary` cache — no disk I/O needed. Resource names follow: `L2Toolkit.Tables.{Name}.l2dat`.
+### Embedded Tables & TableManager
+
+The `Tables/` folder contains 8 `.l2dat` files registered as `<EmbeddedResource>` in `.csproj`. At startup (`App.axaml.cs → OnFrameworkInitializationCompleted`), `TableManager.EnsureTables()` copies any missing table to `exePath/tables/` on disk. Pages load tables via `TableManager.LoadTable(name)`, which:
+
+1. Reads from `exePath/tables/{name}.l2dat` if the file exists (user-replaceable)
+2. Falls back to the embedded resource if the file is absent
+3. Caches the result in a shared `ConcurrentDictionary`
+
+This allows users to replace tables without recompiling — drop a new `.l2dat` into `exePath/tables/` and restart. Deleting a file from the folder restores it from the embedded copy on next launch.
+
+```csharp
+// Load a table in any page
+var content = TableManager.LoadTable("Skillgrp");
+
+// Force reload after replacing a file on disk
+TableManager.InvalidateCache();
+
+// Tables folder path
+var folder = TableManager.TablesFolder; // exePath/tables/
+```
+
+Resource names follow: `L2Toolkit.Tables.{Name}.l2dat`.
 
 ### Test DAT & L2DAT Converter
 Located in `pages/AppSettingsControl.xaml.cs`. **Test DAT** reads `.dat` files from a system folder, auto-discovers supported types, loads name table first, then processes all files to `.txt`. **L2DAT Converter** compresses `.txt` files to `.l2dat` with round-trip byte-by-byte verification.
