@@ -12,6 +12,7 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.Styling;
+using L2Toolkit.DatReader;
 using MsBox.Avalonia;
 
 namespace L2Toolkit.pages;
@@ -71,15 +72,21 @@ public partial class EnchantEffect : UserControl
         public int    ShowType      { get; set; } = 1;
     }
 
+    // ─── DB Keys ──────────────────────────────────────────────────────────────
+
+    private const string WeaponLastPathKey = "weaponenchant_last_path";
+    private const string ArmorLastPathKey  = "fullarmorenchant_last_path";
+
     // ─── Weapon State ─────────────────────────────────────────────────────────
 
-    private List<WeaponEnchantEntry> _entries = [];
-    private WeaponEnchantEntry?      _currentEntry;
-    private string                   _loadedFilePath = "";
-    private bool                     _suppressHexUpdate;
-    private bool                     _pickerUpdating;
-    private TextBox?                 _activeHexBox;
-    private bool                     _pickerBuilt;
+    private List<WeaponEnchantEntry>    _entries          = [];
+    private List<DatWeaponEnchantEffect> _datWeaponRecords = [];
+    private WeaponEnchantEntry?          _currentEntry;
+    private string                       _loadedFilePath = "";
+    private bool                         _suppressHexUpdate;
+    private bool                         _pickerUpdating;
+    private TextBox?                     _activeHexBox;
+    private bool                         _pickerBuilt;
 
     // Weapon row control references (indexed 0-19)
     private readonly List<Border>     _radSwatches    = [];
@@ -93,9 +100,10 @@ public partial class EnchantEffect : UserControl
 
     // ─── Armor State ──────────────────────────────────────────────────────────
 
-    private List<ArmorColorEntry>    _armorEntries       = [];
-    private string                   _armorLoadedFilePath = "";
-    private bool                     _armorSuppressHex;
+    private List<ArmorColorEntry>           _armorEntries        = [];
+    private List<DatFullArmorEnchantEffect> _datArmorRecords     = [];
+    private string                          _armorLoadedFilePath = "";
+    private bool                            _armorSuppressHex;
 
     // Armor row control references (indexed per entry)
     private readonly List<Border>     _armorMinSwatches  = [];
@@ -125,6 +133,12 @@ public partial class EnchantEffect : UserControl
     {
         InitializeComponent();
         BuildRows();
+
+        var db = database.AppDatabase.GetInstance();
+        var lastWeapon = db.GetValue(WeaponLastPathKey);
+        if (!string.IsNullOrEmpty(lastWeapon)) FilePath.Text = lastWeapon;
+        var lastArmor = db.GetValue(ArmorLastPathKey);
+        if (!string.IsNullOrEmpty(lastArmor)) ArmorFilePath.Text = lastArmor;
     }
 
     // ─── Mode toggle ──────────────────────────────────────────────────────────
@@ -149,32 +163,51 @@ public partial class EnchantEffect : UserControl
     // ─── Weapon File I/O ──────────────────────────────────────────────────────
 
     private async void FilePath_OnClick(object? sender, PointerPressedEventArgs e)
-        => await PickAndLoadFile();
+        => await PickWeaponFileAsync();
 
     private async void LoadFile_Click(object? sender, RoutedEventArgs e)
-        => await PickAndLoadFile();
+        => await PickWeaponFileAsync();
 
-    private async Task PickAndLoadFile()
+    private async Task PickWeaponFileAsync()
     {
         var topLevel = TopLevel.GetTopLevel(this);
         var files = await topLevel!.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
-            Title = "Selecionar WeaponEnchantEffect.txt",
+            Title = "Selecionar WeaponEnchantEffectData.dat",
             AllowMultiple = false,
             FileTypeFilter =
             [
-                new FilePickerFileType("Text") { Patterns = ["*.txt"] },
-                new FilePickerFileType("All")  { Patterns = ["*.*"] }
+                new FilePickerFileType("DAT") { Patterns = ["*.dat"] },
+                new FilePickerFileType("All") { Patterns = ["*.*"] }
             ]
         });
         if (files.Count == 0) return;
 
-        _loadedFilePath = files[0].Path.LocalPath;
-        FilePath.Text   = _loadedFilePath;
+        var path = files[0].Path.LocalPath;
+        database.AppDatabase.GetInstance().UpdateValue(WeaponLastPathKey, path);
+        await LoadWeaponFromPathAsync(path);
+    }
+
+    private async Task LoadWeaponFromPathAsync(string path)
+    {
+        if (string.IsNullOrEmpty(path) || !File.Exists(path))
+        {
+            await MessageBoxManager.GetMessageBoxStandard("Erro", "Arquivo não encontrado.").ShowWindowAsync();
+            return;
+        }
 
         try
         {
-            _entries = ParseFile(_loadedFilePath);
+            var folder    = Path.GetDirectoryName(path) ?? "";
+            var decrypted = await Task.Run(() => DatCrypto.DecryptFile(path));
+
+            var ntPath  = Path.Combine(folder, "L2GameDataName.dat");
+            var datFile = File.Exists(ntPath) ? new L2DatFile(ntPath) : new L2DatFile();
+            _datWeaponRecords = await Task.Run(() => datFile.ParseWeaponEnchantEffectData(decrypted));
+            _entries          = MapWeaponDatToEntries(_datWeaponRecords);
+            _loadedFilePath   = path;
+            FilePath.Text     = path;
+
             PopulateSelectors();
             SelectorPanel.IsVisible = true;
             SaveButton.IsVisible    = true;
@@ -187,16 +220,16 @@ public partial class EnchantEffect : UserControl
 
     private async void SaveFile_Click(object? sender, RoutedEventArgs e)
     {
+        if (string.IsNullOrEmpty(_loadedFilePath)) return;
         try
         {
-            var content = SerializeEntries(_entries);
-            await File.WriteAllTextAsync(_loadedFilePath, content, new UTF8Encoding(true));
-
-            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-            {
-                FileName        = _loadedFilePath,
-                UseShellExecute = true
-            });
+            SyncWeaponUiToDat();
+            var backup = _loadedFilePath + ".bak";
+            File.Copy(_loadedFilePath, backup, overwrite: true);
+            var binary    = L2DatFile.SerializeWeaponEnchantEffectData(_datWeaponRecords);
+            var encrypted = DatCrypto.EncryptFile(binary);
+            await File.WriteAllBytesAsync(_loadedFilePath, encrypted);
+            ShowSuccessToast("Arquivo salvo com sucesso. Backup: .dat.bak");
         }
         catch (Exception ex)
         {
@@ -207,32 +240,47 @@ public partial class EnchantEffect : UserControl
     // ─── Armor File I/O ───────────────────────────────────────────────────────
 
     private async void ArmorFilePath_OnClick(object? sender, PointerPressedEventArgs e)
-        => await PickAndLoadArmorFile();
+        => await PickArmorFileAsync();
 
     private async void ArmorLoadFile_Click(object? sender, RoutedEventArgs e)
-        => await PickAndLoadArmorFile();
+        => await PickArmorFileAsync();
 
-    private async Task PickAndLoadArmorFile()
+    private async Task PickArmorFileAsync()
     {
         var topLevel = TopLevel.GetTopLevel(this);
         var files = await topLevel!.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
-            Title = "Selecionar FullArmorEnchantEffectData.txt",
+            Title = "Selecionar FullArmorEnchantEffectData.dat",
             AllowMultiple = false,
             FileTypeFilter =
             [
-                new FilePickerFileType("Text") { Patterns = ["*.txt"] },
-                new FilePickerFileType("All")  { Patterns = ["*.*"] }
+                new FilePickerFileType("DAT") { Patterns = ["*.dat"] },
+                new FilePickerFileType("All") { Patterns = ["*.*"] }
             ]
         });
         if (files.Count == 0) return;
 
-        _armorLoadedFilePath = files[0].Path.LocalPath;
-        ArmorFilePath.Text   = _armorLoadedFilePath;
+        var path = files[0].Path.LocalPath;
+        database.AppDatabase.GetInstance().UpdateValue(ArmorLastPathKey, path);
+        await LoadArmorFromPathAsync(path);
+    }
+
+    private async Task LoadArmorFromPathAsync(string path)
+    {
+        if (string.IsNullOrEmpty(path) || !File.Exists(path))
+        {
+            await MessageBoxManager.GetMessageBoxStandard("Erro", "Arquivo não encontrado.").ShowWindowAsync();
+            return;
+        }
 
         try
         {
-            _armorEntries = ParseArmorFile(_armorLoadedFilePath);
+            var decrypted     = await Task.Run(() => DatCrypto.DecryptFile(path));
+            _datArmorRecords  = await Task.Run(() => L2DatFile.ParseFullArmorEnchantEffectData(decrypted));
+            _armorEntries     = _datArmorRecords.Select(MapArmorDat).ToList();
+            _armorLoadedFilePath = path;
+            ArmorFilePath.Text   = path;
+
             BuildArmorRows();
             LoadArmorEntriesIntoRows();
             RefreshArmorPreview();
@@ -246,20 +294,114 @@ public partial class EnchantEffect : UserControl
 
     private async void ArmorSaveFile_Click(object? sender, RoutedEventArgs e)
     {
+        if (string.IsNullOrEmpty(_armorLoadedFilePath)) return;
         try
         {
-            var content = SerializeArmorEntries(_armorEntries);
-            await File.WriteAllTextAsync(_armorLoadedFilePath, content, new UTF8Encoding(true));
-
-            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-            {
-                FileName        = _armorLoadedFilePath,
-                UseShellExecute = true
-            });
+            SyncArmorUiToDat();
+            var backup = _armorLoadedFilePath + ".bak";
+            File.Copy(_armorLoadedFilePath, backup, overwrite: true);
+            var binary    = L2DatFile.SerializeFullArmorEnchantEffectData(_datArmorRecords);
+            var encrypted = DatCrypto.EncryptFile(binary);
+            await File.WriteAllBytesAsync(_armorLoadedFilePath, encrypted);
+            ShowSuccessToast("Arquivo salvo com sucesso. Backup: .dat.bak");
         }
         catch (Exception ex)
         {
             await MessageBoxManager.GetMessageBoxStandard("Erro ao salvar", ex.Message).ShowWindowAsync();
+        }
+    }
+
+    // ─── DAT → UI Mapping ─────────────────────────────────────────────────────
+
+    private static List<WeaponEnchantEntry> MapWeaponDatToEntries(List<DatWeaponEnchantEffect> recs)
+    {
+        var result = new List<WeaponEnchantEntry>();
+        foreach (var r in recs)
+        {
+            var entry = new WeaponEnchantEntry
+            {
+                Type  = r.Type,
+                Grade = "[" + r.Grade + "]"
+            };
+            for (int i = 0; i < 20; i++)
+            {
+                var rad  = r.RadianceRgb[i];
+                var ring = r.RingRgb[i];
+
+                entry.Levels[i].Radiance.Primary   = rad.R.Length  >= 6 ? rad.R[..6]  : "000000";
+                entry.Levels[i].Radiance.Secondary = rad.R1.Length >= 6 ? rad.R1[..6] : "000000";
+                entry.Levels[i].Radiance.Opacity   = rad.B.ToString("0.0##", System.Globalization.CultureInfo.InvariantCulture);
+
+                entry.Levels[i].Ring.Primary   = ring.R.Length  >= 6 ? ring.R[..6]  : "000000";
+                entry.Levels[i].Ring.Secondary = ring.R1.Length >= 6 ? ring.R1[..6] : "000000";
+                entry.Levels[i].Ring.Opacity   = ring.B.ToString("0.0##", System.Globalization.CultureInfo.InvariantCulture);
+
+                entry.Levels[i].Particle = r.SwordFlowMaxParticle[i].ToString("0.0##", System.Globalization.CultureInfo.InvariantCulture);
+            }
+            result.Add(entry);
+        }
+        return result;
+    }
+
+    private static ArmorColorEntry MapArmorDat(DatFullArmorEnchantEffect r) => new()
+    {
+        EffectType    = (int)r.EffectType,
+        Unk           = (int)r.Unk,
+        MinEnchantNum = (int)r.MinEnchantNum,
+        NoiseScale    = r.NoiseScale.ToString("0.0##", System.Globalization.CultureInfo.InvariantCulture),
+        NoisePanSpeed = r.NoisePanSpeed.ToString("0.0##", System.Globalization.CultureInfo.InvariantCulture),
+        NoiseRate     = r.NoiseRate.ToString("0.0##", System.Globalization.CultureInfo.InvariantCulture),
+        ExtrudeScale  = r.ExtrudeScale.ToString("0.0##", System.Globalization.CultureInfo.InvariantCulture),
+        EdgePeak      = r.EdgePeak.ToString("0.0##", System.Globalization.CultureInfo.InvariantCulture),
+        EdgeSharp     = r.EdgeSharp.ToString("0.0##", System.Globalization.CultureInfo.InvariantCulture),
+        MinColorRgb   = r.MinColor.Length >= 6 ? r.MinColor[..6].ToUpper() : "000000",
+        MinColorAlpha = r.MinColor.Length >= 8 ? r.MinColor[6..8].ToUpper() : "FF",
+        MaxColorRgb   = r.MaxColor.Length >= 6 ? r.MaxColor[..6].ToUpper() : "000000",
+        MaxColorAlpha = r.MaxColor.Length >= 8 ? r.MaxColor[6..8].ToUpper() : "FF",
+        ShowType      = (int)r.ShowType
+    };
+
+    // ─── UI → DAT Sync ────────────────────────────────────────────────────────
+
+    private void SyncWeaponUiToDat()
+    {
+        for (int recIdx = 0; recIdx < _datWeaponRecords.Count && recIdx < _entries.Count; recIdx++)
+        {
+            var entry = _entries[recIdx];
+            var dat   = _datWeaponRecords[recIdx];
+            for (int i = 0; i < 20; i++)
+            {
+                var rad  = dat.RadianceRgb[i];
+                var ring = dat.RingRgb[i];
+
+                var radAlpha  = rad.R.Length  >= 8 ? rad.R[6..8]  : "00";
+                var rad1Alpha = rad.R1.Length >= 8 ? rad.R1[6..8] : "00";
+                var ringAlpha  = ring.R.Length  >= 8 ? ring.R[6..8]  : "00";
+                var ring1Alpha = ring.R1.Length >= 8 ? ring.R1[6..8] : "00";
+
+                dat.RadianceRgb[i] = new RgbTest
+                {
+                    R  = (entry.Levels[i].Radiance.Primary   + radAlpha).ToUpper(),
+                    R1 = (entry.Levels[i].Radiance.Secondary + rad1Alpha).ToUpper(),
+                    B  = rad.B
+                };
+                dat.RingRgb[i] = new RgbTest
+                {
+                    R  = (entry.Levels[i].Ring.Primary   + ringAlpha).ToUpper(),
+                    R1 = (entry.Levels[i].Ring.Secondary + ring1Alpha).ToUpper(),
+                    B  = ring.B
+                };
+            }
+        }
+    }
+
+    private void SyncArmorUiToDat()
+    {
+        for (int i = 0; i < _datArmorRecords.Count && i < _armorEntries.Count; i++)
+        {
+            var entry = _armorEntries[i];
+            _datArmorRecords[i].MinColor = (entry.MinColorRgb + entry.MinColorAlpha).ToUpper();
+            _datArmorRecords[i].MaxColor = (entry.MaxColorRgb + entry.MaxColorAlpha).ToUpper();
         }
     }
 
@@ -1004,206 +1146,6 @@ public partial class EnchantEffect : UserControl
         SuccessToast.IsVisible = false;
     }
 
-    // ─── Weapon Parser ────────────────────────────────────────────────────────
-
-    private static List<WeaponEnchantEntry> ParseFile(string path)
-    {
-        var entries = new List<WeaponEnchantEntry>();
-        var lines   = File.ReadLines(path);
-
-        foreach (var rawLine in lines)
-        {
-            var line = rawLine.TrimStart('\uFEFF').Trim();
-            if (!line.StartsWith("weapon_enchant_effect_data_begin", StringComparison.Ordinal))
-                continue;
-
-            var lookup = new Dictionary<string, string>(StringComparer.Ordinal);
-            foreach (var field in line.Split('\t'))
-            {
-                var eq = field.IndexOf('=');
-                if (eq < 0) continue;
-                lookup[field[..eq]] = field[(eq + 1)..];
-            }
-
-            var entry = new WeaponEnchantEntry
-            {
-                Type               = lookup.GetValueOrDefault("type",                        "00000000"),
-                Grade              = lookup.GetValueOrDefault("grade",                       "[none]"),
-                RadianceEffectName = lookup.GetValueOrDefault("radiance_effect_name",        ""),
-                RadianceShowValue  = lookup.GetValueOrDefault("radiance_effect_show_value",  "{4}"),
-                SwordFlowShowValue = lookup.GetValueOrDefault("sword_flow_effect_show_value","7"),
-                ParticleEffectName = lookup.GetValueOrDefault("particle_effect_name",        ""),
-                ParticleShowValue  = lookup.GetValueOrDefault("particle_effect_show_value",  "{9999}"),
-                RingEffectName     = lookup.GetValueOrDefault("ring_effect_name",            ""),
-                RingShowValue      = lookup.GetValueOrDefault("ring_effect_show_value",      "{9999}")
-            };
-
-            for (int i = 1; i <= 20; i++)
-            {
-                var level = entry.Levels[i - 1];
-
-                if (lookup.TryGetValue($"radiance_effect_RGB_opacity_e{i}", out var radVal))
-                    ParseSlot(radVal, level.Radiance);
-
-                if (lookup.TryGetValue($"ring_effect_RGB_e{i}", out var ringVal))
-                    ParseSlot(ringVal, level.Ring);
-
-                level.Particle = lookup.GetValueOrDefault($"sword_flow_effect_max_particle_e{i}", "0.1");
-            }
-
-            entries.Add(entry);
-        }
-
-        return entries;
-    }
-
-    private static void ParseSlot(string raw, ColorSlot slot)
-    {
-        raw = raw.Trim('{', '}');
-        var parts = raw.Split(';');
-        slot.Primary   = parts.Length > 0 && parts[0].Length >= 6 ? parts[0][..6] : "000000";
-        slot.Secondary = parts.Length > 1 && parts[1].Length >= 6 ? parts[1][..6] : "000000";
-        slot.Opacity   = parts.Length > 2 ? parts[2] : "1.0";
-    }
-
-    // ─── Armor Parser ─────────────────────────────────────────────────────────
-
-    private static List<ArmorColorEntry> ParseArmorFile(string path)
-    {
-        var entries = new List<ArmorColorEntry>();
-        var lines   = File.ReadLines(path);
-
-        foreach (var rawLine in lines)
-        {
-            var line = rawLine.TrimStart('\uFEFF').Trim();
-            if (!line.StartsWith("full_armor_enchant_effect_data_begin", StringComparison.Ordinal))
-                continue;
-
-            var lookup = new Dictionary<string, string>(StringComparer.Ordinal);
-            foreach (var field in line.Split('\t'))
-            {
-                var eq = field.IndexOf('=');
-                if (eq < 0) continue;
-                lookup[field[..eq]] = field[(eq + 1)..];
-            }
-
-            var entry = new ArmorColorEntry
-            {
-                NoiseScale    = lookup.GetValueOrDefault("noise_scale",     "0.1"),
-                NoisePanSpeed = lookup.GetValueOrDefault("noise_pan_speed", "0.25"),
-                NoiseRate     = lookup.GetValueOrDefault("noise_rate",      "0.5"),
-                ExtrudeScale  = lookup.GetValueOrDefault("extrude_scale",   "0.5"),
-                EdgePeak      = lookup.GetValueOrDefault("edge_peak",       "1.0"),
-                EdgeSharp     = lookup.GetValueOrDefault("edge_sharp",      "0.25"),
-            };
-
-            if (int.TryParse(lookup.GetValueOrDefault("effect_type", "0"), out var et))
-                entry.EffectType = et;
-            if (int.TryParse(lookup.GetValueOrDefault("unk", "1"), out var unk))
-                entry.Unk = unk;
-            if (int.TryParse(lookup.GetValueOrDefault("min_enchant_num", "0"), out var men))
-                entry.MinEnchantNum = men;
-            if (int.TryParse(lookup.GetValueOrDefault("show_type", "1"), out var st))
-                entry.ShowType = st;
-
-            // min_color / max_color are RRGGBBAA (8 hex chars)
-            if (lookup.TryGetValue("min_color", out var minColor) && minColor.Length >= 8)
-            {
-                entry.MinColorRgb   = minColor[..6].ToUpper();
-                entry.MinColorAlpha = minColor[6..8].ToUpper();
-            }
-            if (lookup.TryGetValue("max_color", out var maxColor) && maxColor.Length >= 8)
-            {
-                entry.MaxColorRgb   = maxColor[..6].ToUpper();
-                entry.MaxColorAlpha = maxColor[6..8].ToUpper();
-            }
-
-            entries.Add(entry);
-        }
-
-        return entries;
-    }
-
-    // ─── Weapon Serializer ────────────────────────────────────────────────────
-
-    private static string SerializeEntries(List<WeaponEnchantEntry> entries)
-    {
-        var sb = new StringBuilder();
-        for (int e = 0; e < entries.Count; e++)
-        {
-            if (e > 0) sb.Append('\n');
-            sb.Append(SerializeEntry(entries[e]));
-        }
-        return sb.ToString();
-    }
-
-    private static string SerializeEntry(WeaponEnchantEntry entry)
-    {
-        var sb = new StringBuilder();
-        sb.Append("weapon_enchant_effect_data_begin");
-        sb.Append($"\ttype={entry.Type}");
-        sb.Append($"\tgrade={entry.Grade}");
-        sb.Append($"\tradiance_effect_name={entry.RadianceEffectName}");
-        sb.Append($"\tradiance_effect_show_value={entry.RadianceShowValue}");
-
-        for (int i = 1; i <= 20; i++)
-        {
-            var rad = entry.Levels[i - 1].Radiance;
-            sb.Append($"\tradiance_effect_RGB_opacity_e{i}={{{rad.Primary}00;{rad.Secondary}00;{rad.Opacity}}}");
-        }
-
-        sb.Append($"\tsword_flow_effect_show_value={entry.SwordFlowShowValue}");
-
-        for (int i = 1; i <= 20; i++)
-            sb.Append($"\tsword_flow_effect_max_particle_e{i}={entry.Levels[i - 1].Particle}");
-
-        sb.Append($"\tparticle_effect_name={entry.ParticleEffectName}");
-        sb.Append($"\tparticle_effect_show_value={entry.ParticleShowValue}");
-        sb.Append($"\tring_effect_name={entry.RingEffectName}");
-        sb.Append($"\tring_effect_show_value={entry.RingShowValue}");
-
-        for (int i = 1; i <= 20; i++)
-        {
-            var ring = entry.Levels[i - 1].Ring;
-            sb.Append($"\tring_effect_RGB_e{i}={{{ring.Primary}00;{ring.Secondary}00;{ring.Opacity}}}");
-        }
-
-        sb.Append("\tweapon_enchant_effect_data_end");
-        return sb.ToString();
-    }
-
-    // ─── Armor Serializer ─────────────────────────────────────────────────────
-
-    private static string SerializeArmorEntries(List<ArmorColorEntry> entries)
-    {
-        var sb = new StringBuilder();
-        for (int i = 0; i < entries.Count; i++)
-        {
-            if (i > 0) sb.Append('\n');
-            sb.Append(SerializeArmorEntry(entries[i]));
-        }
-        return sb.ToString();
-    }
-
-    private static string SerializeArmorEntry(ArmorColorEntry entry)
-    {
-        var sb = new StringBuilder();
-        sb.Append("full_armor_enchant_effect_data_begin");
-        sb.Append($"\teffect_type={entry.EffectType}");
-        sb.Append($"\tunk={entry.Unk}");
-        sb.Append($"\tmin_enchant_num={entry.MinEnchantNum}");
-        sb.Append($"\tnoise_scale={entry.NoiseScale}");
-        sb.Append($"\tnoise_pan_speed={entry.NoisePanSpeed}");
-        sb.Append($"\tnoise_rate={entry.NoiseRate}");
-        sb.Append($"\textrude_scale={entry.ExtrudeScale}");
-        sb.Append($"\tedge_peak={entry.EdgePeak}");
-        sb.Append($"\tedge_sharp={entry.EdgeSharp}");
-        sb.Append($"\tmin_color={entry.MinColorRgb}{entry.MinColorAlpha}");
-        sb.Append($"\tmax_color={entry.MaxColorRgb}{entry.MaxColorAlpha}");
-        sb.Append($"\tshow_type={entry.ShowType}");
-        sb.Append("\tfull_armor_enchant_effect_data_end");
-        return sb.ToString();
-    }
 
     // ─── Color helpers ────────────────────────────────────────────────────────
 
