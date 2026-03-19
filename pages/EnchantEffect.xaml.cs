@@ -151,6 +151,8 @@ public partial class EnchantEffect : UserControl
         _isWeaponMode = weaponMode;
         WeaponSection.IsVisible = weaponMode;
         ArmorSection.IsVisible  = !weaponMode;
+        WeaponRowsSection.IsVisible = weaponMode  && ContentPanel.IsVisible;
+        ArmorRowsSection.IsVisible  = !weaponMode && ArmorContentPanel.IsVisible;
 
         if (this.TryFindResource("ModeButtonActive",   out var active)   && active   is ControlTheme activeTheme &&
             this.TryFindResource("ModeButtonInactive", out var inactive) && inactive is ControlTheme inactiveTheme)
@@ -299,6 +301,7 @@ public partial class EnchantEffect : UserControl
             LoadArmorEntriesIntoRows();
             RefreshArmorPreview();
             ArmorContentPanel.IsVisible = true;
+            ArmorRowsSection.IsVisible  = true;
         }
         catch (Exception ex)
         {
@@ -454,7 +457,8 @@ public partial class EnchantEffect : UserControl
         _currentEntry = _entries.FirstOrDefault(en => en.Type == type && en.Grade == grade);
         if (_currentEntry == null) return;
 
-        ContentPanel.IsVisible = true;
+        ContentPanel.IsVisible      = true;
+        WeaponRowsSection.IsVisible = true;
         LoadEntryIntoRows(_currentEntry);
         RefreshPreview();
     }

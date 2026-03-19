@@ -166,8 +166,8 @@
    </UserControl.Styles>
 
    <Grid>
-   <ScrollViewer VerticalScrollBarVisibility="Auto">
-       <StackPanel Margin="30,28,30,40" Spacing="10">
+       <Grid RowDefinitions="Auto,*" Margin="30,28,30,20">
+       <StackPanel Grid.Row="0" Spacing="4">
 
            <!-- Header -->
            <StackPanel Spacing="4">
@@ -196,7 +196,7 @@
            </Border>
 
            <!-- ═══ WEAPON SECTION ═══ -->
-           <StackPanel x:Name="WeaponSection" Spacing="24">
+           <StackPanel x:Name="WeaponSection" Spacing="10">
 
                <!-- File loader -->
                <StackPanel Spacing="8">
@@ -242,7 +242,7 @@
                </Grid>
 
                <!-- Weapon content (hidden until entry selected) -->
-               <StackPanel x:Name="ContentPanel" IsVisible="False" Spacing="20">
+               <StackPanel x:Name="ContentPanel" IsVisible="False" Spacing="10">
 
                    <!-- Gradient preview bar -->
                    <StackPanel Spacing="6">
@@ -297,20 +297,6 @@
                            </Grid>
                        </StackPanel>
                    </Border>
-
-                   <!-- Column headers -->
-                   <Grid ColumnDefinitions="52,8,*,12,*,12,60" Margin="0,0,0,-8">
-                       <TextBlock Grid.Column="2" Text="RADIANCE"
-                                  Foreground="#6B7280" FontSize="10" FontWeight="Bold" LetterSpacing="1"/>
-                       <TextBlock Grid.Column="4" Text="RING"
-                                  Foreground="#6B7280" FontSize="10" FontWeight="Bold" LetterSpacing="1"/>
-                       <TextBlock Grid.Column="6" Text="PART."
-                                  Foreground="#6B7280" FontSize="10" FontWeight="Bold" LetterSpacing="1"
-                                  TextAlignment="Right"/>
-                   </Grid>
-
-                   <!-- Rows panel (populated in code) -->
-                   <StackPanel x:Name="RowsPanel" Spacing="3"/>
 
                </StackPanel>
 
@@ -381,25 +367,49 @@
                        </StackPanel>
                    </Border>
 
-                   <!-- Column headers -->
-                   <Grid ColumnDefinitions="60,8,*,12,*" Margin="0,0,0,-8">
-                       <TextBlock Grid.Column="0" Text="GRAU MIN."
-                                  Foreground="#6B7280" FontSize="10" FontWeight="Bold" LetterSpacing="1"/>
-                       <TextBlock Grid.Column="2" Text="MIN COLOR"
-                                  Foreground="#6B7280" FontSize="10" FontWeight="Bold" LetterSpacing="1"/>
-                       <TextBlock Grid.Column="4" Text="MÁX COLOR"
-                                  Foreground="#6B7280" FontSize="10" FontWeight="Bold" LetterSpacing="1"/>
-                   </Grid>
-
-                   <!-- Armor rows panel (populated in code) -->
-                   <StackPanel x:Name="ArmorRowsPanel" Spacing="3"/>
-
                </StackPanel>
 
            </StackPanel>
 
        </StackPanel>
-   </ScrollViewer>
+
+       <!-- Row 1: Dynamic rows (preenche o espaço restante da janela) -->
+       <Grid Grid.Row="1" Margin="0,8,0,0">
+
+           <!-- Seção de linhas de arma (visível quando entrada carregada) -->
+           <Grid x:Name="WeaponRowsSection" IsVisible="False" RowDefinitions="Auto,*">
+               <Grid Grid.Row="0" ColumnDefinitions="52,8,*,12,*,12,60" Margin="0,0,0,4">
+                   <TextBlock Grid.Column="2" Text="RADIANCE"
+                              Foreground="#6B7280" FontSize="10" FontWeight="Bold" LetterSpacing="1"/>
+                   <TextBlock Grid.Column="4" Text="RING"
+                              Foreground="#6B7280" FontSize="10" FontWeight="Bold" LetterSpacing="1"/>
+                   <TextBlock Grid.Column="6" Text="PART."
+                              Foreground="#6B7280" FontSize="10" FontWeight="Bold" LetterSpacing="1"
+                              TextAlignment="Right"/>
+               </Grid>
+               <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                   <StackPanel x:Name="RowsPanel" Spacing="3"/>
+               </ScrollViewer>
+           </Grid>
+
+           <!-- Seção de linhas de armadura (visível quando arquivo carregado) -->
+           <Grid x:Name="ArmorRowsSection" IsVisible="False" RowDefinitions="Auto,*">
+               <Grid Grid.Row="0" ColumnDefinitions="60,8,*,12,*" Margin="0,0,0,4">
+                   <TextBlock Grid.Column="0" Text="GRAU MIN."
+                              Foreground="#6B7280" FontSize="10" FontWeight="Bold" LetterSpacing="1"/>
+                   <TextBlock Grid.Column="2" Text="MIN COLOR"
+                              Foreground="#6B7280" FontSize="10" FontWeight="Bold" LetterSpacing="1"/>
+                   <TextBlock Grid.Column="4" Text="MÁX COLOR"
+                              Foreground="#6B7280" FontSize="10" FontWeight="Bold" LetterSpacing="1"/>
+               </Grid>
+               <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                   <StackPanel x:Name="ArmorRowsPanel" Spacing="3"/>
+               </ScrollViewer>
+           </Grid>
+
+       </Grid>
+
+       </Grid>
 
    <!-- Success toast notification -->
    <Border x:Name="SuccessToast"
