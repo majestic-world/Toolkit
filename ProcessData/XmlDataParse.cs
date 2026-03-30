@@ -23,8 +23,11 @@ public static class XmlDataParse
             "twohandstaff" => "BIGBLUNT",
             "dualdagger" => "DUALDAGGER",
             "twohandcrossbow" => "CROSSBOW",
+            "crossbow" => "CROSSBOW",
             "dualblunt" => "DUAL",
             "fist" => "NONE",
+            "ancientsword" => "ANCIENTSWORD",
+            "rapier" => "RAPIER",
             _ => type
         };
     }
