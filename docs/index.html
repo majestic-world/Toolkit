@@ -12,115 +12,42 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#4b5563',
-                        secondary: '#6b7280',
-                        accent: '#374151',
                         dark: '#1f2937',
                         'dark-lighter': '#374151'
                     },
                     fontFamily: {
                         'sans': ['Inter', 'system-ui', 'sans-serif'],
-                    },
-                    animation: {
-                        'fade-in': 'fadeIn 0.5s ease-in-out',
-                        'slide-up': 'slideUp 0.6s ease-out',
-                        'float': 'float 6s ease-in-out infinite',
                     }
                 }
             }
         }
     </script>
-    <style>
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        @keyframes slideUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
-        
-        .gradient-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-        
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-        
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        
-        .glass-effect {
-            backdrop-filter: blur(10px);
-            background: rgba(255, 255, 255, 0.9);
-        }
-        
-        .text-gradient {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-    </style>
 </head>
 <body class="bg-gray-50">
+
     <!-- Header -->
-    <header class="glass-effect shadow-2xl sticky top-0 z-50 border-b border-gray-200">
-        <div class="container mx-auto px-6 py-5">
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4">
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-4">
-                    <div class="bg-gradient-to-r from-gray-600 to-gray-700 p-3 rounded-xl shadow-lg">
-                        <i class="fas fa-tools text-2xl text-white"></i>
+                    <div class="bg-gray-800 p-3 rounded-lg">
+                        <i class="fas fa-tools text-xl text-white"></i>
                     </div>
                     <div>
-                        <h1 class="text-3xl font-bold text-gradient">L2Toolkit</h1>
-                        <p class="text-sm text-gray-500 font-medium">Ferramentas para Desenvolvedores Lineage 2</p>
+                        <h1 class="text-2xl font-bold text-gray-900">L2Toolkit</h1>
+                        <p class="text-sm text-gray-500">Ferramentas para Desenvolvedores Lineage 2</p>
                     </div>
                 </div>
                 <div class="hidden md:flex space-x-8">
-                    <a href="#inicio" class="text-gray-600 hover:text-gray-800 transition-all duration-300 font-medium relative group">
-                        Início
-                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gray-600 group-hover:w-full transition-all duration-300"></span>
-                    </a>
-                    <a href="#instalacao" class="text-gray-600 hover:text-gray-800 transition-all duration-300 font-medium relative group">
-                        Instalação
-                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gray-600 group-hover:w-full transition-all duration-300"></span>
-                    </a>
-                    <a href="#funcionalidades" class="text-gray-600 hover:text-gray-800 transition-all duration-300 font-medium relative group">
-                        Funcionalidades
-                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gray-600 group-hover:w-full transition-all duration-300"></span>
-                    </a>
-                    <a href="#live-data" class="text-gray-600 hover:text-gray-800 transition-all duration-300 font-medium relative group">
-                        Live Data
-                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gray-600 group-hover:w-full transition-all duration-300"></span>
-                    </a>
-                    <a href="#geodata-converter" class="text-gray-600 hover:text-gray-800 transition-all duration-300 font-medium relative group">
-                        Geodata
-                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gray-600 group-hover:w-full transition-all duration-300"></span>
-                    </a>
-                    <a href="#api" class="text-gray-600 hover:text-gray-800 transition-all duration-300 font-medium relative group">
-                        API
-                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gray-600 group-hover:w-full transition-all duration-300"></span>
-                    </a>
-                    <a href="#desenvolvimento" class="text-gray-600 hover:text-gray-800 transition-all duration-300 font-medium relative group">
-                        Desenvolvimento
-                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gray-600 group-hover:w-full transition-all duration-300"></span>
-                    </a>
-                    <a href="#build" class="text-gray-600 hover:text-gray-800 transition-all duration-300 font-medium relative group">
-                        Build
-                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gray-600 group-hover:w-full transition-all duration-300"></span>
-                    </a>
+                    <a href="#inicio" class="text-gray-600 hover:text-gray-900 font-medium">Início</a>
+                    <a href="#instalacao" class="text-gray-600 hover:text-gray-900 font-medium">Instalação</a>
+                    <a href="#funcionalidades" class="text-gray-600 hover:text-gray-900 font-medium">Funcionalidades</a>
+                    <a href="#live-data" class="text-gray-600 hover:text-gray-900 font-medium">Live Data</a>
+                    <a href="#geodata-converter" class="text-gray-600 hover:text-gray-900 font-medium">Geodata</a>
+                    <a href="#desenvolvimento" class="text-gray-600 hover:text-gray-900 font-medium">Desenvolvimento</a>
+                    <a href="#build" class="text-gray-600 hover:text-gray-900 font-medium">Build</a>
                 </div>
-                <button class="md:hidden bg-gray-100 p-2 rounded-lg hover:bg-gray-200 transition-colors" onclick="toggleMenu()">
+                <button class="md:hidden bg-gray-100 p-2 rounded-lg" onclick="toggleMenu()">
                     <i class="fas fa-bars text-xl text-gray-600"></i>
                 </button>
             </div>
@@ -128,42 +55,37 @@
     </header>
 
     <!-- Mobile Menu -->
-    <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg">
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-gray-200">
         <div class="container mx-auto px-4 py-4">
             <div class="flex flex-col space-y-4">
-                <a href="#inicio" class="text-gray-600 hover:text-primary transition-colors">Início</a>
-                <a href="#instalacao" class="text-gray-600 hover:text-primary transition-colors">Instalação</a>
-                <a href="#funcionalidades" class="text-gray-600 hover:text-primary transition-colors">Funcionalidades</a>
-                <a href="#live-data" class="text-gray-600 hover:text-primary transition-colors">Live Data</a>
-                <a href="#geodata-converter" class="text-gray-600 hover:text-primary transition-colors">Geodata</a>
-                <a href="#api" class="text-gray-600 hover:text-primary transition-colors">API</a>
-                <a href="#desenvolvimento" class="text-gray-600 hover:text-primary transition-colors">Desenvolvimento</a>
-                <a href="#build" class="text-gray-600 hover:text-primary transition-colors">Build</a>
+                <a href="#inicio" class="text-gray-600 hover:text-gray-900">Início</a>
+                <a href="#instalacao" class="text-gray-600 hover:text-gray-900">Instalação</a>
+                <a href="#funcionalidades" class="text-gray-600 hover:text-gray-900">Funcionalidades</a>
+                <a href="#live-data" class="text-gray-600 hover:text-gray-900">Live Data</a>
+                <a href="#geodata-converter" class="text-gray-600 hover:text-gray-900">Geodata</a>
+                <a href="#desenvolvimento" class="text-gray-600 hover:text-gray-900">Desenvolvimento</a>
+                <a href="#build" class="text-gray-600 hover:text-gray-900">Build</a>
             </div>
         </div>
     </div>
 
     <!-- Update Banner -->
-    <div class="bg-gradient-to-r from-blue-600 to-purple-700 text-white py-3 text-center relative">
-        <div class="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-700 opacity-90"></div>
-        <div class="relative z-10">
-            <span class="text-sm font-medium">
-                <i class="fas fa-star mr-2"></i>
-                <strong>NOVA ATUALIZAÇÃO:</strong> Live Data e Skin Builder agora utilizam dados embutidos — zero configuração!
-                <i class="fas fa-arrow-right ml-2"></i>
-                <a href="#live-data" class="text-white hover:text-yellow-300 transition-colors font-semibold">Ver detalhes</a>
-            </span>
-        </div>
+    <div class="bg-gray-800 text-white py-3 text-center">
+        <span class="text-sm font-medium">
+            <i class="fas fa-star mr-2"></i>
+            <strong>NOVA ATUALIZAÇÃO:</strong> Live Data e Skin Builder agora utilizam dados embutidos — zero configuração!
+            <i class="fas fa-arrow-right ml-2"></i>
+            <a href="#live-data" class="text-gray-300 hover:text-white font-semibold">Ver detalhes</a>
+        </span>
     </div>
 
     <!-- Hero Section -->
-    <section id="inicio" class="relative bg-gradient-to-br from-gray-700 via-gray-800 to-gray-900 text-white py-24 overflow-hidden">
-        <div class="absolute inset-0 bg-black bg-opacity-20"></div>
-        <div class="container mx-auto px-6 relative z-10">
-            <div class="max-w-5xl mx-auto text-center animate-fade-in">
+    <section id="inicio" class="bg-gray-900 text-white py-24">
+        <div class="container mx-auto px-6">
+            <div class="max-w-5xl mx-auto text-center">
                 <div class="mb-8">
                     <h2 class="text-6xl md:text-7xl font-bold mb-6 leading-tight">
-                        L2<span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">Toolkit</span>
+                        L2<span class="text-gray-400">Toolkit</span>
                     </h2>
                     <p class="text-xl md:text-2xl mb-4 text-gray-300 font-light leading-relaxed">
                         Conjunto completo de ferramentas para desenvolvedores de servidores Lineage 2
@@ -173,14 +95,14 @@
                     </p>
                 </div>
                 <div class="flex flex-col lg:flex-row gap-4 justify-center items-center">
-                    <a href="#instalacao" class="group bg-white text-gray-800 px-8 py-3 rounded-2xl font-semibold hover:bg-gray-100 transition-all duration-300 shadow-2xl hover:shadow-white/10 hover:scale-105 transform">
-                        <i class="fas fa-download mr-2 group-hover:animate-bounce"></i>Começar Agora
+                    <a href="#instalacao" class="bg-white text-gray-900 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100">
+                        <i class="fas fa-download mr-2"></i>Começar Agora
                     </a>
-                    <a href="#funcionalidades" class="group border-2 border-white/30 text-white px-8 py-3 rounded-2xl font-semibold hover:bg-white hover:text-gray-800 transition-all duration-300 backdrop-blur-sm bg-white/10 hover:scale-105 transform">
-                        <i class="fas fa-book mr-2 group-hover:animate-pulse"></i>Funcionalidades
+                    <a href="#funcionalidades" class="border border-gray-600 text-gray-300 px-8 py-3 rounded-lg font-semibold hover:bg-gray-800">
+                        <i class="fas fa-book mr-2"></i>Funcionalidades
                     </a>
-                    <a href="#live-data" class="group border-2 border-blue-400/50 text-blue-200 px-8 py-3 rounded-2xl font-semibold hover:bg-blue-500 hover:text-white transition-all duration-300 backdrop-blur-sm bg-blue-500/20 hover:scale-105 transform">
-                        <i class="fas fa-database mr-2 group-hover:animate-pulse"></i>Live Data (166)
+                    <a href="#live-data" class="border border-gray-700 text-gray-400 px-8 py-3 rounded-lg font-semibold hover:bg-gray-800">
+                        <i class="fas fa-database mr-2"></i>Live Data (166)
                     </a>
                 </div>
             </div>
@@ -188,112 +110,111 @@
     </section>
 
     <!-- Quick Stats -->
-    <section class="bg-gradient-to-br from-gray-50 to-white py-20 relative">
-        <div class="absolute inset-0 bg-gradient-to-r from-blue-50/20 to-purple-50/20"></div>
-        <div class="container mx-auto px-6 relative z-10">
+    <section class="bg-gray-50 py-16">
+        <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div class="text-center group animate-slide-up">
-                    <div class="bg-gradient-to-br from-gray-600 to-gray-700 text-white rounded-2xl w-20 h-20 flex items-center justify-center mx-auto mb-6 shadow-xl group-hover:shadow-2xl transition-all duration-300 group-hover:scale-110 transform">
-                        <i class="fas fa-tools text-3xl group-hover:animate-pulse"></i>
+                <div class="text-center">
+                    <div class="bg-gray-800 text-white rounded-xl w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-tools text-2xl"></i>
                     </div>
                     <h3 class="text-3xl font-bold text-gray-800 mb-2">12+</h3>
-                    <p class="text-gray-600 font-medium">Ferramentas Principais</p>
+                    <p class="text-gray-600">Ferramentas Principais</p>
                 </div>
-                <div class="text-center group animate-slide-up" style="animation-delay: 0.1s;">
-                    <div class="bg-gradient-to-br from-gray-500 to-gray-600 text-white rounded-2xl w-20 h-20 flex items-center justify-center mx-auto mb-6 shadow-xl group-hover:shadow-2xl transition-all duration-300 group-hover:scale-110 transform">
-                        <i class="fas fa-code text-3xl group-hover:animate-pulse"></i>
+                <div class="text-center">
+                    <div class="bg-gray-800 text-white rounded-xl w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-code text-2xl"></i>
                     </div>
                     <h3 class="text-3xl font-bold text-gray-800 mb-2">.NET 10</h3>
-                    <p class="text-gray-600 font-medium">Tecnologia Moderna</p>
+                    <p class="text-gray-600">Tecnologia Moderna</p>
                 </div>
-                <div class="text-center group animate-slide-up" style="animation-delay: 0.2s;">
-                    <div class="bg-gradient-to-br from-gray-700 to-gray-800 text-white rounded-2xl w-20 h-20 flex items-center justify-center mx-auto mb-6 shadow-xl group-hover:shadow-2xl transition-all duration-300 group-hover:scale-110 transform">
-                        <i class="fas fa-desktop text-3xl group-hover:animate-pulse"></i>
+                <div class="text-center">
+                    <div class="bg-gray-800 text-white rounded-xl w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-desktop text-2xl"></i>
                     </div>
                     <h3 class="text-3xl font-bold text-gray-800 mb-2">Avalonia</h3>
-                    <p class="text-gray-600 font-medium">Interface Multiplataforma</p>
+                    <p class="text-gray-600">Interface Multiplataforma</p>
                 </div>
-                <div class="text-center group animate-slide-up" style="animation-delay: 0.3s;">
-                    <div class="bg-gradient-to-br from-gray-800 to-gray-900 text-white rounded-2xl w-20 h-20 flex items-center justify-center mx-auto mb-6 shadow-xl group-hover:shadow-2xl transition-all duration-300 group-hover:scale-110 transform">
-                        <i class="fas fa-gamepad text-3xl group-hover:animate-pulse"></i>
+                <div class="text-center">
+                    <div class="bg-gray-800 text-white rounded-xl w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-gamepad text-2xl"></i>
                     </div>
                     <h3 class="text-3xl font-bold text-gray-800 mb-2">Lineage 2</h3>
-                    <p class="text-gray-600 font-medium">Especializado</p>
+                    <p class="text-gray-600">Especializado</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Installation Section -->
-    <section id="instalacao" class="bg-gradient-to-br from-gray-50 to-white py-20">
+    <section id="instalacao" class="bg-white py-20">
         <div class="container mx-auto px-6">
             <div class="max-w-5xl mx-auto">
                 <div class="text-center mb-16">
-                    <h2 class="text-5xl font-bold text-gray-800 mb-4">Instalação e Configuração</h2>
-                    <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    <h2 class="text-4xl font-bold text-gray-900 mb-4">Instalação e Configuração</h2>
+                    <p class="text-lg text-gray-600 max-w-3xl mx-auto">
                         Siga este guia para configurar o L2Toolkit em seu ambiente de desenvolvimento
                     </p>
                 </div>
-                
-                <div class="bg-white rounded-2xl shadow-xl p-8 mb-8 card-hover">
-                    <h3 class="text-3xl font-semibold mb-6 text-gray-800"><i class="fas fa-clipboard-check mr-3 text-gray-600"></i>Requisitos do Sistema</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-xl border-l-4 border-blue-400 card-hover">
-                            <h4 class="font-semibold text-blue-800 mb-3">Sistema Operacional</h4>
-                            <p class="text-blue-700 font-medium">Windows 10/11</p>
+
+                <div class="bg-white rounded-xl border border-gray-200 p-8 mb-6">
+                    <h3 class="text-2xl font-semibold mb-6 text-gray-800"><i class="fas fa-clipboard-check mr-3 text-gray-500"></i>Requisitos do Sistema</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-5 rounded-lg border border-gray-200">
+                            <h4 class="font-semibold text-gray-800 mb-2">Sistema Operacional</h4>
+                            <p class="text-gray-700">Windows 10/11</p>
                         </div>
-                        <div class="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-xl border-l-4 border-green-400 card-hover">
-                            <h4 class="font-semibold text-green-800 mb-3">Framework</h4>
-                            <p class="text-green-700 font-medium">.NET 10</p>
+                        <div class="bg-gray-50 p-5 rounded-lg border border-gray-200">
+                            <h4 class="font-semibold text-gray-800 mb-2">Framework</h4>
+                            <p class="text-gray-700">.NET 10</p>
                         </div>
-                        <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-xl border-l-4 border-purple-400 card-hover">
-                            <h4 class="font-semibold text-purple-800 mb-3">IDE (Desenvolvimento)</h4>
-                            <p class="text-purple-700 font-medium">Visual Studio ou Rider</p>
+                        <div class="bg-gray-50 p-5 rounded-lg border border-gray-200">
+                            <h4 class="font-semibold text-gray-800 mb-2">IDE (Desenvolvimento)</h4>
+                            <p class="text-gray-700">Visual Studio ou Rider</p>
                         </div>
-                        <div class="bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-xl border-l-4 border-orange-400 card-hover">
-                            <h4 class="font-semibold text-orange-800 mb-3">Arquitetura</h4>
-                            <p class="text-orange-700 font-medium">x64</p>
+                        <div class="bg-gray-50 p-5 rounded-lg border border-gray-200">
+                            <h4 class="font-semibold text-gray-800 mb-2">Arquitetura</h4>
+                            <p class="text-gray-700">x64</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-2xl shadow-xl p-8 card-hover">
-                    <h3 class="text-3xl font-semibold mb-6 text-gray-800"><i class="fas fa-cog mr-3 text-gray-600"></i>Configuração Inicial</h3>
+                <div class="bg-white rounded-xl border border-gray-200 p-8">
+                    <h3 class="text-2xl font-semibold mb-6 text-gray-800"><i class="fas fa-cog mr-3 text-gray-500"></i>Configuração Inicial</h3>
                     <div class="space-y-6">
-                        <div class="bg-gradient-to-r from-gray-50 to-gray-100 p-6 rounded-xl border-l-4 border-gray-500">
+                        <div class="bg-gray-50 p-6 rounded-lg border-l-4 border-gray-400">
                             <h4 class="font-semibold mb-4 text-gray-800">1. Preparar Arquivos de Assets</h4>
-                            <p class="text-gray-700 mb-4">Certifique-se de que os seguintes arquivos estão na pasta <code class="bg-gray-200 px-3 py-1 rounded-lg text-sm font-mono">assets/</code>:</p>
-                            <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <p class="text-gray-700 mb-4">Certifique-se de que os seguintes arquivos estão na pasta <code class="bg-gray-200 px-2 py-1 rounded text-sm font-mono">assets/</code>:</p>
+                            <div class="bg-white p-4 rounded-lg border border-gray-200">
                                 <ul class="text-gray-700 space-y-2">
                                     <li class="flex items-center">
-                                        <i class="fas fa-file-alt mr-3 text-gray-500"></i>
+                                        <i class="fas fa-file-alt mr-3 text-gray-400"></i>
                                         <code class="bg-gray-100 px-2 py-1 rounded text-sm font-mono">ItemName_Classic-eu.txt</code>
                                     </li>
                                     <li class="flex items-center">
-                                        <i class="fas fa-file-alt mr-3 text-gray-500"></i>
+                                        <i class="fas fa-file-alt mr-3 text-gray-400"></i>
                                         <code class="bg-gray-100 px-2 py-1 rounded text-sm font-mono">EtcItemgrp_Classic.txt</code>
                                     </li>
                                     <li class="flex items-center">
-                                        <i class="fas fa-file-alt mr-3 text-gray-500"></i>
+                                        <i class="fas fa-file-alt mr-3 text-gray-400"></i>
                                         <code class="bg-gray-100 px-2 py-1 rounded text-sm font-mono">Armorgrp_Classic.txt</code>
                                     </li>
                                     <li class="flex items-center">
-                                        <i class="fas fa-file-alt mr-3 text-gray-500"></i>
+                                        <i class="fas fa-file-alt mr-3 text-gray-400"></i>
                                         <code class="bg-gray-100 px-2 py-1 rounded text-sm font-mono">Weapongrp_Classic.txt</code>
                                     </li>
                                     <li class="flex items-center">
-                                        <i class="fas fa-file-alt mr-3 text-gray-500"></i>
+                                        <i class="fas fa-file-alt mr-3 text-gray-400"></i>
                                         <code class="bg-gray-100 px-2 py-1 rounded text-sm font-mono">Skillgrp_Classic.txt</code>
                                     </li>
                                     <li class="flex items-center">
-                                        <i class="fas fa-chart-bar mr-3 text-orange-500"></i>
-                                        <code class="bg-orange-100 px-2 py-1 rounded text-sm font-mono">ItemStatData.txt</code>
-                                        <span class="text-xs bg-orange-500 text-white px-2 py-1 rounded-full ml-2">Necessário para XML</span>
+                                        <i class="fas fa-chart-bar mr-3 text-gray-500"></i>
+                                        <code class="bg-gray-100 px-2 py-1 rounded text-sm font-mono">ItemStatData.txt</code>
+                                        <span class="text-xs bg-gray-700 text-white px-2 py-1 rounded ml-2">Necessário para XML</span>
                                     </li>
                                 </ul>
                             </div>
                         </div>
-                        <div class="bg-gradient-to-r from-gray-50 to-gray-100 p-6 rounded-xl border-l-4 border-gray-500">
+                        <div class="bg-gray-50 p-6 rounded-lg border-l-4 border-gray-400">
                             <h4 class="font-semibold mb-3 text-gray-800">2. Executar o Projeto</h4>
                             <p class="text-gray-700 leading-relaxed">Execute através da IDE ou use o executável compilado diretamente para começar a usar o L2Toolkit.</p>
                         </div>
@@ -304,28 +225,27 @@
     </section>
 
     <!-- Features Section -->
-    <section id="funcionalidades" class="bg-white py-20">
+    <section id="funcionalidades" class="bg-gray-50 py-20">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16">
-                <h2 class="text-5xl font-bold text-gray-800 mb-4">Funcionalidades Principais</h2>
-                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Funcionalidades Principais</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
                     Descubra todas as ferramentas poderosas que o L2Toolkit oferece para acelerar seu desenvolvimento
                 </p>
             </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Door Generator -->
-                <div class="bg-white rounded-2xl shadow-lg p-8 border-l-4 border-gray-500 card-hover group">
-                    <div class="flex items-center mb-6">
-                        <div class="bg-gray-100 p-3 rounded-xl mr-4 group-hover:bg-gray-200 transition-colors">
-                            <i class="fas fa-door-open text-2xl text-gray-600"></i>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white rounded-xl border border-gray-200 border-l-4 border-l-gray-500 p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-gray-100 p-3 rounded-lg mr-4">
+                            <i class="fas fa-door-open text-xl text-gray-600"></i>
                         </div>
-                        <h3 class="text-xl font-semibold text-gray-800">Gerar Portas</h3>
+                        <h3 class="text-lg font-semibold text-gray-800">Gerar Portas</h3>
                     </div>
-                    <p class="text-gray-600 mb-6 leading-relaxed">Converte dados de portas do UnrealEd para formato XML com precisão e eficiência.</p>
-                    <div class="bg-gradient-to-r from-gray-50 to-gray-100 p-4 rounded-xl text-sm border-l-4 border-gray-300">
+                    <p class="text-gray-600 mb-4 leading-relaxed">Converte dados de portas do UnrealEd para formato XML com precisão e eficiência.</p>
+                    <div class="bg-gray-50 p-4 rounded-lg text-sm border-l-4 border-gray-300">
                         <strong class="text-gray-800">Como usar:</strong><br>
-                        <span class="text-gray-700">
+                        <span class="text-gray-600">
                             1. Cole os dados da porta<br>
                             2. Clique em "Converter para XML"<br>
                             3. Copie o resultado
@@ -333,18 +253,17 @@
                     </div>
                 </div>
 
-                <!-- Pawn Data -->
-                <div class="bg-white rounded-2xl shadow-lg p-8 border-l-4 border-gray-600 card-hover group">
-                    <div class="flex items-center mb-6">
-                        <div class="bg-gray-100 p-3 rounded-xl mr-4 group-hover:bg-gray-200 transition-colors">
-                            <i class="fas fa-running text-2xl text-gray-600"></i>
+                <div class="bg-white rounded-xl border border-gray-200 border-l-4 border-l-gray-500 p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-gray-100 p-3 rounded-lg mr-4">
+                            <i class="fas fa-running text-xl text-gray-600"></i>
                         </div>
-                        <h3 class="text-xl font-semibold text-gray-800">Animações (Pawn Data)</h3>
+                        <h3 class="text-lg font-semibold text-gray-800">Animações (Pawn Data)</h3>
                     </div>
-                    <p class="text-gray-600 mb-6 leading-relaxed">Gerador de dados de animação para NPCs com suporte a múltiplas animações.</p>
-                    <div class="bg-gradient-to-r from-gray-50 to-gray-100 p-4 rounded-xl text-sm border-l-4 border-gray-300">
+                    <p class="text-gray-600 mb-4 leading-relaxed">Gerador de dados de animação para NPCs com suporte a múltiplas animações.</p>
+                    <div class="bg-gray-50 p-4 rounded-lg text-sm border-l-4 border-gray-300">
                         <strong class="text-gray-800">Como usar:</strong><br>
-                        <span class="text-gray-700">
+                        <span class="text-gray-600">
                             1. Insira o nome do Pawn<br>
                             2. Preencha as animações<br>
                             3. Clique em "Gerar PawnAnimData"
@@ -352,18 +271,17 @@
                     </div>
                 </div>
 
-                <!-- Spawn Manager -->
-                <div class="bg-white rounded-2xl shadow-lg p-8 border-l-4 border-gray-500 card-hover group">
-                    <div class="flex items-center mb-6">
-                        <div class="bg-gray-100 p-3 rounded-xl mr-4 group-hover:bg-gray-200 transition-colors">
-                            <i class="fas fa-map-marker-alt text-2xl text-gray-600"></i>
+                <div class="bg-white rounded-xl border border-gray-200 border-l-4 border-l-gray-500 p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-gray-100 p-3 rounded-lg mr-4">
+                            <i class="fas fa-map-marker-alt text-xl text-gray-600"></i>
                         </div>
-                        <h3 class="text-xl font-semibold text-gray-800">Gerenciador de Spawn</h3>
+                        <h3 class="text-lg font-semibold text-gray-800">Gerenciador de Spawn</h3>
                     </div>
-                    <p class="text-gray-600 mb-6 leading-relaxed">Cria arquivos de spawn para NPCs de forma automatizada e organizada.</p>
-                    <div class="bg-gradient-to-r from-gray-50 to-gray-100 p-4 rounded-xl text-sm border-l-4 border-gray-300">
+                    <p class="text-gray-600 mb-4 leading-relaxed">Cria arquivos de spawn para NPCs de forma automatizada e organizada.</p>
+                    <div class="bg-gray-50 p-4 rounded-lg text-sm border-l-4 border-gray-300">
                         <strong class="text-gray-800">Como usar:</strong><br>
-                        <span class="text-gray-700">
+                        <span class="text-gray-600">
                             1. Insira os IDs dos NPCs<br>
                             2. Cole os dados de spawn<br>
                             3. Clique em "Criar Spawns"
@@ -371,18 +289,17 @@
                     </div>
                 </div>
 
-                <!-- Prime Shop -->
-                <div class="bg-white rounded-2xl shadow-lg p-8 border-l-4 border-gray-600 card-hover group">
-                    <div class="flex items-center mb-6">
-                        <div class="bg-gray-100 p-3 rounded-xl mr-4 group-hover:bg-gray-200 transition-colors">
-                            <i class="fas fa-shopping-cart text-2xl text-gray-600"></i>
+                <div class="bg-white rounded-xl border border-gray-200 border-l-4 border-l-gray-500 p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-gray-100 p-3 rounded-lg mr-4">
+                            <i class="fas fa-shopping-cart text-xl text-gray-600"></i>
                         </div>
-                        <h3 class="text-xl font-semibold text-gray-800">Prime Shop</h3>
+                        <h3 class="text-lg font-semibold text-gray-800">Prime Shop</h3>
                     </div>
-                    <p class="text-gray-600 mb-6 leading-relaxed">Gerador de itens para a Prime Shop do cliente com configuração completa.</p>
-                    <div class="bg-gradient-to-r from-gray-50 to-gray-100 p-4 rounded-xl text-sm border-l-4 border-gray-300">
+                    <p class="text-gray-600 mb-4 leading-relaxed">Gerador de itens para a Prime Shop do cliente com configuração completa.</p>
+                    <div class="bg-gray-50 p-4 rounded-lg text-sm border-l-4 border-gray-300">
                         <strong class="text-gray-800">Como usar:</strong><br>
-                        <span class="text-gray-700">
+                        <span class="text-gray-600">
                             1. Insira os IDs dos itens<br>
                             2. Configure categoria e preço<br>
                             3. Clique em "GERAR"
@@ -390,83 +307,81 @@
                     </div>
                 </div>
 
-                <!-- Live Data -->
-                <div class="bg-white rounded-2xl shadow-lg p-8 border-l-4 border-gray-500 card-hover group">
-                    <div class="flex items-center mb-6">
-                        <div class="bg-gray-100 p-3 rounded-xl mr-4 group-hover:bg-gray-200 transition-colors">
-                            <i class="fas fa-database text-2xl text-gray-600"></i>
+                <div class="bg-white rounded-xl border border-gray-200 border-l-4 border-l-gray-500 p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-gray-100 p-3 rounded-lg mr-4">
+                            <i class="fas fa-database text-xl text-gray-600"></i>
                         </div>
-                        <h3 class="text-xl font-semibold text-gray-800">Live Data (166)</h3>
+                        <h3 class="text-lg font-semibold text-gray-800">Live Data (166)</h3>
                     </div>
-                    <p class="text-gray-600 mb-6 leading-relaxed">Obtém arquivos .dat Live para uso no Classic com processamento otimizado e geração de XML.</p>
-                    <div class="bg-gradient-to-r from-gray-50 to-gray-100 p-4 rounded-xl text-sm border-l-4 border-gray-300 mb-4">
+                    <p class="text-gray-600 mb-4 leading-relaxed">Obtém arquivos .dat Live para uso no Classic com processamento otimizado e geração de XML.</p>
+                    <div class="bg-gray-50 p-4 rounded-lg text-sm border-l-4 border-gray-300 mb-3">
                         <strong class="text-gray-800">Processa:</strong><br>
-                        <span class="text-gray-700">
+                        <span class="text-gray-600">
                             Skills, Armas, Armaduras, Itens<br>
-                            <span class="text-xs bg-blue-500 text-white px-2 py-1 rounded-full">NOVO</span> <strong>Geração de XML para equipamentos</strong>
+                            <span class="text-xs bg-gray-700 text-white px-2 py-1 rounded">NOVO</span> <strong>Geração de XML para equipamentos</strong>
                         </span>
                     </div>
-                    <a href="#live-data" class="inline-flex items-center text-gray-600 hover:text-gray-800 font-medium transition-colors group">
+                    <a href="#live-data" class="inline-flex items-center text-gray-600 hover:text-gray-900 font-medium">
                         <span>Ver documentação completa</span>
-                        <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                        <i class="fas fa-arrow-right ml-2"></i>
                     </a>
                 </div>
 
-                <!-- Geodata Converter -->
-                <div class="bg-white rounded-2xl shadow-lg p-8 border-l-4 border-teal-500 card-hover group">
-                    <div class="flex items-center mb-6">
-                        <div class="bg-teal-50 p-3 rounded-xl mr-4 group-hover:bg-teal-100 transition-colors">
-                            <i class="fas fa-map text-2xl text-teal-600"></i>
+                <div class="bg-white rounded-xl border border-gray-200 border-l-4 border-l-gray-500 p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-gray-100 p-3 rounded-lg mr-4">
+                            <i class="fas fa-map text-xl text-gray-600"></i>
                         </div>
-                        <h3 class="text-xl font-semibold text-gray-800">Converter Geodata</h3>
+                        <h3 class="text-lg font-semibold text-gray-800">Converter Geodata</h3>
                     </div>
-                    <p class="text-gray-600 mb-6 leading-relaxed">Converte arquivos de geodata entre 8 formatos de entrada (L2J, CONV_DAT, L2D, L2G, L2S, L2M, RP, PATH_TXT) e 3 formatos de saída.</p>
-                    <div class="bg-gradient-to-r from-teal-50 to-green-50 p-4 rounded-xl text-sm border-l-4 border-teal-300">
+                    <p class="text-gray-600 mb-4 leading-relaxed">Converte arquivos de geodata entre 8 formatos de entrada (L2J, CONV_DAT, L2D, L2G, L2S, L2M, RP, PATH_TXT) e 3 formatos de saída.</p>
+                    <div class="bg-gray-50 p-4 rounded-lg text-sm border-l-4 border-gray-300 mb-3">
                         <strong class="text-gray-800">Como usar:</strong><br>
-                        <span class="text-gray-700">
+                        <span class="text-gray-600">
                             1. Selecione a pasta com os arquivos geodata<br>
                             2. Selecione a pasta de saída<br>
                             3. Escolha o formato e clique em "Iniciar Conversão"
                         </span>
                     </div>
-                    <a href="#geodata-converter" class="inline-flex items-center text-teal-600 hover:text-teal-800 font-medium transition-colors group mt-4">
+                    <a href="#geodata-converter" class="inline-flex items-center text-gray-600 hover:text-gray-900 font-medium">
                         <span>Ver documentação completa</span>
-                        <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                        <i class="fas fa-arrow-right ml-2"></i>
                     </a>
                 </div>
             </div>
 
-            <!-- Utilities Section -->
-            <div class="mt-20">
-                <div class="text-center mb-12">
-                    <h3 class="text-4xl font-bold text-gray-800 mb-4">Utilitários</h3>
-                    <p class="text-lg text-gray-600">Ferramentas complementares para otimizar seu fluxo de trabalho</p>
+            <!-- Utilities -->
+            <div class="mt-16">
+                <div class="text-center mb-10">
+                    <h3 class="text-3xl font-bold text-gray-900 mb-3">Utilitários</h3>
+                    <p class="text-gray-600">Ferramentas complementares para otimizar seu fluxo de trabalho</p>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div class="bg-gradient-to-br from-gray-50 to-gray-100 p-6 rounded-2xl text-center card-hover group">
-                        <div class="bg-white p-4 rounded-xl shadow-sm mb-4 mx-auto w-16 h-16 flex items-center justify-center group-hover:shadow-md transition-shadow">
-                            <i class="fas fa-search text-2xl text-gray-600"></i>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-white p-6 rounded-xl border border-gray-200 text-center">
+                        <div class="bg-gray-100 p-3 rounded-lg mb-3 mx-auto w-12 h-12 flex items-center justify-center">
+                            <i class="fas fa-search text-xl text-gray-600"></i>
                         </div>
                         <h4 class="font-semibold text-gray-800 mb-2">Pesquisar Ícone</h4>
                         <p class="text-sm text-gray-600">Busca ícones por ID com interface intuitiva</p>
                     </div>
-                    <div class="bg-gradient-to-br from-gray-50 to-gray-100 p-6 rounded-2xl text-center card-hover group">
-                        <div class="bg-white p-4 rounded-xl shadow-sm mb-4 mx-auto w-16 h-16 flex items-center justify-center group-hover:shadow-md transition-shadow">
-                            <i class="fas fa-file-alt text-2xl text-gray-600"></i>
+                    <div class="bg-white p-6 rounded-xl border border-gray-200 text-center">
+                        <div class="bg-gray-100 p-3 rounded-lg mb-3 mx-auto w-12 h-12 flex items-center justify-center">
+                            <i class="fas fa-file-alt text-xl text-gray-600"></i>
                         </div>
                         <h4 class="font-semibold text-gray-800 mb-2">Separar Logs</h4>
                         <p class="text-sm text-gray-600">Análise avançada de logs do servidor</p>
                     </div>
-                    <div class="bg-gradient-to-br from-gray-50 to-gray-100 p-6 rounded-2xl text-center card-hover group">
-                        <div class="bg-white p-4 rounded-xl shadow-sm mb-4 mx-auto w-16 h-16 flex items-center justify-center group-hover:shadow-md transition-shadow">
-                            <i class="fas fa-edit text-2xl text-gray-600"></i>
+                    <div class="bg-white p-6 rounded-xl border border-gray-200 text-center">
+                        <div class="bg-gray-100 p-3 rounded-lg mb-3 mx-auto w-12 h-12 flex items-center justify-center">
+                            <i class="fas fa-edit text-xl text-gray-600"></i>
                         </div>
                         <h4 class="font-semibold text-gray-800 mb-2">Corrigir Descrição</h4>
                         <p class="text-sm text-gray-600">Processamento de descrições de itens</p>
                     </div>
-                    <div class="bg-gradient-to-br from-gray-50 to-gray-100 p-6 rounded-2xl text-center card-hover group">
-                        <div class="bg-white p-4 rounded-xl shadow-sm mb-4 mx-auto w-16 h-16 flex items-center justify-center group-hover:shadow-md transition-shadow">
-                            <i class="fas fa-arrow-up text-2xl text-gray-600"></i>
+                    <div class="bg-white p-6 rounded-xl border border-gray-200 text-center">
+                        <div class="bg-gray-100 p-3 rounded-lg mb-3 mx-auto w-12 h-12 flex items-center justify-center">
+                            <i class="fas fa-arrow-up text-xl text-gray-600"></i>
                         </div>
                         <h4 class="font-semibold text-gray-800 mb-2">Upgrade Equipment</h4>
                         <p class="text-sm text-gray-600">Gerenciamento de dados de upgrade</p>
@@ -476,310 +391,239 @@
         </div>
     </section>
 
-    <!-- Live Data 166 Detailed Section -->
-    <section id="live-data" class="bg-gradient-to-br from-gray-800 to-gray-900 text-white py-20 relative overflow-hidden">
-        <div class="absolute inset-0 bg-black bg-opacity-30"></div>
-        <div class="absolute top-10 right-10 w-64 h-64 bg-blue-500 bg-opacity-10 rounded-full blur-3xl"></div>
-        <div class="absolute bottom-10 left-10 w-80 h-80 bg-purple-500 bg-opacity-10 rounded-full blur-3xl"></div>
-        
-        <div class="container mx-auto px-6 relative z-10">
+    <!-- Live Data Section -->
+    <section id="live-data" class="bg-gray-900 text-white py-20">
+        <div class="container mx-auto px-6">
             <div class="max-w-6xl mx-auto">
-                <!-- Header -->
                 <div class="text-center mb-16">
-                    <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl mb-6 shadow-2xl">
-                        <i class="fas fa-database text-3xl text-white"></i>
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-gray-700 rounded-xl mb-6">
+                        <i class="fas fa-database text-2xl text-white"></i>
                     </div>
-                    <h2 class="text-5xl font-bold mb-4">
-                        Live Data <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">(166)</span>
-                    </h2>
-                    <p class="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+                    <h2 class="text-4xl font-bold mb-4">Live Data <span class="text-gray-400">(166)</span></h2>
+                    <p class="text-lg text-gray-300 max-w-3xl mx-auto leading-relaxed">
                         Sistema avançado para converter dados Live para uso no Classic com geração automática de XML.
                         Os dados do cliente Live já vêm embutidos no aplicativo em formato comprimido — sem necessidade de configuração ou arquivos externos.
                     </p>
                 </div>
 
-                <!-- Main Features Grid -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                     <!-- Embedded Data -->
-                    <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl p-8 card-hover">
-                        <h3 class="text-2xl font-semibold mb-6 flex items-center">
-                            <i class="fas fa-microchip mr-3 text-blue-400"></i>
+                    <div class="bg-gray-800 rounded-xl p-8">
+                        <h3 class="text-xl font-semibold mb-6 flex items-center">
+                            <i class="fas fa-microchip mr-3 text-gray-400"></i>
                             Dados Embutidos
                         </h3>
                         <p class="text-gray-300 mb-6">
-                            Os dados do cliente Live são comprimidos em formato <code class="text-blue-300">.l2dat</code> e embutidos diretamente no executável.
-                            Não é necessário selecionar pasta ou manter arquivos externos — tudo é carregado automaticamente na memória sob demanda.
+                            Os dados do cliente Live são comprimidos em formato <code class="text-gray-300 bg-gray-700 px-1 rounded">.l2dat</code> e embutidos diretamente no executável.
                         </p>
-                        <div class="space-y-3">
-                            <div class="bg-black bg-opacity-20 p-4 rounded-xl flex items-center">
-                                <i class="fas fa-magic mr-4 text-blue-400"></i>
+                        <div class="space-y-2">
+                            <div class="bg-gray-700 p-3 rounded-lg flex items-center">
+                                <i class="fas fa-file-code mr-3 text-gray-400"></i>
                                 <div>
-                                    <code class="text-blue-300 font-mono">Skillgrp.l2dat</code>
-                                    <p class="text-sm text-gray-400">Dados de skills do jogo</p>
+                                    <code class="text-gray-200 font-mono text-sm">Skillgrp.l2dat</code>
+                                    <p class="text-xs text-gray-400">Dados de skills do jogo</p>
                                 </div>
                             </div>
-                            <div class="bg-black bg-opacity-20 p-4 rounded-xl flex items-center">
-                                <i class="fas fa-tag mr-4 text-green-400"></i>
+                            <div class="bg-gray-700 p-3 rounded-lg flex items-center">
+                                <i class="fas fa-file-code mr-3 text-gray-400"></i>
                                 <div>
-                                    <code class="text-green-300 font-mono">SkillName-eu.l2dat</code>
-                                    <p class="text-sm text-gray-400">Nomes das skills</p>
+                                    <code class="text-gray-200 font-mono text-sm">SkillName-eu.l2dat</code>
+                                    <p class="text-xs text-gray-400">Nomes das skills</p>
                                 </div>
                             </div>
-                            <div class="bg-black bg-opacity-20 p-4 rounded-xl flex items-center">
-                                <i class="fas fa-tag mr-4 text-purple-400"></i>
+                            <div class="bg-gray-700 p-3 rounded-lg flex items-center">
+                                <i class="fas fa-file-code mr-3 text-gray-400"></i>
                                 <div>
-                                    <code class="text-purple-300 font-mono">ItemName-eu.l2dat</code>
-                                    <p class="text-sm text-gray-400">Nomes dos itens</p>
+                                    <code class="text-gray-200 font-mono text-sm">ItemName-eu.l2dat</code>
+                                    <p class="text-xs text-gray-400">Nomes dos itens</p>
                                 </div>
                             </div>
-                            <div class="bg-black bg-opacity-20 p-4 rounded-xl flex items-center">
-                                <i class="fas fa-shield-alt mr-4 text-red-400"></i>
+                            <div class="bg-gray-700 p-3 rounded-lg flex items-center">
+                                <i class="fas fa-file-code mr-3 text-gray-400"></i>
                                 <div>
-                                    <code class="text-red-300 font-mono">Weapongrp.l2dat</code>
-                                    <p class="text-sm text-gray-400">Dados de armas</p>
+                                    <code class="text-gray-200 font-mono text-sm">Weapongrp.l2dat</code>
+                                    <p class="text-xs text-gray-400">Dados de armas</p>
                                 </div>
                             </div>
-                            <div class="bg-black bg-opacity-20 p-4 rounded-xl flex items-center">
-                                <i class="fas fa-shield-alt mr-4 text-yellow-400"></i>
+                            <div class="bg-gray-700 p-3 rounded-lg flex items-center">
+                                <i class="fas fa-file-code mr-3 text-gray-400"></i>
                                 <div>
-                                    <code class="text-yellow-300 font-mono">Armorgrp.l2dat</code>
-                                    <p class="text-sm text-gray-400">Dados de armaduras</p>
+                                    <code class="text-gray-200 font-mono text-sm">Armorgrp.l2dat</code>
+                                    <p class="text-xs text-gray-400">Dados de armaduras</p>
                                 </div>
                             </div>
-                            <div class="bg-black bg-opacity-20 p-4 rounded-xl flex items-center">
-                                <i class="fas fa-gem mr-4 text-indigo-400"></i>
+                            <div class="bg-gray-700 p-3 rounded-lg flex items-center">
+                                <i class="fas fa-file-code mr-3 text-gray-400"></i>
                                 <div>
-                                    <code class="text-indigo-300 font-mono">EtcItemgrp.l2dat</code>
-                                    <p class="text-sm text-gray-400">Dados de itens diversos</p>
+                                    <code class="text-gray-200 font-mono text-sm">EtcItemgrp.l2dat</code>
+                                    <p class="text-xs text-gray-400">Dados de itens diversos</p>
                                 </div>
                             </div>
-                            <div class="bg-black bg-opacity-20 p-4 rounded-xl flex items-center">
-                                <i class="fas fa-chart-bar mr-4 text-orange-400"></i>
+                            <div class="bg-gray-700 p-3 rounded-lg flex items-center">
+                                <i class="fas fa-file-code mr-3 text-gray-400"></i>
                                 <div>
-                                    <code class="text-orange-300 font-mono">ItemStatData.l2dat</code>
-                                    <p class="text-sm text-gray-400">Status dos equipamentos — necessário para geração de XML</p>
+                                    <code class="text-gray-200 font-mono text-sm">ItemStatData.l2dat</code>
+                                    <p class="text-xs text-gray-400">Status dos equipamentos — necessário para geração de XML</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="mt-6 p-4 bg-blue-500 bg-opacity-20 rounded-xl border border-blue-400 border-opacity-30">
-                            <p class="text-sm text-blue-200">
+                        <div class="mt-5 p-4 bg-gray-700 rounded-lg border border-gray-600">
+                            <p class="text-sm text-gray-300">
                                 <i class="fas fa-compress-arrows-alt mr-2"></i>
-                                <strong>Compressão Brotli:</strong> ~190 MB de dados tabulares comprimidos para ~2.5 MB no executável (~98.5% de redução).
-                                Os dados são descomprimidos sob demanda e mantidos em cache na memória para acesso instantâneo.
+                                <strong>Compressão Brotli:</strong> ~190 MB comprimidos para ~2.5 MB (~98.5% de redução). Descomprimidos sob demanda e mantidos em cache.
                             </p>
                         </div>
                     </div>
 
                     <!-- Processing Types -->
-                    <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl p-8 card-hover">
-                        <h3 class="text-2xl font-semibold mb-6 flex items-center">
+                    <div class="bg-gray-800 rounded-xl p-8">
+                        <h3 class="text-xl font-semibold mb-6 flex items-center">
                             <i class="fas fa-cogs mr-3 text-gray-400"></i>
                             Tipos de Processamento
                         </h3>
                         <p class="text-gray-300 mb-6">Escolha o tipo de dados que deseja processar:</p>
                         <div class="space-y-4">
-                            <div class="bg-gradient-to-r from-gray-500 bg-opacity-20 to-gray-600 bg-opacity-20 p-4 rounded-xl border-l-4 border-gray-400">
-                                <h4 class="font-semibold text-gray-300 mb-2">Skills</h4>
-                                <p class="text-sm text-gray-300">Processa skills do jogo com seus efeitos e propriedades</p>
+                            <div class="bg-gray-700 p-4 rounded-lg border-l-4 border-gray-500">
+                                <h4 class="font-semibold text-gray-200 mb-1">Skills</h4>
+                                <p class="text-sm text-gray-400">Processa skills do jogo com seus efeitos e propriedades</p>
                             </div>
-                            <div class="bg-gradient-to-r from-gray-500 bg-opacity-20 to-gray-600 bg-opacity-20 p-4 rounded-xl border-l-4 border-gray-400">
-                                <h4 class="font-semibold text-gray-300 mb-2">Weapons</h4>
-                                <p class="text-sm text-gray-300">Processa armas com stats, grades e características <strong>+ Geração de XML</strong></p>
+                            <div class="bg-gray-700 p-4 rounded-lg border-l-4 border-gray-500">
+                                <h4 class="font-semibold text-gray-200 mb-1">Weapons</h4>
+                                <p class="text-sm text-gray-400">Processa armas com stats, grades e características <strong class="text-gray-300">+ Geração de XML</strong></p>
                             </div>
-                            <div class="bg-gradient-to-r from-gray-500 bg-opacity-20 to-gray-600 bg-opacity-20 p-4 rounded-xl border-l-4 border-gray-400">
-                                <h4 class="font-semibold text-gray-300 mb-2">Armor</h4>
-                                <p class="text-sm text-gray-300">Processa armaduras com defesas e set effects <strong>+ Geração de XML</strong></p>
+                            <div class="bg-gray-700 p-4 rounded-lg border-l-4 border-gray-500">
+                                <h4 class="font-semibold text-gray-200 mb-1">Armor</h4>
+                                <p class="text-sm text-gray-400">Processa armaduras com defesas e set effects <strong class="text-gray-300">+ Geração de XML</strong></p>
                             </div>
-                            <div class="bg-gradient-to-r from-gray-500 bg-opacity-20 to-gray-600 bg-opacity-20 p-4 rounded-xl border-l-4 border-gray-400">
-                                <h4 class="font-semibold text-gray-300 mb-2">Items</h4>
-                                <p class="text-sm text-gray-300">Processa itens diversos como consumíveis e materiais</p>
+                            <div class="bg-gray-700 p-4 rounded-lg border-l-4 border-gray-500">
+                                <h4 class="font-semibold text-gray-200 mb-1">Items</h4>
+                                <p class="text-sm text-gray-400">Processa itens diversos como consumíveis e materiais</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- New Features Section -->
-                <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl p-8 mb-12">
-                    <h3 class="text-3xl font-semibold mb-8 text-center">
-                        <i class="fas fa-cog mr-3 text-blue-400"></i>
-                        Opções de Configuração
+                <!-- Configuration Options -->
+                <div class="bg-gray-800 rounded-xl p-8 mb-8">
+                    <h3 class="text-2xl font-semibold mb-8 text-center">
+                        <i class="fas fa-cog mr-3 text-gray-400"></i>Opções de Configuração
                     </h3>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div class="bg-black bg-opacity-20 p-6 rounded-xl border border-blue-400 border-opacity-30">
-                            <h4 class="font-semibold text-blue-300 mb-4 flex items-center">
-                                <i class="fas fa-exchange-alt mr-3"></i>
-                                Conversão S+ → S
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-gray-700 p-6 rounded-lg">
+                            <h4 class="font-semibold text-gray-200 mb-4 flex items-center">
+                                <i class="fas fa-exchange-alt mr-3"></i>Conversão S+ → S
                             </h4>
-                            <p class="text-gray-300 mb-4">
-                                Converte automaticamente grades avançadas para grade S compatível com Classic:
-                            </p>
+                            <p class="text-gray-300 mb-4">Converte automaticamente grades avançadas para grade S compatível com Classic:</p>
                             <ul class="text-sm text-gray-300 space-y-2">
-                                <li><span class="text-orange-300">S80</span> → <span class="text-green-300">S</span></li>
-                                <li><span class="text-orange-300">R95</span> → <span class="text-green-300">S</span></li>
-                                <li><span class="text-orange-300">R99</span> → <span class="text-green-300">S</span></li>
-                                <li><span class="text-orange-300">R110</span> → <span class="text-green-300">S</span></li>
+                                <li><span class="text-gray-400">S80</span> → <span class="text-gray-200">S</span></li>
+                                <li><span class="text-gray-400">R95</span> → <span class="text-gray-200">S</span></li>
+                                <li><span class="text-gray-400">R99</span> → <span class="text-gray-200">S</span></li>
+                                <li><span class="text-gray-400">R110</span> → <span class="text-gray-200">S</span></li>
                             </ul>
                         </div>
-                        
-                        <div class="bg-black bg-opacity-20 p-6 rounded-xl border border-purple-400 border-opacity-30">
-                            <h4 class="font-semibold text-purple-300 mb-4 flex items-center">
-                                <i class="fas fa-sparkles mr-3"></i>
-                                Brilho do Enchant
+                        <div class="bg-gray-700 p-6 rounded-lg">
+                            <h4 class="font-semibold text-gray-200 mb-4 flex items-center">
+                                <i class="fas fa-magic mr-3"></i>Brilho do Enchant
                             </h4>
-                            <p class="text-gray-300 mb-4">
-                                Habilita o efeito visual de brilho no enchant para armaduras:
-                            </p>
-                            <div class="bg-gray-800 bg-opacity-50 p-3 rounded-lg">
-                                <code class="text-purple-300 text-sm">
-                                    full_armor_enchant_effect_type=-1<br>
-                                    ↓<br>
-                                    full_armor_enchant_effect_type=1
+                            <p class="text-gray-300 mb-4">Habilita o efeito visual de brilho no enchant para armaduras:</p>
+                            <div class="bg-gray-800 p-3 rounded-lg">
+                                <code class="text-gray-300 text-sm">
+                                    full_armor_enchant_effect_type=-1<br>↓<br>full_armor_enchant_effect_type=1
                                 </code>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- How to Use Section -->
-                <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl p-8 mb-12">
-                    <h3 class="text-3xl font-semibold mb-8 text-center">
-                        <i class="fas fa-play-circle mr-3 text-green-400"></i>
-                        Como Usar o Live Data
+                <!-- How to Use -->
+                <div class="bg-gray-800 rounded-xl p-8 mb-8">
+                    <h3 class="text-2xl font-semibold mb-8 text-center">
+                        <i class="fas fa-play-circle mr-3 text-gray-400"></i>Como Usar o Live Data
                     </h3>
-                    
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        <!-- Step 1 -->
-                        <div class="text-center group">
-                            <div class="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-2xl w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110">
-                                <span class="font-bold text-xl">1</span>
+                        <div class="text-center">
+                            <div class="bg-gray-600 text-white rounded-xl w-14 h-14 flex items-center justify-center mx-auto mb-4">
+                                <span class="font-bold text-lg">1</span>
                             </div>
-                            <h4 class="font-semibold mb-3 text-white">Escolher Tipo</h4>
-                            <p class="text-gray-300 text-sm leading-relaxed">Selecione o tipo de processamento: Skills, Weapons, Armor ou Items</p>
+                            <h4 class="font-semibold mb-2 text-white">Escolher Tipo</h4>
+                            <p class="text-gray-400 text-sm">Selecione o tipo de processamento: Skills, Weapons, Armor ou Items</p>
                         </div>
-
-                        <!-- Step 2 -->
-                        <div class="text-center group">
-                            <div class="bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-2xl w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110">
-                                <span class="font-bold text-xl">2</span>
+                        <div class="text-center">
+                            <div class="bg-gray-600 text-white rounded-xl w-14 h-14 flex items-center justify-center mx-auto mb-4">
+                                <span class="font-bold text-lg">2</span>
                             </div>
-                            <h4 class="font-semibold mb-3 text-white">Inserir IDs</h4>
-                            <p class="text-gray-300 text-sm leading-relaxed">Defina os IDs desejados usando diferentes formatos de entrada</p>
+                            <h4 class="font-semibold mb-2 text-white">Inserir IDs</h4>
+                            <p class="text-gray-400 text-sm">Defina os IDs desejados usando diferentes formatos de entrada</p>
                         </div>
-
-                        <!-- Step 3 -->
-                        <div class="text-center group">
-                            <div class="bg-gradient-to-br from-pink-500 to-pink-600 text-white rounded-2xl w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110">
-                                <span class="font-bold text-xl">3</span>
+                        <div class="text-center">
+                            <div class="bg-gray-600 text-white rounded-xl w-14 h-14 flex items-center justify-center mx-auto mb-4">
+                                <span class="font-bold text-lg">3</span>
                             </div>
-                            <h4 class="font-semibold mb-3 text-white">Configurar Opções</h4>
-                            <p class="text-gray-300 text-sm leading-relaxed">Configure a conversão S+ e o brilho do enchant para equipamentos</p>
+                            <h4 class="font-semibold mb-2 text-white">Configurar Opções</h4>
+                            <p class="text-gray-400 text-sm">Configure a conversão S+ e o brilho do enchant para equipamentos</p>
                         </div>
-
-                        <!-- Step 4 -->
-                        <div class="text-center group">
-                            <div class="bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-2xl w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110">
-                                <span class="font-bold text-xl">4</span>
+                        <div class="text-center">
+                            <div class="bg-gray-600 text-white rounded-xl w-14 h-14 flex items-center justify-center mx-auto mb-4">
+                                <span class="font-bold text-lg">4</span>
                             </div>
-                            <h4 class="font-semibold mb-3 text-white">Gerar Dados</h4>
-                            <p class="text-gray-300 text-sm leading-relaxed">Clique em "Gerar" para processar e obter os dados convertidos + XML</p>
+                            <h4 class="font-semibold mb-2 text-white">Gerar Dados</h4>
+                            <p class="text-gray-400 text-sm">Clique em "Gerar" para processar e obter os dados convertidos + XML</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- ID Formats and Results -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <!-- ID Formats -->
-                    <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl p-8 card-hover">
-                        <h3 class="text-2xl font-semibold mb-6 flex items-center">
-                            <i class="fas fa-hashtag mr-3 text-orange-400"></i>
-                            Formatos de ID
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-gray-800 rounded-xl p-8">
+                        <h3 class="text-xl font-semibold mb-6 flex items-center">
+                            <i class="fas fa-hashtag mr-3 text-gray-400"></i>Formatos de ID
                         </h3>
-                        <p class="text-gray-300 mb-6">Diferentes maneiras de especificar os IDs dos itens:</p>
                         <div class="space-y-4">
-                            <div class="bg-black bg-opacity-30 p-4 rounded-xl">
-                                <h4 class="font-semibold text-orange-300 mb-2">ID Único</h4>
-                                <code class="text-orange-200 bg-black bg-opacity-50 px-3 py-1 rounded">1000</code>
+                            <div class="bg-gray-700 p-4 rounded-lg">
+                                <h4 class="font-semibold text-gray-200 mb-2">ID Único</h4>
+                                <code class="text-gray-300 bg-gray-600 px-3 py-1 rounded">1000</code>
                                 <p class="text-sm text-gray-400 mt-2">Para processar apenas um item específico</p>
                             </div>
-                            <div class="bg-black bg-opacity-30 p-4 rounded-xl">
-                                <h4 class="font-semibold text-blue-300 mb-2">Múltiplos IDs</h4>
-                                <code class="text-blue-200 bg-black bg-opacity-50 px-3 py-1 rounded">1000;1001;1002</code>
-                                <p class="text-sm text-gray-400 mt-2">Para processar vários itens específicos (separados por ";")</p>
+                            <div class="bg-gray-700 p-4 rounded-lg">
+                                <h4 class="font-semibold text-gray-200 mb-2">Múltiplos IDs</h4>
+                                <code class="text-gray-300 bg-gray-600 px-3 py-1 rounded">1000;1001;1002</code>
+                                <p class="text-sm text-gray-400 mt-2">Para processar vários itens (separados por ";")</p>
                             </div>
-                            <div class="bg-black bg-opacity-30 p-4 rounded-xl">
-                                <h4 class="font-semibold text-purple-300 mb-2">Range de IDs</h4>
-                                <code class="text-purple-200 bg-black bg-opacity-50 px-3 py-1 rounded">1000...1010</code>
+                            <div class="bg-gray-700 p-4 rounded-lg">
+                                <h4 class="font-semibold text-gray-200 mb-2">Range de IDs</h4>
+                                <code class="text-gray-300 bg-gray-600 px-3 py-1 rounded">1000...1010</code>
                                 <p class="text-sm text-gray-400 mt-2">Para processar uma faixa de IDs (do 1000 ao 1010)</p>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Results -->
-                    <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl p-8 card-hover">
-                        <h3 class="text-2xl font-semibold mb-6 flex items-center">
-                            <i class="fas fa-download mr-3 text-green-400"></i>
-                            Resultados Gerados
+                    <div class="bg-gray-800 rounded-xl p-8">
+                        <h3 class="text-xl font-semibold mb-6 flex items-center">
+                            <i class="fas fa-download mr-3 text-gray-400"></i>Resultados Gerados
                         </h3>
-                        <p class="text-gray-300 mb-6">O que você receberá após o processamento:</p>
                         <div class="space-y-4">
-                            <div class="bg-black bg-opacity-40 p-6 rounded-xl border-l-4 border-green-400">
-                                <h4 class="font-semibold text-green-400 mb-3 flex items-center">
-                                    <i class="fas fa-file-code mr-2"></i>
-                                    Dados GRP
-                                </h4>
-                                <p class="text-sm text-white leading-relaxed">
-                                    Arquivos de dados estruturados prontos para uso no Classic, 
-                                    contendo todas as propriedades e características dos itens/skills processados.
-                                </p>
+                            <div class="bg-gray-700 p-5 rounded-lg border-l-4 border-gray-500">
+                                <h4 class="font-semibold text-gray-200 mb-2"><i class="fas fa-file-code mr-2"></i>Dados GRP</h4>
+                                <p class="text-sm text-gray-400">Arquivos de dados estruturados prontos para uso no Classic.</p>
                             </div>
-                            <div class="bg-black bg-opacity-40 p-6 rounded-xl border-l-4 border-blue-400">
-                                <h4 class="font-semibold text-blue-400 mb-3 flex items-center">
-                                    <i class="fas fa-tags mr-2"></i>
-                                    Nomes dos Items/Skills
-                                </h4>
-                                <p class="text-sm text-white leading-relaxed">
-                                    Mapeamento completo dos nomes localizados para cada item ou skill processado, 
-                                    facilitando a identificação e uso no jogo.
-                                </p>
+                            <div class="bg-gray-700 p-5 rounded-lg border-l-4 border-gray-500">
+                                <h4 class="font-semibold text-gray-200 mb-2"><i class="fas fa-tags mr-2"></i>Nomes dos Items/Skills</h4>
+                                <p class="text-sm text-gray-400">Mapeamento completo dos nomes localizados para cada item ou skill processado.</p>
                             </div>
-                            <div class="bg-black bg-opacity-40 p-6 rounded-xl border-l-4 border-purple-400">
-                                <h4 class="font-semibold text-purple-400 mb-3 flex items-center">
-                                    <i class="fas fa-code mr-2"></i>
-                                    Dados XML <span class="text-xs bg-purple-500 px-2 py-1 rounded-full ml-2">NOVO</span>
+                            <div class="bg-gray-700 p-5 rounded-lg border-l-4 border-gray-500">
+                                <h4 class="font-semibold text-gray-200 mb-2">
+                                    <i class="fas fa-code mr-2"></i>Dados XML
+                                    <span class="text-xs bg-gray-600 px-2 py-1 rounded ml-2">NOVO</span>
                                 </h4>
-                                <p class="text-sm text-white leading-relaxed">
-                                    Arquivo XML completo para armas e armaduras com todos os stats, propriedades e enchantments 
-                                    prontos para uso no servidor.
-                                </p>
+                                <p class="text-sm text-gray-400">Arquivo XML completo para armas e armaduras com todos os stats prontos para uso no servidor.</p>
                             </div>
                         </div>
-                        
-                        <div class="mt-6 p-4 bg-blue-500 bg-opacity-20 rounded-xl border border-blue-400 border-opacity-30">
+                        <div class="mt-4 p-4 bg-gray-700 rounded-lg border border-gray-600">
                             <div class="flex items-start">
-                                <i class="fas fa-star text-blue-400 mr-3 mt-1"></i>
-                                <div>
-                                    <h5 class="font-semibold text-blue-300 mb-1">Novas Funcionalidades <span class="text-xs bg-blue-500 px-2 py-1 rounded-full">ATUALIZAÇÃO</span></h5>
-                                    <ul class="text-sm text-blue-100 space-y-1">
-                                        <li><strong>Conversão S+ → S:</strong> Converte automaticamente S80, R95, R99, R110 para grade S</li>
-                                        <li><strong>Brilho do Enchant:</strong> Habilita efeito de brilho no enchant (GPR) para armaduras</li>
-                                        <li><strong>Geração de XML:</strong> Cria arquivos XML completos com todos os stats dos equipamentos</li>
-                                        <li><strong>ItemStatData.txt:</strong> Novo arquivo necessário para processamento de status</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="mt-4 p-4 bg-yellow-500 bg-opacity-20 rounded-xl border border-yellow-400 border-opacity-30">
-                            <div class="flex items-start">
-                                <i class="fas fa-lightbulb text-yellow-400 mr-3 mt-1"></i>
-                                <div>
-                                    <h5 class="font-semibold text-yellow-300 mb-1">Dica Profissional</h5>
-                                    <p class="text-sm text-yellow-100">
-                                        Use ranges para processar grandes quantidades de itens de uma só vez, 
-                                        economizando tempo e garantindo consistência nos dados.
-                                    </p>
-                                </div>
+                                <i class="fas fa-lightbulb text-gray-400 mr-3 mt-1"></i>
+                                <p class="text-sm text-gray-400">
+                                    <strong class="text-gray-300">Dica:</strong> Use ranges para processar grandes quantidades de itens de uma só vez, economizando tempo e garantindo consistência.
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -789,166 +633,120 @@
     </section>
 
     <!-- Geodata Converter Section -->
-    <section id="geodata-converter" class="bg-gradient-to-br from-slate-900 to-gray-900 text-white py-20 relative overflow-hidden">
-        <div class="absolute inset-0 bg-black bg-opacity-30"></div>
-        <div class="absolute top-10 left-10 w-72 h-72 bg-green-500 bg-opacity-10 rounded-full blur-3xl"></div>
-        <div class="absolute bottom-10 right-10 w-80 h-80 bg-teal-500 bg-opacity-10 rounded-full blur-3xl"></div>
-
-        <div class="container mx-auto px-6 relative z-10">
+    <section id="geodata-converter" class="bg-gray-800 text-white py-20">
+        <div class="container mx-auto px-6">
             <div class="max-w-6xl mx-auto">
-                <!-- Header -->
                 <div class="text-center mb-16">
-                    <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-green-500 to-teal-600 rounded-2xl mb-6 shadow-2xl">
-                        <i class="fas fa-map text-3xl text-white"></i>
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-gray-700 rounded-xl mb-6">
+                        <i class="fas fa-map text-2xl text-white"></i>
                     </div>
-                    <h2 class="text-5xl font-bold mb-4">
-                        Converter <span class="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-teal-400">Geodata</span>
-                    </h2>
-                    <p class="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+                    <h2 class="text-4xl font-bold mb-4">Converter <span class="text-gray-400">Geodata</span></h2>
+                    <p class="text-lg text-gray-300 max-w-3xl mx-auto leading-relaxed">
                         Converta arquivos de geodata binários entre os principais formatos utilizados em servidores Lineage 2.
-                        Suporta 8 formatos de entrada e gera saída em L2J, CONV_DAT ou L2G com total fidelidade ao formato original.
+                        Suporta 8 formatos de entrada e gera saída em L2J, CONV_DAT ou L2G.
                     </p>
                 </div>
 
-                <!-- Formats Grid -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                     <!-- Input Formats -->
-                    <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl p-8 card-hover">
-                        <h3 class="text-2xl font-semibold mb-6 flex items-center">
-                            <i class="fas fa-file-import mr-3 text-green-400"></i>
-                            Formatos de Entrada
+                    <div class="bg-gray-700 rounded-xl p-8">
+                        <h3 class="text-xl font-semibold mb-6 flex items-center">
+                            <i class="fas fa-file-import mr-3 text-gray-400"></i>Formatos de Entrada
                         </h3>
-                        <p class="text-gray-300 mb-6">Detectados automaticamente pela extensão do arquivo:</p>
-                        <div class="space-y-3">
-                            <div class="bg-black bg-opacity-20 p-4 rounded-xl flex items-center">
-                                <i class="fas fa-file-code mr-4 text-green-400"></i>
-                                <div>
-                                    <code class="text-green-300 font-mono">.l2j</code>
-                                    <p class="text-sm text-gray-400">Formato L2J — padrão Java aberto</p>
-                                </div>
+                        <p class="text-gray-300 mb-4">Detectados automaticamente pela extensão do arquivo:</p>
+                        <div class="space-y-2">
+                            <div class="bg-gray-600 p-3 rounded-lg flex items-center">
+                                <i class="fas fa-file-code mr-3 text-gray-400"></i>
+                                <div><code class="text-gray-200 font-mono text-sm">.l2j</code><p class="text-xs text-gray-400">Formato L2J — padrão Java aberto</p></div>
                             </div>
-                            <div class="bg-black bg-opacity-20 p-4 rounded-xl flex items-center">
-                                <i class="fas fa-file-code mr-4 text-teal-400"></i>
-                                <div>
-                                    <code class="text-teal-300 font-mono">_conv.dat</code>
-                                    <p class="text-sm text-gray-400">Formato CONV_DAT — geodata com cabeçalho estendido</p>
-                                </div>
+                            <div class="bg-gray-600 p-3 rounded-lg flex items-center">
+                                <i class="fas fa-file-code mr-3 text-gray-400"></i>
+                                <div><code class="text-gray-200 font-mono text-sm">_conv.dat</code><p class="text-xs text-gray-400">Formato CONV_DAT — cabeçalho estendido</p></div>
                             </div>
-                            <div class="bg-black bg-opacity-20 p-4 rounded-xl flex items-center">
-                                <i class="fas fa-file-code mr-4 text-blue-400"></i>
-                                <div>
-                                    <code class="text-blue-300 font-mono">.l2d</code>
-                                    <p class="text-sm text-gray-400">Formato L2D — geodata com NSWE separado</p>
-                                </div>
+                            <div class="bg-gray-600 p-3 rounded-lg flex items-center">
+                                <i class="fas fa-file-code mr-3 text-gray-400"></i>
+                                <div><code class="text-gray-200 font-mono text-sm">.l2d</code><p class="text-xs text-gray-400">Formato L2D — NSWE separado</p></div>
                             </div>
-                            <div class="bg-black bg-opacity-20 p-4 rounded-xl flex items-center">
-                                <i class="fas fa-lock mr-4 text-yellow-400"></i>
-                                <div>
-                                    <code class="text-yellow-300 font-mono">.l2g</code>
-                                    <p class="text-sm text-gray-400">Formato L2G — criptografado com chave XOR aleatória</p>
-                                </div>
+                            <div class="bg-gray-600 p-3 rounded-lg flex items-center">
+                                <i class="fas fa-lock mr-3 text-gray-400"></i>
+                                <div><code class="text-gray-200 font-mono text-sm">.l2g</code><p class="text-xs text-gray-400">Formato L2G — criptografado com chave XOR</p></div>
                             </div>
-                            <div class="bg-black bg-opacity-20 p-4 rounded-xl flex items-center">
-                                <i class="fas fa-lock mr-4 text-orange-400"></i>
-                                <div>
-                                    <code class="text-orange-300 font-mono">.l2s</code>
-                                    <p class="text-sm text-gray-400">Formato L2S — criptografado com chave derivada de IP</p>
-                                </div>
+                            <div class="bg-gray-600 p-3 rounded-lg flex items-center">
+                                <i class="fas fa-lock mr-3 text-gray-400"></i>
+                                <div><code class="text-gray-200 font-mono text-sm">.l2s</code><p class="text-xs text-gray-400">Formato L2S — chave derivada de IP</p></div>
                             </div>
-                            <div class="bg-black bg-opacity-20 p-4 rounded-xl flex items-center">
-                                <i class="fas fa-layer-group mr-4 text-purple-400"></i>
-                                <div>
-                                    <code class="text-purple-300 font-mono">.l2m</code>
-                                    <p class="text-sm text-gray-400">Formato L2M — multicamada com offset relativo por bloco</p>
-                                </div>
+                            <div class="bg-gray-600 p-3 rounded-lg flex items-center">
+                                <i class="fas fa-layer-group mr-3 text-gray-400"></i>
+                                <div><code class="text-gray-200 font-mono text-sm">.l2m</code><p class="text-xs text-gray-400">Formato L2M — multicamada com offset por bloco</p></div>
                             </div>
-                            <div class="bg-black bg-opacity-20 p-4 rounded-xl flex items-center">
-                                <i class="fas fa-file-code mr-4 text-red-400"></i>
-                                <div>
-                                    <code class="text-red-300 font-mono">.rp</code>
-                                    <p class="text-sm text-gray-400">Formato RP — variante do L2D</p>
-                                </div>
+                            <div class="bg-gray-600 p-3 rounded-lg flex items-center">
+                                <i class="fas fa-file-code mr-3 text-gray-400"></i>
+                                <div><code class="text-gray-200 font-mono text-sm">.rp</code><p class="text-xs text-gray-400">Formato RP — variante do L2D</p></div>
                             </div>
-                            <div class="bg-black bg-opacity-20 p-4 rounded-xl flex items-center">
-                                <i class="fas fa-file-alt mr-4 text-indigo-400"></i>
-                                <div>
-                                    <code class="text-indigo-300 font-mono">_path.txt</code>
-                                    <p class="text-sm text-gray-400">Formato PATH_TXT — texto estruturado com regex</p>
-                                </div>
+                            <div class="bg-gray-600 p-3 rounded-lg flex items-center">
+                                <i class="fas fa-file-alt mr-3 text-gray-400"></i>
+                                <div><code class="text-gray-200 font-mono text-sm">_path.txt</code><p class="text-xs text-gray-400">Formato PATH_TXT — texto estruturado com regex</p></div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Output Formats + Behavior -->
+                    <!-- Output + Copy -->
                     <div class="space-y-6">
-                        <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl p-8 card-hover">
-                            <h3 class="text-2xl font-semibold mb-6 flex items-center">
-                                <i class="fas fa-file-export mr-3 text-teal-400"></i>
-                                Formatos de Saída
+                        <div class="bg-gray-700 rounded-xl p-8">
+                            <h3 class="text-xl font-semibold mb-6 flex items-center">
+                                <i class="fas fa-file-export mr-3 text-gray-400"></i>Formatos de Saída
                             </h3>
-                            <div class="space-y-3">
-                                <div class="bg-black bg-opacity-20 p-4 rounded-xl flex items-center">
-                                    <i class="fas fa-check-circle mr-4 text-green-400"></i>
-                                    <div>
-                                        <code class="text-green-300 font-mono">.l2j</code>
-                                        <p class="text-sm text-gray-400">Padrão L2J — compatível com a maioria dos emuladores</p>
-                                    </div>
+                            <div class="space-y-2">
+                                <div class="bg-gray-600 p-3 rounded-lg flex items-center">
+                                    <i class="fas fa-check-circle mr-3 text-gray-400"></i>
+                                    <div><code class="text-gray-200 font-mono text-sm">.l2j</code><p class="text-xs text-gray-400">Compatível com a maioria dos emuladores</p></div>
                                 </div>
-                                <div class="bg-black bg-opacity-20 p-4 rounded-xl flex items-center">
-                                    <i class="fas fa-check-circle mr-4 text-teal-400"></i>
-                                    <div>
-                                        <code class="text-teal-300 font-mono">_conv.dat</code>
-                                        <p class="text-sm text-gray-400">CONV_DAT — formato com cabeçalho estendido por região</p>
-                                    </div>
+                                <div class="bg-gray-600 p-3 rounded-lg flex items-center">
+                                    <i class="fas fa-check-circle mr-3 text-gray-400"></i>
+                                    <div><code class="text-gray-200 font-mono text-sm">_conv.dat</code><p class="text-xs text-gray-400">Cabeçalho estendido por região</p></div>
                                 </div>
-                                <div class="bg-black bg-opacity-20 p-4 rounded-xl flex items-center">
-                                    <i class="fas fa-check-circle mr-4 text-yellow-400"></i>
-                                    <div>
-                                        <code class="text-yellow-300 font-mono">.l2g</code>
-                                        <p class="text-sm text-gray-400">L2G — saída criptografada com chave XOR aleatória</p>
-                                    </div>
+                                <div class="bg-gray-600 p-3 rounded-lg flex items-center">
+                                    <i class="fas fa-check-circle mr-3 text-gray-400"></i>
+                                    <div><code class="text-gray-200 font-mono text-sm">.l2g</code><p class="text-xs text-gray-400">Saída criptografada com chave XOR aleatória</p></div>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl p-8 card-hover">
+                        <div class="bg-gray-700 rounded-xl p-8">
                             <h3 class="text-xl font-semibold mb-4 flex items-center">
-                                <i class="fas fa-copy mr-3 text-blue-400"></i>
-                                Cópia Inteligente
+                                <i class="fas fa-copy mr-3 text-gray-400"></i>Cópia Inteligente
                             </h3>
                             <p class="text-gray-300 leading-relaxed">
-                                Se o arquivo de entrada já estiver no formato de saída selecionado, ele é <strong class="text-white">copiado diretamente</strong> sem passar pelo processo de conversão. Isso preserva os dados originais com fidelidade total e economiza tempo de processamento.
+                                Se o arquivo de entrada já estiver no formato de saída selecionado, ele é <strong class="text-white">copiado diretamente</strong> sem conversão, preservando os dados com fidelidade total.
                             </p>
                         </div>
                     </div>
                 </div>
 
                 <!-- How to Use -->
-                <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl p-8 card-hover">
-                    <h3 class="text-2xl font-semibold mb-8 flex items-center">
-                        <i class="fas fa-play-circle mr-3 text-green-400"></i>
-                        Como Usar o Converter Geodata
+                <div class="bg-gray-700 rounded-xl p-8">
+                    <h3 class="text-xl font-semibold mb-8 flex items-center">
+                        <i class="fas fa-play-circle mr-3 text-gray-400"></i>Como Usar o Converter Geodata
                     </h3>
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                         <div class="text-center">
-                            <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-teal-500 rounded-full flex items-center justify-center text-white font-bold text-lg mx-auto mb-4">1</div>
-                            <h4 class="font-semibold mb-2">Pasta de Entrada</h4>
-                            <p class="text-sm text-gray-400">Selecione a pasta com os arquivos geodata a converter. O formato é detectado automaticamente pela extensão.</p>
+                            <div class="w-12 h-12 bg-gray-500 rounded-lg flex items-center justify-center text-white font-bold text-lg mx-auto mb-4">1</div>
+                            <h4 class="font-semibold mb-2 text-white">Pasta de Entrada</h4>
+                            <p class="text-sm text-gray-400">Selecione a pasta com os arquivos geodata. O formato é detectado automaticamente.</p>
                         </div>
                         <div class="text-center">
-                            <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-teal-500 rounded-full flex items-center justify-center text-white font-bold text-lg mx-auto mb-4">2</div>
-                            <h4 class="font-semibold mb-2">Pasta de Saída</h4>
-                            <p class="text-sm text-gray-400">Selecione onde os arquivos convertidos serão salvos. Os arquivos de saída seguem a nomenclatura padrão <code class="text-green-300">X_Y.ext</code>.</p>
+                            <div class="w-12 h-12 bg-gray-500 rounded-lg flex items-center justify-center text-white font-bold text-lg mx-auto mb-4">2</div>
+                            <h4 class="font-semibold mb-2 text-white">Pasta de Saída</h4>
+                            <p class="text-sm text-gray-400">Selecione onde os arquivos convertidos serão salvos. Nomenclatura padrão <code class="text-gray-300">X_Y.ext</code>.</p>
                         </div>
                         <div class="text-center">
-                            <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-teal-500 rounded-full flex items-center justify-center text-white font-bold text-lg mx-auto mb-4">3</div>
-                            <h4 class="font-semibold mb-2">Formato de Saída</h4>
-                            <p class="text-sm text-gray-400">Escolha o formato de destino: L2J, CONV_DAT ou L2G. Apenas arquivos em formato diferente serão convertidos.</p>
+                            <div class="w-12 h-12 bg-gray-500 rounded-lg flex items-center justify-center text-white font-bold text-lg mx-auto mb-4">3</div>
+                            <h4 class="font-semibold mb-2 text-white">Formato de Saída</h4>
+                            <p class="text-sm text-gray-400">Escolha o formato de destino: L2J, CONV_DAT ou L2G.</p>
                         </div>
                         <div class="text-center">
-                            <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-teal-500 rounded-full flex items-center justify-center text-white font-bold text-lg mx-auto mb-4">4</div>
-                            <h4 class="font-semibold mb-2">Iniciar Conversão</h4>
-                            <p class="text-sm text-gray-400">Clique em <strong class="text-white">Iniciar Conversão</strong>. O progresso e os logs aparecem em tempo real. É possível cancelar a qualquer momento.</p>
+                            <div class="w-12 h-12 bg-gray-500 rounded-lg flex items-center justify-center text-white font-bold text-lg mx-auto mb-4">4</div>
+                            <h4 class="font-semibold mb-2 text-white">Iniciar Conversão</h4>
+                            <p class="text-sm text-gray-400">Clique em <strong class="text-white">Iniciar Conversão</strong>. Progresso em tempo real. Cancelável a qualquer momento.</p>
                         </div>
                     </div>
                 </div>
@@ -960,41 +758,39 @@
     <section id="desenvolvimento" class="bg-white py-20">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16">
-                <h2 class="text-5xl font-bold text-gray-800 mb-4">Desenvolvimento</h2>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Desenvolvimento</h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto">
                     Tudo que você precisa saber para contribuir e expandir o L2Toolkit
                 </p>
             </div>
-            
+
             <div class="max-w-6xl mx-auto">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <!-- Tech Stack -->
-                    <div class="bg-gradient-to-br from-gray-700 to-gray-800 text-white rounded-2xl p-8 shadow-xl">
-                        <h3 class="text-2xl font-semibold mb-6"><i class="fas fa-code mr-3"></i>Stack Tecnológico</h3>
-                        <div class="space-y-4">
-                            <div class="flex items-center bg-white bg-opacity-10 p-3 rounded-lg">
-                                <i class="fas fa-dot-circle mr-4 text-blue-400"></i>
-                                <span><strong>C# .NET 10</strong> - Framework principal</span>
+                    <div class="bg-gray-900 text-white rounded-xl p-8">
+                        <h3 class="text-xl font-semibold mb-6"><i class="fas fa-code mr-3 text-gray-400"></i>Stack Tecnológico</h3>
+                        <div class="space-y-3">
+                            <div class="flex items-center bg-gray-800 p-3 rounded-lg">
+                                <i class="fas fa-dot-circle mr-4 text-gray-400"></i>
+                                <span><strong>C# .NET 10</strong> — Framework principal</span>
                             </div>
-                            <div class="flex items-center bg-white bg-opacity-10 p-3 rounded-lg">
-                                <i class="fas fa-dot-circle mr-4 text-blue-400"></i>
-                                <span><strong>Avalonia UI 11.2</strong> - Interface multiplataforma</span>
+                            <div class="flex items-center bg-gray-800 p-3 rounded-lg">
+                                <i class="fas fa-dot-circle mr-4 text-gray-400"></i>
+                                <span><strong>Avalonia UI 11.2</strong> — Interface multiplataforma</span>
                             </div>
-                            <div class="flex items-center bg-white bg-opacity-10 p-3 rounded-lg">
-                                <i class="fas fa-dot-circle mr-4 text-blue-400"></i>
-                                <span><strong>Native AOT</strong> - Compilação nativa</span>
+                            <div class="flex items-center bg-gray-800 p-3 rounded-lg">
+                                <i class="fas fa-dot-circle mr-4 text-gray-400"></i>
+                                <span><strong>Native AOT</strong> — Compilação nativa</span>
                             </div>
-                            <div class="flex items-center bg-white bg-opacity-10 p-3 rounded-lg">
-                                <i class="fas fa-dot-circle mr-4 text-blue-400"></i>
-                                <span><strong>Visual Studio / Rider</strong> - IDEs recomendadas</span>
+                            <div class="flex items-center bg-gray-800 p-3 rounded-lg">
+                                <i class="fas fa-dot-circle mr-4 text-gray-400"></i>
+                                <span><strong>Visual Studio / Rider</strong> — IDEs recomendadas</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Project Structure -->
-                    <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-8 shadow-xl">
-                        <h3 class="text-2xl font-semibold mb-6 text-gray-800"><i class="fas fa-folder-tree mr-3 text-gray-600"></i>Estrutura do Projeto</h3>
-                        <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-gray-400 overflow-x-auto">
+                    <div class="bg-gray-50 rounded-xl border border-gray-200 p-8">
+                        <h3 class="text-xl font-semibold mb-6 text-gray-800"><i class="fas fa-folder-tree mr-3 text-gray-500"></i>Estrutura do Projeto</h3>
+                        <div class="bg-white p-5 rounded-lg border border-gray-200 overflow-x-auto">
                             <pre class="text-xs text-gray-700 leading-relaxed whitespace-pre"><code>L2Toolkit/
 ├── pages/        # Páginas UI (AXAML + code-behind)
 ├── DatReader/    # Parser .dat e compressão .l2dat
@@ -1011,83 +807,55 @@
                 </div>
 
                 <!-- Getting Started -->
-                <div class="bg-white rounded-2xl shadow-2xl p-8 mt-8 border-t-4 border-gray-500">
-                    <h3 class="text-3xl font-semibold mb-8 text-gray-800"><i class="fas fa-rocket mr-3 text-gray-600"></i>Começando a Desenvolver</h3>
+                <div class="bg-white rounded-xl border border-gray-200 p-8 mt-8">
+                    <h3 class="text-2xl font-semibold mb-8 text-gray-800"><i class="fas fa-rocket mr-3 text-gray-500"></i>Começando a Desenvolver</h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <div class="text-center group">
-                            <div class="bg-gradient-to-br from-gray-600 to-gray-700 text-white rounded-2xl w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110">
-                                <span class="font-bold text-xl">1</span>
+                        <div class="text-center">
+                            <div class="bg-gray-800 text-white rounded-xl w-14 h-14 flex items-center justify-center mx-auto mb-4">
+                                <span class="font-bold text-lg">1</span>
                             </div>
                             <h4 class="font-semibold mb-3 text-gray-800">Clone o Repositório</h4>
-                            <p class="text-gray-600 leading-relaxed">Faça o clone do projeto do GitHub para sua máquina local</p>
+                            <p class="text-gray-600">Faça o clone do projeto do GitHub para sua máquina local</p>
                         </div>
-                        <div class="text-center group">
-                            <div class="bg-gradient-to-br from-gray-500 to-gray-600 text-white rounded-2xl w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110">
-                                <span class="font-bold text-xl">2</span>
+                        <div class="text-center">
+                            <div class="bg-gray-800 text-white rounded-xl w-14 h-14 flex items-center justify-center mx-auto mb-4">
+                                <span class="font-bold text-lg">2</span>
                             </div>
                             <h4 class="font-semibold mb-3 text-gray-800">Instale as Dependências</h4>
-                            <p class="text-gray-600 leading-relaxed">Restore os pacotes NuGet necessários para o projeto</p>
+                            <p class="text-gray-600">Restore os pacotes NuGet necessários para o projeto</p>
                         </div>
-                        <div class="text-center group">
-                            <div class="bg-gradient-to-br from-gray-700 to-gray-800 text-white rounded-2xl w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110">
-                                <span class="font-bold text-xl">3</span>
+                        <div class="text-center">
+                            <div class="bg-gray-800 text-white rounded-xl w-14 h-14 flex items-center justify-center mx-auto mb-4">
+                                <span class="font-bold text-lg">3</span>
                             </div>
                             <h4 class="font-semibold mb-3 text-gray-800">Execute o Projeto</h4>
-                            <p class="text-gray-600 leading-relaxed">Compile e execute no Visual Studio para começar</p>
+                            <p class="text-gray-600">Compile e execute no Visual Studio para começar</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Contributing -->
-                <div class="bg-gradient-to-r from-gray-600 to-gray-700 text-white rounded-2xl p-8 mt-8 shadow-2xl relative overflow-hidden">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-white bg-opacity-10 rounded-full blur-2xl"></div>
-                    <div class="absolute bottom-0 left-0 w-24 h-24 bg-white bg-opacity-5 rounded-full blur-2xl"></div>
-                    <div class="relative z-10">
-                        <h3 class="text-3xl font-semibold mb-4"><i class="fas fa-hands-helping mr-3"></i>Contribuindo</h3>
-                        <p class="mb-6 text-lg text-gray-100">Ajude a melhorar o L2Toolkit! Contribuições são sempre bem-vindas.</p>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="bg-white bg-opacity-10 p-6 rounded-xl backdrop-blur-sm">
-                                <h4 class="font-semibold mb-4 text-xl">Como Contribuir:</h4>
-                                <ul class="space-y-3">
-                                    <li class="flex items-center">
-                                        <i class="fas fa-check-circle mr-3 text-green-400"></i>
-                                        Fork o projeto
-                                    </li>
-                                    <li class="flex items-center">
-                                        <i class="fas fa-check-circle mr-3 text-green-400"></i>
-                                        Crie uma branch para sua feature
-                                    </li>
-                                    <li class="flex items-center">
-                                        <i class="fas fa-check-circle mr-3 text-green-400"></i>
-                                        Commit suas mudanças
-                                    </li>
-                                    <li class="flex items-center">
-                                        <i class="fas fa-check-circle mr-3 text-green-400"></i>
-                                        Abra um Pull Request
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="bg-white bg-opacity-10 p-6 rounded-xl backdrop-blur-sm">
-                                <h4 class="font-semibold mb-4 text-xl">Áreas que Precisam de Ajuda:</h4>
-                                <ul class="space-y-3">
-                                    <li class="flex items-center">
-                                        <i class="fas fa-star mr-3 text-yellow-400"></i>
-                                        Novas funcionalidades
-                                    </li>
-                                    <li class="flex items-center">
-                                        <i class="fas fa-star mr-3 text-yellow-400"></i>
-                                        Correção de bugs
-                                    </li>
-                                    <li class="flex items-center">
-                                        <i class="fas fa-star mr-3 text-yellow-400"></i>
-                                        Melhorias na UI
-                                    </li>
-                                    <li class="flex items-center">
-                                        <i class="fas fa-star mr-3 text-yellow-400"></i>
-                                        Documentação
-                                    </li>
-                                </ul>
-                            </div>
+                <div class="bg-gray-900 text-white rounded-xl p-8 mt-8">
+                    <h3 class="text-2xl font-semibold mb-4"><i class="fas fa-hands-helping mr-3 text-gray-400"></i>Contribuindo</h3>
+                    <p class="mb-6 text-gray-300">Ajude a melhorar o L2Toolkit! Contribuições são sempre bem-vindas.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-gray-800 p-6 rounded-xl">
+                            <h4 class="font-semibold mb-4 text-lg">Como Contribuir:</h4>
+                            <ul class="space-y-3 text-gray-300">
+                                <li class="flex items-center"><i class="fas fa-check-circle mr-3 text-gray-500"></i>Fork o projeto</li>
+                                <li class="flex items-center"><i class="fas fa-check-circle mr-3 text-gray-500"></i>Crie uma branch para sua feature</li>
+                                <li class="flex items-center"><i class="fas fa-check-circle mr-3 text-gray-500"></i>Commit suas mudanças</li>
+                                <li class="flex items-center"><i class="fas fa-check-circle mr-3 text-gray-500"></i>Abra um Pull Request</li>
+                            </ul>
+                        </div>
+                        <div class="bg-gray-800 p-6 rounded-xl">
+                            <h4 class="font-semibold mb-4 text-lg">Áreas que Precisam de Ajuda:</h4>
+                            <ul class="space-y-3 text-gray-300">
+                                <li class="flex items-center"><i class="fas fa-circle mr-3 text-gray-600 text-xs"></i>Novas funcionalidades</li>
+                                <li class="flex items-center"><i class="fas fa-circle mr-3 text-gray-600 text-xs"></i>Correção de bugs</li>
+                                <li class="flex items-center"><i class="fas fa-circle mr-3 text-gray-600 text-xs"></i>Melhorias na UI</li>
+                                <li class="flex items-center"><i class="fas fa-circle mr-3 text-gray-600 text-xs"></i>Documentação</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -1096,67 +864,61 @@
     </section>
 
     <!-- Build Section -->
-    <section id="build" class="bg-gradient-to-br from-gray-50 to-white py-20">
+    <section id="build" class="bg-gray-50 py-20">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16">
-                <h2 class="text-5xl font-bold text-gray-800 mb-4">Build</h2>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Build</h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto">
                     Compilação com Native AOT para máxima performance e executável autossuficiente
                 </p>
             </div>
 
-            <div class="max-w-4xl mx-auto space-y-6">
-
-                <!-- Windows -->
-                <div class="bg-white rounded-2xl shadow-lg p-8 border-l-4 border-blue-500 card-hover">
-                    <div class="flex items-center mb-4">
-                        <div class="bg-blue-100 p-2 rounded-lg mr-4">
-                            <i class="fab fa-windows text-2xl text-blue-600"></i>
-                        </div>
-                        <h3 class="text-xl font-semibold text-gray-800">Windows</h3>
-                    </div>
-                    <pre class="bg-gray-900 text-green-400 p-4 rounded-xl text-sm overflow-x-auto font-mono leading-relaxed">dotnet publish -r win-x64 -c Release -p:PublishAot=true -p:OptimizationPreference=Speed -p:StackTraceSupport=false -p:InvariantGlobalization=true</pre>
-                </div>
-
-                <!-- Linux -->
-                <div class="bg-white rounded-2xl shadow-lg p-8 border-l-4 border-orange-500 card-hover">
-                    <div class="flex items-center mb-4">
-                        <div class="bg-orange-100 p-2 rounded-lg mr-4">
-                            <i class="fab fa-linux text-2xl text-orange-600"></i>
-                        </div>
-                        <h3 class="text-xl font-semibold text-gray-800">Linux</h3>
-                    </div>
-                    <pre class="bg-gray-900 text-green-400 p-4 rounded-xl text-sm overflow-x-auto font-mono leading-relaxed">dotnet publish -r linux-x64 -c Release -p:PublishAot=true -p:OptimizationPreference=Speed -p:StackTraceSupport=false -p:InvariantGlobalization=true</pre>
-                </div>
-
-                <!-- macOS Intel -->
-                <div class="bg-white rounded-2xl shadow-lg p-8 border-l-4 border-gray-500 card-hover">
+            <div class="max-w-4xl mx-auto space-y-4">
+                <div class="bg-white rounded-xl border border-gray-200 p-6">
                     <div class="flex items-center mb-4">
                         <div class="bg-gray-100 p-2 rounded-lg mr-4">
-                            <i class="fab fa-apple text-2xl text-gray-700"></i>
+                            <i class="fab fa-windows text-xl text-gray-600"></i>
                         </div>
-                        <h3 class="text-xl font-semibold text-gray-800">macOS <span class="text-gray-500 font-normal text-base">Intel</span></h3>
+                        <h3 class="text-lg font-semibold text-gray-800">Windows</h3>
                     </div>
-                    <pre class="bg-gray-900 text-green-400 p-4 rounded-xl text-sm overflow-x-auto font-mono leading-relaxed">dotnet publish -r osx-x64 -c Release -p:PublishAot=true -p:OptimizationPreference=Speed -p:StackTraceSupport=false -p:InvariantGlobalization=true</pre>
+                    <pre class="bg-gray-900 text-gray-300 p-4 rounded-lg text-sm overflow-x-auto font-mono">dotnet publish -r win-x64 -c Release -p:PublishAot=true -p:OptimizationPreference=Speed -p:StackTraceSupport=false -p:InvariantGlobalization=true</pre>
                 </div>
 
-                <!-- macOS Apple Silicon -->
-                <div class="bg-white rounded-2xl shadow-lg p-8 border-l-4 border-gray-500 card-hover">
+                <div class="bg-white rounded-xl border border-gray-200 p-6">
                     <div class="flex items-center mb-4">
                         <div class="bg-gray-100 p-2 rounded-lg mr-4">
-                            <i class="fab fa-apple text-2xl text-gray-700"></i>
+                            <i class="fab fa-linux text-xl text-gray-600"></i>
                         </div>
-                        <h3 class="text-xl font-semibold text-gray-800">macOS <span class="text-gray-500 font-normal text-base">Apple Silicon</span></h3>
+                        <h3 class="text-lg font-semibold text-gray-800">Linux</h3>
                     </div>
-                    <pre class="bg-gray-900 text-green-400 p-4 rounded-xl text-sm overflow-x-auto font-mono leading-relaxed">dotnet publish -r osx-arm64 -c Release -p:PublishAot=true -p:OptimizationPreference=Speed -p:StackTraceSupport=false -p:InvariantGlobalization=true</pre>
+                    <pre class="bg-gray-900 text-gray-300 p-4 rounded-lg text-sm overflow-x-auto font-mono">dotnet publish -r linux-x64 -c Release -p:PublishAot=true -p:OptimizationPreference=Speed -p:StackTraceSupport=false -p:InvariantGlobalization=true</pre>
                 </div>
 
+                <div class="bg-white rounded-xl border border-gray-200 p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-gray-100 p-2 rounded-lg mr-4">
+                            <i class="fab fa-apple text-xl text-gray-600"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800">macOS <span class="text-gray-500 font-normal text-base">Intel</span></h3>
+                    </div>
+                    <pre class="bg-gray-900 text-gray-300 p-4 rounded-lg text-sm overflow-x-auto font-mono">dotnet publish -r osx-x64 -c Release -p:PublishAot=true -p:OptimizationPreference=Speed -p:StackTraceSupport=false -p:InvariantGlobalization=true</pre>
+                </div>
+
+                <div class="bg-white rounded-xl border border-gray-200 p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-gray-100 p-2 rounded-lg mr-4">
+                            <i class="fab fa-apple text-xl text-gray-600"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800">macOS <span class="text-gray-500 font-normal text-base">Apple Silicon</span></h3>
+                    </div>
+                    <pre class="bg-gray-900 text-gray-300 p-4 rounded-lg text-sm overflow-x-auto font-mono">dotnet publish -r osx-arm64 -c Release -p:PublishAot=true -p:OptimizationPreference=Speed -p:StackTraceSupport=false -p:InvariantGlobalization=true</pre>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-dark text-white py-12">
+    <footer class="bg-gray-900 text-white py-12">
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
@@ -1164,38 +926,35 @@
                     <p class="text-gray-400">Ferramentas profissionais para desenvolvedores de servidores Lineage 2.</p>
                 </div>
                 <div>
-                    <h4 class="font-semibold mb-4">Documentação</h4>
+                    <h4 class="font-semibold mb-4 text-white">Documentação</h4>
                     <ul class="space-y-2 text-gray-400">
-                        <li><a href="#instalacao" class="hover:text-white transition-colors">Instalação</a></li>
-                        <li><a href="#funcionalidades" class="hover:text-white transition-colors">Funcionalidades</a></li>
-                        <li><a href="#live-data" class="hover:text-white transition-colors">Live Data</a></li>
-                        <li><a href="#geodata-converter" class="hover:text-white transition-colors">Geodata Converter</a></li>
+                        <li><a href="#instalacao" class="hover:text-white">Instalação</a></li>
+                        <li><a href="#funcionalidades" class="hover:text-white">Funcionalidades</a></li>
+                        <li><a href="#live-data" class="hover:text-white">Live Data</a></li>
+                        <li><a href="#geodata-converter" class="hover:text-white">Geodata Converter</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="font-semibold mb-4">Desenvolvimento</h4>
+                    <h4 class="font-semibold mb-4 text-white">Desenvolvimento</h4>
                     <ul class="space-y-2 text-gray-400">
-                        <li><a href="#desenvolvimento" class="hover:text-white transition-colors">Guia de Desenvolvimento</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Changelog</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Roadmap</a></li>
+                        <li><a href="#desenvolvimento" class="hover:text-white">Guia de Desenvolvimento</a></li>
+                        <li><a href="#" class="hover:text-white">Changelog</a></li>
+                        <li><a href="#" class="hover:text-white">Roadmap</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="font-semibold mb-4">Informações</h4>
+                    <h4 class="font-semibold mb-4 text-white">Informações</h4>
                     <ul class="space-y-2 text-gray-400">
-                        <li><strong>Versão:</strong> 2.0.0.0</li>
-                        <li><strong>Empresa:</strong> Majestic World Studio</li>
-                        <li><strong>Licença:</strong> Open Source</li>
-                        <li><strong>Última Atualização:</strong> Live Data XML</li>
+                        <li><strong class="text-gray-300">Versão:</strong> 2.0.0.0</li>
+                        <li><strong class="text-gray-300">Empresa:</strong> Majestic World Studio</li>
+                        <li><strong class="text-gray-300">Licença:</strong> Open Source</li>
+                        <li><strong class="text-gray-300">Última Atualização:</strong> Live Data XML</li>
                     </ul>
                 </div>
             </div>
             <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
                 <p>&copy; 2025 Majestic World Studio. Desenvolvido para a comunidade Lineage 2.</p>
-                <p class="mt-2 text-sm">
-                    <i class="fas fa-heart text-red-400 mr-1"></i>
-                    Agradecimentos especiais à comunidade L2 pelo feedback e sugestões de melhorias
-                </p>
+                <p class="mt-2 text-sm">Agradecimentos especiais à comunidade L2 pelo feedback e sugestões de melhorias</p>
             </div>
         </div>
     </footer>
@@ -1206,29 +965,23 @@
             menu.classList.toggle('hidden');
         }
 
-        // Smooth scrolling for navigation links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                    // Close mobile menu if open
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     document.getElementById('mobile-menu').classList.add('hidden');
                 }
             });
         });
 
-        // Add scroll effect to header
         window.addEventListener('scroll', function() {
             const header = document.querySelector('header');
             if (window.scrollY > 100) {
-                header.classList.add('shadow-xl');
+                header.classList.add('shadow-sm');
             } else {
-                header.classList.remove('shadow-xl');
+                header.classList.remove('shadow-sm');
             }
         });
     </script>
