@@ -220,11 +220,39 @@ public partial class EnchantEffect : UserControl
             PopulateSelectors();
             SelectorPanel.IsVisible = true;
             SaveButton.IsVisible    = true;
+            CloseWeaponButton.IsVisible = true;
         }
         catch (Exception ex)
         {
             ShowErrorBanner(ex.Message);
         }
+    }
+
+    private void CloseWeaponFile_Click(object? sender, RoutedEventArgs e)
+    {
+        _entries          = [];
+        _datWeaponRecords = [];
+        _currentEntry     = null;
+        _loadedFilePath   = "";
+        _activeHexBox     = null;
+
+        // Mantém o caminho no campo para permitir reabrir rapidamente o mesmo arquivo.
+
+        TypeCombo.ItemsSource  = null;
+        GradeCombo.ItemsSource = null;
+
+        SelectorPanel.IsVisible     = false;
+        ContentPanel.IsVisible      = false;
+        WeaponRowsSection.IsVisible = false;
+        SaveButton.IsVisible        = false;
+        CloseWeaponButton.IsVisible = false;
+
+        PreviewGrid.Children.Clear();
+        PreviewGrid.ColumnDefinitions.Clear();
+        PreviewLabelsGrid.Children.Clear();
+        PreviewLabelsGrid.ColumnDefinitions.Clear();
+
+        BuildRows();
     }
 
     private async void SaveFile_Click(object? sender, RoutedEventArgs e)
@@ -302,11 +330,33 @@ public partial class EnchantEffect : UserControl
             RefreshArmorPreview();
             ArmorContentPanel.IsVisible = true;
             ArmorRowsSection.IsVisible  = true;
+            CloseArmorButton.IsVisible  = true;
         }
         catch (Exception ex)
         {
             ShowErrorBanner(ex.Message);
         }
+    }
+
+    private void CloseArmorFile_Click(object? sender, RoutedEventArgs e)
+    {
+        _armorEntries        = [];
+        _datArmorRecords     = [];
+        _armorLoadedFilePath = "";
+        _activeHexBox        = null;
+
+        // Mantém o caminho no campo para permitir reabrir rapidamente o mesmo arquivo.
+
+        ArmorContentPanel.IsVisible = false;
+        ArmorRowsSection.IsVisible  = false;
+        CloseArmorButton.IsVisible  = false;
+
+        ArmorPreviewGrid.Children.Clear();
+        ArmorPreviewGrid.ColumnDefinitions.Clear();
+        ArmorPreviewLabelsGrid.Children.Clear();
+        ArmorPreviewLabelsGrid.ColumnDefinitions.Clear();
+
+        BuildArmorRows();
     }
 
     private async void ArmorSaveFile_Click(object? sender, RoutedEventArgs e)

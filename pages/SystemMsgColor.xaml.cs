@@ -200,6 +200,30 @@ public partial class SystemMsgColor : UserControl
         }
     }
 
+    private void CloseFile_Click(object? sender, RoutedEventArgs e)
+    {
+        _entries.Clear();
+        _visibleEntries.Clear();
+        _selectedIds.Clear();
+        _lastClickedId = -1;
+        _activeHexBox  = null;
+
+        // Mantém _loadedFilePath e o campo preenchidos para permitir reabrir
+        // rapidamente o mesmo arquivo pelo botão "Abrir".
+        SearchBox.Text = "";
+
+        MsgRowsPanel.Children.Clear();
+        OverflowLabel.IsVisible = false;
+        StatsLabel.Text = "";
+
+        ColorsModal.IsVisible      = false;
+        ColorPickerPopup.IsOpen    = false;
+
+        ContentPanel.IsVisible        = false;
+        MsgScrollViewer.IsVisible     = false;
+        BackupWarningBanner.IsVisible = true;
+    }
+
     private void StartSaveSpinner()
     {
         SaveBtn.IsEnabled    = false;

@@ -281,6 +281,18 @@
                                    </StackPanel>
                                </Button>
 
+                               <!-- Fechar arquivo -->
+                               <Button x:Name="CloseWeaponButton" Grid.Column="2" IsVisible="False"
+                                       Click="CloseWeaponFile_Click"
+                                       Theme="{StaticResource GhostButton}" Height="36" Padding="14,0">
+                                   <StackPanel Orientation="Horizontal" Spacing="8">
+                                       <PathIcon Width="12" Height="12" VerticalAlignment="Center"
+                                                 Foreground="#B0B0B0"
+                                                 Data="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                                       <TextBlock Text="Fechar Arquivo" VerticalAlignment="Center" FontSize="13"/>
+                                   </StackPanel>
+                               </Button>
+
                                <!-- Salvar -->
                                <Button x:Name="SaveButton" Grid.Column="4" IsVisible="False"
                                        Click="SaveFile_Click" Height="36" Padding="16,0"
@@ -351,8 +363,18 @@
                            <TextBlock Text="AÇÕES"
                                       Foreground="#6B7280" FontSize="10"
                                       FontWeight="Bold" LetterSpacing="1"/>
-                           <Grid ColumnDefinitions="*,Auto">
-                               <Button x:Name="ArmorSaveButton" Grid.Column="1"
+                           <Grid ColumnDefinitions="*,Auto,10,Auto">
+                               <Button x:Name="CloseArmorButton" Grid.Column="1" IsVisible="False"
+                                       Click="CloseArmorFile_Click" Height="36" Padding="14,0"
+                                       Theme="{StaticResource GhostButton}">
+                                   <StackPanel Orientation="Horizontal" Spacing="8">
+                                       <PathIcon Width="12" Height="12" VerticalAlignment="Center"
+                                                 Foreground="#B0B0B0"
+                                                 Data="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                                       <TextBlock Text="Fechar Arquivo" VerticalAlignment="Center" FontSize="13"/>
+                                   </StackPanel>
+                               </Button>
+                               <Button x:Name="ArmorSaveButton" Grid.Column="3"
                                        Click="ArmorSaveFile_Click" Height="36" Padding="16,0"
                                        Theme="{StaticResource SaveButton}">
                                    <StackPanel Orientation="Horizontal" Spacing="8">
