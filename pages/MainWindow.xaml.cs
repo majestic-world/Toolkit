@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -9,15 +11,17 @@ namespace L2Toolkit
 {
     public partial class MainWindow : Window
     {
+        private readonly Dictionary<Type, UserControl> _pageCache = new();
+
         public MainWindow()
         {
             InitializeComponent();
-            MainContent.Content = new DoorGenerateControl();
+            ShowPage<DoorGenerateControl>();
 
             AppNavigator.NavigateTo += page =>
             {
                 if (page == "settings")
-                    MainContent.Content = new AppSettingsControl();
+                    ShowPage<AppSettingsControl>();
             };
 
             PropertyChanged += (_, e) =>
@@ -25,6 +29,19 @@ namespace L2Toolkit
                 if (e.Property == WindowStateProperty)
                     UpdateMaximizeIcon();
             };
+        }
+
+        // Mantém uma única instância de cada página para preservar o estado
+        // (dados carregados, campos preenchidos) ao navegar entre páginas.
+        private void ShowPage<T>() where T : UserControl, new()
+        {
+            if (!_pageCache.TryGetValue(typeof(T), out var page))
+            {
+                page = new T();
+                _pageCache[typeof(T)] = page;
+            }
+
+            MainContent.Content = page;
         }
 
         private void UpdateMaximizeIcon()
@@ -72,60 +89,60 @@ namespace L2Toolkit
         // ── Navegação da sidebar ──────────────────────────────────────────
 
         private void BtnPawnData_Click(object sender, RoutedEventArgs e)
-            => MainContent.Content = new PawnDataControl();
+            => ShowPage<PawnDataControl>();
 
         private void BtnPrimeShop_Click(object sender, RoutedEventArgs e)
-            => MainContent.Content = new PrimeShopGenerator();
+            => ShowPage<PrimeShopGenerator>();
 
         private void BtnDoor_Click(object sender, RoutedEventArgs e)
-            => MainContent.Content = new DoorGenerateControl();
+            => ShowPage<DoorGenerateControl>();
 
         private void BtnSpawnManager_Click(object sender, RoutedEventArgs e)
-            => MainContent.Content = new SpawnManager();
+            => ShowPage<SpawnManager>();
 
         private void BtnDescriptionFix_Click(object sender, RoutedEventArgs e)
-            => MainContent.Content = new DescriptionFix();
+            => ShowPage<DescriptionFix>();
 
         private void BtnMissions_Click(object sender, RoutedEventArgs e)
-            => MainContent.Content = new Missions();
+            => ShowPage<Missions>();
 
         private void BtnUpgrade_Click(object sender, RoutedEventArgs e)
-            => MainContent.Content = new UpgradeEquipment();
+            => ShowPage<UpgradeEquipment>();
 
         private void BtnSearchIcon_Click(object sender, RoutedEventArgs e)
-            => MainContent.Content = new SearchIcon();
+            => ShowPage<SearchIcon>();
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
-            => MainContent.Content = new LogParse();
+            => ShowPage<LogParse>();
 
         private void ButtonSkills_OnClick(object sender, RoutedEventArgs e)
-            => MainContent.Content = new SkillsModify();
+            => ShowPage<SkillsModify>();
 
         private void ButtonLiveMode_OnClick(object sender, RoutedEventArgs e)
-            => MainContent.Content = new LiveData();
+            => ShowPage<LiveData>();
 
         private void ButtonCreateMultisell_OnClick(object sender, RoutedEventArgs e)
-            => MainContent.Content = new CreateMultisell();
+            => ShowPage<CreateMultisell>();
 
         private void ButtonUpgradeNormalSystem_OnClick(object sender, RoutedEventArgs e)
-            => MainContent.Content = new UpgradeNormalSystem();
+            => ShowPage<UpgradeNormalSystem>();
 
         private void ButtonMobius_OnClick(object sender, RoutedEventArgs e)
-            => MainContent.Content = new Commission();
+            => ShowPage<Commission>();
 
         private void SkinBuilder_OnClick(object sender, RoutedEventArgs e)
-            => MainContent.Content = new SkinBuilder();
+            => ShowPage<SkinBuilder>();
 
         private void BtnGeodataConverter_Click(object sender, RoutedEventArgs e)
-            => MainContent.Content = new GeodataConverterControl();
+            => ShowPage<GeodataConverterControl>();
 
         private void BtnSettings_Click(object sender, RoutedEventArgs e)
-            => MainContent.Content = new AppSettingsControl();
+            => ShowPage<AppSettingsControl>();
 
         private void BtnEnchantEffect_Click(object sender, RoutedEventArgs e)
-            => MainContent.Content = new EnchantEffect();
+            => ShowPage<EnchantEffect>();
 
         private void BtnSystemMsgColor_Click(object sender, RoutedEventArgs e)
-            => MainContent.Content = new SystemMsgColor();
+            => ShowPage<SystemMsgColor>();
     }
 }
