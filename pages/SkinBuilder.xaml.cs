@@ -604,6 +604,30 @@ public partial class SkinBuilder : UserControl
         }
     }
 
+    private void ResetButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        _errorTimer.Stop();
+        NotificacaoBorder.IsVisible = false;
+
+        _itemsName.Clear();
+        _itemsStatus.Clear();
+
+        TypeProcess.SelectedIndex = 0;
+        UpdatePresets("Weapons");
+
+        // Limpa após UpdatePresets: reatribuir o ItemsSource do PresetComboBox
+        // pode reemitir SelectionChanged com o índice antigo e repopular o campo.
+        ProcessClientId.Text = string.Empty;
+
+        ClientTextBox.Text = string.Empty;
+        NameData.Text = string.Empty;
+        XmlData.Text = string.Empty;
+        SkinData.Text = string.Empty;
+        StatusData.Text = string.Empty;
+
+        _log.ClearLog();
+    }
+
     private void CreateStatus(List<string> ids)
     {
         var list = new StringBuilder();

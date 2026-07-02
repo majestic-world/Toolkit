@@ -949,6 +949,36 @@ public partial class LiveData : UserControl
         }
     }
 
+    private void ResetButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        _errorTimer.Stop();
+        NotificacaoBorder.IsVisible = false;
+
+        _itemsName.Clear();
+        _itemsStatus.Clear();
+
+        TypeProcess.SelectedIndex = 0;
+        UpdatePresets("Skills");
+
+        // Limpa após UpdatePresets: reatribuir o ItemsSource do PresetComboBox
+        // pode reemitir SelectionChanged com o índice antigo e repopular o campo.
+        ProcessClientId.Text = string.Empty;
+        SetItemNextId.Text = string.Empty;
+        ConvertSPlusCheckBox.IsChecked = true;
+        EnableEnchantGlowCheckBox.IsChecked = true;
+
+        ClientTextBox.Text = string.Empty;
+        NameData.Text = string.Empty;
+        XmlData.Text = string.Empty;
+        SetItemGrpData.Text = string.Empty;
+
+        StackPanelXml.IsVisible = false;
+        ConvertSPlusCheckBox.IsVisible = false;
+        EnableEnchantGlowCheckBox.IsVisible = false;
+        SetItemIdPanel.IsVisible = false;
+        SetItemGrpPanel.IsVisible = false;
+    }
+
     private async void CopiarClienteButton_OnClick(object sender, RoutedEventArgs e)
     {
         var text = ClientTextBox.Text;

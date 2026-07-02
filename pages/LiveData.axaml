@@ -261,21 +261,37 @@
                         Height="1"
                         Background="#464646"
                         VerticalAlignment="Center"/>
-                <Button Grid.Column="1"
-                        x:Name="GerarButton"
-                        Click="GerarButton_OnClick"
-                        Height="40"
-                        Padding="28,0"
-                        Margin="20,0"
-                        Theme="{StaticResource SecondaryButton}">
-                    <StackPanel Orientation="Horizontal" Spacing="9">
-                        <PathIcon Foreground="White" Data="M8 5v14l11-7z" Width="14" Height="14" VerticalAlignment="Center"/>
-                        <TextBlock Text="Gerar Dados"
-                                   FontSize="13"
-                                   FontWeight="SemiBold"
-                                   VerticalAlignment="Center"/>
-                    </StackPanel>
-                </Button>
+                <StackPanel Grid.Column="1"
+                            Orientation="Horizontal"
+                            Spacing="10"
+                            Margin="20,0">
+                    <Button x:Name="GerarButton"
+                            Click="GerarButton_OnClick"
+                            Height="40"
+                            Padding="28,0"
+                            Theme="{StaticResource SecondaryButton}">
+                        <StackPanel Orientation="Horizontal" Spacing="9">
+                            <PathIcon Foreground="White" Data="M8 5v14l11-7z" Width="14" Height="14" VerticalAlignment="Center"/>
+                            <TextBlock Text="Gerar Dados"
+                                       FontSize="13"
+                                       FontWeight="SemiBold"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="ResetButton"
+                            Click="ResetButton_OnClick"
+                            Height="40"
+                            Padding="20,0"
+                            Theme="{StaticResource GhostButton}">
+                        <StackPanel Orientation="Horizontal" Spacing="9">
+                            <PathIcon Foreground="#B0B0B0" Data="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z" Width="14" Height="14" VerticalAlignment="Center"/>
+                            <TextBlock Text="Resetar"
+                                       FontSize="13"
+                                       FontWeight="SemiBold"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
                 <Border Grid.Column="2"
                         Height="1"
                         Background="#464646"
