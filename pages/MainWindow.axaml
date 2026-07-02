@@ -24,7 +24,7 @@
             <!-- Botão da sidebar -->
             <ControlTheme x:Key="SidebarButtonStyle" TargetType="Button">
                 <Setter Property="Height" Value="34"/>
-                <Setter Property="Margin" Value="6,2"/>
+                <Setter Property="Margin" Value="6,4"/>
                 <Setter Property="Padding" Value="14,0"/>
                 <Setter Property="Cursor" Value="Hand"/>
                 <Setter Property="FontSize" Value="14"/>
@@ -146,7 +146,7 @@
                             CornerRadius="3"
                             Padding="5,1"
                             VerticalAlignment="Center">
-                        <TextBlock Text="v3.5"
+                        <TextBlock Text="v3.6"
                                    Foreground="#888888"
                                    FontSize="11"
                                    FontWeight="Medium"/>
