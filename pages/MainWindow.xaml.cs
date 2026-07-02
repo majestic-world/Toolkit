@@ -12,10 +12,34 @@ namespace L2Toolkit
     public partial class MainWindow : Window
     {
         private readonly Dictionary<Type, UserControl> _pageCache = new();
+        private readonly Dictionary<Type, Button> _sidebarButtons;
+        private Button? _activeSidebarButton;
 
         public MainWindow()
         {
             InitializeComponent();
+
+            _sidebarButtons = new Dictionary<Type, Button>
+            {
+                [typeof(DoorGenerateControl)]     = BtnDoorButton,
+                [typeof(GeodataConverterControl)] = BtnGeodataConverterButton,
+                [typeof(PawnDataControl)]         = BtnPawnDataButton,
+                [typeof(SpawnManager)]            = BtnSpawnManagerButton,
+                [typeof(PrimeShopGenerator)]      = BtnPrimeShopButton,
+                [typeof(DescriptionFix)]          = BtnDescriptionFixButton,
+                [typeof(Missions)]                = BtnMissionsButton,
+                [typeof(UpgradeEquipment)]        = BtnUpgradeButton,
+                [typeof(UpgradeNormalSystem)]     = BtnUpgradeNormalSystemButton,
+                [typeof(LiveData)]                = BtnLiveModeButton,
+                [typeof(SkinBuilder)]             = SkinBuilderBtn,
+                [typeof(CreateMultisell)]         = BtnCreateMultisellButton,
+                [typeof(Commission)]              = BtnMobiusButton,
+                [typeof(EnchantEffect)]           = BtnEnchantEffectButton,
+                [typeof(SystemMsgColor)]          = BtnSystemMsgColorButton,
+                [typeof(SearchIcon)]              = BtnSearchIconButton,
+                [typeof(LogParse)]                = BtnLogParseButton,
+            };
+
             ShowPage<DoorGenerateControl>();
 
             AppNavigator.NavigateTo += page =>
@@ -42,6 +66,16 @@ namespace L2Toolkit
             }
 
             MainContent.Content = page;
+            SetActiveSidebarButton(typeof(T));
+        }
+
+        // Destaca no sidebar o botão correspondente à página atualmente aberta.
+        private void SetActiveSidebarButton(Type pageType)
+        {
+            _activeSidebarButton?.Classes.Remove("active");
+
+            _activeSidebarButton = _sidebarButtons.GetValueOrDefault(pageType);
+            _activeSidebarButton?.Classes.Add("active");
         }
 
         private void UpdateMaximizeIcon()

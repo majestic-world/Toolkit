@@ -70,6 +70,12 @@
                 <Style Selector="^:pressed /template/ Border#activeIndicator">
                     <Setter Property="Opacity" Value="1"/>
                 </Style>
+                <Style Selector="^.active /template/ Border#PART_Border">
+                    <Setter Property="Background" Value="#3F3F3F"/>
+                </Style>
+                <Style Selector="^.active /template/ Border#activeIndicator">
+                    <Setter Property="Opacity" Value="1"/>
+                </Style>
             </ControlTheme>
 
             <!-- Botão de controle da titlebar (minimizar/maximizar) -->
@@ -146,7 +152,7 @@
                             CornerRadius="3"
                             Padding="5,1"
                             VerticalAlignment="Center">
-                        <TextBlock Text="v3.6"
+                        <TextBlock Text="v3.7"
                                    Foreground="#888888"
                                    FontSize="11"
                                    FontWeight="Medium"/>
@@ -226,7 +232,7 @@
                                    LetterSpacing="1"
                                    Margin="20,8,12,4"/>
 
-                        <Button Click="BtnDoor_Click" Theme="{StaticResource SidebarButtonStyle}">
+                        <Button x:Name="BtnDoorButton" Click="BtnDoor_Click" Theme="{StaticResource SidebarButtonStyle}">
                             <StackPanel Orientation="Horizontal">
                                 <PathIcon Data="M384 128L448 128L448 544C448 561.7 462.3 576 480 576L512 576C529.7 576 544 561.7 544 544C544 526.3 529.7 512 512 512L512 128C512 92.7 483.3 64 448 64L352 64L352 64L192 64C156.7 64 128 92.7 128 128L128 512C110.3 512 96 526.3 96 544C96 561.7 110.3 576 128 576L352 576C369.7 576 384 561.7 384 544L384 128zM256 320C256 302.3 270.3 288 288 288C305.7 288 320 302.3 320 320C320 337.7 305.7 352 288 352C270.3 352 256 337.7 256 320z"
                                           Width="16" Height="16" Foreground="#5B9BD5" VerticalAlignment="Center" Margin="0,0,12,0"/>
@@ -234,7 +240,7 @@
                             </StackPanel>
                         </Button>
 
-                        <Button Click="BtnGeodataConverter_Click" Theme="{StaticResource SidebarButtonStyle}">
+                        <Button x:Name="BtnGeodataConverterButton" Click="BtnGeodataConverter_Click" Theme="{StaticResource SidebarButtonStyle}">
                             <StackPanel Orientation="Horizontal">
                                 <!-- Globe icon -->
                                 <PathIcon Data="m360-240 56-56-62-64h166v-80H354l62-64-56-56-160 160 160 160Zm240-160 160-160-160-160-56 56 62 64H440v80h166l-62 64 56 56ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"
@@ -243,7 +249,7 @@
                             </StackPanel>
                         </Button>
 
-                        <Button Click="BtnPawnData_Click" Theme="{StaticResource SidebarButtonStyle}">
+                        <Button x:Name="BtnPawnDataButton" Click="BtnPawnData_Click" Theme="{StaticResource SidebarButtonStyle}">
                             <StackPanel Orientation="Horizontal">
                                 <!-- Person walking icon -->
                                 <PathIcon Data="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L6 8.3V13h2V9.6l1.8-.7"
@@ -252,7 +258,7 @@
                             </StackPanel>
                         </Button>
 
-                        <Button Click="BtnSpawnManager_Click" Theme="{StaticResource SidebarButtonStyle}">
+                        <Button x:Name="BtnSpawnManagerButton" Click="BtnSpawnManager_Click" Theme="{StaticResource SidebarButtonStyle}">
                             <StackPanel Orientation="Horizontal">
                                 <!-- Person / NPC icon -->
                                 <PathIcon Data="M240-280 40-480l200-200 56 56-143 144 143 144-56 56Zm178 132-76-24 200-640 76 24-200 640Zm302-132-56-56 143-144-143-144 56-56 200 200-200 200Z"
@@ -261,7 +267,7 @@
                             </StackPanel>
                         </Button>
 
-                        <Button Click="BtnPrimeShop_Click" Theme="{StaticResource SidebarButtonStyle}">
+                        <Button x:Name="BtnPrimeShopButton" Click="BtnPrimeShop_Click" Theme="{StaticResource SidebarButtonStyle}">
                             <StackPanel Orientation="Horizontal">
                                 <!-- Shopping cart icon -->
                                 <PathIcon Data="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96C5 16.1 6.9 18 9 18h12v-2H9.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63H19c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1 1 0 0023.25 5H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"
@@ -270,7 +276,7 @@
                             </StackPanel>
                         </Button>
 
-                        <Button Click="BtnDescriptionFix_Click" Theme="{StaticResource SidebarButtonStyle}">
+                        <Button x:Name="BtnDescriptionFixButton" Click="BtnDescriptionFix_Click" Theme="{StaticResource SidebarButtonStyle}">
                             <StackPanel Orientation="Horizontal">
                                 <!-- Pencil / edit icon -->
                                 <PathIcon Data="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
@@ -279,7 +285,7 @@
                             </StackPanel>
                         </Button>
 
-                        <Button Click="BtnMissions_Click" Theme="{StaticResource SidebarButtonStyle}">
+                        <Button x:Name="BtnMissionsButton" Click="BtnMissions_Click" Theme="{StaticResource SidebarButtonStyle}">
                             <StackPanel Orientation="Horizontal">
                                 <!-- Checkmark icon -->
                                 <PathIcon Data="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q65 0 123 19t107 53l-58 59q-38-24-81-37.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q32 0 62-6t58-17l60 61q-41 20-86 31t-94 11Zm280-80v-120H640v-80h120v-120h80v120h120v80H840v120h-80ZM424-296 254-466l56-56 114 114 400-401 56 56-456 457Z"
@@ -288,7 +294,7 @@
                             </StackPanel>
                         </Button>
 
-                        <Button Click="BtnUpgrade_Click" Theme="{StaticResource SidebarButtonStyle}">
+                        <Button x:Name="BtnUpgradeButton" Click="BtnUpgrade_Click" Theme="{StaticResource SidebarButtonStyle}">
                             <StackPanel Orientation="Horizontal">
                                 <!-- Upload / arrow up icon -->
                                 <PathIcon Data="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"
@@ -297,7 +303,7 @@
                             </StackPanel>
                         </Button>
 
-                        <Button Click="ButtonUpgradeNormalSystem_OnClick" Theme="{StaticResource SidebarButtonStyle}">
+                        <Button x:Name="BtnUpgradeNormalSystemButton" Click="ButtonUpgradeNormalSystem_OnClick" Theme="{StaticResource SidebarButtonStyle}">
                             <StackPanel Orientation="Horizontal">
                                 <!-- Wrench / build icon -->
                                 <PathIcon Data="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"
@@ -306,7 +312,7 @@
                             </StackPanel>
                         </Button>
 
-                        <Button Click="ButtonLiveMode_OnClick" Theme="{StaticResource SidebarButtonStyle}">
+                        <Button x:Name="BtnLiveModeButton" Click="ButtonLiveMode_OnClick" Theme="{StaticResource SidebarButtonStyle}">
                             <StackPanel Orientation="Horizontal">
                                 <!-- Wifi / broadcast signal icon -->
                                 <PathIcon Data="M480-480ZM370-80l-16-128q-13-5-24.5-12T307-235l-119 50L78-375l103-78q-1-7-1-13.5v-27q0-6.5 1-13.5L78-585l110-190 119 50q11-8 23-15t24-12l16-128h220l16 128q13 5 24.5 12t22.5 15l119-50 110 190-74 56q-22-11-45-18.5T714-558l63-48-39-68-99 42q-22-23-48.5-38.5T533-694l-13-106h-79l-14 106q-31 8-57.5 23.5T321-633l-99-41-39 68 86 64q-5 15-7 30t-2 32q0 16 2 31t7 30l-86 65 39 68 99-42q17 17 36.5 30.5T400-275q1 57 23.5 107T484-80H370Zm41-279q6-20 14.5-38.5T445-433q-11-8-17-20.5t-6-26.5q0-25 17.5-42.5T482-540q14 0 27 6.5t21 17.5q17-11 35-19.5t38-13.5q-18-32-50-51.5T482-620q-59 0-99.5 41T342-480q0 38 18.5 70.5T411-359Zm269 199 120-120-120-120-28 28 72 72H560v40h163l-71 72 28 28Zm-141.5 21.5Q480-197 480-280t58.5-141.5Q597-480 680-480t141.5 58.5Q880-363 880-280t-58.5 141.5Q763-80 680-80t-141.5-58.5Z" Width="16" Height="16" Foreground="#5B9BD5" VerticalAlignment="Center" Margin="0,0,12,0"/>
@@ -323,7 +329,7 @@
                             </StackPanel>
                         </Button>
 
-                        <Button Click="ButtonCreateMultisell_OnClick" Theme="{StaticResource SidebarButtonStyle}">
+                        <Button x:Name="BtnCreateMultisellButton" Click="ButtonCreateMultisell_OnClick" Theme="{StaticResource SidebarButtonStyle}">
                             <StackPanel Orientation="Horizontal">
                                 <!-- Shopping cart icon (same as Prime Shop) -->
                                 <PathIcon Data="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96C5 16.1 6.9 18 9 18h12v-2H9.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63H19c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1 1 0 0023.25 5H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"
@@ -332,7 +338,7 @@
                             </StackPanel>
                         </Button>
 
-                        <Button Click="ButtonMobius_OnClick" Theme="{StaticResource SidebarButtonStyle}">
+                        <Button x:Name="BtnMobiusButton" Click="ButtonMobius_OnClick" Theme="{StaticResource SidebarButtonStyle}">
                             <StackPanel Orientation="Horizontal">
                                 <!-- Tag / label icon -->
                                 <PathIcon Data="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"
@@ -350,7 +356,7 @@
                             </StackPanel>
                         </Button>
 
-                        <Button Click="BtnEnchantEffect_Click" Theme="{StaticResource SidebarButtonStyle}">
+                        <Button x:Name="BtnEnchantEffectButton" Click="BtnEnchantEffect_Click" Theme="{StaticResource SidebarButtonStyle}">
                             <StackPanel Orientation="Horizontal">
                                 <!-- Sparkle / enchant glow icon -->
                                 <PathIcon Data="M551-800H280v-80h351l-80 80ZM391-640H160v-80h311l-80 80ZM231-480H40v-80h271l-80 80Zm353 80L480-504 280-304l104 104 200-200Zm-47-161 104 104 199-199-104-104-199 199Zm-84-28 216 216-229 229q-24 24-56 24t-56-24l-2-2-26 26H100l126-126-2-2q-24-24-24-56t24-56l229-229Zm0 0 227-227q24-24 56-24t56 24l104 104q24 24 24 56t-24 56L669-373 453-589Z" Width="16" Height="16" Foreground="#5B9BD5" VerticalAlignment="Center" Margin="0,0,12,0"/>
@@ -358,7 +364,7 @@
                             </StackPanel>
                         </Button>
 
-                        <Button Click="BtnSystemMsgColor_Click" Theme="{StaticResource SidebarButtonStyle}">
+                        <Button x:Name="BtnSystemMsgColorButton" Click="BtnSystemMsgColor_Click" Theme="{StaticResource SidebarButtonStyle}">
                             <StackPanel Orientation="Horizontal">
                                 <PathIcon Data="m247-904 57-56 343 343q23 23 23 57t-23 57L457-313q-23 23-57 23t-57-23L153-503q-23-23-23-57t23-57l190-191-96-96Zm153 153L209-560h382L400-751Zm303.5 447.5Q680-327 680-360q0-21 12.5-45t27.5-45q9-12 19-25t21-25q11 12 21 25t19 25q15 21 27.5 45t12.5 45q0 33-23.5 56.5T760-280q-33 0-56.5-23.5ZM80 0v-160h800V0H80Z" Width="16" Height="16" Foreground="#5B9BD5" VerticalAlignment="Center" Margin="0,0,12,0"/>
                                 <TextBlock Text="System Msg Color"/>
@@ -374,7 +380,7 @@
                                    LetterSpacing="1"
                                    Margin="20,8,12,4"/>
 
-                        <Button Click="BtnSearchIcon_Click" Theme="{StaticResource SidebarButtonStyle}">
+                        <Button x:Name="BtnSearchIconButton" Click="BtnSearchIcon_Click" Theme="{StaticResource SidebarButtonStyle}">
                             <StackPanel Orientation="Horizontal">
                                 <!-- Search / magnifier icon -->
                                 <PathIcon Data="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
@@ -383,7 +389,7 @@
                             </StackPanel>
                         </Button>
 
-                        <Button Click="ButtonBase_OnClick" Theme="{StaticResource SidebarButtonStyle}">
+                        <Button x:Name="BtnLogParseButton" Click="ButtonBase_OnClick" Theme="{StaticResource SidebarButtonStyle}">
                             <StackPanel Orientation="Horizontal">
                                 <!-- List / logs icon -->
                                 <PathIcon Data="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"
