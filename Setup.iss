@@ -3,13 +3,15 @@
 ; Non-commercial use only
 
 #define MyAppName "L2 Toolkit"
-#define MyAppVersion "3.5"
+#define MyAppVersion "3.7"
 #define MyAppPublisher "Majestic World Studio"
 #define MyAppURL "https://majestic-world.studio"
 #define MyAppExeName "L2 Toolkit.exe"
 #define MyAppAssocName MyAppName + " File"
 #define MyAppAssocExt ".myp"
 #define MyAppAssocKey StringChange(MyAppAssocName, " ", "") + MyAppAssocExt
+#define RepoDir SourcePath
+#define PublishDir RepoDir + "bin\Release\net10.0\win-x64\publish\"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
@@ -36,9 +38,9 @@ ChangesAssociations=yes
 DisableProgramGroupPage=yes
 ; Remove the following line to run in administrative install mode (install for all users).
 PrivilegesRequired=lowest
-OutputDir=C:\Workspace\DotNet\Toolkit\bin\Release\net10.0\win-x64\publish\Setup
+OutputDir={#PublishDir}Setup
 OutputBaseFilename=L2 Toolkit Installer
-SetupIconFile=C:\Workspace\DotNet\Toolkit\images\4game_icon.ico
+SetupIconFile={#RepoDir}images\4game_icon.ico
 SolidCompression=yes
 WizardStyle=modern windows11
 
@@ -50,12 +52,11 @@ Name: "brazilianportuguese"; MessagesFile: "compiler:Languages\BrazilianPortugue
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "C:\Workspace\DotNet\Toolkit\bin\Release\net10.0\win-x64\publish\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Workspace\DotNet\Toolkit\bin\Release\net10.0\win-x64\publish\av_libglesv2.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Workspace\DotNet\Toolkit\bin\Release\net10.0\win-x64\publish\L2 Toolkit.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Workspace\DotNet\Toolkit\bin\Release\net10.0\win-x64\publish\libHarfBuzzSharp.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Workspace\DotNet\Toolkit\bin\Release\net10.0\win-x64\publish\libSkiaSharp.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Workspace\DotNet\Toolkit\bin\Release\net10.0\win-x64\publish\SQLite.Interop.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#PublishDir}{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#PublishDir}av_libglesv2.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#PublishDir}libHarfBuzzSharp.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#PublishDir}libSkiaSharp.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#PublishDir}SQLite.Interop.dll"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Registry]
