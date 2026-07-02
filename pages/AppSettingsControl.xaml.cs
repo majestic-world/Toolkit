@@ -32,6 +32,19 @@ public partial class AppSettingsControl : UserControl
     private const string BuildSourceDirKey = "build_source_dir";
     private const string BuildOutputDirKey = "build_output_dir";
 
+    // Tabelas que o sistema efetivamente carrega em runtime (ver TableManager/Tables).
+    private static readonly string[] RequiredTableNames =
+    [
+        "Armorgrp",
+        "EtcItemgrp",
+        "ItemName-eu",
+        "ItemStatData",
+        "SetItemGrp-eu",
+        "Skillgrp",
+        "SkillName-eu",
+        "Weapongrp"
+    ];
+
     public AppSettingsControl()
     {
         InitializeComponent();
@@ -328,9 +341,19 @@ public partial class AppSettingsControl : UserControl
             .OrderBy(f => f)
             .ToArray();
 
+        var onlyRequired = BuildOnlyRequiredCheckBox.IsChecked == true;
+        if (onlyRequired)
+        {
+            txtFiles = txtFiles
+                .Where(f => RequiredTableNames.Contains(Path.GetFileNameWithoutExtension(f), StringComparer.OrdinalIgnoreCase))
+                .ToArray();
+        }
+
         if (txtFiles.Length == 0)
         {
-            BuildStatusText.Text = "Nenhum arquivo .txt encontrado na pasta de origem.";
+            BuildStatusText.Text = onlyRequired
+                ? "Nenhum dos arquivos necessários foi encontrado na pasta de origem."
+                : "Nenhum arquivo .txt encontrado na pasta de origem.";
             BuildStatusText.Foreground = new SolidColorBrush(Color.Parse("#BF5D5D"));
             BuildStatusText.IsVisible = true;
             return;

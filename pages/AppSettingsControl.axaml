@@ -338,6 +338,13 @@
                                 </ComboBox>
                             </StackPanel>
 
+                            <!-- Apenas os necessários -->
+                            <CheckBox x:Name="BuildOnlyRequiredCheckBox"
+                                      IsChecked="True"
+                                      Foreground="#C8C8C8"
+                                      FontSize="13"
+                                      Content="Apenas os necessários (empacota somente as tabelas usadas pelo sistema, ignora o resto)"/>
+
                             <!-- Progress bar -->
                             <StackPanel x:Name="BuildProgressPanel" IsVisible="False" Spacing="6">
                                 <Grid ColumnDefinitions="*,8,Auto">
