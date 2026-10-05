@@ -65,9 +65,11 @@
                 <Setter Property="Background" Value="{DynamicResource ThemeSurfaceCardHover}"/>
                 <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderHoverStrong}"/>
             </Style>
+            <!-- Borda de 2 px no selecionado com 1 px a menos de padding: o conteúdo não se desloca. -->
             <Style Selector="^.current /template/ Border#PART_Border">
                 <Setter Property="BorderBrush" Value="{DynamicResource ThemeAccent}"/>
                 <Setter Property="BorderThickness" Value="2"/>
+                <Setter Property="Padding" Value="7"/>
             </Style>
         </ControlTheme>
     </Window.Resources>
