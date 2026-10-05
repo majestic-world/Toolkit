@@ -118,7 +118,7 @@
             </StackPanel>
 
             <!-- ── Arquivo ───────────────────────────────────────── -->
-            <Grid Grid.Row="2" ColumnDefinitions="*,10,Auto" Margin="0,0,0,14">
+            <Grid Grid.Row="2" ColumnDefinitions="*,10,Auto,8,Auto" Margin="0,0,0,14">
                     <!-- Clicar no campo escolhe outro arquivo; o botão abre o que já está nele. -->
                     <Border Grid.Column="0" Background="Transparent" Cursor="Hand"
                             ToolTip.Tip="Clique para escolher outro arquivo"
@@ -135,6 +135,15 @@
                             <PathIcon Data="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"
                                       Foreground="{DynamicResource ThemeTextLabel}" Width="14" Height="14" VerticalAlignment="Center"/>
                             <TextBlock Text="Abrir" FontSize="13" FontWeight="Medium" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="LibraryButton" Grid.Column="4" Height="36" Padding="16,0"
+                            Theme="{StaticResource GhostButton}" Click="Library_Click"
+                            ToolTip.Tip="Abre uma janela com todos os BMP da pasta do client">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <PathIcon Data="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12zM10 13l2.03 2.71L15 12l4 5H9l1-4z"
+                                      Foreground="{DynamicResource ThemeTextLabel}" Width="14" Height="14" VerticalAlignment="Center"/>
+                            <TextBlock Text="Pasta do client" FontSize="13" FontWeight="Medium" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
                 </Grid>

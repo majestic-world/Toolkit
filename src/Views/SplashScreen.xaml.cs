@@ -1,19 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
-using Avalonia.Media.Imaging;
-using Avalonia.Platform;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using L2Toolkit.Processing.Splash;
 using L2Toolkit.Settings;
+using L2Toolkit.Utilities;
 
 namespace L2Toolkit.Views;
 
@@ -40,6 +38,7 @@ public partial class SplashScreen : UserControl
     private int _previewVersion;
     private int _previewColors;
     private bool _busy;
+    private SplashLibraryWindow? _library;
 
     public SplashScreen()
     {
@@ -104,6 +103,7 @@ public partial class SplashScreen : UserControl
         FilePathBox.Text = document.FilePath;
         FormatCombo.SelectedIndex = Array.IndexOf(Formats, document.Format);
         EncryptionCombo.SelectedIndex = Array.IndexOf(Encryptions, document.Encryption);
+        _library?.SetCurrent(document.FilePath);
         RefreshPreview();
     }
 
@@ -144,6 +144,8 @@ public partial class SplashScreen : UserControl
             });
             AppDatabase.GetInstance().UpdateValue(LastPathKey, path);
             Adopt(saved);
+            if (_library != null)
+                await _library.RefreshFileAsync(path);
             ShowSuccess($"{saved.FileName} salva — {Describe(saved)}."
                         + (backup != null ? $" Original preservado em {Path.GetFileName(backup)}." : ""));
         });
@@ -162,6 +164,36 @@ public partial class SplashScreen : UserControl
             await Task.Run(() => SplashFile.ExportPng(path, canvas));
             ShowSuccess($"{Path.GetFileName(path)} exportado com o canal alpha.");
         });
+    }
+
+    /// <summary>
+    /// Galeria da pasta do client numa janela própria e independente: não bloqueia a
+    /// página e pode ficar ao lado dela. Uma só instância; clicar de novo traz para frente.
+    /// </summary>
+    private async void Library_Click(object? sender, RoutedEventArgs e)
+    {
+        if (_library != null)
+        {
+            _library.Activate();
+            return;
+        }
+
+        var library = new SplashLibraryWindow();
+        library.FileChosen += path =>
+        {
+            if (!_busy) _ = LoadAsync(path);
+        };
+        library.Closed += (_, _) => _library = null;
+        // Sem dono para não ficar sempre por cima do editor; fecha junto com o app.
+        if (TopLevel.GetTopLevel(this) is Window main)
+            main.Closed += (_, _) => library.Close();
+        _library = library;
+        library.SetCurrent(_document?.FilePath);
+        library.Show();
+
+        var folder = SplashLibraryWindow.InitialFolder(_document?.FilePath ?? FilePathBox.Text);
+        if (folder != null)
+            await library.LoadFolderAsync(folder);
     }
 
     // ─── Edição ───────────────────────────────────────────────────────────────
@@ -251,17 +283,8 @@ public partial class SplashScreen : UserControl
 
     private void ShowBitmap(RgbaImage image)
     {
-        var bitmap = new WriteableBitmap(new PixelSize(image.Width, image.Height), new Vector(96, 96),
-            PixelFormat.Rgba8888, AlphaFormat.Unpremul);
-        using (var buffer = bitmap.Lock())
-        {
-            var rowBytes = image.Width * 4;
-            for (var row = 0; row < image.Height; row++)
-                Marshal.Copy(image.Pixels, row * rowBytes, buffer.Address + row * buffer.RowBytes, rowBytes);
-        }
-
         var previous = PreviewImage.Source as IDisposable;
-        PreviewImage.Source = bitmap;
+        PreviewImage.Source = RgbaBitmap.ToBitmap(image);
         previous?.Dispose();
     }
 
