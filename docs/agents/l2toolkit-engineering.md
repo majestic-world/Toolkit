@@ -7,7 +7,8 @@ Read `CONTEXT.md` first. This reference preserves the engineering constraints th
 L2Toolkit is a single-window Avalonia desktop suite for Lineage 2 server developers. It has more than fifteen data-processing tools and targets .NET 10 with nullable reference types enabled.
 
 - Build/run in development: `dotnet run`
-- Release publish: `make build` (Windows), `make macos`, `make linux`, `make dist` (Windows + Inno Setup installer). They run `scripts/build.ps1` under PowerShell 7; Native AOT must run on the target OS. Tool logs go to `obj/BuildLogs/<rid>/`.
+- Release publish: `make build` (Windows), `make macos`, `make linux`, `make dist` (Windows + Inno Setup installer). They run `scripts/build.ps1` under PowerShell 7; Native AOT must run on the target OS. Publish output: `build/Release/<rid>/publish/`; tool logs: `build/logs/<rid>/`.
+- Build outputs: `Directory.Build.props` sends everything to `build/` (`build/<Config>/[<rid>/]`, intermediates in `build/obj/`, no target-framework folder). There are no `bin/` or `obj/` folders; do not reintroduce paths to them.
 - App version: `APP_VERSION` in `.env` is the only source. `L2Toolkit.csproj` turns it into the assembly/file/informational version (the titlebar badge reads the informational version), and `scripts/build.ps1` passes it to Inno Setup (`/DMyAppVersion`) and the macOS bundle `Info.plist`. Do not hardcode versions elsewhere; `Setup.iss` refuses to compile without the define.
 - There is no test project. Verify changed behavior in the running GUI, including the relevant file-processing path.
 

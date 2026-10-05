@@ -1,0 +1,13 @@
+<Project>
+  <!-- Todas as saídas ficam em build/ (em vez de bin/ e obj/):
+         build/<Config>/[<rid>/][publish/]  binários e publish
+         build/obj/                         restore e intermediários
+         build/logs/<rid>/                  logs de scripts/build.ps1
+       Precisa estar aqui: BaseIntermediateOutputPath deve ser definido antes dos props do SDK. -->
+  <PropertyGroup>
+    <BuildRoot>$(MSBuildThisFileDirectory)build\</BuildRoot>
+    <BaseOutputPath>$(BuildRoot)</BaseOutputPath>
+    <BaseIntermediateOutputPath>$(BuildRoot)obj\</BaseIntermediateOutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+</Project>

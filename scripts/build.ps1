@@ -8,7 +8,8 @@
              -Installer creates the .dmg with create-dmg.
     linux:   dotnet publish linux-<arch>.
     Native AOT cannot cross-compile between operating systems, so each platform
-    must be built on its own OS. Tool output goes to obj/BuildLogs/<rid>/.
+    must be built on its own OS. Output goes to build/<Configuration>/<rid>/publish/,
+    tool logs to build/logs/<rid>/.
 #>
 [CmdletBinding()]
 param(
@@ -32,8 +33,8 @@ $root = Split-Path -Parent $PSScriptRoot
 $appName = 'L2 Toolkit'
 $project = Join-Path $root 'L2Toolkit.csproj'
 $rid = @{ windows = 'win'; macos = 'osx'; linux = 'linux' }[$Platform] + "-$Architecture"
-$publishDir = Join-Path $root "bin/$Configuration/net10.0/$rid/publish"
-$logs = Join-Path $root "obj/BuildLogs/$rid"
+$publishDir = Join-Path $root "build/$Configuration/$rid/publish"
+$logs = Join-Path $root "build/logs/$rid"
 $publishProperties = @(
     '-p:PublishAot=true',
     '-p:OptimizationPreference=Speed',

@@ -28,7 +28,7 @@ Acesse a documentação completa em:
 
 ## Build
 
-Requer PowerShell 7 (`pwsh`), GNU Make e o .NET 10 SDK. Todos os alvos publicam com Native AOT em `bin/Release/net10.0/<rid>/publish/`; os logs das ferramentas ficam em `obj/BuildLogs/<rid>/`. O Native AOT não compila entre sistemas operacionais: cada plataforma precisa ser gerada no próprio sistema.
+Requer PowerShell 7 (`pwsh`), GNU Make e o .NET 10 SDK. Todas as saídas de build ficam em `build/` (não há `bin/` nem `obj/`): `build/Debug/` e `build/Release/` para os binários, `build/obj/` para os intermediários. Os alvos abaixo publicam com Native AOT em `build/Release/<rid>/publish/`; os logs das ferramentas ficam em `build/logs/<rid>/`. O Native AOT não compila entre sistemas operacionais: cada plataforma precisa ser gerada no próprio sistema.
 
 | Comando | Resultado |
 |---|---|

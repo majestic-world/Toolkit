@@ -14,7 +14,7 @@
 #define MyAppAssocExt ".myp"
 #define MyAppAssocKey StringChange(MyAppAssocName, " ", "") + MyAppAssocExt
 #define RepoDir SourcePath
-#define PublishDir RepoDir + "bin\Release\net10.0\win-x64\publish\"
+#define PublishDir RepoDir + "build\Release\win-x64\publish\"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
