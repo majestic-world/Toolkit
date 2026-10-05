@@ -20,7 +20,7 @@ public partial class BrushGeneratorPage : UserControl
 {
     private const string LastFolderKey = "brush_last_folder";
     private const int PreviewSize = 720;
-    private const int MaxBatch = 200;
+    private BrushVariantsWindow? _variants;
 
     // Mesma ordem dos itens do ComboBox de tamanho.
     private static readonly int[] Sizes = [1024, 2048, 2500, 4096, BrushGenerator.MaxSize];
@@ -86,7 +86,45 @@ public partial class BrushGeneratorPage : UserControl
     {
         _seed = seed;
         SeedBox.Text = seed.ToString();
+        _variants?.SetCurrent(seed);
         RefreshPreview();
+    }
+
+    /// <summary>Leva uma variação escolhida na janela para o palco, com as intensidades dela.</summary>
+    private void ApplyVariant(BrushSettings settings)
+    {
+        SpikesSlider.Value = settings.Spikes * 100;
+        CracksSlider.Value = settings.Cracks * 100;
+        ClawsSlider.Value = settings.Claws * 100;
+        DebrisSlider.Value = settings.Debris * 100;
+        SoftnessSlider.Value = settings.Softness * 100;
+        _previewDebounce.Stop();
+        SetSeed(settings.Seed);
+    }
+
+    /// <summary>
+    /// Variações numa janela própria e independente, como a "Pasta do client" da Splash
+    /// Screen. Uma só instância; clicar de novo traz para frente e gera de novo.
+    /// </summary>
+    private async void Variants_Click(object? sender, RoutedEventArgs e)
+    {
+        if (_variants != null)
+        {
+            _variants.Activate();
+            await _variants.GenerateAsync();
+            return;
+        }
+
+        var variants = new BrushVariantsWindow(CurrentSettings, () => SelectedSize);
+        variants.VariantChosen += ApplyVariant;
+        variants.Closed += (_, _) => _variants = null;
+        // Sem dono para não ficar sempre por cima da página; fecha junto com o app.
+        if (TopLevel.GetTopLevel(this) is Window main)
+            main.Closed += (_, _) => variants.Close();
+        _variants = variants;
+        variants.SetCurrent(_seed);
+        variants.Show();
+        await variants.GenerateAsync();
     }
 
     // ─── Prévia ───────────────────────────────────────────────────────────────
@@ -142,40 +180,6 @@ public partial class BrushGeneratorPage : UserControl
         });
     }
 
-    private async void ExportBatch_Click(object? sender, RoutedEventArgs e)
-    {
-        if (!int.TryParse(BatchBox.Text?.Trim(), out var count) || count is < 1 or > MaxBatch)
-        {
-            ShowError($"Informe um lote entre 1 e {MaxBatch}.");
-            return;
-        }
-
-        var storage = TopLevel.GetTopLevel(this)?.StorageProvider;
-        if (storage == null) return;
-        var folders = await storage.OpenFolderPickerAsync(new FolderPickerOpenOptions
-        {
-            Title = "Pasta para o lote de brushes",
-            AllowMultiple = false,
-            SuggestedStartLocation = await StartFolderAsync(storage),
-        });
-        if (folders.Count == 0) return;
-
-        var folder = folders[0].Path.LocalPath;
-        var (first, size) = (_seed, SelectedSize);
-        await RunAsync($"Gerando lote 0/{count}…", async () =>
-        {
-            for (var i = 0; i < count; i++)
-            {
-                var seed = first + i;
-                var settings = CurrentSettings(seed);
-                await Task.Run(() => BrushGenerator.ExportPng(settings, size, Path.Combine(folder, $"l2brush_{seed}.png")));
-                InfoText.Text = $"Gerando lote {i + 1}/{count}…";
-            }
-            RememberFolder(folder);
-            ShowSuccess($"{count} brushes exportados em {folder} (l2brush_{first}.png a l2brush_{first + count - 1}.png).");
-        });
-    }
-
     private static void RememberFolder(string? folder)
     {
         if (!string.IsNullOrEmpty(folder))
@@ -214,7 +218,7 @@ public partial class BrushGeneratorPage : UserControl
 
     private void UpdateControls()
     {
-        ExportButton.IsEnabled = BatchButton.IsEnabled = !_busy;
+        ExportButton.IsEnabled = VariantsButton.IsEnabled = !_busy;
     }
 
     private void UpdateInfo()

@@ -192,26 +192,16 @@
                             <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
                             <TextBlock Text="SAÍDA" Classes="Section"/>
 
-                            <Grid ColumnDefinitions="*,10,90">
-                                <StackPanel Spacing="5">
-                                    <TextBlock Text="Tamanho" Classes="Field"/>
-                                    <ComboBox x:Name="SizeCombo" HorizontalAlignment="Stretch">
-                                        <ComboBoxItem Content="1024 px"/>
-                                        <ComboBoxItem Content="2048 px"/>
-                                        <ComboBoxItem Content="2500 px"/>
-                                        <ComboBoxItem Content="4096 px"/>
-                                        <ComboBoxItem Content="5000 px"/>
-                                    </ComboBox>
-                                </StackPanel>
-                                <StackPanel Grid.Column="2" Spacing="5">
-                                    <TextBlock Text="Lote" Classes="Field"/>
-                                    <TextBox x:Name="BatchBox" Classes="FormField" Height="32" Padding="10,0"
-                                             VerticalContentAlignment="Center" Text="10"
-                                             ToolTip.Tip="Quantos brushes o “Exportar lote” grava (1–200)"/>
-                                </StackPanel>
-                            </Grid>
-                            <TextBlock Classes="Hint"
-                                       Text="O lote usa esta semente e as seguintes, com as mesmas intensidades."/>
+                            <StackPanel Spacing="5">
+                                <TextBlock Text="Tamanho" Classes="Field"/>
+                                <ComboBox x:Name="SizeCombo" HorizontalAlignment="Stretch">
+                                    <ComboBoxItem Content="1024 px"/>
+                                    <ComboBoxItem Content="2048 px"/>
+                                    <ComboBoxItem Content="2500 px"/>
+                                    <ComboBoxItem Content="4096 px"/>
+                                    <ComboBoxItem Content="5000 px"/>
+                                </ComboBox>
+                            </StackPanel>
                         </StackPanel>
                     </ScrollViewer>
                 </Border>
@@ -222,9 +212,10 @@
                     <Grid ColumnDefinitions="*,Auto,8,Auto">
                         <TextBlock x:Name="InfoText" Grid.Column="0" Classes="Hint" FontSize="12"
                                    VerticalAlignment="Center" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
-                        <Button x:Name="BatchButton" Grid.Column="1" Theme="{StaticResource GhostButton}"
-                                Height="34" Padding="14,0" Click="ExportBatch_Click">
-                            <TextBlock Text="Exportar lote…" FontSize="12" FontWeight="Medium"/>
+                        <Button x:Name="VariantsButton" Grid.Column="1" Theme="{StaticResource GhostButton}"
+                                Height="34" Padding="14,0" Click="Variants_Click"
+                                ToolTip.Tip="Abre uma janela com várias variações para escolher">
+                            <TextBlock Text="Gerar vários…" FontSize="12" FontWeight="Medium"/>
                         </Button>
                         <Button x:Name="ExportButton" Grid.Column="3" Theme="{StaticResource SecondaryButton}"
                                 Height="34" Padding="20,0" Click="Export_Click">

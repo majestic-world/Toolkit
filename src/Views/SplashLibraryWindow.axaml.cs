@@ -156,7 +156,7 @@ public partial class SplashLibraryWindow : Window
         var tile = new Button
         {
             Content = content,
-            Theme = (ControlTheme)Resources["TileButton"]!,
+            Theme = (ControlTheme)this.FindResource("TileButton")!,
         };
         ToolTip.SetTip(tile, entry.FilePath);
         tile.Click += (_, _) => FileChosen?.Invoke(entry.FilePath);

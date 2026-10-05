@@ -248,6 +248,39 @@
                     <Setter Property="Foreground" Value="LightGray"/>
                 </Style>
             </ControlTheme>
+
+
+            <!-- Miniatura clicável das galerias; a classe "current" marca o item aberto no editor. -->
+            <ControlTheme x:Key="TileButton" TargetType="Button">
+                <Setter Property="Background" Value="{DynamicResource ThemeSurfaceCard}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorder}"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Padding" Value="8"/>
+                <Setter Property="Margin" Value="0,0,12,12"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Template">
+                    <ControlTemplate>
+                        <Border x:Name="PART_Border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter Content="{TemplateBinding Content}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter>
+                <Style Selector="^:pointerover /template/ Border#PART_Border">
+                    <Setter Property="Background" Value="{DynamicResource ThemeSurfaceCardHover}"/>
+                    <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderHoverStrong}"/>
+                </Style>
+                <!-- Borda de 2 px no selecionado com 1 px a menos de padding: o conteúdo não se desloca. -->
+                <Style Selector="^.current /template/ Border#PART_Border">
+                    <Setter Property="BorderBrush" Value="{DynamicResource ThemeAccent}"/>
+                    <Setter Property="BorderThickness" Value="2"/>
+                    <Setter Property="Padding" Value="7"/>
+                </Style>
+            </ControlTheme>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
