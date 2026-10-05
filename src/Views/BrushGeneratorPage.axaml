@@ -195,6 +195,7 @@
                             <StackPanel Spacing="5">
                                 <TextBlock Text="Tamanho" Classes="Field"/>
                                 <ComboBox x:Name="SizeCombo" HorizontalAlignment="Stretch">
+                                    <ComboBoxItem Content="512 px"/>
                                     <ComboBoxItem Content="1024 px"/>
                                     <ComboBoxItem Content="2048 px"/>
                                     <ComboBoxItem Content="2500 px"/>

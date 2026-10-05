@@ -23,7 +23,7 @@ public partial class BrushGeneratorPage : UserControl
     private BrushVariantsWindow? _variants;
 
     // Mesma ordem dos itens do ComboBox de tamanho.
-    private static readonly int[] Sizes = [1024, 2048, 2500, 4096, BrushGenerator.MaxSize];
+    private static readonly int[] Sizes = [512, 1024, 2048, 2500, 4096, BrushGenerator.MaxSize];
 
     private readonly DispatcherTimer _bannerTimer = new() { Interval = TimeSpan.FromSeconds(6) };
     // Arrastar um slider dispara dezenas de mudanças; a prévia só refaz quando ele para.
@@ -36,7 +36,7 @@ public partial class BrushGeneratorPage : UserControl
     public BrushGeneratorPage()
     {
         InitializeComponent();
-        SizeCombo.SelectedIndex = Array.IndexOf(Sizes, 2500);
+        SizeCombo.SelectedIndex = Array.IndexOf(Sizes, 512);
         _bannerTimer.Tick += (_, _) => HideBanners();
         _previewDebounce.Tick += (_, _) =>
         {
