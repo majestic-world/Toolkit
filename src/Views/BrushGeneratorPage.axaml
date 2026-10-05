@@ -1,0 +1,242 @@
+<UserControl x:Class="L2Toolkit.Views.BrushGeneratorPage"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="{DynamicResource ThemeSurfacePage}">
+
+    <UserControl.Resources>
+        <ControlTheme x:Key="GhostButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextButton}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderStrong}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border x:Name="PART_Border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="6"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Content="{TemplateBinding Content}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+            <Style Selector="^:pointerover /template/ Border#PART_Border">
+                <Setter Property="Background" Value="{DynamicResource ThemeSurfaceHover}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderHoverStrong}"/>
+            </Style>
+            <Style Selector="^:pressed /template/ Border#PART_Border">
+                <Setter Property="Background" Value="{DynamicResource ThemeSurfacePressed}"/>
+            </Style>
+            <Style Selector="^:disabled">
+                <Setter Property="Opacity" Value="0.45"/>
+            </Style>
+        </ControlTheme>
+    </UserControl.Resources>
+
+    <UserControl.Styles>
+        <Style Selector="TextBox.FormField">
+            <Setter Property="Background" Value="{DynamicResource ThemeSurfaceInput}"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextBody}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorder}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+        <Style Selector="TextBox.FormField /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="{DynamicResource ThemeSurfaceInput}"/>
+            <Setter Property="CornerRadius" Value="5"/>
+        </Style>
+        <Style Selector="TextBox.FormField:focus /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeAccent}"/>
+        </Style>
+        <Style Selector="TextBlock.Section">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="LetterSpacing" Value="1.5"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextLabel}"/>
+        </Style>
+        <Style Selector="TextBlock.Field">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextLabel}"/>
+        </Style>
+        <Style Selector="TextBlock.Value">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextBody}"/>
+        </Style>
+        <Style Selector="TextBlock.Hint">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextHint}"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+        <Style Selector="Slider">
+            <Setter Property="Minimum" Value="0"/>
+            <Setter Property="Maximum" Value="100"/>
+            <Setter Property="TickFrequency" Value="1"/>
+            <Setter Property="IsSnapToTickEnabled" Value="True"/>
+            <Setter Property="Margin" Value="0,-6,0,-4"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Grid Margin="32,24,32,24" RowDefinitions="Auto,Auto,*">
+
+        <!-- ── Cabeçalho ─────────────────────────────────────── -->
+        <StackPanel Grid.Row="0" Spacing="3" Margin="0,0,0,14">
+            <TextBlock Text="Gerador de Brush"
+                       FontSize="22" FontWeight="SemiBold"
+                       Foreground="{DynamicResource ThemeTextTitle}"/>
+            <TextBlock Text="Brushes de borda rasgada no estilo das splash do L2 — PNG preto em fundo branco para o Photoshop"
+                       FontSize="13"
+                       Foreground="{DynamicResource ThemeTextTitle}"/>
+        </StackPanel>
+
+        <!-- ── Avisos ────────────────────────────────────────── -->
+        <StackPanel Grid.Row="1">
+            <Border x:Name="ErrorBanner" IsVisible="False" Margin="0,0,0,12"
+                    Background="{DynamicResource ThemeWarningBg}" BorderBrush="{DynamicResource ThemeWarningBorder}"
+                    BorderThickness="1" CornerRadius="6" Padding="14,8">
+                <Grid ColumnDefinitions="Auto,*">
+                    <PathIcon Data="M12 2L1 21h22L12 2zm1 16h-2v-2h2v2zm0-4h-2V9h2v5z" Width="14" Height="14"
+                              Foreground="{DynamicResource ThemeWarning}" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                    <TextBlock x:Name="ErrorText" Grid.Column="1" Foreground="{DynamicResource ThemeWarning}"
+                               TextWrapping="Wrap" FontSize="13" VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
+            <Border x:Name="SuccessBanner" IsVisible="False" Margin="0,0,0,12"
+                    Background="{DynamicResource ThemeSuccessBgAlt}" BorderBrush="{DynamicResource ThemeSuccessBorderAlt}"
+                    BorderThickness="1" CornerRadius="6" Padding="14,8">
+                <Grid ColumnDefinitions="Auto,*">
+                    <PathIcon Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Width="14" Height="14"
+                              Foreground="{DynamicResource ThemeSuccessIcon}" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                    <TextBlock x:Name="SuccessText" Grid.Column="1" Foreground="{DynamicResource ThemeSuccessText}"
+                               TextWrapping="Wrap" FontSize="13" VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
+        </StackPanel>
+
+        <!-- ── Editor ────────────────────────────────────────── -->
+        <Border Grid.Row="2" CornerRadius="8" ClipToBounds="True"
+                Background="{DynamicResource ThemeSurfaceCard}"
+                BorderBrush="{DynamicResource ThemeBorder}" BorderThickness="1">
+            <Grid RowDefinitions="*,Auto" ColumnDefinitions="*,Auto">
+
+                <!-- Prévia: exatamente o PNG exportado, em escala reduzida -->
+                <Border Grid.Row="0" Grid.Column="0" Padding="16"
+                        Background="{DynamicResource ThemeSurfaceInput}">
+                    <Image x:Name="PreviewImage" Stretch="Uniform"
+                           RenderOptions.BitmapInterpolationMode="HighQuality"/>
+                </Border>
+
+                <!-- Painel de opções (rola só em janelas muito baixas) -->
+                <Border Grid.Row="0" Grid.Column="1" Width="270"
+                        BorderBrush="{DynamicResource ThemeBorder}" BorderThickness="1,0,0,0">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="16,14" Spacing="10">
+
+                            <TextBlock Text="SEMENTE" Classes="Section"/>
+                            <Grid ColumnDefinitions="*,8,Auto">
+                                <TextBox x:Name="SeedBox" Classes="FormField" Height="32" Padding="10,0"
+                                         VerticalContentAlignment="Center"
+                                         FontFamily="Consolas,Courier New,monospace"
+                                         ToolTip.Tip="A mesma semente gera sempre o mesmo brush"/>
+                                <Button x:Name="ShuffleButton" Grid.Column="2" Theme="{StaticResource GhostButton}"
+                                        Height="32" Padding="12,0" Click="Shuffle_Click">
+                                    <TextBlock Text="Gerar outro" FontSize="12" FontWeight="Medium"/>
+                                </Button>
+                            </Grid>
+
+                            <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
+                            <TextBlock Text="FORMA" Classes="Section"/>
+
+                            <StackPanel>
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TextBlock Text="Pontas" Classes="Field"/>
+                                    <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #SpikesSlider.Value, StringFormat={}{0:0}}"/>
+                                </Grid>
+                                <Slider x:Name="SpikesSlider" Value="50"/>
+                            </StackPanel>
+                            <StackPanel>
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TextBlock Text="Rachaduras" Classes="Field"/>
+                                    <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #CracksSlider.Value, StringFormat={}{0:0}}"/>
+                                </Grid>
+                                <Slider x:Name="CracksSlider" Value="50"/>
+                            </StackPanel>
+                            <StackPanel>
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TextBlock Text="Garras" Classes="Field"/>
+                                    <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #ClawsSlider.Value, StringFormat={}{0:0}}"/>
+                                </Grid>
+                                <Slider x:Name="ClawsSlider" Value="50"/>
+                            </StackPanel>
+                            <StackPanel>
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TextBlock Text="Estilhaços" Classes="Field"/>
+                                    <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #DebrisSlider.Value, StringFormat={}{0:0}}"/>
+                                </Grid>
+                                <Slider x:Name="DebrisSlider" Value="50"/>
+                            </StackPanel>
+                            <StackPanel>
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TextBlock Text="Borda suave" Classes="Field"/>
+                                    <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #SoftnessSlider.Value, StringFormat={}{0:0}}"/>
+                                </Grid>
+                                <Slider x:Name="SoftnessSlider" Value="0"/>
+                            </StackPanel>
+
+                            <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
+                            <TextBlock Text="SAÍDA" Classes="Section"/>
+
+                            <Grid ColumnDefinitions="*,10,90">
+                                <StackPanel Spacing="5">
+                                    <TextBlock Text="Tamanho" Classes="Field"/>
+                                    <ComboBox x:Name="SizeCombo" HorizontalAlignment="Stretch">
+                                        <ComboBoxItem Content="1024 px"/>
+                                        <ComboBoxItem Content="2048 px"/>
+                                        <ComboBoxItem Content="2500 px"/>
+                                        <ComboBoxItem Content="4096 px"/>
+                                        <ComboBoxItem Content="5000 px"/>
+                                    </ComboBox>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Spacing="5">
+                                    <TextBlock Text="Lote" Classes="Field"/>
+                                    <TextBox x:Name="BatchBox" Classes="FormField" Height="32" Padding="10,0"
+                                             VerticalContentAlignment="Center" Text="10"
+                                             ToolTip.Tip="Quantos brushes o “Exportar lote” grava (1–200)"/>
+                                </StackPanel>
+                            </Grid>
+                            <TextBlock Classes="Hint"
+                                       Text="O lote usa esta semente e as seguintes, com as mesmas intensidades."/>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Border>
+
+                <!-- Rodapé: detalhes + ações -->
+                <Border Grid.Row="1" Grid.ColumnSpan="2" Padding="16,10"
+                        BorderBrush="{DynamicResource ThemeBorder}" BorderThickness="0,1,0,0">
+                    <Grid ColumnDefinitions="*,Auto,8,Auto">
+                        <TextBlock x:Name="InfoText" Grid.Column="0" Classes="Hint" FontSize="12"
+                                   VerticalAlignment="Center" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
+                        <Button x:Name="BatchButton" Grid.Column="1" Theme="{StaticResource GhostButton}"
+                                Height="34" Padding="14,0" Click="ExportBatch_Click">
+                            <TextBlock Text="Exportar lote…" FontSize="12" FontWeight="Medium"/>
+                        </Button>
+                        <Button x:Name="ExportButton" Grid.Column="3" Theme="{StaticResource SecondaryButton}"
+                                Height="34" Padding="20,0" Click="Export_Click">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <PathIcon Data="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"
+                                          Foreground="White" Width="13" Height="13" VerticalAlignment="Center"/>
+                                <TextBlock Text="Exportar PNG…" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

@@ -36,6 +36,7 @@ namespace L2Toolkit.Views
                 [typeof(EnchantEffect)]           = BtnEnchantEffectButton,
                 [typeof(SystemMsgColor)]          = BtnSystemMsgColorButton,
                 [typeof(SplashScreen)]            = BtnSplashScreenButton,
+                [typeof(BrushGeneratorPage)]      = BtnBrushGeneratorButton,
                 [typeof(SearchIcon)]              = BtnSearchIconButton,
                 [typeof(LogParse)]                = BtnLogParseButton,
             };
@@ -172,5 +173,8 @@ namespace L2Toolkit.Views
 
         private void BtnSplashScreen_Click(object sender, RoutedEventArgs e)
             => ShowPage<SplashScreen>();
+
+        private void BtnBrushGenerator_Click(object sender, RoutedEventArgs e)
+            => ShowPage<BrushGeneratorPage>();
     }
 }
