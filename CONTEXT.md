@@ -28,6 +28,10 @@ _Avoid_: tabela de itens.
 Índice de 32 bits para a Name table. Para preservar um arquivo em round trip, seu índice bruto é a fonte de verdade, mesmo quando há uma string resolvida para exibição.
 _Avoid_: nome resolvido.
 
+**Splash screen**:
+BMP de abertura do cliente (`sp_256_*`, `sp_32b_*`, `logo_*` em `SysTextures`), embrulhado no envelope XOR `Lineage2Ver111/121`. Nas versões de 256 cores, a transparência é a **cor-chave** (verde `#00FF00` nos arquivos oficiais) que o cliente recorta.
+_Avoid_: client `.dat`, textura UTX.
+
 ## Artefatos e integridade
 
 **Server artifact**:

@@ -336,6 +336,15 @@
                             </StackPanel>
                         </Button>
 
+                        <Button x:Name="BtnSplashScreenButton" Click="BtnSplashScreen_Click" Theme="{StaticResource SidebarButtonStyle}">
+                            <StackPanel Orientation="Horizontal">
+                                <!-- Image / picture icon -->
+                                <PathIcon Data="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"
+                                          Width="16" Height="16" Foreground="{DynamicResource ThemeAccent}" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                                <TextBlock Text="Splash Screen"/>
+                            </StackPanel>
+                        </Button>
+
                         <Border Height="1" Background="{DynamicResource ThemeSurfaceRaised}" Margin="12,6,12,0"/>
 
                         <TextBlock Text="UTILITÁRIOS"

@@ -35,6 +35,7 @@ namespace L2Toolkit.Views
                 [typeof(CreateMultisell)]         = BtnCreateMultisellButton,
                 [typeof(EnchantEffect)]           = BtnEnchantEffectButton,
                 [typeof(SystemMsgColor)]          = BtnSystemMsgColorButton,
+                [typeof(SplashScreen)]            = BtnSplashScreenButton,
                 [typeof(SearchIcon)]              = BtnSearchIconButton,
                 [typeof(LogParse)]                = BtnLogParseButton,
             };
@@ -168,5 +169,8 @@ namespace L2Toolkit.Views
 
         private void BtnSystemMsgColor_Click(object sender, RoutedEventArgs e)
             => ShowPage<SystemMsgColor>();
+
+        private void BtnSplashScreen_Click(object sender, RoutedEventArgs e)
+            => ShowPage<SplashScreen>();
     }
 }

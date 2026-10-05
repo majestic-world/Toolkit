@@ -42,6 +42,8 @@
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.0" />
     <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.0" />
     <PackageReference Include="MsBox.Avalonia" Version="3.0.0-rc2" />
+    <!-- Mesma versão que o Avalonia.Skia já traz; usado direto pelo editor de splash (PNG/JPG). -->
+    <PackageReference Include="SkiaSharp" Version="2.88.8" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.119" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <PackageReference Include="Tmds.DBus.Protocol" Version="0.21.3" />

@@ -112,3 +112,12 @@ For every file marked `isSafePackage="true"` in the structure XML, the serialize
 5. Wire page load through decrypt → parse → UI mapping, and save through UI mapping → serialize → encrypt → write.
 
 `Views/AppSettingsControl.xaml.cs` also owns Test DAT and the L2DAT Converter. Test DAT discovers supported files, loads the Name table before dependent files, and exports text. The converter packs text to `.l2dat` and verifies the round trip byte for byte.
+
+## Splash screens
+
+`Views/SplashScreen` edits the client opening bitmaps (`SysTextures/sp_256_*.bmp`, `sp_32b_*.bmp`, `logo_*.bmp`); the codec lives in `Processing/Splash/` (`L2Toolkit.Processing.Splash`). These files are not client `.dat`: they are plain BMPs inside an XOR `Lineage2Ver###` envelope (28-byte UTF-16LE header).
+
+- `SplashEnvelope`: version 111 XORs with `0xAC`; version 121 XORs with the low byte of the sum of the lowercase file name's UTF-16 units, so saving under another name changes the key. Other versions are rejected.
+- `SplashConverter` is the single conversion path for both the page preview and `SplashFile.Save`, so the preview is the saved result. Formats without alpha flatten transparency onto the key color (default `#00FF00`, the retail chroma green). Retail 256-color files do not store the key at a fixed palette slot (`166Retail/sp_256_01.bmp` has black at index 0), so the key color is a user setting, never inferred from the palette. In 256-color output, pixels with alpha < 128 map exactly to the key color, never to a dithered neighbor.
+- An image with ≤ 256 colors keeps its exact colors when re-saved (palette order may change); larger images use a weighted median cut, optional Floyd–Steinberg.
+- `SplashFile.Save` writes to a sibling `.tmp` then replaces the target; the page copies the original to `<file>.bak` on the first overwrite. PNG/JPG/WEBP import and PNG export go through SkiaSharp (explicit reference, same version Avalonia.Skia brings) as unpremultiplied RGBA.

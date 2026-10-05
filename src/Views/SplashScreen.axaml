@@ -1,0 +1,276 @@
+<UserControl x:Class="L2Toolkit.Views.SplashScreen"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="using:L2Toolkit.Views.Controls"
+             Background="{DynamicResource ThemeSurfacePage}">
+
+    <UserControl.Resources>
+        <ControlTheme x:Key="GhostButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextButton}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderStrong}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border x:Name="PART_Border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="6"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Content="{TemplateBinding Content}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+            <Style Selector="^:pointerover /template/ Border#PART_Border">
+                <Setter Property="Background" Value="{DynamicResource ThemeSurfaceHover}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderHoverStrong}"/>
+            </Style>
+            <Style Selector="^:pressed /template/ Border#PART_Border">
+                <Setter Property="Background" Value="{DynamicResource ThemeSurfacePressed}"/>
+            </Style>
+            <Style Selector="^:disabled">
+                <Setter Property="Opacity" Value="0.45"/>
+            </Style>
+        </ControlTheme>
+    </UserControl.Resources>
+
+    <UserControl.Styles>
+        <Style Selector="TextBox.FormField">
+            <Setter Property="Background" Value="{DynamicResource ThemeSurfaceInput}"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextBody}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorder}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+        <Style Selector="TextBox.FormField /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="{DynamicResource ThemeSurfaceInput}"/>
+            <Setter Property="CornerRadius" Value="5"/>
+        </Style>
+        <Style Selector="TextBox.FormField:pointerover /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderHover}"/>
+        </Style>
+        <Style Selector="TextBlock.Section">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="LetterSpacing" Value="1.5"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextLabel}"/>
+        </Style>
+        <Style Selector="TextBlock.Field">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextLabel}"/>
+            <Setter Property="Margin" Value="0,0,0,5"/>
+        </Style>
+        <Style Selector="TextBlock.Hint">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextHint}"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+        <Style Selector="CheckBox">
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextBody}"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Grid>
+        <!-- Sem scroll na página: o editor ocupa a altura restante e a prévia encolhe junto. -->
+        <Grid Margin="32,24,32,24" RowDefinitions="Auto,Auto,Auto,*">
+
+            <!-- ── Cabeçalho ─────────────────────────────────────── -->
+            <StackPanel Grid.Row="0" Spacing="3" Margin="0,0,0,14">
+                <TextBlock Text="Splash Screen"
+                           FontSize="22" FontWeight="SemiBold"
+                           Foreground="{DynamicResource ThemeTextTitle}"/>
+                <TextBlock Text="Abre, edita e grava os BMP de abertura do cliente (sp_256, sp_32b, logo)"
+                           FontSize="13"
+                           Foreground="{DynamicResource ThemeTextTitle}"/>
+            </StackPanel>
+
+            <!-- ── Avisos ────────────────────────────────────────── -->
+            <StackPanel Grid.Row="1">
+                <Border x:Name="ErrorBanner" IsVisible="False" Margin="0,0,0,12"
+                        Background="{DynamicResource ThemeWarningBg}" BorderBrush="{DynamicResource ThemeWarningBorder}"
+                        BorderThickness="1" CornerRadius="6" Padding="14,8">
+                    <Grid ColumnDefinitions="Auto,*">
+                        <PathIcon Data="M12 2L1 21h22L12 2zm1 16h-2v-2h2v2zm0-4h-2V9h2v5z" Width="14" Height="14"
+                                  Foreground="{DynamicResource ThemeWarning}" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                        <TextBlock x:Name="ErrorText" Grid.Column="1" Foreground="{DynamicResource ThemeWarning}"
+                                   TextWrapping="Wrap" FontSize="13" VerticalAlignment="Center"/>
+                    </Grid>
+                </Border>
+                <Border x:Name="SuccessBanner" IsVisible="False" Margin="0,0,0,12"
+                        Background="{DynamicResource ThemeSuccessBgAlt}" BorderBrush="{DynamicResource ThemeSuccessBorderAlt}"
+                        BorderThickness="1" CornerRadius="6" Padding="14,8">
+                    <Grid ColumnDefinitions="Auto,*">
+                        <PathIcon Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Width="14" Height="14"
+                                  Foreground="{DynamicResource ThemeSuccessIcon}" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                        <TextBlock x:Name="SuccessText" Grid.Column="1" Foreground="{DynamicResource ThemeSuccessText}"
+                                   TextWrapping="Wrap" FontSize="13" VerticalAlignment="Center"/>
+                    </Grid>
+                </Border>
+            </StackPanel>
+
+            <!-- ── Arquivo ───────────────────────────────────────── -->
+            <Grid Grid.Row="2" ColumnDefinitions="*,10,Auto" Margin="0,0,0,14">
+                    <!-- Clicar no campo escolhe outro arquivo; o botão abre o que já está nele. -->
+                    <Border Grid.Column="0" Background="Transparent" Cursor="Hand"
+                            ToolTip.Tip="Clique para escolher outro arquivo"
+                            PointerPressed="FilePath_PointerPressed">
+                        <TextBox x:Name="FilePathBox" Classes="FormField"
+                                 IsReadOnly="True" Focusable="False" IsHitTestVisible="False"
+                                 Height="36" Padding="12,0" VerticalContentAlignment="Center"
+                                 FontFamily="Consolas,Courier New,monospace"
+                                 Watermark="Clique para selecionar um sp_256_*.bmp, sp_32b_*.bmp ou logo_*.bmp do SysTextures..."/>
+                    </Border>
+                    <Button x:Name="OpenButton" Grid.Column="2" Height="36" Padding="16,0"
+                            Theme="{StaticResource GhostButton}" Click="Open_Click">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <PathIcon Data="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"
+                                      Foreground="{DynamicResource ThemeTextLabel}" Width="14" Height="14" VerticalAlignment="Center"/>
+                            <TextBlock Text="Abrir" FontSize="13" FontWeight="Medium" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+
+            <!-- ── Editor ────────────────────────────────────────── -->
+            <Border Grid.Row="3" CornerRadius="8" ClipToBounds="True"
+                    Background="{DynamicResource ThemeSurfaceCard}"
+                    BorderBrush="{DynamicResource ThemeBorder}" BorderThickness="1">
+                    <Grid RowDefinitions="*,Auto" ColumnDefinitions="*,Auto">
+
+                        <!-- Prévia: exatamente o que será gravado no formato escolhido -->
+                        <Border Grid.Row="0" Grid.Column="0" Padding="16"
+                                Background="{DynamicResource ThemeSurfaceInput}">
+                            <Grid>
+                                <TextBlock x:Name="EmptyText"
+                                           Text="Abra uma splash screen ou substitua por uma imagem para começar."
+                                           Classes="Hint" FontSize="13" TextAlignment="Center"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="320"/>
+                                <Grid x:Name="PreviewFrame" IsVisible="False"
+                                      HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <controls:Checkerboard LightBrush="{DynamicResource ThemeSurfaceCard}"
+                                                           DarkBrush="{DynamicResource ThemeSurfaceRaised}"/>
+                                    <Image x:Name="PreviewImage" Stretch="Uniform" StretchDirection="DownOnly"
+                                           RenderOptions.BitmapInterpolationMode="HighQuality"/>
+                                </Grid>
+                            </Grid>
+                        </Border>
+
+                        <!-- Painel de opções (rola só em janelas muito baixas) -->
+                        <Border Grid.Row="0" Grid.Column="1" Width="270"
+                                BorderBrush="{DynamicResource ThemeBorder}" BorderThickness="1,0,0,0">
+                            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <StackPanel Margin="16,14" Spacing="10">
+
+                                <TextBlock Text="GRAVAÇÃO" Classes="Section"/>
+
+                                <StackPanel>
+                                    <TextBlock Text="Formato" Classes="Field"/>
+                                    <ComboBox x:Name="FormatCombo" HorizontalAlignment="Stretch">
+                                        <ComboBoxItem Content="32 bits com alpha (sp_32b)"/>
+                                        <ComboBoxItem Content="256 cores (sp_256)"/>
+                                        <ComboBoxItem Content="24 bits sem alpha"/>
+                                    </ComboBox>
+                                </StackPanel>
+
+                                <StackPanel>
+                                    <TextBlock Text="Criptografia" Classes="Field"/>
+                                    <ComboBox x:Name="EncryptionCombo" HorizontalAlignment="Stretch">
+                                        <ComboBoxItem Content="Lineage2Ver121"/>
+                                        <ComboBoxItem Content="Lineage2Ver111"/>
+                                        <ComboBoxItem Content="Sem criptografia"/>
+                                    </ComboBox>
+                                </StackPanel>
+
+                                <StackPanel>
+                                    <TextBlock Text="Cor-chave" Classes="Field"/>
+                                    <Button x:Name="KeyColorButton" Theme="{StaticResource GhostButton}"
+                                            HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                                            Height="32" Padding="8,0" Click="KeyColor_Click">
+                                        <StackPanel Orientation="Horizontal" Spacing="10">
+                                            <Border x:Name="KeyColorSwatch" Width="22" Height="16" CornerRadius="3"
+                                                    BorderBrush="{DynamicResource ThemeBorderStrong}" BorderThickness="1"/>
+                                            <TextBlock x:Name="KeyColorText" FontFamily="Consolas,Courier New,monospace"
+                                                       FontSize="12" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <TextBlock Classes="Hint" Margin="0,4,0,0"
+                                               Text="Sem alpha, o cliente recorta esta cor."/>
+                                </StackPanel>
+
+                                <CheckBox x:Name="DitherCheck" Content="Dithering na redução de cores"/>
+
+                                <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
+
+                                <TextBlock Text="EDIÇÃO" Classes="Section"/>
+
+                                <StackPanel Spacing="6">
+                                    <Button x:Name="ReplaceButton" Theme="{StaticResource GhostButton}"
+                                            HorizontalAlignment="Stretch" Height="32" Click="Replace_Click">
+                                        <TextBlock Text="Substituir imagem…" FontSize="12" FontWeight="Medium"/>
+                                    </Button>
+                                    <CheckBox x:Name="KeepSizeCheck" IsChecked="True" IsEnabled="False"
+                                              Content="Manter o tamanho atual"/>
+                                </StackPanel>
+
+                                <StackPanel Spacing="4">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <TextBlock Text="Tolerância" Classes="Field" Margin="0"/>
+                                        <TextBlock Grid.Column="1" FontSize="12" Foreground="{DynamicResource ThemeTextBody}"
+                                                   Text="{Binding #ToleranceSlider.Value, StringFormat={}{0:0}}"/>
+                                    </Grid>
+                                    <Slider x:Name="ToleranceSlider" Minimum="0" Maximum="128" Value="32"
+                                            TickFrequency="1" IsSnapToTickEnabled="True"/>
+                                    <Button x:Name="KeyOutButton" Theme="{StaticResource GhostButton}"
+                                            HorizontalAlignment="Stretch" Height="32" Click="KeyOut_Click">
+                                        <TextBlock Text="Recortar cor-chave" FontSize="12" FontWeight="Medium"/>
+                                    </Button>
+                                </StackPanel>
+                            </StackPanel>
+                            </ScrollViewer>
+                        </Border>
+
+                        <!-- Rodapé: detalhes + ações -->
+                        <Border Grid.Row="1" Grid.ColumnSpan="2" Padding="16,10"
+                                BorderBrush="{DynamicResource ThemeBorder}" BorderThickness="0,1,0,0">
+                            <Grid ColumnDefinitions="*,Auto,8,Auto,8,Auto">
+                                <TextBlock x:Name="InfoText" Grid.Column="0" Classes="Hint" FontSize="12"
+                                           VerticalAlignment="Center" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
+                                <Button x:Name="ExportButton" Grid.Column="1" Theme="{StaticResource GhostButton}"
+                                        Height="34" Padding="14,0" Click="ExportPng_Click">
+                                    <TextBlock Text="Exportar PNG" FontSize="12" FontWeight="Medium"/>
+                                </Button>
+                                <Button x:Name="SaveAsButton" Grid.Column="3" Theme="{StaticResource GhostButton}"
+                                        Height="34" Padding="14,0" Click="SaveAs_Click">
+                                    <TextBlock Text="Salvar como…" FontSize="12" FontWeight="Medium"/>
+                                </Button>
+                                <Button x:Name="SaveButton" Grid.Column="5" Theme="{StaticResource SecondaryButton}"
+                                        Height="34" Padding="20,0" Click="Save_Click">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <PathIcon Data="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"
+                                                  Foreground="White" Width="13" Height="13" VerticalAlignment="Center"/>
+                                        <TextBlock Text="Salvar" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+                            </Grid>
+                        </Border>
+                    </Grid>
+            </Border>
+        </Grid>
+
+        <!-- Seletor de cor compartilhado -->
+        <Popup x:Name="ColorPickerPopup" IsLightDismissEnabled="True" Placement="Bottom" VerticalOffset="6">
+            <Border Background="{DynamicResource ThemeSurfaceInput}" BorderBrush="{DynamicResource ThemeBorderMuted}"
+                    BorderThickness="1" CornerRadius="10" Padding="14" BoxShadow="0 8 32 4 #AA000000">
+                <controls:HsvColorPicker x:Name="ColorPicker"/>
+            </Border>
+        </Popup>
+    </Grid>
+</UserControl>
