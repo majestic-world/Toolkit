@@ -150,9 +150,6 @@ namespace L2Toolkit.Views
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
             => ShowPage<LogParse>();
 
-        private void ButtonSkills_OnClick(object sender, RoutedEventArgs e)
-            => ShowPage<SkillsModify>();
-
         private void ButtonLiveMode_OnClick(object sender, RoutedEventArgs e)
             => ShowPage<LiveData>();
 

@@ -339,15 +339,6 @@
                             </StackPanel>
                         </Button>
 
-                        <Button IsVisible="False" Click="ButtonSkills_OnClick" Theme="{StaticResource SidebarButtonStyle}">
-                            <StackPanel Orientation="Horizontal">
-                                <!-- Star / magic icon -->
-                                <PathIcon Data="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
-                                          Width="16" Height="16" Foreground="{DynamicResource ThemeAccent}" VerticalAlignment="Center" Margin="0,0,12,0"/>
-                                <TextBlock Text="Enchant Skill (GF)"/>
-                            </StackPanel>
-                        </Button>
-
                         <Button x:Name="BtnEnchantEffectButton" Click="BtnEnchantEffect_Click" Theme="{StaticResource SidebarButtonStyle}">
                             <StackPanel Orientation="Horizontal">
                                 <!-- Sparkle / enchant glow icon -->
