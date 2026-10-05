@@ -1,13 +1,13 @@
 <UserControl x:Class="L2Toolkit.Views.GeodataConverterControl"
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             Background="#333333">
+             Background="{DynamicResource ThemeSurfacePage}">
 
     <UserControl.Resources>
         <ControlTheme x:Key="GhostButton" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="#C8C8C8"/>
-            <Setter Property="BorderBrush" Value="#6A6A6A"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextButton}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderStrong}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -28,50 +28,50 @@
                 </ControlTemplate>
             </Setter>
             <Style Selector="^:pointerover /template/ Border#PART_Border">
-                <Setter Property="Background" Value="#3C3C3C"/>
-                <Setter Property="BorderBrush" Value="#808080"/>
+                <Setter Property="Background" Value="{DynamicResource ThemeSurfaceHover}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderHoverStrong}"/>
             </Style>
             <Style Selector="^:pressed /template/ Border#PART_Border">
-                <Setter Property="Background" Value="#282828"/>
+                <Setter Property="Background" Value="{DynamicResource ThemeSurfacePressed}"/>
             </Style>
         </ControlTheme>
     </UserControl.Resources>
 
     <UserControl.Styles>
         <Style Selector="TextBox.FormField">
-            <Setter Property="Background" Value="#252525"/>
-            <Setter Property="Foreground" Value="#D4D4D4"/>
-            <Setter Property="CaretBrush" Value="#5B9BD5"/>
-            <Setter Property="SelectionBrush" Value="#1E3A5A"/>
-            <Setter Property="BorderBrush" Value="#464646"/>
+            <Setter Property="Background" Value="{DynamicResource ThemeSurfaceInput}"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextBody}"/>
+            <Setter Property="CaretBrush" Value="{DynamicResource ThemeAccent}"/>
+            <Setter Property="SelectionBrush" Value="{DynamicResource ThemeSelection}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorder}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="CornerRadius" Value="5"/>
             <Setter Property="Padding" Value="10,7"/>
             <Setter Property="FontSize" Value="13"/>
         </Style>
         <Style Selector="TextBox.FormField /template/ Border#PART_BorderElement">
-            <Setter Property="Background" Value="#252525"/>
+            <Setter Property="Background" Value="{DynamicResource ThemeSurfaceInput}"/>
             <Setter Property="CornerRadius" Value="5"/>
         </Style>
         <Style Selector="TextBox.FormField:focus /template/ Border#PART_BorderElement">
-            <Setter Property="BorderBrush" Value="#5B9BD5"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeAccent}"/>
             <Setter Property="BorderThickness" Value="1"/>
         </Style>
         <Style Selector="TextBox.FormField:pointerover /template/ Border#PART_BorderElement">
-            <Setter Property="BorderBrush" Value="#707070"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderHover}"/>
         </Style>
 
         <Style Selector="TextBox.Code /template/ Border#PART_BorderElement">
-            <Setter Property="Background" Value="#252525"/>
+            <Setter Property="Background" Value="{DynamicResource ThemeSurfaceInput}"/>
             <Setter Property="BorderThickness" Value="0"/>
         </Style>
         <Style Selector="TextBox.Code:focus /template/ Border#PART_BorderElement">
-            <Setter Property="Background" Value="#252525"/>
+            <Setter Property="Background" Value="{DynamicResource ThemeSurfaceInput}"/>
             <Setter Property="BorderBrush" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
         </Style>
         <Style Selector="TextBox.Code:pointerover /template/ Border#PART_BorderElement">
-            <Setter Property="Background" Value="#252525"/>
+            <Setter Property="Background" Value="{DynamicResource ThemeSurfaceInput}"/>
         </Style>
     </UserControl.Styles>
 
@@ -83,26 +83,26 @@
                 <TextBlock Text="Converter Geodata"
                            FontSize="22"
                            FontWeight="SemiBold"
-                           Foreground="#E8E8E8"/>
+                           Foreground="{DynamicResource ThemeTextTitle}"/>
                 <TextBlock Text="Converta arquivos de geodata entre formatos L2J, CONV_DAT e L2G"
                            FontSize="13"
-                           Foreground="#E8E8E8"/>
+                           Foreground="{DynamicResource ThemeTextTitle}"/>
             </StackPanel>
 
             <!-- Notification Banner -->
             <Border x:Name="NotificacaoBorder"
                     Margin="32,0,32,16"
-                    Background="#1F1A0A"
-                    BorderBrush="#5C4A00"
+                    Background="{DynamicResource ThemeWarningBg}"
+                    BorderBrush="{DynamicResource ThemeWarningBorder}"
                     BorderThickness="1"
                     CornerRadius="6"
                     Padding="14,10"
                     IsVisible="False">
                 <Grid ColumnDefinitions="Auto,*">
-                    <PathIcon Grid.Column="0" Data="M12 2L1 21h22L12 2zm1 16h-2v-2h2v2zm0-4h-2V9h2v5z" Width="14" Height="14" Foreground="#D4A017" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                    <PathIcon Grid.Column="0" Data="M12 2L1 21h22L12 2zm1 16h-2v-2h2v2zm0-4h-2V9h2v5z" Width="14" Height="14" Foreground="{DynamicResource ThemeWarning}" VerticalAlignment="Center" Margin="0,0,10,0"/>
                     <TextBlock Grid.Column="1"
                                x:Name="StatusNotificacao"
-                               Foreground="#D4A017"
+                               Foreground="{DynamicResource ThemeWarning}"
                                TextWrapping="Wrap"
                                FontSize="13"
                                VerticalAlignment="Center"/>
@@ -112,12 +112,12 @@
             <!-- Panel 01: Configuration -->
             <Border Margin="32,0"
                     CornerRadius="8"
-                    Background="#2C2C2C"
-                    BorderBrush="#464646"
+                    Background="{DynamicResource ThemeSurfaceCard}"
+                    BorderBrush="{DynamicResource ThemeBorder}"
                     BorderThickness="1"
                     ClipToBounds="True">
                 <Grid ColumnDefinitions="4,*">
-                    <Border Grid.Column="0" Background="#5B9BD5"/>
+                    <Border Grid.Column="0" Background="{DynamicResource ThemeAccent}"/>
                     <StackPanel Grid.Column="1">
 
                         <StackPanel Orientation="Horizontal"
@@ -128,12 +128,12 @@
                             <TextBlock Text="CONFIGURAÇÕES"
                                        FontSize="11"
                                        FontWeight="Bold"
-                                       Foreground="#B8B8B8"
+                                       Foreground="{DynamicResource ThemeTextLabel}"
                                        LetterSpacing="1.5"
                                        VerticalAlignment="Center"/>
                         </StackPanel>
 
-                        <Border Height="1" Background="#464646"/>
+                        <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
 
                         <StackPanel Margin="20,16,20,20" Spacing="14">
 
@@ -141,7 +141,7 @@
                             <StackPanel Spacing="6">
                                 <TextBlock Text="Pasta de entrada (arquivos geodata)"
                                            FontSize="12"
-                                           Foreground="#B8B8B8"
+                                           Foreground="{DynamicResource ThemeTextLabel}"
                                            FontWeight="Medium"/>
                                 <Grid ColumnDefinitions="*,12,Auto">
                                     <TextBox x:Name="InputDir"
@@ -160,7 +160,7 @@
                                             Padding="16,0"
                                             Theme="{StaticResource GhostButton}">
                                         <StackPanel Orientation="Horizontal" Spacing="8">
-                                            <PathIcon Data="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" Foreground="#B8B8B8" Width="14" Height="14" VerticalAlignment="Center"/>
+                                            <PathIcon Data="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" Foreground="{DynamicResource ThemeTextLabel}" Width="14" Height="14" VerticalAlignment="Center"/>
                                             <TextBlock Text="Selecionar"
                                                        FontSize="13"
                                                        FontWeight="Medium"
@@ -174,7 +174,7 @@
                             <StackPanel Spacing="6">
                                 <TextBlock Text="Pasta de saída"
                                            FontSize="12"
-                                           Foreground="#B8B8B8"
+                                           Foreground="{DynamicResource ThemeTextLabel}"
                                            FontWeight="Medium"/>
                                 <Grid ColumnDefinitions="*,12,Auto">
                                     <TextBox x:Name="OutputDir"
@@ -193,7 +193,7 @@
                                             Padding="16,0"
                                             Theme="{StaticResource GhostButton}">
                                         <StackPanel Orientation="Horizontal" Spacing="8">
-                                            <PathIcon Data="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" Foreground="#B8B8B8" Width="14" Height="14" VerticalAlignment="Center"/>
+                                            <PathIcon Data="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" Foreground="{DynamicResource ThemeTextLabel}" Width="14" Height="14" VerticalAlignment="Center"/>
                                             <TextBlock Text="Selecionar"
                                                        FontSize="13"
                                                        FontWeight="Medium"
@@ -207,7 +207,7 @@
                             <StackPanel Spacing="6">
                                 <TextBlock Text="Formato de saída"
                                            FontSize="12"
-                                           Foreground="#B8B8B8"
+                                           Foreground="{DynamicResource ThemeTextLabel}"
                                            FontWeight="Medium"/>
                                 <ComboBox x:Name="FormatComboBox"
                                           Height="38"
@@ -229,7 +229,7 @@
             <Grid Margin="32,16" ColumnDefinitions="*,Auto,*">
                 <Border Grid.Column="0"
                         Height="1"
-                        Background="#464646"
+                        Background="{DynamicResource ThemeBorder}"
                         VerticalAlignment="Center"/>
                 <Button Grid.Column="1"
                         x:Name="ConvertButton"
@@ -248,19 +248,19 @@
                 </Button>
                 <Border Grid.Column="2"
                         Height="1"
-                        Background="#464646"
+                        Background="{DynamicResource ThemeBorder}"
                         VerticalAlignment="Center"/>
             </Grid>
 
             <!-- Panel 02: Progress and Logs -->
             <Border Margin="32,0,32,32"
                     CornerRadius="8"
-                    Background="#2C2C2C"
-                    BorderBrush="#464646"
+                    Background="{DynamicResource ThemeSurfaceCard}"
+                    BorderBrush="{DynamicResource ThemeBorder}"
                     BorderThickness="1"
                     ClipToBounds="True">
                 <Grid ColumnDefinitions="4,*">
-                    <Border Grid.Column="0" Background="#5B9BD5"/>
+                    <Border Grid.Column="0" Background="{DynamicResource ThemeAccent}"/>
                     <StackPanel Grid.Column="1">
 
                         <StackPanel Orientation="Horizontal"
@@ -271,12 +271,12 @@
                             <TextBlock Text="PROGRESSO"
                                        FontSize="11"
                                        FontWeight="Bold"
-                                       Foreground="#B8B8B8"
+                                       Foreground="{DynamicResource ThemeTextLabel}"
                                        LetterSpacing="1.5"
                                        VerticalAlignment="Center"/>
                         </StackPanel>
 
-                        <Border Height="1" Background="#464646"/>
+                        <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
 
                         <!-- Progress bar -->
                         <StackPanel Margin="20,16,20,8" Spacing="8">
@@ -285,27 +285,27 @@
                                            Grid.Column="0"
                                            Text="Aguardando..."
                                            FontSize="12"
-                                           Foreground="#B8B8B8"/>
+                                           Foreground="{DynamicResource ThemeTextLabel}"/>
                                 <TextBlock x:Name="ProgressPercent"
                                            Grid.Column="1"
                                            Text="0%"
                                            FontSize="12"
-                                           Foreground="#B8B8B8"/>
+                                           Foreground="{DynamicResource ThemeTextLabel}"/>
                             </Grid>
                             <Border Height="6"
                                     CornerRadius="3"
-                                    Background="#252525"
+                                    Background="{DynamicResource ThemeSurfaceInput}"
                                     ClipToBounds="True">
                                 <Border x:Name="ProgressBar"
                                         Height="6"
                                         CornerRadius="3"
-                                        Background="#5B9BD5"
+                                        Background="{DynamicResource ThemeAccent}"
                                         HorizontalAlignment="Left"
                                         Width="0"/>
                             </Border>
                         </StackPanel>
 
-                        <Border Height="1" Background="#464646" Margin="0,8,0,0"/>
+                        <Border Height="1" Background="{DynamicResource ThemeBorder}" Margin="0,8,0,0"/>
 
                         <!-- Logs -->
                         <TextBox x:Name="LogContent"
@@ -315,10 +315,10 @@
                                  Height="200"
                                  Padding="20,14"
                                  BorderThickness="0"
-                                 Background="#252525"
-                                 Foreground="#B0C4B1"
-                                 CaretBrush="#5B9BD5"
-                                 SelectionBrush="#1E3A5A"
+                                 Background="{DynamicResource ThemeSurfaceInput}"
+                                 Foreground="{DynamicResource ThemeTextLog}"
+                                 CaretBrush="{DynamicResource ThemeAccent}"
+                                 SelectionBrush="{DynamicResource ThemeSelection}"
                                  FontFamily="Consolas,Courier New,monospace"
                                  FontSize="12"
                                  IsReadOnly="True"

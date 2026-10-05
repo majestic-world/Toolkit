@@ -1,13 +1,13 @@
 <UserControl x:Class="L2Toolkit.Views.PawnDataControl"
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             Background="#333333">
+             Background="{DynamicResource ThemeSurfacePage}">
 
     <UserControl.Resources>
         <ControlTheme x:Key="GhostButton" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="#C8C8C8"/>
-            <Setter Property="BorderBrush" Value="#6A6A6A"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextButton}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderStrong}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -28,11 +28,11 @@
                 </ControlTemplate>
             </Setter>
             <Style Selector="^:pointerover /template/ Border#PART_Border">
-                <Setter Property="Background" Value="#3C3C3C"/>
-                <Setter Property="BorderBrush" Value="#808080"/>
+                <Setter Property="Background" Value="{DynamicResource ThemeSurfaceHover}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderHoverStrong}"/>
             </Style>
             <Style Selector="^:pressed /template/ Border#PART_Border">
-                <Setter Property="Background" Value="#282828"/>
+                <Setter Property="Background" Value="{DynamicResource ThemeSurfacePressed}"/>
             </Style>
         </ControlTheme>
     </UserControl.Resources>
@@ -41,40 +41,40 @@
 
         <!-- Form TextBox: dark input field -->
         <Style Selector="TextBox.FormField">
-            <Setter Property="Background" Value="#252525"/>
-            <Setter Property="Foreground" Value="#D4D4D4"/>
-            <Setter Property="CaretBrush" Value="#5B9BD5"/>
-            <Setter Property="SelectionBrush" Value="#1E3A5A"/>
-            <Setter Property="BorderBrush" Value="#464646"/>
+            <Setter Property="Background" Value="{DynamicResource ThemeSurfaceInput}"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextBody}"/>
+            <Setter Property="CaretBrush" Value="{DynamicResource ThemeAccent}"/>
+            <Setter Property="SelectionBrush" Value="{DynamicResource ThemeSelection}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorder}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="CornerRadius" Value="5"/>
             <Setter Property="Padding" Value="10,7"/>
             <Setter Property="FontSize" Value="13"/>
         </Style>
         <Style Selector="TextBox.FormField:focus /template/ Border#PART_BorderElement">
-            <Setter Property="BorderBrush" Value="#5B9BD5"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeAccent}"/>
             <Setter Property="BorderThickness" Value="1"/>
         </Style>
         <Style Selector="TextBox.FormField /template/ Border#PART_BorderElement">
-            <Setter Property="Background" Value="#252525"/>
+            <Setter Property="Background" Value="{DynamicResource ThemeSurfaceInput}"/>
             <Setter Property="CornerRadius" Value="5"/>
         </Style>
         <Style Selector="TextBox.FormField:pointerover /template/ Border#PART_BorderElement">
-            <Setter Property="BorderBrush" Value="#707070"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderHover}"/>
         </Style>
 
         <!-- Code output TextBox -->
         <Style Selector="TextBox.Code /template/ Border#PART_BorderElement">
-            <Setter Property="Background" Value="#252525"/>
+            <Setter Property="Background" Value="{DynamicResource ThemeSurfaceInput}"/>
             <Setter Property="BorderThickness" Value="0"/>
         </Style>
         <Style Selector="TextBox.Code:focus /template/ Border#PART_BorderElement">
-            <Setter Property="Background" Value="#252525"/>
+            <Setter Property="Background" Value="{DynamicResource ThemeSurfaceInput}"/>
             <Setter Property="BorderBrush" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
         </Style>
         <Style Selector="TextBox.Code:pointerover /template/ Border#PART_BorderElement">
-            <Setter Property="Background" Value="#252525"/>
+            <Setter Property="Background" Value="{DynamicResource ThemeSurfaceInput}"/>
         </Style>
 
     </UserControl.Styles>
@@ -87,21 +87,21 @@
                 <TextBlock Text="Animações de NPC"
                            FontSize="22"
                            FontWeight="SemiBold"
-                           Foreground="#E8E8E8"/>
+                           Foreground="{DynamicResource ThemeTextTitle}"/>
                 <TextBlock Text="Gerador de PawnAnimData.dat para Lineage II"
                            FontSize="13"
-                           Foreground="#E8E8E8"/>
+                           Foreground="{DynamicResource ThemeTextTitle}"/>
             </StackPanel>
 
             <!-- ── Painel 01: Nome do Pawn ───────────────────────────── -->
             <Border Margin="32,0"
                     CornerRadius="8"
-                    Background="#2C2C2C"
-                    BorderBrush="#464646"
+                    Background="{DynamicResource ThemeSurfaceCard}"
+                    BorderBrush="{DynamicResource ThemeBorder}"
                     BorderThickness="1"
                     ClipToBounds="True">
                 <Grid ColumnDefinitions="4,*">
-                    <Border Grid.Column="0" Background="#5B9BD5"/>
+                    <Border Grid.Column="0" Background="{DynamicResource ThemeAccent}"/>
                     <StackPanel Grid.Column="1">
 
                         <StackPanel Orientation="Horizontal"
@@ -112,12 +112,12 @@
                             <TextBlock Text="NOME DO PAWN"
                                        FontSize="11"
                                        FontWeight="Bold"
-                                       Foreground="#B8B8B8"
+                                       Foreground="{DynamicResource ThemeTextLabel}"
                                        LetterSpacing="1.5"
                                        VerticalAlignment="Center"/>
                         </StackPanel>
 
-                        <Border Height="1" Background="#464646"/>
+                        <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
 
                         <TextBox x:Name="PawnNameTextBox"
                                  Classes="FormField"
@@ -131,12 +131,12 @@
             <!-- ── Painel 02: Entradas de Animação ─────────────────── -->
             <Border Margin="32,16"
                     CornerRadius="8"
-                    Background="#2C2C2C"
-                    BorderBrush="#464646"
+                    Background="{DynamicResource ThemeSurfaceCard}"
+                    BorderBrush="{DynamicResource ThemeBorder}"
                     BorderThickness="1"
                     ClipToBounds="True">
                 <Grid ColumnDefinitions="4,*">
-                    <Border Grid.Column="0" Background="#5B9BD5"/>
+                    <Border Grid.Column="0" Background="{DynamicResource ThemeAccent}"/>
                     <StackPanel Grid.Column="1">
 
                         <StackPanel Orientation="Horizontal"
@@ -147,12 +147,12 @@
                             <TextBlock Text="ENTRADAS DE ANIMAÇÃO"
                                        FontSize="11"
                                        FontWeight="Bold"
-                                       Foreground="#B8B8B8"
+                                       Foreground="{DynamicResource ThemeTextLabel}"
                                        LetterSpacing="1.5"
                                        VerticalAlignment="Center"/>
                         </StackPanel>
 
-                        <Border Height="1" Background="#464646"/>
+                        <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
 
                         <!-- Animation fields grid -->
                         <Grid Margin="20,16,20,20"
@@ -161,115 +161,115 @@
 
                             <!-- Row 0 -->
                             <StackPanel Grid.Column="0" Grid.Row="0" Spacing="4">
-                                <TextBlock Text="1 — Walk" FontSize="12" Foreground="#B8B8B8" FontWeight="Medium"/>
+                                <TextBlock Text="1 — Walk" FontSize="12" Foreground="{DynamicResource ThemeTextLabel}" FontWeight="Medium"/>
                                 <TextBox x:Name="Entry_1" Classes="FormField"/>
                             </StackPanel>
                             <StackPanel Grid.Column="2" Grid.Row="0" Spacing="4">
-                                <TextBlock Text="2 — Run" FontSize="12" Foreground="#B8B8B8" FontWeight="Medium"/>
+                                <TextBlock Text="2 — Run" FontSize="12" Foreground="{DynamicResource ThemeTextLabel}" FontWeight="Medium"/>
                                 <TextBox x:Name="Entry_2" Classes="FormField"/>
                             </StackPanel>
 
                             <!-- Row 2 -->
                             <StackPanel Grid.Column="0" Grid.Row="2" Spacing="4">
-                                <TextBlock Text="8 — AtkWait" FontSize="12" Foreground="#B8B8B8" FontWeight="Medium"/>
+                                <TextBlock Text="8 — AtkWait" FontSize="12" Foreground="{DynamicResource ThemeTextLabel}" FontWeight="Medium"/>
                                 <TextBox x:Name="Entry_8" Classes="FormField"/>
                             </StackPanel>
                             <StackPanel Grid.Column="2" Grid.Row="2" Spacing="4">
-                                <TextBlock Text="9 — AtkWait" FontSize="12" Foreground="#B8B8B8" FontWeight="Medium"/>
+                                <TextBlock Text="9 — AtkWait" FontSize="12" Foreground="{DynamicResource ThemeTextLabel}" FontWeight="Medium"/>
                                 <TextBox x:Name="Entry_9" Classes="FormField"/>
                             </StackPanel>
 
                             <!-- Subtle group separator -->
                             <Border Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="3"
-                                    Height="1" Background="#464646" Margin="0,4"/>
+                                    Height="1" Background="{DynamicResource ThemeBorder}" Margin="0,4"/>
 
                             <!-- Row 4 -->
                             <StackPanel Grid.Column="0" Grid.Row="4" Spacing="4">
-                                <TextBlock Text="20 — Attack 01" FontSize="12" Foreground="#B8B8B8" FontWeight="Medium"/>
+                                <TextBlock Text="20 — Attack 01" FontSize="12" Foreground="{DynamicResource ThemeTextLabel}" FontWeight="Medium"/>
                                 <TextBox x:Name="Entry_20" Classes="FormField"/>
                             </StackPanel>
                             <StackPanel Grid.Column="2" Grid.Row="4" Spacing="4">
-                                <TextBlock Text="21 — Attack 02" FontSize="12" Foreground="#B8B8B8" FontWeight="Medium"/>
+                                <TextBlock Text="21 — Attack 02" FontSize="12" Foreground="{DynamicResource ThemeTextLabel}" FontWeight="Medium"/>
                                 <TextBox x:Name="Entry_21" Classes="FormField"/>
                             </StackPanel>
 
                             <!-- Row 6 -->
                             <StackPanel Grid.Column="0" Grid.Row="6" Spacing="4">
-                                <TextBlock Text="22 — Attack 03" FontSize="12" Foreground="#B8B8B8" FontWeight="Medium"/>
+                                <TextBlock Text="22 — Attack 03" FontSize="12" Foreground="{DynamicResource ThemeTextLabel}" FontWeight="Medium"/>
                                 <TextBox x:Name="Entry_22" Classes="FormField"/>
                             </StackPanel>
 
                             <!-- Subtle group separator -->
                             <Border Grid.Column="0" Grid.Row="8" Grid.ColumnSpan="3"
-                                    Height="1" Background="#464646" Margin="0,4"/>
+                                    Height="1" Background="{DynamicResource ThemeBorder}" Margin="0,4"/>
 
                             <!-- Row 8 -->
                             <StackPanel Grid.Column="0" Grid.Row="8" Spacing="4">
-                                <TextBlock Text="28 — Special Attack 01" FontSize="12" Foreground="#B8B8B8" FontWeight="Medium"/>
+                                <TextBlock Text="28 — Special Attack 01" FontSize="12" Foreground="{DynamicResource ThemeTextLabel}" FontWeight="Medium"/>
                                 <TextBox x:Name="Entry_28" Classes="FormField"/>
                             </StackPanel>
                             <StackPanel Grid.Column="2" Grid.Row="8" Spacing="4">
-                                <TextBlock Text="29 — Special Attack 02" FontSize="12" Foreground="#B8B8B8" FontWeight="Medium"/>
+                                <TextBlock Text="29 — Special Attack 02" FontSize="12" Foreground="{DynamicResource ThemeTextLabel}" FontWeight="Medium"/>
                                 <TextBox x:Name="Entry_29" Classes="FormField"/>
                             </StackPanel>
 
                             <!-- Row 10 -->
                             <StackPanel Grid.Column="0" Grid.Row="10" Spacing="4">
-                                <TextBlock Text="30 — Special Attack 03" FontSize="12" Foreground="#B8B8B8" FontWeight="Medium"/>
+                                <TextBlock Text="30 — Special Attack 03" FontSize="12" Foreground="{DynamicResource ThemeTextLabel}" FontWeight="Medium"/>
                                 <TextBox x:Name="Entry_30" Classes="FormField"/>
                             </StackPanel>
                             <StackPanel Grid.Column="2" Grid.Row="10" Spacing="4">
-                                <TextBlock Text="31 — Special Attack 04" FontSize="12" Foreground="#B8B8B8" FontWeight="Medium"/>
+                                <TextBlock Text="31 — Special Attack 04" FontSize="12" Foreground="{DynamicResource ThemeTextLabel}" FontWeight="Medium"/>
                                 <TextBox x:Name="Entry_31" Classes="FormField"/>
                             </StackPanel>
 
                             <!-- Row 12 -->
                             <StackPanel Grid.Column="0" Grid.Row="12" Spacing="4">
-                                <TextBlock Text="32 — Special Attack 05" FontSize="12" Foreground="#B8B8B8" FontWeight="Medium"/>
+                                <TextBlock Text="32 — Special Attack 05" FontSize="12" Foreground="{DynamicResource ThemeTextLabel}" FontWeight="Medium"/>
                                 <TextBox x:Name="Entry_32" Classes="FormField"/>
                             </StackPanel>
                             <StackPanel Grid.Column="2" Grid.Row="12" Spacing="4">
-                                <TextBlock Text="33 — Special Attack 06" FontSize="12" Foreground="#B8B8B8" FontWeight="Medium"/>
+                                <TextBlock Text="33 — Special Attack 06" FontSize="12" Foreground="{DynamicResource ThemeTextLabel}" FontWeight="Medium"/>
                                 <TextBox x:Name="Entry_33" Classes="FormField"/>
                             </StackPanel>
 
                             <!-- Row 14 -->
                             <StackPanel Grid.Column="0" Grid.Row="14" Spacing="4">
-                                <TextBlock Text="34 — Special Attack 07" FontSize="12" Foreground="#B8B8B8" FontWeight="Medium"/>
+                                <TextBlock Text="34 — Special Attack 07" FontSize="12" Foreground="{DynamicResource ThemeTextLabel}" FontWeight="Medium"/>
                                 <TextBox x:Name="Entry_34" Classes="FormField"/>
                             </StackPanel>
                             <StackPanel Grid.Column="2" Grid.Row="14" Spacing="4">
-                                <TextBlock Text="35 — Special Attack 08" FontSize="12" Foreground="#B8B8B8" FontWeight="Medium"/>
+                                <TextBlock Text="35 — Special Attack 08" FontSize="12" Foreground="{DynamicResource ThemeTextLabel}" FontWeight="Medium"/>
                                 <TextBox x:Name="Entry_35" Classes="FormField"/>
                             </StackPanel>
 
                             <!-- Row 16 -->
                             <StackPanel Grid.Column="0" Grid.Row="16" Spacing="4">
-                                <TextBlock Text="36 — Special Attack 09" FontSize="12" Foreground="#B8B8B8" FontWeight="Medium"/>
+                                <TextBlock Text="36 — Special Attack 09" FontSize="12" Foreground="{DynamicResource ThemeTextLabel}" FontWeight="Medium"/>
                                 <TextBox x:Name="Entry_36" Classes="FormField"/>
                             </StackPanel>
                             <StackPanel Grid.Column="2" Grid.Row="16" Spacing="4">
-                                <TextBlock Text="37 — Special Attack 10" FontSize="12" Foreground="#B8B8B8" FontWeight="Medium"/>
+                                <TextBlock Text="37 — Special Attack 10" FontSize="12" Foreground="{DynamicResource ThemeTextLabel}" FontWeight="Medium"/>
                                 <TextBox x:Name="Entry_37" Classes="FormField"/>
                             </StackPanel>
 
                             <!-- Subtle group separator -->
                             <Border Grid.Column="0" Grid.Row="18" Grid.ColumnSpan="3"
-                                    Height="1" Background="#464646" Margin="0,4"/>
+                                    Height="1" Background="{DynamicResource ThemeBorder}" Margin="0,4"/>
 
                             <!-- Row 18 -->
                             <StackPanel Grid.Column="0" Grid.Row="18" Spacing="4">
-                                <TextBlock Text="60 — Death / Exit" FontSize="12" Foreground="#B8B8B8" FontWeight="Medium"/>
+                                <TextBlock Text="60 — Death / Exit" FontSize="12" Foreground="{DynamicResource ThemeTextLabel}" FontWeight="Medium"/>
                                 <TextBox x:Name="Entry_60" Classes="FormField"/>
                             </StackPanel>
                             <StackPanel Grid.Column="2" Grid.Row="18" Spacing="4">
-                                <TextBlock Text="62 — DeathWait" FontSize="12" Foreground="#B8B8B8" FontWeight="Medium"/>
+                                <TextBlock Text="62 — DeathWait" FontSize="12" Foreground="{DynamicResource ThemeTextLabel}" FontWeight="Medium"/>
                                 <TextBox x:Name="Entry_62" Classes="FormField"/>
                             </StackPanel>
 
                             <!-- Row 20 -->
                             <StackPanel Grid.Column="0" Grid.Row="20" Spacing="4">
-                                <TextBlock Text="92 — Social Actions" FontSize="12" Foreground="#B8B8B8" FontWeight="Medium"/>
+                                <TextBlock Text="92 — Social Actions" FontSize="12" Foreground="{DynamicResource ThemeTextLabel}" FontWeight="Medium"/>
                                 <TextBox x:Name="Entry_92" Classes="FormField"/>
                             </StackPanel>
 
@@ -283,7 +283,7 @@
             <Grid Margin="32,4" ColumnDefinitions="*,Auto,*">
                 <Border Grid.Column="0"
                         Height="1"
-                        Background="#464646"
+                        Background="{DynamicResource ThemeBorder}"
                         VerticalAlignment="Center"/>
                 <Button Grid.Column="1"
                         x:Name="GenerateButton"
@@ -301,19 +301,19 @@
                 </Button>
                 <Border Grid.Column="2"
                         Height="1"
-                        Background="#464646"
+                        Background="{DynamicResource ThemeBorder}"
                         VerticalAlignment="Center"/>
             </Grid>
 
             <!-- ── Painel 03: Saída ──────────────────────────────────── -->
             <Border Margin="32,12,32,32"
                     CornerRadius="8"
-                    Background="#2C2C2C"
-                    BorderBrush="#464646"
+                    Background="{DynamicResource ThemeSurfaceCard}"
+                    BorderBrush="{DynamicResource ThemeBorder}"
                     BorderThickness="1"
                     ClipToBounds="True">
                 <Grid ColumnDefinitions="4,*">
-                    <Border Grid.Column="0" Background="#5B9BD5"/>
+                    <Border Grid.Column="0" Background="{DynamicResource ThemeAccent}"/>
                     <StackPanel Grid.Column="1">
 
                         <Grid ColumnDefinitions="Auto,Auto,*,Auto,Auto"
@@ -324,7 +324,7 @@
                                        Text="SAÍDA GERADA"
                                        FontSize="11"
                                        FontWeight="Bold"
-                                       Foreground="#B8B8B8"
+                                       Foreground="{DynamicResource ThemeTextLabel}"
                                        LetterSpacing="1.5"
                                        VerticalAlignment="Center"/>
 
@@ -332,19 +332,19 @@
                             <Border Grid.Column="3"
                                     x:Name="CopiadoTextBlock"
                                     IsVisible="False"
-                                    Background="#142B1A"
-                                    BorderBrush="#245230"
+                                    Background="{DynamicResource ThemeSuccessBg}"
+                                    BorderBrush="{DynamicResource ThemeSuccessBorder}"
                                     BorderThickness="1"
                                     CornerRadius="5"
                                     Padding="10,4"
                                     VerticalAlignment="Center"
                                     Margin="0,0,10,0">
                                 <StackPanel Orientation="Horizontal" Spacing="5">
-                                    <PathIcon Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Width="10" Height="10" Foreground="#52C97A" VerticalAlignment="Center"/>
+                                    <PathIcon Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Width="10" Height="10" Foreground="{DynamicResource ThemeSuccess}" VerticalAlignment="Center"/>
                                     <TextBlock Text="Copiado!"
                                                FontSize="11"
                                                FontWeight="Medium"
-                                               Foreground="#52C97A"
+                                               Foreground="{DynamicResource ThemeSuccess}"
                                                VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Border>
@@ -357,7 +357,7 @@
                                     VerticalAlignment="Center"
                                     Theme="{StaticResource GhostButton}">
                                 <StackPanel Orientation="Horizontal" Spacing="7">
-                                    <PathIcon Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" Foreground="#B8B8B8" Width="12" Height="12" VerticalAlignment="Center"/>
+                                    <PathIcon Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" Foreground="{DynamicResource ThemeTextLabel}" Width="12" Height="12" VerticalAlignment="Center"/>
                                     <TextBlock Text="Copiar"
                                                FontSize="12"
                                                FontWeight="Medium"
@@ -367,7 +367,7 @@
 
                         </Grid>
 
-                        <Border Height="1" Background="#464646"/>
+                        <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
 
                         <TextBox x:Name="OutputTextBox"
                                  Classes="Code"
@@ -376,10 +376,10 @@
                                  Height="160"
                                  Padding="20,14"
                                  BorderThickness="0"
-                                 Background="#252525"
-                                 Foreground="#9CDCFE"
-                                 CaretBrush="#5B9BD5"
-                                 SelectionBrush="#1E3A5A"
+                                 Background="{DynamicResource ThemeSurfaceInput}"
+                                 Foreground="{DynamicResource ThemeTextCode}"
+                                 CaretBrush="{DynamicResource ThemeAccent}"
+                                 SelectionBrush="{DynamicResource ThemeSelection}"
                                  FontFamily="Consolas,Courier New,monospace"
                                  FontSize="12"
                                  IsReadOnly="True"

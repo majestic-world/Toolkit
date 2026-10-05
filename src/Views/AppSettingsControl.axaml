@@ -1,13 +1,13 @@
 <UserControl x:Class="L2Toolkit.Views.AppSettingsControl"
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             Background="#333333">
+             Background="{DynamicResource ThemeSurfacePage}">
 
     <UserControl.Resources>
         <ControlTheme x:Key="GhostButton" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="#C8C8C8"/>
-            <Setter Property="BorderBrush" Value="#6A6A6A"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextButton}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderStrong}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -28,37 +28,37 @@
                 </ControlTemplate>
             </Setter>
             <Style Selector="^:pointerover /template/ Border#PART_Border">
-                <Setter Property="Background" Value="#3C3C3C"/>
-                <Setter Property="BorderBrush" Value="#808080"/>
+                <Setter Property="Background" Value="{DynamicResource ThemeSurfaceHover}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderHoverStrong}"/>
             </Style>
             <Style Selector="^:pressed /template/ Border#PART_Border">
-                <Setter Property="Background" Value="#282828"/>
+                <Setter Property="Background" Value="{DynamicResource ThemeSurfacePressed}"/>
             </Style>
         </ControlTheme>
     </UserControl.Resources>
 
     <UserControl.Styles>
         <Style Selector="TextBox.FormField">
-            <Setter Property="Background" Value="#252525"/>
-            <Setter Property="Foreground" Value="#D4D4D4"/>
-            <Setter Property="CaretBrush" Value="#5B9BD5"/>
-            <Setter Property="SelectionBrush" Value="#1E3A5A"/>
-            <Setter Property="BorderBrush" Value="#464646"/>
+            <Setter Property="Background" Value="{DynamicResource ThemeSurfaceInput}"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextBody}"/>
+            <Setter Property="CaretBrush" Value="{DynamicResource ThemeAccent}"/>
+            <Setter Property="SelectionBrush" Value="{DynamicResource ThemeSelection}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorder}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="CornerRadius" Value="5"/>
             <Setter Property="Padding" Value="10,7"/>
             <Setter Property="FontSize" Value="13"/>
         </Style>
         <Style Selector="TextBox.FormField /template/ Border#PART_BorderElement">
-            <Setter Property="Background" Value="#252525"/>
+            <Setter Property="Background" Value="{DynamicResource ThemeSurfaceInput}"/>
             <Setter Property="CornerRadius" Value="5"/>
         </Style>
         <Style Selector="TextBox.FormField:focus /template/ Border#PART_BorderElement">
-            <Setter Property="BorderBrush" Value="#5B9BD5"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeAccent}"/>
             <Setter Property="BorderThickness" Value="1"/>
         </Style>
         <Style Selector="TextBox.FormField:pointerover /template/ Border#PART_BorderElement">
-            <Setter Property="BorderBrush" Value="#707070"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderHover}"/>
         </Style>
     </UserControl.Styles>
 
@@ -70,21 +70,64 @@
                 <TextBlock Text="Configurações"
                            FontSize="22"
                            FontWeight="SemiBold"
-                           Foreground="#E8E8E8"/>
+                           Foreground="{DynamicResource ThemeTextTitle}"/>
                 <TextBlock Text="Configure os caminhos e preferências do aplicativo"
                            FontSize="13"
-                           Foreground="#E8E8E8"/>
+                           Foreground="{DynamicResource ThemeTextTitle}"/>
             </StackPanel>
+
+            <!-- Panel: Appearance -->
+            <Border Margin="32,0,32,20"
+                    CornerRadius="8"
+                    Background="{DynamicResource ThemeSurfaceCard}"
+                    BorderBrush="{DynamicResource ThemeBorder}"
+                    BorderThickness="1"
+                    ClipToBounds="True">
+                <Grid ColumnDefinitions="4,*">
+                    <Border Grid.Column="0" Background="{DynamicResource ThemeAccent}"/>
+                    <StackPanel Grid.Column="1">
+
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="20,0"
+                                    Height="52"
+                                    Spacing="14"
+                                    VerticalAlignment="Center">
+                            <TextBlock Text="APARÊNCIA"
+                                       FontSize="11"
+                                       FontWeight="Bold"
+                                       Foreground="{DynamicResource ThemeTextLabel}"
+                                       LetterSpacing="1.5"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
+
+                        <StackPanel Margin="20,16,20,20" Spacing="6">
+                            <TextBlock Text="Tema"
+                                       FontSize="12"
+                                       Foreground="{DynamicResource ThemeTextLabel}"
+                                       FontWeight="Medium"/>
+                            <ComboBox x:Name="ThemeComboBox"
+                                      Width="220"
+                                      HorizontalAlignment="Left"
+                                      SelectionChanged="ThemeComboBox_OnSelectionChanged">
+                                <ComboBoxItem Content="Escuro (padrão)"/>
+                                <ComboBoxItem Content="Claro"/>
+                            </ComboBox>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Border>
 
             <!-- Panel 01: Assets folder -->
             <Border Margin="32,0"
                     CornerRadius="8"
-                    Background="#2C2C2C"
-                    BorderBrush="#464646"
+                    Background="{DynamicResource ThemeSurfaceCard}"
+                    BorderBrush="{DynamicResource ThemeBorder}"
                     BorderThickness="1"
                     ClipToBounds="True">
                 <Grid ColumnDefinitions="4,*">
-                    <Border Grid.Column="0" Background="#5B9BD5"/>
+                    <Border Grid.Column="0" Background="{DynamicResource ThemeAccent}"/>
                     <StackPanel Grid.Column="1">
 
                         <StackPanel Orientation="Horizontal"
@@ -95,17 +138,17 @@
                             <TextBlock Text="PASTA DE ASSETS"
                                        FontSize="11"
                                        FontWeight="Bold"
-                                       Foreground="#B8B8B8"
+                                       Foreground="{DynamicResource ThemeTextLabel}"
                                        LetterSpacing="1.5"
                                        VerticalAlignment="Center"/>
                         </StackPanel>
 
-                        <Border Height="1" Background="#464646"/>
+                        <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
 
                         <StackPanel Margin="20,16,20,20" Spacing="14">
                             <TextBlock TextWrapping="Wrap"
                                        FontSize="13"
-                                       Foreground="#B8B8B8"
+                                       Foreground="{DynamicResource ThemeTextLabel}"
                                        LineHeight="20">
                                 Alguns módulos dependem de arquivos de dados do cliente Lineage 2 (ex: ItemName, Armorgrp, Weapongrp).
                                 Selecione a pasta onde esses arquivos estão localizados.
@@ -114,7 +157,7 @@
                             <StackPanel Spacing="6">
                                 <TextBlock Text="Localização da pasta de assets"
                                            FontSize="12"
-                                           Foreground="#B8B8B8"
+                                           Foreground="{DynamicResource ThemeTextLabel}"
                                            FontWeight="Medium"/>
                                 <Grid ColumnDefinitions="*,12,Auto,8,Auto">
                                     <TextBox x:Name="AssetsDirBox"
@@ -133,7 +176,7 @@
                                             Padding="16,0"
                                             Theme="{StaticResource GhostButton}">
                                         <StackPanel Orientation="Horizontal" Spacing="8">
-                                            <PathIcon Data="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" Foreground="#B8B8B8" Width="14" Height="14" VerticalAlignment="Center"/>
+                                            <PathIcon Data="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" Foreground="{DynamicResource ThemeTextLabel}" Width="14" Height="14" VerticalAlignment="Center"/>
                                             <TextBlock Text="Selecionar"
                                                        FontSize="13"
                                                        FontWeight="Medium"
@@ -146,7 +189,7 @@
                                             Padding="14,0"
                                             Theme="{StaticResource GhostButton}">
                                         <StackPanel Orientation="Horizontal" Spacing="8">
-                                            <PathIcon Data="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" Width="14" Height="14" VerticalAlignment="Center" Foreground="#B8B8B8"/>
+                                            <PathIcon Data="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" Width="14" Height="14" VerticalAlignment="Center" Foreground="{DynamicResource ThemeTextLabel}"/>
                                             <TextBlock Text="Limpar"
                                                        FontSize="13"
                                                        FontWeight="Medium"
@@ -157,37 +200,37 @@
                             </StackPanel>
 
                             <!-- Modules that need assets -->
-                            <Border Background="#252525"
+                            <Border Background="{DynamicResource ThemeSurfaceInput}"
                                     CornerRadius="6"
                                     Padding="14,10">
                                 <StackPanel Spacing="6">
                                     <TextBlock Text="Módulos que utilizam esta pasta:"
                                                FontSize="12"
                                                FontWeight="SemiBold"
-                                               Foreground="#B8B8B8"/>
+                                               Foreground="{DynamicResource ThemeTextLabel}"/>
                                     <StackPanel Orientation="Horizontal" Spacing="6">
-                                        <Border Background="#3A3A3A" CornerRadius="4" Padding="8,4">
-                                            <TextBlock Text="Prime Shop" FontSize="12" Foreground="#C8C8C8"/>
+                                        <Border Background="{DynamicResource ThemeSurfaceRaised}" CornerRadius="4" Padding="8,4">
+                                            <TextBlock Text="Prime Shop" FontSize="12" Foreground="{DynamicResource ThemeTextButton}"/>
                                         </Border>
-                                        <Border Background="#3A3A3A" CornerRadius="4" Padding="8,4">
-                                            <TextBlock Text="Pesquisar Ícone" FontSize="12" Foreground="#C8C8C8"/>
+                                        <Border Background="{DynamicResource ThemeSurfaceRaised}" CornerRadius="4" Padding="8,4">
+                                            <TextBlock Text="Pesquisar Ícone" FontSize="12" Foreground="{DynamicResource ThemeTextButton}"/>
                                         </Border>
-                                        <Border Background="#3A3A3A" CornerRadius="4" Padding="8,4">
-                                            <TextBlock Text="Criar MultiSell" FontSize="12" Foreground="#C8C8C8"/>
+                                        <Border Background="{DynamicResource ThemeSurfaceRaised}" CornerRadius="4" Padding="8,4">
+                                            <TextBlock Text="Criar MultiSell" FontSize="12" Foreground="{DynamicResource ThemeTextButton}"/>
                                         </Border>
                                     </StackPanel>
                                 </StackPanel>
                             </Border>
 
                             <!-- Files needed -->
-                            <Border Background="#252525"
+                            <Border Background="{DynamicResource ThemeSurfaceInput}"
                                     CornerRadius="6"
                                     Padding="14,10">
                                 <StackPanel Spacing="6">
                                     <TextBlock Text="Arquivos necessários na pasta:"
                                                FontSize="12"
                                                FontWeight="SemiBold"
-                                               Foreground="#B8B8B8"/>
+                                               Foreground="{DynamicResource ThemeTextLabel}"/>
                                     <StackPanel x:Name="FilesStatusPanel" Orientation="Horizontal" Spacing="6"/>
                                 </StackPanel>
                             </Border>
@@ -201,12 +244,12 @@
             <!-- Panel: L2DAT Build -->
             <Border Margin="32,20,32,0"
                     CornerRadius="8"
-                    Background="#2C2C2C"
-                    BorderBrush="#464646"
+                    Background="{DynamicResource ThemeSurfaceCard}"
+                    BorderBrush="{DynamicResource ThemeBorder}"
                     BorderThickness="1"
                     ClipToBounds="True">
                 <Grid ColumnDefinitions="4,*">
-                    <Border Grid.Column="0" Background="#8DB27C"/>
+                    <Border Grid.Column="0" Background="{DynamicResource ThemeSuccessAccent}"/>
                     <StackPanel Grid.Column="1">
 
                         <StackPanel Orientation="Horizontal"
@@ -214,23 +257,23 @@
                                     Height="52"
                                     Spacing="14"
                                     VerticalAlignment="Center">
-                            <PathIcon Data="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" Width="18" Height="18" Foreground="#8DB27C" VerticalAlignment="Center"/>
-                            <Border Width="1" Height="18" Background="#6A6A6A" VerticalAlignment="Center"/>
+                            <PathIcon Data="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" Width="18" Height="18" Foreground="{DynamicResource ThemeSuccessAccent}" VerticalAlignment="Center"/>
+                            <Border Width="1" Height="18" Background="{DynamicResource ThemeBorderStrong}" VerticalAlignment="Center"/>
                             <TextBlock Text="L2DAT BUILD"
                                        FontSize="11"
                                        FontWeight="Bold"
-                                       Foreground="#B8B8B8"
+                                       Foreground="{DynamicResource ThemeTextLabel}"
                                        LetterSpacing="1.5"
                                        VerticalAlignment="Center"/>
                         </StackPanel>
 
-                        <Border Height="1" Background="#464646"/>
+                        <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
 
                         <StackPanel Margin="20,16,20,20" Spacing="14">
 
                             <TextBlock TextWrapping="Wrap"
                                        FontSize="13"
-                                       Foreground="#B8B8B8"
+                                       Foreground="{DynamicResource ThemeTextLabel}"
                                        LineHeight="20">
                                 Compila arquivos .txt da pasta de origem em .l2dat na pasta de saída. Somente arquivos na raiz da pasta são processados.
                             </TextBlock>
@@ -239,7 +282,7 @@
                             <StackPanel Spacing="6">
                                 <TextBlock Text="Pasta de origem (.txt)"
                                            FontSize="12"
-                                           Foreground="#B8B8B8"
+                                           Foreground="{DynamicResource ThemeTextLabel}"
                                            FontWeight="Medium"/>
                                 <Grid ColumnDefinitions="*,8,Auto,8,Auto">
                                     <TextBox x:Name="BuildSourceBox"
@@ -260,7 +303,7 @@
                                             Padding="14,0"
                                             Theme="{StaticResource GhostButton}">
                                         <StackPanel Orientation="Horizontal" Spacing="7">
-                                            <PathIcon Data="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" Foreground="#B8B8B8" Width="13" Height="13" VerticalAlignment="Center"/>
+                                            <PathIcon Data="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" Foreground="{DynamicResource ThemeTextLabel}" Width="13" Height="13" VerticalAlignment="Center"/>
                                             <TextBlock Text="Selecionar" FontSize="13" FontWeight="Medium" VerticalAlignment="Center"/>
                                         </StackPanel>
                                     </Button>
@@ -269,7 +312,7 @@
                                             Height="34"
                                             Padding="12,0"
                                             Theme="{StaticResource GhostButton}">
-                                        <PathIcon Data="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" Width="13" Height="13" Foreground="#B8B8B8"/>
+                                        <PathIcon Data="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" Width="13" Height="13" Foreground="{DynamicResource ThemeTextLabel}"/>
                                     </Button>
                                 </Grid>
                             </StackPanel>
@@ -278,7 +321,7 @@
                             <StackPanel Spacing="6">
                                 <TextBlock Text="Pasta de saída (.l2dat)"
                                            FontSize="12"
-                                           Foreground="#B8B8B8"
+                                           Foreground="{DynamicResource ThemeTextLabel}"
                                            FontWeight="Medium"/>
                                 <Grid ColumnDefinitions="*,8,Auto,8,Auto">
                                     <TextBox x:Name="BuildOutputBox"
@@ -299,7 +342,7 @@
                                             Padding="14,0"
                                             Theme="{StaticResource GhostButton}">
                                         <StackPanel Orientation="Horizontal" Spacing="7">
-                                            <PathIcon Data="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" Foreground="#B8B8B8" Width="13" Height="13" VerticalAlignment="Center"/>
+                                            <PathIcon Data="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" Foreground="{DynamicResource ThemeTextLabel}" Width="13" Height="13" VerticalAlignment="Center"/>
                                             <TextBlock Text="Selecionar" FontSize="13" FontWeight="Medium" VerticalAlignment="Center"/>
                                         </StackPanel>
                                     </Button>
@@ -309,7 +352,7 @@
                                             Padding="12,0"
                                             Theme="{StaticResource GhostButton}">
                                         <StackPanel Orientation="Horizontal" Spacing="7">
-                                            <PathIcon Data="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z" Foreground="#B8B8B8" Width="13" Height="13" VerticalAlignment="Center"/>
+                                            <PathIcon Data="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z" Foreground="{DynamicResource ThemeTextLabel}" Width="13" Height="13" VerticalAlignment="Center"/>
                                             <TextBlock Text="Padrão" FontSize="13" FontWeight="Medium" VerticalAlignment="Center"/>
                                         </StackPanel>
                                     </Button>
@@ -320,7 +363,7 @@
                             <StackPanel Spacing="6">
                                 <TextBlock Text="Nível de compressão"
                                            FontSize="12"
-                                           Foreground="#B8B8B8"
+                                           Foreground="{DynamicResource ThemeTextLabel}"
                                            FontWeight="Medium"/>
                                 <ComboBox x:Name="BuildQualityBox"
                                           Height="34"
@@ -337,7 +380,7 @@
                             <!-- Apenas os necessários -->
                             <CheckBox x:Name="BuildOnlyRequiredCheckBox"
                                       IsChecked="True"
-                                      Foreground="#C8C8C8"
+                                      Foreground="{DynamicResource ThemeTextButton}"
                                       FontSize="13"
                                       Content="Apenas os necessários (empacota somente as tabelas usadas pelo sistema, ignora o resto)"/>
 
@@ -348,20 +391,20 @@
                                                  Grid.Column="0"
                                                  Minimum="0" Maximum="100" Value="0"
                                                  Height="6"
-                                                 Foreground="#8DB27C"
-                                                 Background="#252525"
+                                                 Foreground="{DynamicResource ThemeSuccessAccent}"
+                                                 Background="{DynamicResource ThemeSurfaceInput}"
                                                  VerticalAlignment="Center"/>
                                     <TextBlock x:Name="BuildProgressLabel"
                                                Grid.Column="2"
                                                Text="0 / 0"
                                                FontSize="11"
-                                               Foreground="#A0A7B4"
+                                               Foreground="{DynamicResource ThemeTextHint}"
                                                VerticalAlignment="Center"/>
                                 </Grid>
                                 <TextBlock x:Name="BuildCurrentFile"
                                            FontSize="11"
                                            FontFamily="Consolas,Courier New,monospace"
-                                           Foreground="#A0A7B4"
+                                           Foreground="{DynamicResource ThemeTextHint}"
                                            TextTrimming="CharacterEllipsis"/>
                             </StackPanel>
 
@@ -373,7 +416,7 @@
                                         Padding="20,0"
                                         Theme="{StaticResource GhostButton}">
                                     <StackPanel Orientation="Horizontal" Spacing="8">
-                                        <PathIcon Data="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" Width="14" Height="14" Foreground="#8DB27C" VerticalAlignment="Center"/>
+                                        <PathIcon Data="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" Width="14" Height="14" Foreground="{DynamicResource ThemeSuccessAccent}" VerticalAlignment="Center"/>
                                         <TextBlock Text="Build"
                                                    FontSize="13"
                                                    FontWeight="SemiBold"
@@ -383,7 +426,7 @@
                                 <TextBlock x:Name="BuildStatusText"
                                            Grid.Column="2"
                                            FontSize="12"
-                                           Foreground="#B8B8B8"
+                                           Foreground="{DynamicResource ThemeTextLabel}"
                                            VerticalAlignment="Center"
                                            TextWrapping="Wrap"
                                            IsVisible="False"/>
@@ -397,12 +440,12 @@
             <!-- Panel 02: Config file -->
             <Border Margin="32,16,32,32"
                     CornerRadius="8"
-                    Background="#2C2C2C"
-                    BorderBrush="#464646"
+                    Background="{DynamicResource ThemeSurfaceCard}"
+                    BorderBrush="{DynamicResource ThemeBorder}"
                     BorderThickness="1"
                     ClipToBounds="True">
                 <Grid ColumnDefinitions="4,*">
-                    <Border Grid.Column="0" Background="#5B9BD5"/>
+                    <Border Grid.Column="0" Background="{DynamicResource ThemeAccent}"/>
                     <StackPanel Grid.Column="1">
 
                         <StackPanel Orientation="Horizontal"
@@ -413,28 +456,28 @@
                             <TextBlock Text="ARQUIVO DE CONFIGURAÇÃO"
                                        FontSize="11"
                                        FontWeight="Bold"
-                                       Foreground="#B8B8B8"
+                                       Foreground="{DynamicResource ThemeTextLabel}"
                                        LetterSpacing="1.5"
                                        VerticalAlignment="Center"/>
                         </StackPanel>
 
-                        <Border Height="1" Background="#464646"/>
+                        <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
 
                         <StackPanel Margin="20,16,20,20" Spacing="14">
                             <TextBlock TextWrapping="Wrap"
                                        FontSize="13"
-                                       Foreground="#B8B8B8">
+                                       Foreground="{DynamicResource ThemeTextLabel}">
                                 As configurações do aplicativo são salvas em um arquivo local no AppData.
                             </TextBlock>
 
                             <StackPanel Spacing="6">
                                 <TextBlock Text="Localização do arquivo"
                                            FontSize="12"
-                                           Foreground="#B8B8B8"
+                                           Foreground="{DynamicResource ThemeTextLabel}"
                                            FontWeight="Medium"/>
                                 <TextBlock x:Name="ConfigPathText"
                                            FontSize="12"
-                                           Foreground="#D4D4D4"
+                                           Foreground="{DynamicResource ThemeTextBody}"
                                            FontFamily="Consolas,Courier New,monospace"
                                            TextWrapping="Wrap"/>
                             </StackPanel>
@@ -445,7 +488,7 @@
                                         Padding="16,0"
                                         Theme="{StaticResource GhostButton}">
                                     <StackPanel Orientation="Horizontal" Spacing="8">
-                                        <PathIcon Data="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" Width="14" Height="14" Foreground="#B8B8B8" VerticalAlignment="Center"/>
+                                        <PathIcon Data="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" Width="14" Height="14" Foreground="{DynamicResource ThemeTextLabel}" VerticalAlignment="Center"/>
                                         <TextBlock Text="Abrir pasta de configuração"
                                                    FontSize="13"
                                                    FontWeight="Medium"
@@ -457,7 +500,7 @@
                                         Padding="16,0"
                                         Theme="{StaticResource GhostButton}">
                                     <StackPanel Orientation="Horizontal" Spacing="8">
-                                        <PathIcon Data="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z" Foreground="#B8B8B8" Width="14" Height="14" VerticalAlignment="Center"/>
+                                        <PathIcon Data="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z" Foreground="{DynamicResource ThemeTextLabel}" Width="14" Height="14" VerticalAlignment="Center"/>
                                         <TextBlock Text="Abrir pasta do aplicativo"
                                                    FontSize="13"
                                                    FontWeight="Medium"
@@ -473,12 +516,12 @@
             <!-- Panel: Test DAT (temporary) -->
             <Border Margin="32,0,32,32"
                     CornerRadius="8"
-                    Background="#2C2C2C"
-                    BorderBrush="#464646"
+                    Background="{DynamicResource ThemeSurfaceCard}"
+                    BorderBrush="{DynamicResource ThemeBorder}"
                     BorderThickness="1"
                     ClipToBounds="True">
                 <Grid ColumnDefinitions="4,*">
-                    <Border Grid.Column="0" Background="#D4A54A"/>
+                    <Border Grid.Column="0" Background="{DynamicResource ThemeWarningAccent}"/>
                     <StackPanel Grid.Column="1">
 
                         <StackPanel Orientation="Horizontal"
@@ -486,22 +529,22 @@
                                     Height="52"
                                     Spacing="14"
                                     VerticalAlignment="Center">
-                            <PathIcon Data="M12 2L1 21h22L12 2zm1 16h-2v-2h2v2zm0-4h-2V9h2v5z" Width="18" Height="18" Foreground="#D4A54A" VerticalAlignment="Center"/>
-                            <Border Width="1" Height="18" Background="#6A6A6A" VerticalAlignment="Center"/>
+                            <PathIcon Data="M12 2L1 21h22L12 2zm1 16h-2v-2h2v2zm0-4h-2V9h2v5z" Width="18" Height="18" Foreground="{DynamicResource ThemeWarningAccent}" VerticalAlignment="Center"/>
+                            <Border Width="1" Height="18" Background="{DynamicResource ThemeBorderStrong}" VerticalAlignment="Center"/>
                             <TextBlock Text="TEST DAT (TEMPORÁRIO)"
                                        FontSize="11"
                                        FontWeight="Bold"
-                                       Foreground="#B8B8B8"
+                                       Foreground="{DynamicResource ThemeTextLabel}"
                                        LetterSpacing="1.5"
                                        VerticalAlignment="Center"/>
                         </StackPanel>
 
-                        <Border Height="1" Background="#464646"/>
+                        <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
 
                         <StackPanel Margin="20,16,20,20" Spacing="14">
                             <TextBlock TextWrapping="Wrap"
                                        FontSize="13"
-                                       Foreground="#B8B8B8"
+                                       Foreground="{DynamicResource ThemeTextLabel}"
                                        LineHeight="20">
                                 Selecione um arquivo .dat do cliente L2 para descriptografar e salvar como .txt na área de trabalho.
                             </TextBlock>
@@ -512,7 +555,7 @@
                                         Padding="16,0"
                                         Theme="{StaticResource GhostButton}">
                                     <StackPanel Orientation="Horizontal" Spacing="8">
-                                        <PathIcon Data="M14 6l-1-2H5v17h2v-7h5l1 2h7V6h-6zm4 8h-4l-1-2H7V6h5l1 2h5v6z" Width="14" Height="14" VerticalAlignment="Center" Foreground="#B8B8B8"/>
+                                        <PathIcon Data="M14 6l-1-2H5v17h2v-7h5l1 2h7V6h-6zm4 8h-4l-1-2H7V6h5l1 2h5v6z" Width="14" Height="14" VerticalAlignment="Center" Foreground="{DynamicResource ThemeTextLabel}"/>
                                         <TextBlock Text="Test DAT"
                                                    FontSize="13"
                                                    FontWeight="Medium"
@@ -521,7 +564,7 @@
                                 </Button>
                                 <TextBlock x:Name="DatStatusText"
                                            FontSize="12"
-                                           Foreground="#B8B8B8"
+                                           Foreground="{DynamicResource ThemeTextLabel}"
                                            VerticalAlignment="Center"
                                            IsVisible="False"/>
                             </StackPanel>

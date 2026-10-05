@@ -14,6 +14,8 @@ using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using L2Toolkit.ClientDat;
 using MsBox.Avalonia;
+using Avalonia.Controls.Documents;
+using L2Toolkit.Utilities;
 
 namespace L2Toolkit.Views;
 
@@ -322,7 +324,7 @@ public partial class SystemMsgColor : UserControl
         // ID badge
         var badge = new Border
         {
-            Background          = new SolidColorBrush(Color.Parse("#252F3D")),
+            [!Border.BackgroundProperty]          = AppTheme.Brush("ThemeAccentBadgeBg"),
             CornerRadius        = new CornerRadius(4),
             Padding             = new Thickness(6, 2),
             VerticalAlignment   = VerticalAlignment.Center,
@@ -333,7 +335,7 @@ public partial class SystemMsgColor : UserControl
             Text       = $"#{entry.Id}",
             FontSize   = 11,
             FontFamily = new FontFamily("Consolas,Courier New,monospace"),
-            Foreground = new SolidColorBrush(Color.Parse("#5B9BD5"))
+            [!TextElement.ForegroundProperty] = AppTheme.Brush("ThemeAccent")
         };
 
         // Color swatch
@@ -361,9 +363,9 @@ public partial class SystemMsgColor : UserControl
             FontFamily               = new FontFamily("Consolas,Courier New,monospace"),
             FontSize                 = 12,
             VerticalContentAlignment = VerticalAlignment.Center,
-            Background               = new SolidColorBrush(Color.Parse("#252525")),
-            Foreground               = new SolidColorBrush(Color.Parse("#D4D4D4")),
-            BorderBrush              = new SolidColorBrush(Color.Parse("#464646")),
+            [!Border.BackgroundProperty]               = AppTheme.Brush("ThemeSurfaceInput"),
+            [!TextElement.ForegroundProperty]               = AppTheme.Brush("ThemeTextBody"),
+            [!Border.BorderBrushProperty]              = AppTheme.Brush("ThemeBorder"),
             BorderThickness          = new Thickness(1),
             CornerRadius             = new CornerRadius(4),
             Padding                  = new Thickness(6, 4),
@@ -388,7 +390,7 @@ public partial class SystemMsgColor : UserControl
         {
             Text              = entry.MessageText,
             FontSize          = 12,
-            Foreground        = new SolidColorBrush(Color.Parse("#C0C0C0")),
+            [!TextElement.ForegroundProperty]        = AppTheme.Brush("ThemeTextIcon"),
             VerticalAlignment = VerticalAlignment.Center,
             TextTrimming      = TextTrimming.CharacterEllipsis,
             Cursor            = new Cursor(StandardCursorType.Hand)
@@ -424,7 +426,7 @@ public partial class SystemMsgColor : UserControl
                 editing                  = false;
                 hexBox.IsReadOnly        = true;
                 hexBox.IsHitTestVisible  = false;
-                hexBox.BorderBrush       = new SolidColorBrush(Color.Parse("#464646"));
+                hexBox[!Border.BorderBrushProperty]       = AppTheme.Brush("ThemeBorder");
                 editBtn.Content          = MakePencilIcon();
 
                 var raw = (hexBox.Text?.Trim().TrimStart('#') ?? "").ToUpper();
@@ -447,7 +449,7 @@ public partial class SystemMsgColor : UserControl
                 editing                  = true;
                 hexBox.IsReadOnly        = false;
                 hexBox.IsHitTestVisible  = true;
-                hexBox.BorderBrush       = new SolidColorBrush(Color.Parse("#5B9BD5"));
+                hexBox[!Border.BorderBrushProperty]       = AppTheme.Brush("ThemeAccent");
                 editBtn.Content          = MakeCheckIcon();
                 _activeHexBox            = hexBox;
                 hexBox.Focus();
@@ -481,7 +483,7 @@ public partial class SystemMsgColor : UserControl
 
         var rowBorder = new Border
         {
-            Background   = new SolidColorBrush(Color.Parse(_selectedIds.Contains(entry.Id) ? "#1C3350" : "#2C2C2C")),
+            [!Border.BackgroundProperty] = AppTheme.Brush(_selectedIds.Contains(entry.Id) ? "ThemeRowSelected" : "ThemeSurfaceCard"),
             CornerRadius = new CornerRadius(6),
             Padding      = new Thickness(12, 6),
             Cursor       = new Cursor(StandardCursorType.Hand),
@@ -513,12 +515,12 @@ public partial class SystemMsgColor : UserControl
             if (_selectedIds.Contains(entry.Id))
             {
                 _selectedIds.Remove(entry.Id);
-                rowBorder.Background = new SolidColorBrush(Color.Parse("#2C2C2C"));
+                rowBorder[!Border.BackgroundProperty] = AppTheme.Brush("ThemeSurfaceCard");
             }
             else
             {
                 _selectedIds.Add(entry.Id);
-                rowBorder.Background = new SolidColorBrush(Color.Parse("#1C3350"));
+                rowBorder[!Border.BackgroundProperty] = AppTheme.Brush("ThemeRowSelected");
             }
             _lastClickedId = entry.Id;
             UpdateSelectionUI();
@@ -598,7 +600,7 @@ public partial class SystemMsgColor : UserControl
         {
             Text              = name,
             FontSize          = 11,
-            Foreground        = new SolidColorBrush(Color.Parse("#C0C0C0")),
+            [!TextElement.ForegroundProperty]        = AppTheme.Brush("ThemeTextIcon"),
             VerticalAlignment = VerticalAlignment.Center,
             MaxWidth          = 90,
             TextTrimming      = TextTrimming.CharacterEllipsis
@@ -618,7 +620,7 @@ public partial class SystemMsgColor : UserControl
             {
                 Width      = 9,
                 Height     = 9,
-                Foreground = new SolidColorBrush(Color.Parse("#A0A7B4")),
+                [!TextElement.ForegroundProperty] = AppTheme.Brush("ThemeTextHint"),
                 Data       = Geometry.Parse("M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z")
             }
         };
@@ -636,7 +638,7 @@ public partial class SystemMsgColor : UserControl
 
         return new Border
         {
-            Background   = new SolidColorBrush(Color.Parse("#333333")),
+            [!Border.BackgroundProperty]   = AppTheme.Brush("ThemeSurfacePage"),
             CornerRadius = new CornerRadius(6),
             Padding      = new Thickness(8, 5),
             Margin       = new Thickness(0, 0, 8, 8),
@@ -699,7 +701,7 @@ public partial class SystemMsgColor : UserControl
             Text                = $"#{hex6}",
             FontFamily          = new FontFamily("Consolas,Courier New,monospace"),
             FontSize            = 10,
-            Foreground          = new SolidColorBrush(Color.Parse("#C0C0C0")),
+            [!TextElement.ForegroundProperty]          = AppTheme.Brush("ThemeTextIcon"),
             HorizontalAlignment = HorizontalAlignment.Center
         };
 
@@ -709,7 +711,7 @@ public partial class SystemMsgColor : UserControl
 
         var card = new Border
         {
-            Background   = new SolidColorBrush(Color.Parse("#333333")),
+            [!Border.BackgroundProperty]   = AppTheme.Brush("ThemeSurfacePage"),
             CornerRadius = new CornerRadius(8),
             Padding      = new Thickness(10, 8),
             Margin       = new Thickness(0, 0, 8, 8),
@@ -729,9 +731,9 @@ public partial class SystemMsgColor : UserControl
         };
 
         card.PointerEntered += (_, _) =>
-            card.Background = new SolidColorBrush(Color.Parse("#3E3E3E"));
+            card[!Border.BackgroundProperty] = AppTheme.Brush("ThemeSurfaceCardHover");
         card.PointerExited += (_, _) =>
-            card.Background = new SolidColorBrush(Color.Parse("#333333"));
+            card[!Border.BackgroundProperty] = AppTheme.Brush("ThemeSurfacePage");
 
         return card;
     }
@@ -780,7 +782,7 @@ public partial class SystemMsgColor : UserControl
             {
                 editing = false;
                 hex.IsReadOnly = true; hex.IsHitTestVisible = false;
-                hex.BorderBrush = new SolidColorBrush(Color.Parse("#464646"));
+                hex[!Border.BorderBrushProperty] = AppTheme.Brush("ThemeBorder");
                 editBtn.Content = MakePencilIcon();
                 var raw = (hex.Text?.Trim().TrimStart('#') ?? "").ToUpper();
                 if (TryParseHex(raw, out _)) { if (hex.Text != raw) hex.Text = raw; }
@@ -790,7 +792,7 @@ public partial class SystemMsgColor : UserControl
             {
                 editing = true;
                 hex.IsReadOnly = false; hex.IsHitTestVisible = true;
-                hex.BorderBrush = new SolidColorBrush(Color.Parse("#5B9BD5"));
+                hex[!Border.BorderBrushProperty] = AppTheme.Brush("ThemeAccent");
                 editBtn.Content = MakeCheckIcon();
                 _activeHexBox = hex;
                 hex.Focus(); hex.SelectAll();
@@ -826,9 +828,9 @@ public partial class SystemMsgColor : UserControl
             FontSize                 = 12,
             Height                   = 28,
             VerticalContentAlignment = VerticalAlignment.Center,
-            Background               = new SolidColorBrush(Color.Parse("#252525")),
-            Foreground               = new SolidColorBrush(Color.Parse("#D4D4D4")),
-            BorderBrush              = new SolidColorBrush(Color.Parse("#464646")),
+            [!Border.BackgroundProperty]               = AppTheme.Brush("ThemeSurfaceInput"),
+            [!TextElement.ForegroundProperty]               = AppTheme.Brush("ThemeTextBody"),
+            [!Border.BorderBrushProperty]              = AppTheme.Brush("ThemeBorder"),
             BorderThickness          = new Thickness(1),
             CornerRadius             = new CornerRadius(4),
             Padding                  = new Thickness(6, 4),
@@ -865,7 +867,7 @@ public partial class SystemMsgColor : UserControl
     {
         Width      = 12,
         Height     = 12,
-        Foreground = new SolidColorBrush(Colors.White),
+        [!TextElement.ForegroundProperty] = AppTheme.Brush("ThemeIcon"),
         Data       = Geometry.Parse("M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z")
     };
 
@@ -873,7 +875,7 @@ public partial class SystemMsgColor : UserControl
     {
         Width      = 12,
         Height     = 12,
-        Foreground = new SolidColorBrush(Colors.White),
+        [!TextElement.ForegroundProperty] = AppTheme.Brush("ThemeIcon"),
         Data       = Geometry.Parse("M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z")
     };
 

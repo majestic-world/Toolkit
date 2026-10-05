@@ -1,13 +1,13 @@
 <UserControl x:Class="L2Toolkit.Views.PrimeShopGenerator"
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             Background="#333333">
+             Background="{DynamicResource ThemeSurfacePage}">
 
     <UserControl.Resources>
         <ControlTheme x:Key="GhostButton" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="#C8C8C8"/>
-            <Setter Property="BorderBrush" Value="#6A6A6A"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextButton}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderStrong}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -28,11 +28,11 @@
                 </ControlTemplate>
             </Setter>
             <Style Selector="^:pointerover /template/ Border#PART_Border">
-                <Setter Property="Background" Value="#3C3C3C"/>
-                <Setter Property="BorderBrush" Value="#808080"/>
+                <Setter Property="Background" Value="{DynamicResource ThemeSurfaceHover}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderHoverStrong}"/>
             </Style>
             <Style Selector="^:pressed /template/ Border#PART_Border">
-                <Setter Property="Background" Value="#282828"/>
+                <Setter Property="Background" Value="{DynamicResource ThemeSurfacePressed}"/>
             </Style>
         </ControlTheme>
     </UserControl.Resources>
@@ -40,65 +40,65 @@
     <UserControl.Styles>
 
         <Style Selector="TextBox.FormField">
-            <Setter Property="Background" Value="#252525"/>
-            <Setter Property="Foreground" Value="#D4D4D4"/>
-            <Setter Property="CaretBrush" Value="#5B9BD5"/>
-            <Setter Property="SelectionBrush" Value="#1E3A5A"/>
-            <Setter Property="BorderBrush" Value="#3C3C3C"/>
+            <Setter Property="Background" Value="{DynamicResource ThemeSurfaceInput}"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextBody}"/>
+            <Setter Property="CaretBrush" Value="{DynamicResource ThemeAccent}"/>
+            <Setter Property="SelectionBrush" Value="{DynamicResource ThemeSelection}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeSurfaceHover}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="CornerRadius" Value="5"/>
             <Setter Property="Padding" Value="10,7"/>
             <Setter Property="FontSize" Value="13"/>
         </Style>
         <Style Selector="TextBox.FormField /template/ Border#PART_BorderElement">
-            <Setter Property="Background" Value="#252525"/>
+            <Setter Property="Background" Value="{DynamicResource ThemeSurfaceInput}"/>
             <Setter Property="CornerRadius" Value="5"/>
         </Style>
         <Style Selector="TextBox.FormField:focus /template/ Border#PART_BorderElement">
-            <Setter Property="BorderBrush" Value="#5B9BD5"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeAccent}"/>
         </Style>
         <Style Selector="TextBox.FormField:pointerover /template/ Border#PART_BorderElement">
-            <Setter Property="BorderBrush" Value="#707070"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderHover}"/>
         </Style>
 
         <Style Selector="TextBox.Code /template/ Border#PART_BorderElement">
-            <Setter Property="Background" Value="#252525"/>
+            <Setter Property="Background" Value="{DynamicResource ThemeSurfaceInput}"/>
             <Setter Property="BorderThickness" Value="0"/>
         </Style>
         <Style Selector="TextBox.Code:focus /template/ Border#PART_BorderElement">
-            <Setter Property="Background" Value="#252525"/>
+            <Setter Property="Background" Value="{DynamicResource ThemeSurfaceInput}"/>
             <Setter Property="BorderBrush" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
         </Style>
         <Style Selector="TextBox.Code:pointerover /template/ Border#PART_BorderElement">
-            <Setter Property="Background" Value="#252525"/>
+            <Setter Property="Background" Value="{DynamicResource ThemeSurfaceInput}"/>
         </Style>
 
         <!-- ComboBox dark theme -->
         <Style Selector="ComboBox">
-            <Setter Property="Background" Value="#252525"/>
-            <Setter Property="Foreground" Value="#D4D4D4"/>
-            <Setter Property="BorderBrush" Value="#3C3C3C"/>
+            <Setter Property="Background" Value="{DynamicResource ThemeSurfaceInput}"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextBody}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeSurfaceHover}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="10,7"/>
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
             <Setter Property="FontSize" Value="13"/>
         </Style>
         <Style Selector="ComboBox:pointerover">
-            <Setter Property="BorderBrush" Value="#707070"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderHover}"/>
         </Style>
         <Style Selector="ComboBox:focus">
-            <Setter Property="BorderBrush" Value="#5B9BD5"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeAccent}"/>
         </Style>
         <Style Selector="ComboBoxItem">
-            <Setter Property="Background" Value="#252525"/>
-            <Setter Property="Foreground" Value="#D4D4D4"/>
+            <Setter Property="Background" Value="{DynamicResource ThemeSurfaceInput}"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextBody}"/>
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
         </Style>
         <Style Selector="ComboBoxItem:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="#414141"/>
+            <Setter Property="Background" Value="{DynamicResource ThemeSurfaceItemHover}"/>
         </Style>
 
     </UserControl.Styles>
@@ -111,30 +111,30 @@
                 <TextBlock Text="Prime Shop Generator"
                            FontSize="22"
                            FontWeight="SemiBold"
-                           Foreground="#E8E8E8"/>
+                           Foreground="{DynamicResource ThemeTextTitle}"/>
                 <TextBlock Text="Configure e gere produtos para a Prime Shop"
                            FontSize="13"
-                           Foreground="#E8E8E8"/>
+                           Foreground="{DynamicResource ThemeTextTitle}"/>
             </StackPanel>
 
             <!-- ── Aviso: pasta de assets não configurada ───────────── -->
             <Border x:Name="AssetsWarnBorder"
                     Margin="32,0,32,12"
-                    Background="#1A0C00"
-                    BorderBrush="#7A4A00"
+                    Background="{DynamicResource ThemeCautionBg}"
+                    BorderBrush="{DynamicResource ThemeCautionBorder}"
                     BorderThickness="1"
                     CornerRadius="6"
                     Padding="14,10"
                     Cursor="Hand"
                     IsVisible="False">
                 <StackPanel Orientation="Horizontal" Spacing="10">
-                    <PathIcon Data="M12 2L1 21h22L12 2zm1 16h-2v-2h2v2zm0-4h-2V9h2v5z" Width="14" Height="14" Foreground="#E07020" VerticalAlignment="Center"/>
+                    <PathIcon Data="M12 2L1 21h22L12 2zm1 16h-2v-2h2v2zm0-4h-2V9h2v5z" Width="14" Height="14" Foreground="{DynamicResource ThemeCaution}" VerticalAlignment="Center"/>
                     <TextBlock Text="Pasta de assets não configurada."
-                               Foreground="#E07020"
+                               Foreground="{DynamicResource ThemeCaution}"
                                FontSize="13"
                                VerticalAlignment="Center"/>
                     <TextBlock Text="Clique aqui para configurar."
-                               Foreground="#E07020"
+                               Foreground="{DynamicResource ThemeCaution}"
                                FontSize="13"
                                FontWeight="SemiBold"
                                TextDecorations="Underline"
@@ -145,17 +145,17 @@
             <!-- ── Banner de notificação (condicional) ───────────────── -->
             <Border x:Name="NotificacaoBorder"
                     Margin="32,0,32,16"
-                    Background="#1F1A0A"
-                    BorderBrush="#5C4A00"
+                    Background="{DynamicResource ThemeWarningBg}"
+                    BorderBrush="{DynamicResource ThemeWarningBorder}"
                     BorderThickness="1"
                     CornerRadius="6"
                     Padding="14,10"
                     IsVisible="False">
                 <Grid ColumnDefinitions="Auto,*">
-                    <PathIcon Grid.Column="0" Data="M12 2L1 21h22L12 2zm1 16h-2v-2h2v2zm0-4h-2V9h2v5z" Width="14" Height="14" Foreground="#D4A017" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                    <PathIcon Grid.Column="0" Data="M12 2L1 21h22L12 2zm1 16h-2v-2h2v2zm0-4h-2V9h2v5z" Width="14" Height="14" Foreground="{DynamicResource ThemeWarning}" VerticalAlignment="Center" Margin="0,0,10,0"/>
                     <TextBlock Grid.Column="1"
                                x:Name="StatusNotificacao"
-                               Foreground="#D4A017"
+                               Foreground="{DynamicResource ThemeWarning}"
                                TextWrapping="Wrap"
                                FontSize="13"
                                VerticalAlignment="Center"/>
@@ -165,12 +165,12 @@
             <!-- ── Painel 01: Configuração ───────────────────────────── -->
             <Border Margin="32,0"
                     CornerRadius="8"
-                    Background="#2C2C2C"
-                    BorderBrush="#464646"
+                    Background="{DynamicResource ThemeSurfaceCard}"
+                    BorderBrush="{DynamicResource ThemeBorder}"
                     BorderThickness="1"
                     ClipToBounds="True">
                 <Grid ColumnDefinitions="4,*">
-                    <Border Grid.Column="0" Background="#5B9BD5"/>
+                    <Border Grid.Column="0" Background="{DynamicResource ThemeAccent}"/>
                     <StackPanel Grid.Column="1">
 
                         <StackPanel Orientation="Horizontal"
@@ -181,12 +181,12 @@
                             <TextBlock Text="CONFIGURAÇÃO"
                                        FontSize="11"
                                        FontWeight="Bold"
-                                       Foreground="#B8B8B8"
+                                       Foreground="{DynamicResource ThemeTextLabel}"
                                        LetterSpacing="1.5"
                                        VerticalAlignment="Center"/>
                         </StackPanel>
 
-                        <Border Height="1" Background="#464646"/>
+                        <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
 
                         <StackPanel Margin="20,16,20,20" Spacing="16">
 
@@ -195,7 +195,7 @@
                                 <TextBlock Text="IDs dos itens"
                                            FontSize="12"
                                            FontWeight="Medium"
-                                           Foreground="#B8B8B8"/>
+                                           Foreground="{DynamicResource ThemeTextLabel}"/>
                                 <TextBox x:Name="IdsTextBox"
                                          Classes="FormField"
                                          Watermark="ex: 57;35;36;37 (separados por ponto e vírgula)"/>
@@ -207,7 +207,7 @@
                                     <TextBlock Text="Categoria"
                                                FontSize="12"
                                                FontWeight="Medium"
-                                               Foreground="#B8B8B8"/>
+                                               Foreground="{DynamicResource ThemeTextLabel}"/>
                                     <ComboBox x:Name="CategoryComboBox"
                                               ItemContainerTheme="{StaticResource ComboBoxItemTheme}"/>
                                 </StackPanel>
@@ -215,7 +215,7 @@
                                     <TextBlock Text="Tipo"
                                                FontSize="12"
                                                FontWeight="Medium"
-                                               Foreground="#B8B8B8"/>
+                                               Foreground="{DynamicResource ThemeTextLabel}"/>
                                     <ComboBox x:Name="TypeComboBox"
                                               ItemContainerTheme="{StaticResource ComboBoxItemTheme}"/>
                                 </StackPanel>
@@ -227,7 +227,7 @@
                                     <TextBlock Text="Preço"
                                                FontSize="12"
                                                FontWeight="Medium"
-                                               Foreground="#B8B8B8"/>
+                                               Foreground="{DynamicResource ThemeTextLabel}"/>
                                     <TextBox x:Name="PriceTextBox"
                                              Classes="FormField"
                                              Watermark="ex: 1000"/>
@@ -236,7 +236,7 @@
                                     <TextBlock Text="Quantidade"
                                                FontSize="12"
                                                FontWeight="Medium"
-                                               Foreground="#B8B8B8"/>
+                                               Foreground="{DynamicResource ThemeTextLabel}"/>
                                     <TextBox x:Name="QuantidadeTextBox"
                                              Classes="FormField"
                                              Text="1"/>
@@ -252,7 +252,7 @@
             <Grid Margin="32,20" ColumnDefinitions="*,Auto,*">
                 <Border Grid.Column="0"
                         Height="1"
-                        Background="#464646"
+                        Background="{DynamicResource ThemeBorder}"
                         VerticalAlignment="Center"/>
                 <Button Grid.Column="1"
                         x:Name="GerarButton"
@@ -270,7 +270,7 @@
                 </Button>
                 <Border Grid.Column="2"
                         Height="1"
-                        Background="#464646"
+                        Background="{DynamicResource ThemeBorder}"
                         VerticalAlignment="Center"/>
             </Grid>
 
@@ -280,12 +280,12 @@
                 <!-- Painel 02: Cliente -->
                 <Border Grid.Column="0"
                         CornerRadius="8"
-                        Background="#2C2C2C"
-                        BorderBrush="#464646"
+                        Background="{DynamicResource ThemeSurfaceCard}"
+                        BorderBrush="{DynamicResource ThemeBorder}"
                         BorderThickness="1"
                         ClipToBounds="True">
                     <Grid ColumnDefinitions="4,*">
-                        <Border Grid.Column="0" Background="#5B9BD5"/>
+                        <Border Grid.Column="0" Background="{DynamicResource ThemeAccent}"/>
                         <StackPanel Grid.Column="1">
 
                             <Grid ColumnDefinitions="Auto,Auto,*,Auto,Auto"
@@ -295,25 +295,25 @@
                                            Text="CLIENTE"
                                            FontSize="10"
                                            FontWeight="Bold"
-                                           Foreground="#B8B8B8"
+                                           Foreground="{DynamicResource ThemeTextLabel}"
                                            LetterSpacing="1.5"
                                            VerticalAlignment="Center"/>
                                 <Border Grid.Column="3"
                                         x:Name="ClienteCopiadoTextBlock"
                                         IsVisible="False"
-                                        Background="#142B1A"
-                                        BorderBrush="#245230"
+                                        Background="{DynamicResource ThemeSuccessBg}"
+                                        BorderBrush="{DynamicResource ThemeSuccessBorder}"
                                         BorderThickness="1"
                                         CornerRadius="5"
                                         Padding="8,3"
                                         VerticalAlignment="Center"
                                         Margin="0,0,8,0">
                                     <StackPanel Orientation="Horizontal" Spacing="4">
-                                        <PathIcon Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Width="10" Height="10" Foreground="#52C97A" VerticalAlignment="Center"/>
+                                        <PathIcon Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Width="10" Height="10" Foreground="{DynamicResource ThemeSuccess}" VerticalAlignment="Center"/>
                                         <TextBlock Text="Copiado!"
                                                    FontSize="10"
                                                    FontWeight="Medium"
-                                                   Foreground="#52C97A"
+                                                   Foreground="{DynamicResource ThemeSuccess}"
                                                    VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Border>
@@ -324,7 +324,7 @@
                                         VerticalAlignment="Center"
                                         Theme="{StaticResource GhostButton}">
                                     <StackPanel Orientation="Horizontal" Spacing="6">
-                                        <PathIcon Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" Foreground="#B8B8B8" Width="12" Height="12" VerticalAlignment="Center"/>
+                                        <PathIcon Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" Foreground="{DynamicResource ThemeTextLabel}" Width="12" Height="12" VerticalAlignment="Center"/>
                                         <TextBlock Text="Copiar"
                                                    FontSize="11"
                                                    FontWeight="Medium"
@@ -333,11 +333,11 @@
                                 </Button>
                             </Grid>
 
-                            <Border Height="1" Background="#464646"/>
+                            <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
 
                             <TextBlock Text="ProductName_Classic-eu.dat"
                                        FontSize="10"
-                                       Foreground="#E1E1E1"
+                                       Foreground="{DynamicResource ThemeTextOutput}"
                                        Margin="15 5"
                                        FontFamily="Consolas,Courier New,monospace"/>
 
@@ -348,10 +348,10 @@
                                      Height="180"
                                      Padding="16,10"
                                      BorderThickness="0"
-                                     Background="#252525"
-                                     Foreground="#9CDCFE"
-                                     CaretBrush="#5B9BD5"
-                                     SelectionBrush="#1E3A5A"
+                                     Background="{DynamicResource ThemeSurfaceInput}"
+                                     Foreground="{DynamicResource ThemeTextCode}"
+                                     CaretBrush="{DynamicResource ThemeAccent}"
+                                     SelectionBrush="{DynamicResource ThemeSelection}"
                                      FontFamily="Consolas,Courier New,monospace"
                                      FontSize="11"
                                      IsReadOnly="True"
@@ -364,12 +364,12 @@
                 <!-- Painel 03: Servidor -->
                 <Border Grid.Column="2"
                         CornerRadius="8"
-                        Background="#2C2C2C"
-                        BorderBrush="#464646"
+                        Background="{DynamicResource ThemeSurfaceCard}"
+                        BorderBrush="{DynamicResource ThemeBorder}"
                         BorderThickness="1"
                         ClipToBounds="True">
                     <Grid ColumnDefinitions="4,*">
-                        <Border Grid.Column="0" Background="#5B9BD5"/>
+                        <Border Grid.Column="0" Background="{DynamicResource ThemeAccent}"/>
                         <StackPanel Grid.Column="1">
 
                             <Grid ColumnDefinitions="Auto,Auto,*,Auto,Auto"
@@ -379,25 +379,25 @@
                                            Text="SERVIDOR"
                                            FontSize="10"
                                            FontWeight="Bold"
-                                           Foreground="#B8B8B8"
+                                           Foreground="{DynamicResource ThemeTextLabel}"
                                            LetterSpacing="1.5"
                                            VerticalAlignment="Center"/>
                                 <Border Grid.Column="3"
                                         x:Name="ServidorCopiadoTextBlock"
                                         IsVisible="False"
-                                        Background="#142B1A"
-                                        BorderBrush="#245230"
+                                        Background="{DynamicResource ThemeSuccessBg}"
+                                        BorderBrush="{DynamicResource ThemeSuccessBorder}"
                                         BorderThickness="1"
                                         CornerRadius="5"
                                         Padding="8,3"
                                         VerticalAlignment="Center"
                                         Margin="0,0,8,0">
                                     <StackPanel Orientation="Horizontal" Spacing="4">
-                                        <PathIcon Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Width="10" Height="10" Foreground="#52C97A" VerticalAlignment="Center"/>
+                                        <PathIcon Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Width="10" Height="10" Foreground="{DynamicResource ThemeSuccess}" VerticalAlignment="Center"/>
                                         <TextBlock Text="Copiado!"
                                                    FontSize="10"
                                                    FontWeight="Medium"
-                                                   Foreground="#52C97A"
+                                                   Foreground="{DynamicResource ThemeSuccess}"
                                                    VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Border>
@@ -408,7 +408,7 @@
                                         VerticalAlignment="Center"
                                         Theme="{StaticResource GhostButton}">
                                     <StackPanel Orientation="Horizontal" Spacing="6">
-                                        <PathIcon Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" Foreground="#B8B8B8" Width="12" Height="12" VerticalAlignment="Center"/>
+                                        <PathIcon Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" Foreground="{DynamicResource ThemeTextLabel}" Width="12" Height="12" VerticalAlignment="Center"/>
                                         <TextBlock Text="Copiar"
                                                    FontSize="11"
                                                    FontWeight="Medium"
@@ -417,11 +417,11 @@
                                 </Button>
                             </Grid>
 
-                            <Border Height="1" Background="#464646"/>
+                            <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
 
                             <TextBlock Text="prime_shop.xml"
                                        FontSize="10"
-                                       Foreground="#E1E1E1"
+                                       Foreground="{DynamicResource ThemeTextOutput}"
                                        Margin="15 5"
                                        FontFamily="Consolas,Courier New,monospace"/>
 
@@ -432,10 +432,10 @@
                                      Height="180"
                                      Padding="16,10"
                                      BorderThickness="0"
-                                     Background="#252525"
-                                     Foreground="#9CDCFE"
-                                     CaretBrush="#5B9BD5"
-                                     SelectionBrush="#1E3A5A"
+                                     Background="{DynamicResource ThemeSurfaceInput}"
+                                     Foreground="{DynamicResource ThemeTextCode}"
+                                     CaretBrush="{DynamicResource ThemeAccent}"
+                                     SelectionBrush="{DynamicResource ThemeSelection}"
                                      FontFamily="Consolas,Courier New,monospace"
                                      FontSize="11"
                                      IsReadOnly="True"
@@ -450,12 +450,12 @@
             <!-- ── Painel 04: Logs ───────────────────────────────────── -->
             <Border Margin="32,16,32,32"
                     CornerRadius="8"
-                    Background="#2C2C2C"
-                    BorderBrush="#464646"
+                    Background="{DynamicResource ThemeSurfaceCard}"
+                    BorderBrush="{DynamicResource ThemeBorder}"
                     BorderThickness="1"
                     ClipToBounds="True">
                 <Grid ColumnDefinitions="4,*">
-                    <Border Grid.Column="0" Background="#5B9BD5"/>
+                    <Border Grid.Column="0" Background="{DynamicResource ThemeAccent}"/>
                     <StackPanel Grid.Column="1">
 
                         <Grid ColumnDefinitions="Auto,Auto,*,Auto,Auto"
@@ -465,25 +465,25 @@
                                        Text="LOGS"
                                        FontSize="11"
                                        FontWeight="Bold"
-                                       Foreground="#B8B8B8"
+                                       Foreground="{DynamicResource ThemeTextLabel}"
                                        LetterSpacing="1.5"
                                        VerticalAlignment="Center"/>
                             <Border Grid.Column="3"
                                     x:Name="ItensCopiadoTextBlock"
                                     IsVisible="False"
-                                    Background="#142B1A"
-                                    BorderBrush="#245230"
+                                    Background="{DynamicResource ThemeSuccessBg}"
+                                    BorderBrush="{DynamicResource ThemeSuccessBorder}"
                                     BorderThickness="1"
                                     CornerRadius="5"
                                     Padding="10,4"
                                     VerticalAlignment="Center"
                                     Margin="0,0,10,0">
                                 <StackPanel Orientation="Horizontal" Spacing="5">
-                                    <PathIcon Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Width="10" Height="10" Foreground="#52C97A" VerticalAlignment="Center"/>
+                                    <PathIcon Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Width="10" Height="10" Foreground="{DynamicResource ThemeSuccess}" VerticalAlignment="Center"/>
                                     <TextBlock Text="Copiado!"
                                                FontSize="11"
                                                FontWeight="Medium"
-                                               Foreground="#52C97A"
+                                               Foreground="{DynamicResource ThemeSuccess}"
                                                VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Border>
@@ -494,7 +494,7 @@
                                     VerticalAlignment="Center"
                                     Theme="{StaticResource GhostButton}">
                                 <StackPanel Orientation="Horizontal" Spacing="7">
-                                    <PathIcon Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" Foreground="#B8B8B8" Width="12" Height="12" VerticalAlignment="Center"/>
+                                    <PathIcon Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" Foreground="{DynamicResource ThemeTextLabel}" Width="12" Height="12" VerticalAlignment="Center"/>
                                     <TextBlock Text="Copiar"
                                                FontSize="12"
                                                FontWeight="Medium"
@@ -503,7 +503,7 @@
                             </Button>
                         </Grid>
 
-                        <Border Height="1" Background="#464646"/>
+                        <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
 
                         <TextBox x:Name="ItemsGeneratedTextBox"
                                  Classes="Code"
@@ -512,10 +512,10 @@
                                  Height="140"
                                  Padding="20,14"
                                  BorderThickness="0"
-                                 Background="#252525"
-                                 Foreground="#D4D4D4"
-                                 CaretBrush="#5B9BD5"
-                                 SelectionBrush="#1E3A5A"
+                                 Background="{DynamicResource ThemeSurfaceInput}"
+                                 Foreground="{DynamicResource ThemeTextBody}"
+                                 CaretBrush="{DynamicResource ThemeAccent}"
+                                 SelectionBrush="{DynamicResource ThemeSelection}"
                                  FontFamily="Consolas,Courier New,monospace"
                                  FontSize="12"
                                  IsReadOnly="True"

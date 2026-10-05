@@ -1,10 +1,12 @@
 using System;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Documents;
 using Avalonia.Controls.Shapes;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
+using L2Toolkit.Utilities;
 
 namespace L2Toolkit.Views.Controls;
 
@@ -45,7 +47,7 @@ public sealed class HsvColorPicker : UserControl
         {
             Width = 14,
             Height = 14,
-            Stroke = new SolidColorBrush(Color.Parse("#808080")),
+            [!Shape.StrokeProperty] = AppTheme.Brush("ThemeBorderHoverStrong"),
             StrokeThickness = 1,
             VerticalAlignment = VerticalAlignment.Center
         };
@@ -53,7 +55,7 @@ public sealed class HsvColorPicker : UserControl
         {
             FontFamily = new FontFamily("Consolas,Courier New,monospace"),
             FontSize = 13,
-            Foreground = new SolidColorBrush(Color.Parse("#E8E8E8")),
+            [!TextElement.ForegroundProperty] = AppTheme.Brush("ThemeTextTitle"),
             VerticalAlignment = VerticalAlignment.Center
         };
         var header = new StackPanel

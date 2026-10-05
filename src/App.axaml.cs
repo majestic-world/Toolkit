@@ -13,6 +13,7 @@ namespace L2Toolkit
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             AvaloniaXamlLoader.Load(this);
+            AppTheme.ApplySaved();
         }
 
         public override void OnFrameworkInitializationCompleted()

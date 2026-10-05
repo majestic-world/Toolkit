@@ -14,6 +14,8 @@ using Avalonia.Platform.Storage;
 using Avalonia.Styling;
 using L2Toolkit.ClientDat;
 using MsBox.Avalonia;
+using Avalonia.Controls.Documents;
+using L2Toolkit.Utilities;
 
 namespace L2Toolkit.Views;
 
@@ -526,7 +528,7 @@ public partial class EnchantEffect : UserControl
 
             var row = new Border
             {
-                Background   = new SolidColorBrush(Color.Parse("#2C2C2C")),
+                [!Border.BackgroundProperty]   = AppTheme.Brush("ThemeSurfaceCard"),
                 CornerRadius = new CornerRadius(6),
                 Padding      = new Thickness(12, 7)
             };
@@ -543,7 +545,7 @@ public partial class EnchantEffect : UserControl
             // Level badge
             var badge = new Border
             {
-                Background           = new SolidColorBrush(Color.Parse(isDanger ? "#3D1515" : "#152A3D")),
+                [!Border.BackgroundProperty] = AppTheme.Brush(isDanger ? "ThemeDangerTint" : "ThemeAccentBadge"),
                 CornerRadius         = new CornerRadius(4),
                 Padding              = new Thickness(8, 3),
                 HorizontalAlignment  = HorizontalAlignment.Left,
@@ -554,7 +556,7 @@ public partial class EnchantEffect : UserControl
                 Text       = $"+{levelNum}",
                 FontSize   = 12,
                 FontWeight = FontWeight.SemiBold,
-                Foreground = new SolidColorBrush(Color.Parse(isDanger ? "#E57373" : "#5B9BD5"))
+                [!TextElement.ForegroundProperty] = AppTheme.Brush(isDanger ? "ThemeDanger" : "ThemeAccent")
             };
             Grid.SetColumn(badge, 0);
 
@@ -582,7 +584,7 @@ public partial class EnchantEffect : UserControl
             var particleLabel = new TextBlock
             {
                 Text                = "—",
-                Foreground          = new SolidColorBrush(Color.Parse("#A0A7B4")),
+                [!TextElement.ForegroundProperty]          = AppTheme.Brush("ThemeTextHint"),
                 FontSize            = 12,
                 VerticalAlignment   = VerticalAlignment.Center,
                 HorizontalAlignment = HorizontalAlignment.Right
@@ -620,7 +622,7 @@ public partial class EnchantEffect : UserControl
 
             var row = new Border
             {
-                Background   = new SolidColorBrush(Color.Parse("#2C2C2C")),
+                [!Border.BackgroundProperty]   = AppTheme.Brush("ThemeSurfaceCard"),
                 CornerRadius = new CornerRadius(6),
                 Padding      = new Thickness(12, 7)
             };
@@ -635,7 +637,7 @@ public partial class EnchantEffect : UserControl
             // Enchant level badge (min_enchant_num)
             var badge = new Border
             {
-                Background          = new SolidColorBrush(Color.Parse("#2A3A2A")),
+                [!Border.BackgroundProperty]          = AppTheme.Brush("ThemeSuccessTint"),
                 CornerRadius        = new CornerRadius(4),
                 Padding             = new Thickness(8, 3),
                 HorizontalAlignment = HorizontalAlignment.Left,
@@ -646,7 +648,7 @@ public partial class EnchantEffect : UserControl
                 Text       = $"+{entry.MinEnchantNum}",
                 FontSize   = 12,
                 FontWeight = FontWeight.SemiBold,
-                Foreground = new SolidColorBrush(Color.Parse("#6EC87A"))
+                [!TextElement.ForegroundProperty] = AppTheme.Brush("ThemeSuccessStrong")
             };
             Grid.SetColumn(badge, 0);
 
@@ -703,9 +705,9 @@ public partial class EnchantEffect : UserControl
             FontSize                 = 12,
             Height                   = 28,
             VerticalContentAlignment = VerticalAlignment.Center,
-            Background               = new SolidColorBrush(Color.Parse("#252525")),
-            Foreground               = new SolidColorBrush(Color.Parse("#D4D4D4")),
-            BorderBrush              = new SolidColorBrush(Color.Parse("#464646")),
+            [!Border.BackgroundProperty]               = AppTheme.Brush("ThemeSurfaceInput"),
+            [!TextElement.ForegroundProperty]               = AppTheme.Brush("ThemeTextBody"),
+            [!Border.BorderBrushProperty]              = AppTheme.Brush("ThemeBorder"),
             BorderThickness          = new Thickness(1),
             CornerRadius             = new CornerRadius(4),
             Padding                  = new Thickness(6, 4),
@@ -843,7 +845,7 @@ public partial class EnchantEffect : UserControl
             _editingBoxes.Remove(hex);
             hex.IsReadOnly       = true;
             hex.IsHitTestVisible = false;
-            hex.BorderBrush      = new SolidColorBrush(Color.Parse("#464646"));
+            hex[!Border.BorderBrushProperty]      = AppTheme.Brush("ThemeBorder");
             editBtn.Content = MakePencilIcon();
 
             var raw = (hex.Text?.Trim().TrimStart('#') ?? "").ToUpper();
@@ -870,7 +872,7 @@ public partial class EnchantEffect : UserControl
             _editingBoxes.Add(hex);
             hex.IsReadOnly       = false;
             hex.IsHitTestVisible = true;
-            hex.BorderBrush      = new SolidColorBrush(Color.Parse("#5B9BD5"));
+            hex[!Border.BorderBrushProperty]      = AppTheme.Brush("ThemeAccent");
             editBtn.Content = MakeCheckIcon();
             hex.Focus();
             hex.SelectAll();
@@ -885,10 +887,10 @@ public partial class EnchantEffect : UserControl
         {
             _radHexBoxes[i].IsReadOnly       = true;
             _radHexBoxes[i].IsHitTestVisible = false;
-            _radHexBoxes[i].BorderBrush      = new SolidColorBrush(Color.Parse("#464646"));
+            _radHexBoxes[i][!Border.BorderBrushProperty]      = AppTheme.Brush("ThemeBorder");
             _ringHexBoxes[i].IsReadOnly       = true;
             _ringHexBoxes[i].IsHitTestVisible = false;
-            _ringHexBoxes[i].BorderBrush      = new SolidColorBrush(Color.Parse("#464646"));
+            _ringHexBoxes[i][!Border.BorderBrushProperty]      = AppTheme.Brush("ThemeBorder");
             if (i < _radEditBtns.Count)  _radEditBtns[i].Content  = MakePencilIcon();
             if (i < _ringEditBtns.Count) _ringEditBtns[i].Content = MakePencilIcon();
         }
@@ -903,7 +905,7 @@ public partial class EnchantEffect : UserControl
             _armorEditingBoxes.Remove(hex);
             hex.IsReadOnly       = true;
             hex.IsHitTestVisible = false;
-            hex.BorderBrush      = new SolidColorBrush(Color.Parse("#464646"));
+            hex[!Border.BorderBrushProperty]      = AppTheme.Brush("ThemeBorder");
             editBtn.Content = MakePencilIcon();
 
             var raw = (hex.Text?.Trim().TrimStart('#') ?? "").ToUpper();
@@ -929,7 +931,7 @@ public partial class EnchantEffect : UserControl
             _armorEditingBoxes.Add(hex);
             hex.IsReadOnly       = false;
             hex.IsHitTestVisible = true;
-            hex.BorderBrush      = new SolidColorBrush(Color.Parse("#5B9BD5"));
+            hex[!Border.BorderBrushProperty]      = AppTheme.Brush("ThemeAccent");
             editBtn.Content = MakeCheckIcon();
             hex.Focus();
             hex.SelectAll();
@@ -944,10 +946,10 @@ public partial class EnchantEffect : UserControl
         {
             _armorMinHexBoxes[i].IsReadOnly       = true;
             _armorMinHexBoxes[i].IsHitTestVisible = false;
-            _armorMinHexBoxes[i].BorderBrush      = new SolidColorBrush(Color.Parse("#464646"));
+            _armorMinHexBoxes[i][!Border.BorderBrushProperty]      = AppTheme.Brush("ThemeBorder");
             _armorMaxHexBoxes[i].IsReadOnly       = true;
             _armorMaxHexBoxes[i].IsHitTestVisible = false;
-            _armorMaxHexBoxes[i].BorderBrush      = new SolidColorBrush(Color.Parse("#464646"));
+            _armorMaxHexBoxes[i][!Border.BorderBrushProperty]      = AppTheme.Brush("ThemeBorder");
             if (i < _armorMinEditBtns.Count) _armorMinEditBtns[i].Content = MakePencilIcon();
             if (i < _armorMaxEditBtns.Count) _armorMaxEditBtns[i].Content = MakePencilIcon();
         }
@@ -959,7 +961,7 @@ public partial class EnchantEffect : UserControl
     {
         Width      = 12,
         Height     = 12,
-        Foreground = new SolidColorBrush(Colors.White),
+        [!TextElement.ForegroundProperty] = AppTheme.Brush("ThemeIcon"),
         Data       = Geometry.Parse("M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z")
     };
 
@@ -967,7 +969,7 @@ public partial class EnchantEffect : UserControl
     {
         Width      = 12,
         Height     = 12,
-        Foreground = new SolidColorBrush(Colors.White),
+        [!TextElement.ForegroundProperty] = AppTheme.Brush("ThemeIcon"),
         Data       = Geometry.Parse("M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z")
     };
 
@@ -1018,7 +1020,7 @@ public partial class EnchantEffect : UserControl
             {
                 Text                = $"+{i + 1}",
                 FontSize            = 9,
-                Foreground          = new SolidColorBrush(Color.Parse("#A0A7B4")),
+                [!TextElement.ForegroundProperty]          = AppTheme.Brush("ThemeTextHint"),
                 HorizontalAlignment = HorizontalAlignment.Center
             };
             Grid.SetColumn(lbl, i);
@@ -1053,7 +1055,7 @@ public partial class EnchantEffect : UserControl
             {
                 Text                = $"+{entry.MinEnchantNum}",
                 FontSize            = 9,
-                Foreground          = new SolidColorBrush(Color.Parse("#A0A7B4")),
+                [!TextElement.ForegroundProperty]          = AppTheme.Brush("ThemeTextHint"),
                 HorizontalAlignment = HorizontalAlignment.Center
             };
             Grid.SetColumn(lbl, i);

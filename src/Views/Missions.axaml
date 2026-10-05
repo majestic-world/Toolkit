@@ -1,13 +1,13 @@
 <UserControl x:Class="L2Toolkit.Views.Missions"
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             Background="#333333">
+             Background="{DynamicResource ThemeSurfacePage}">
 
     <UserControl.Resources>
         <ControlTheme x:Key="GhostButton" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="#C8C8C8"/>
-            <Setter Property="BorderBrush" Value="#6A6A6A"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextButton}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderStrong}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -28,39 +28,39 @@
                 </ControlTemplate>
             </Setter>
             <Style Selector="^:pointerover /template/ Border#PART_Border">
-                <Setter Property="Background" Value="#3C3C3C"/>
-                <Setter Property="BorderBrush" Value="#808080"/>
+                <Setter Property="Background" Value="{DynamicResource ThemeSurfaceHover}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderHoverStrong}"/>
             </Style>
             <Style Selector="^:pressed /template/ Border#PART_Border">
-                <Setter Property="Background" Value="#282828"/>
+                <Setter Property="Background" Value="{DynamicResource ThemeSurfacePressed}"/>
             </Style>
         </ControlTheme>
     </UserControl.Resources>
 
     <UserControl.Styles>
         <Style Selector="TextBox.FilePath /template/ Border#PART_BorderElement">
-            <Setter Property="Background" Value="#252525"/>
+            <Setter Property="Background" Value="{DynamicResource ThemeSurfaceInput}"/>
             <Setter Property="CornerRadius" Value="5"/>
         </Style>
         <Style Selector="TextBox.FilePath:pointerover /template/ Border#PART_BorderElement">
-            <Setter Property="Background" Value="#404040"/>
-            <Setter Property="BorderBrush" Value="#707070"/>
+            <Setter Property="Background" Value="{DynamicResource ThemeSurfaceFieldHover}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderHover}"/>
         </Style>
         <Style Selector="TextBox.FilePath:focus /template/ Border#PART_BorderElement">
-            <Setter Property="BorderBrush" Value="#5B9BD5"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeAccent}"/>
         </Style>
 
         <Style Selector="TextBox.Code /template/ Border#PART_BorderElement">
-            <Setter Property="Background" Value="#252525"/>
+            <Setter Property="Background" Value="{DynamicResource ThemeSurfaceInput}"/>
             <Setter Property="BorderThickness" Value="0"/>
         </Style>
         <Style Selector="TextBox.Code:focus /template/ Border#PART_BorderElement">
-            <Setter Property="Background" Value="#252525"/>
+            <Setter Property="Background" Value="{DynamicResource ThemeSurfaceInput}"/>
             <Setter Property="BorderBrush" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
         </Style>
         <Style Selector="TextBox.Code:pointerover /template/ Border#PART_BorderElement">
-            <Setter Property="Background" Value="#252525"/>
+            <Setter Property="Background" Value="{DynamicResource ThemeSurfaceInput}"/>
         </Style>
     </UserControl.Styles>
 
@@ -72,26 +72,26 @@
                 <TextBlock Text="Missões Diárias"
                            FontSize="22"
                            FontWeight="SemiBold"
-                           Foreground="#E8E8E8"/>
+                           Foreground="{DynamicResource ThemeTextTitle}"/>
                 <TextBlock Text="Gera dados de cliente a partir do OneDayReward.xml"
                            FontSize="13"
-                           Foreground="#E8E8E8"/>
+                           Foreground="{DynamicResource ThemeTextTitle}"/>
             </StackPanel>
 
             <!-- ── Banner de erro ────────────────────────────────────── -->
             <Border x:Name="NotificacaoBorder"
                     Margin="32,0,32,16"
-                    Background="#1F1A0A"
-                    BorderBrush="#5C4A00"
+                    Background="{DynamicResource ThemeWarningBg}"
+                    BorderBrush="{DynamicResource ThemeWarningBorder}"
                     BorderThickness="1"
                     CornerRadius="6"
                     Padding="14,10"
                     IsVisible="False">
                 <Grid ColumnDefinitions="Auto,*" HorizontalAlignment="Stretch">
-                    <PathIcon Grid.Column="0" Data="M12 2L1 21h22L12 2zm1 16h-2v-2h2v2zm0-4h-2V9h2v5z" Width="14" Height="14" Foreground="#D4A017" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                    <PathIcon Grid.Column="0" Data="M12 2L1 21h22L12 2zm1 16h-2v-2h2v2zm0-4h-2V9h2v5z" Width="14" Height="14" Foreground="{DynamicResource ThemeWarning}" VerticalAlignment="Center" Margin="0,0,10,0"/>
                     <TextBlock Grid.Column="1"
                                x:Name="StatusNotificacao"
-                               Foreground="#D4A017"
+                               Foreground="{DynamicResource ThemeWarning}"
                                TextWrapping="Wrap"
                                FontSize="13"
                                VerticalAlignment="Center"/>
@@ -101,12 +101,12 @@
             <!-- ── Painel 01: Arquivo XML ────────────────────────────── -->
             <Border Margin="32,0"
                     CornerRadius="8"
-                    Background="#2C2C2C"
-                    BorderBrush="#464646"
+                    Background="{DynamicResource ThemeSurfaceCard}"
+                    BorderBrush="{DynamicResource ThemeBorder}"
                     BorderThickness="1"
                     ClipToBounds="True">
                 <Grid ColumnDefinitions="4,*">
-                    <Border Grid.Column="0" Background="#5B9BD5"/>
+                    <Border Grid.Column="0" Background="{DynamicResource ThemeAccent}"/>
                     <StackPanel Grid.Column="1">
 
                         <StackPanel Orientation="Horizontal"
@@ -117,12 +117,12 @@
                             <TextBlock Text="ARQUIVO XML"
                                        FontSize="11"
                                        FontWeight="Bold"
-                                       Foreground="#B8B8B8"
+                                       Foreground="{DynamicResource ThemeTextLabel}"
                                        LetterSpacing="1.5"
                                        VerticalAlignment="Center"/>
                         </StackPanel>
 
-                        <Border Height="1" Background="#464646"/>
+                        <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
 
                         <Grid Margin="20,16,20,20" ColumnDefinitions="*,12,Auto">
                             <TextBox x:Name="RewardContent"
@@ -132,12 +132,12 @@
                                      VerticalContentAlignment="Center"
                                      Height="38"
                                      Padding="12,0"
-                                     BorderBrush="#464646"
+                                     BorderBrush="{DynamicResource ThemeBorder}"
                                      BorderThickness="1"
-                                     Background="#252525"
-                                     Foreground="#D4D4D4"
-                                     CaretBrush="#5B9BD5"
-                                     SelectionBrush="#1E3A5A"
+                                     Background="{DynamicResource ThemeSurfaceInput}"
+                                     Foreground="{DynamicResource ThemeTextBody}"
+                                     CaretBrush="{DynamicResource ThemeAccent}"
+                                     SelectionBrush="{DynamicResource ThemeSelection}"
                                      FontFamily="Consolas,Courier New,monospace"
                                      FontSize="12"
                                      Watermark="Selecione o OneDayReward.xml..."/>
@@ -147,7 +147,7 @@
                                     Padding="16,0"
                                     Theme="{StaticResource GhostButton}">
                                 <StackPanel Orientation="Horizontal" Spacing="8">
-                                    <PathIcon Data="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" Foreground="#B8B8B8" Width="14" Height="14" VerticalAlignment="Center"/>
+                                    <PathIcon Data="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" Foreground="{DynamicResource ThemeTextLabel}" Width="14" Height="14" VerticalAlignment="Center"/>
                                     <TextBlock Text="Selecionar"
                                                FontSize="13"
                                                FontWeight="Medium"
@@ -164,7 +164,7 @@
             <Grid Margin="32,20" ColumnDefinitions="*,Auto,*">
                 <Border Grid.Column="0"
                         Height="1"
-                        Background="#464646"
+                        Background="{DynamicResource ThemeBorder}"
                         VerticalAlignment="Center"/>
                 <Button Grid.Column="1"
                         x:Name="RewardGenerate"
@@ -182,19 +182,19 @@
                 </Button>
                 <Border Grid.Column="2"
                         Height="1"
-                        Background="#464646"
+                        Background="{DynamicResource ThemeBorder}"
                         VerticalAlignment="Center"/>
             </Grid>
 
             <!-- ── Painel 02: Resultado ──────────────────────────────── -->
             <Border Margin="32,0,32,32"
                     CornerRadius="8"
-                    Background="#2C2C2C"
-                    BorderBrush="#464646"
+                    Background="{DynamicResource ThemeSurfaceCard}"
+                    BorderBrush="{DynamicResource ThemeBorder}"
                     BorderThickness="1"
                     ClipToBounds="True">
                 <Grid ColumnDefinitions="4,*">
-                    <Border Grid.Column="0" Background="#5B9BD5"/>
+                    <Border Grid.Column="0" Background="{DynamicResource ThemeAccent}"/>
                     <StackPanel Grid.Column="1">
 
                         <Grid ColumnDefinitions="Auto,Auto,*,Auto,Auto"
@@ -205,7 +205,7 @@
                                        Text="RESULTADO"
                                        FontSize="11"
                                        FontWeight="Bold"
-                                       Foreground="#B8B8B8"
+                                       Foreground="{DynamicResource ThemeTextLabel}"
                                        LetterSpacing="1.5"
                                        VerticalAlignment="Center"/>
 
@@ -213,19 +213,19 @@
                             <Border Grid.Column="3"
                                     x:Name="CopyBlock"
                                     IsVisible="False"
-                                    Background="#142B1A"
-                                    BorderBrush="#245230"
+                                    Background="{DynamicResource ThemeSuccessBg}"
+                                    BorderBrush="{DynamicResource ThemeSuccessBorder}"
                                     BorderThickness="1"
                                     CornerRadius="5"
                                     Padding="10,4"
                                     VerticalAlignment="Center"
                                     Margin="0,0,10,0">
                                 <StackPanel Orientation="Horizontal" Spacing="5">
-                                    <PathIcon Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Width="10" Height="10" Foreground="#52C97A" VerticalAlignment="Center"/>
+                                    <PathIcon Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Width="10" Height="10" Foreground="{DynamicResource ThemeSuccess}" VerticalAlignment="Center"/>
                                     <TextBlock Text="Copiado!"
                                                FontSize="11"
                                                FontWeight="Medium"
-                                               Foreground="#52C97A"
+                                               Foreground="{DynamicResource ThemeSuccess}"
                                                VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Border>
@@ -238,7 +238,7 @@
                                     VerticalAlignment="Center"
                                     Theme="{StaticResource GhostButton}">
                                 <StackPanel Orientation="Horizontal" Spacing="7">
-                                    <PathIcon Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" Foreground="#B8B8B8" Width="12" Height="12" VerticalAlignment="Center"/>
+                                    <PathIcon Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" Foreground="{DynamicResource ThemeTextLabel}" Width="12" Height="12" VerticalAlignment="Center"/>
                                     <TextBlock Text="Copiar"
                                                FontSize="12"
                                                FontWeight="Medium"
@@ -248,7 +248,7 @@
 
                         </Grid>
 
-                        <Border Height="1" Background="#464646"/>
+                        <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
 
                         <TextBox x:Name="RewardOutput"
                                  Classes="Code"
@@ -257,10 +257,10 @@
                                  Height="280"
                                  Padding="20,14"
                                  BorderThickness="0"
-                                 Background="#252525"
-                                 Foreground="#9CDCFE"
-                                 CaretBrush="#5B9BD5"
-                                 SelectionBrush="#1E3A5A"
+                                 Background="{DynamicResource ThemeSurfaceInput}"
+                                 Foreground="{DynamicResource ThemeTextCode}"
+                                 CaretBrush="{DynamicResource ThemeAccent}"
+                                 SelectionBrush="{DynamicResource ThemeSelection}"
                                  FontFamily="Consolas,Courier New,monospace"
                                  FontSize="12"
                                  IsReadOnly="True"

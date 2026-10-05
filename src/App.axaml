@@ -1,21 +1,30 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="L2Toolkit.App"
-             x:CompileBindings="True">
+             x:CompileBindings="True"
+             RequestedThemeVariant="Dark">
     <Application.Styles>
-        <FluentTheme />
+        <FluentTheme>
+            <!-- No Light, o destaque do Fluent (checkbox, foco, seleção) segue o cinza do app em vez do azul do sistema. -->
+            <FluentTheme.Palettes>
+                <ColorPaletteResources x:Key="Light" Accent="#FF3D3D3D"/>
+            </FluentTheme.Palettes>
+        </FluentTheme>
         <!-- O template Fluent fixa Opacity="0.5" no watermark (não sobrescrevível por estilo);
-             branco a 50% resulta em ~#929292 sobre os campos escuros (#252525), contraste ~5:1. -->
+             ThemeWatermark (branco no Dark, preto no Light) a 50% fica legível sobre os campos, contraste ~5:1. -->
         <Style Selector="TextBox /template/ TextBlock#PART_Watermark">
-            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeWatermark}"/>
         </Style>
     </Application.Styles>
 
     <Application.Resources>
         <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/Themes/Colors.axaml"/>
+            </ResourceDictionary.MergedDictionaries>
             <ControlTheme x:Key="{x:Type ComboBoxItem}" TargetType="ComboBoxItem">
                 <Setter Property="Background" Value="Transparent"/>
-                <Setter Property="Foreground" Value="#D4D4D4"/>
+                <Setter Property="Foreground" Value="{DynamicResource ThemeTextBody}"/>
                 <Setter Property="Padding" Value="10,8"/>
                 <Setter Property="HorizontalAlignment" Value="Stretch"/>
                 <Setter Property="HorizontalContentAlignment" Value="Left"/>
@@ -37,24 +46,24 @@
                     </ControlTemplate>
                 </Setter>
                 <Style Selector="^:pointerover /template/ Border#PART_Border">
-                    <Setter Property="Background" Value="#414141"/>
+                    <Setter Property="Background" Value="{DynamicResource ThemeSurfaceItemHover}"/>
                 </Style>
                 <Style Selector="^:selected /template/ Border#PART_Border">
-                    <Setter Property="Background" Value="#2A4A6A"/>
+                    <Setter Property="Background" Value="{DynamicResource ThemeAccentSelected}"/>
                 </Style>
                 <Style Selector="^:selected /template/ ContentPresenter#PART_ContentPresenter">
-                    <Setter Property="Foreground" Value="#E8E8E8"/>
+                    <Setter Property="Foreground" Value="{DynamicResource ThemeTextTitle}"/>
                 </Style>
                 <Style Selector="^:selected:pointerover /template/ Border#PART_Border">
-                    <Setter Property="Background" Value="#3A5A7A"/>
+                    <Setter Property="Background" Value="{DynamicResource ThemeAccentSelectedHover}"/>
                 </Style>
             </ControlTheme>
 
 
             <ControlTheme x:Key="{x:Type ComboBox}" TargetType="ComboBox">
-                <Setter Property="Background" Value="#252525"/>
-                <Setter Property="Foreground" Value="#D4D4D4"/>
-                <Setter Property="BorderBrush" Value="#464646"/>
+                <Setter Property="Background" Value="{DynamicResource ThemeSurfaceInput}"/>
+                <Setter Property="Foreground" Value="{DynamicResource ThemeTextBody}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorder}"/>
                 <Setter Property="BorderThickness" Value="1"/>
                 <Setter Property="Padding" Value="10,7"/>
                 <Setter Property="HorizontalAlignment" Value="Stretch"/>
@@ -81,7 +90,7 @@
                                               Content="{TemplateBinding SelectionBoxItem}"
                                               ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
                                               Foreground="{TemplateBinding Foreground}"/>
-                            <PathIcon Grid.Column="1" Data="M7 10l5 5 5-5z" Width="10" Height="10" Foreground="#B8B8B8" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,10,0"/>
+                            <PathIcon Grid.Column="1" Data="M7 10l5 5 5-5z" Width="10" Height="10" Foreground="{DynamicResource ThemeTextLabel}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,10,0"/>
                             <Popup Grid.ColumnSpan="2"
                                    x:Name="PART_Popup"
                                    WindowManagerAddShadowHint="False"
@@ -92,8 +101,8 @@
                                    PlacementTarget="PART_Border"
                                    IsLightDismissEnabled="True"
                                    Placement="BottomEdgeAlignedLeft">
-                                <Border Background="#252525"
-                                        BorderBrush="#464646"
+                                <Border Background="{DynamicResource ThemeSurfaceInput}"
+                                        BorderBrush="{DynamicResource ThemeBorder}"
                                         BorderThickness="1"
                                         CornerRadius="5"
                                         Padding="0,4"
@@ -109,10 +118,10 @@
                     </ControlTemplate>
                 </Setter>
                 <Style Selector="^:pointerover /template/ Border#PART_Border">
-                    <Setter Property="BorderBrush" Value="#707070"/>
+                    <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderHover}"/>
                 </Style>
                 <Style Selector="^:focus /template/ Border#PART_Border">
-                    <Setter Property="BorderBrush" Value="#5B9BD5"/>
+                    <Setter Property="BorderBrush" Value="{DynamicResource ThemeAccent}"/>
                 </Style>
             </ControlTheme>
 
@@ -201,7 +210,7 @@
 
 
             <ControlTheme x:Key="SecondaryButton" TargetType="Button">
-                <Setter Property="Background" Value="#1F7AA8"/>
+                <Setter Property="Background" Value="{DynamicResource ThemeButtonPrimary}"/>
                 <Setter Property="Foreground" Value="White"/>
                 <Setter Property="BorderThickness" Value="0"/>
                 <Setter Property="Cursor" Value="Hand"/>
@@ -227,10 +236,10 @@
                     </ControlTemplate>
                 </Setter>
                 <Style Selector="^:pointerover /template/ Border#PART_Border">
-                    <Setter Property="Background" Value="#19648C"/>
+                    <Setter Property="Background" Value="{DynamicResource ThemeButtonPrimaryHover}"/>
                 </Style>
                 <Style Selector="^:pressed /template/ Border#PART_Border">
-                    <Setter Property="Background" Value="#19648C"/>
+                    <Setter Property="Background" Value="{DynamicResource ThemeButtonPrimaryHover}"/>
                 </Style>
                 <Style Selector="^:disabled /template/ Border#PART_Border">
                     <Setter Property="Background" Value="Gray"/>

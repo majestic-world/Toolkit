@@ -12,6 +12,7 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using L2Toolkit.Parsing;
 using L2Toolkit.Utilities;
+using Avalonia.Controls.Documents;
 
 namespace L2Toolkit.Views;
 
@@ -67,7 +68,7 @@ public partial class CreateMultisell : UserControl
             Text = $"{id}-{count}",
             FontFamily = new FontFamily("Consolas,Courier New,monospace"),
             FontSize = 12,
-            Foreground = new SolidColorBrush(Color.Parse("#C8C8C8")),
+            [!TextElement.ForegroundProperty] = AppTheme.Brush("ThemeTextButton"),
             VerticalAlignment = VerticalAlignment.Center
         };
 
@@ -76,7 +77,7 @@ public partial class CreateMultisell : UserControl
             Text = "\uE711",
             FontFamily = new FontFamily("Segoe MDL2 Assets"),
             FontSize = 10,
-            Foreground = new SolidColorBrush(Color.Parse("#A0A0A0")),
+            [!TextElement.ForegroundProperty] = AppTheme.Brush("ThemeTextSection"),
             VerticalAlignment = VerticalAlignment.Center,
             Margin = new Avalonia.Thickness(4, 0, 0, 0)
         };
@@ -87,8 +88,8 @@ public partial class CreateMultisell : UserControl
 
         var pill = new Border
         {
-            Background = new SolidColorBrush(Color.Parse("#2E2E2E")),
-            BorderBrush = new SolidColorBrush(Color.Parse("#505050")),
+            [!Border.BackgroundProperty] = AppTheme.Brush("ThemeSurfaceChip"),
+            [!Border.BorderBrushProperty] = AppTheme.Brush("ThemeBorderMuted"),
             BorderThickness = new Avalonia.Thickness(1),
             CornerRadius = new Avalonia.CornerRadius(4),
             Padding = new Avalonia.Thickness(8, 4),

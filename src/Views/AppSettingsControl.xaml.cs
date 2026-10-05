@@ -4,13 +4,16 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Styling;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using L2Toolkit.Settings;
 using L2Toolkit.ClientDat;
 using L2Toolkit.Utilities;
+using Avalonia.Controls.Documents;
 
 namespace L2Toolkit.Views;
 
@@ -48,6 +51,7 @@ public partial class AppSettingsControl : UserControl
     public AppSettingsControl()
     {
         InitializeComponent();
+        ThemeComboBox.SelectedIndex = AppTheme.Saved == ThemeVariant.Light ? 1 : 0;
 
         var db = AppDatabase.GetInstance();
 
@@ -106,6 +110,13 @@ public partial class AppSettingsControl : UserControl
         BuildBtn.Click  += async (_, _) => await BuildTablesAsync();
     }
 
+    private void ThemeComboBox_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        var variant = ThemeComboBox.SelectedIndex == 1 ? ThemeVariant.Light : ThemeVariant.Dark;
+        if (variant != Application.Current!.RequestedThemeVariant)
+            AppTheme.Set(variant);
+    }
+
     /// <summary>
     /// Supported .dat file patterns and their parser keys.
     /// L2GameDataName is excluded — it's loaded first as the name table.
@@ -130,12 +141,12 @@ public partial class AppSettingsControl : UserControl
         if (!Directory.Exists(systemDir))
         {
             DatStatusText.Text = $"Pasta não encontrada: {systemDir}";
-            DatStatusText.Foreground = new SolidColorBrush(Color.Parse("#E07A7A"));
+            DatStatusText[!TextElement.ForegroundProperty] = AppTheme.Brush("ThemeStatusError");
             DatStatusText.IsVisible = true;
             return;
         }
 
-        DatStatusText.Foreground = new SolidColorBrush(Color.Parse("#D4A54A"));
+        DatStatusText[!TextElement.ForegroundProperty] = AppTheme.Brush("ThemeWarningAccent");
         DatStatusText.IsVisible = true;
         TestDatBtn.IsEnabled = false;
 
@@ -203,18 +214,18 @@ public partial class AppSettingsControl : UserControl
             if (failed == 0)
             {
                 DatStatusText.Text = $"Concluído: {success} arquivo(s) salvo(s) em {outputDir}";
-                DatStatusText.Foreground = new SolidColorBrush(Color.Parse("#5DBF6A"));
+                DatStatusText[!TextElement.ForegroundProperty] = AppTheme.Brush("ThemeStatusOk");
             }
             else
             {
                 DatStatusText.Text = $"Concluído: {success} ok, {failed} erro(s) — {string.Join(" | ", errors)}";
-                DatStatusText.Foreground = new SolidColorBrush(Color.Parse("#E07A7A"));
+                DatStatusText[!TextElement.ForegroundProperty] = AppTheme.Brush("ThemeStatusError");
             }
         }
         catch (Exception ex)
         {
             DatStatusText.Text = $"Erro: {ex.Message}";
-            DatStatusText.Foreground = new SolidColorBrush(Color.Parse("#E07A7A"));
+            DatStatusText[!TextElement.ForegroundProperty] = AppTheme.Brush("ThemeStatusError");
         }
         finally
         {
@@ -325,7 +336,7 @@ public partial class AppSettingsControl : UserControl
         if (string.IsNullOrEmpty(sourceDir) || !Directory.Exists(sourceDir))
         {
             BuildStatusText.Text = "Selecione uma pasta de origem válida.";
-            BuildStatusText.Foreground = new SolidColorBrush(Color.Parse("#E07A7A"));
+            BuildStatusText[!TextElement.ForegroundProperty] = AppTheme.Brush("ThemeStatusError");
             BuildStatusText.IsVisible = true;
             return;
         }
@@ -354,7 +365,7 @@ public partial class AppSettingsControl : UserControl
             BuildStatusText.Text = onlyRequired
                 ? "Nenhum dos arquivos necessários foi encontrado na pasta de origem."
                 : "Nenhum arquivo .txt encontrado na pasta de origem.";
-            BuildStatusText.Foreground = new SolidColorBrush(Color.Parse("#E07A7A"));
+            BuildStatusText[!TextElement.ForegroundProperty] = AppTheme.Brush("ThemeStatusError");
             BuildStatusText.IsVisible = true;
             return;
         }
@@ -366,7 +377,7 @@ public partial class AppSettingsControl : UserControl
         BuildCurrentFile.Text = string.Empty;
         BuildProgressPanel.IsVisible = true;
         BuildStatusText.Text = "Compilando...";
-        BuildStatusText.Foreground = new SolidColorBrush(Color.Parse("#D4A54A"));
+        BuildStatusText[!TextElement.ForegroundProperty] = AppTheme.Brush("ThemeWarningAccent");
         BuildStatusText.IsVisible = true;
 
         int quality = BuildQualityBox.SelectedIndex switch
@@ -427,12 +438,12 @@ public partial class AppSettingsControl : UserControl
             if (failed == 0)
             {
                 BuildStatusText.Text = $"Build concluído: {success} arquivo(s) — {FormatSize(totalOriginal)} → {FormatSize(totalPacked)} → {savings:P1}";
-                BuildStatusText.Foreground = new SolidColorBrush(Color.Parse("#5DBF6A"));
+                BuildStatusText[!TextElement.ForegroundProperty] = AppTheme.Brush("ThemeStatusOk");
             }
             else
             {
                 BuildStatusText.Text = $"{success} ok, {failed} erro(s) — {string.Join(" | ", errors)}";
-                BuildStatusText.Foreground = new SolidColorBrush(Color.Parse("#E07A7A"));
+                BuildStatusText[!TextElement.ForegroundProperty] = AppTheme.Brush("ThemeStatusError");
             }
 
             BuildCurrentFile.Text = string.Empty;
@@ -440,7 +451,7 @@ public partial class AppSettingsControl : UserControl
         catch (Exception ex)
         {
             BuildStatusText.Text = $"Erro: {ex.Message}";
-            BuildStatusText.Foreground = new SolidColorBrush(Color.Parse("#E07A7A"));
+            BuildStatusText[!TextElement.ForegroundProperty] = AppTheme.Brush("ThemeStatusError");
         }
         finally
         {
@@ -487,8 +498,8 @@ public partial class AppSettingsControl : UserControl
         {
             bool exists = !string.IsNullOrEmpty(dir) && File.Exists(Path.Combine(dir, file));
 
-            var color = Color.Parse(exists ? "#5DBF6A" : "#E07A7A");
-            var bg    = Color.Parse(exists ? "#182A1A" : "#2A1818");
+            var color = exists ? "ThemeStatusOk" : "ThemeStatusError";
+            var bg    = exists ? "ThemeStatusOkBg" : "ThemeStatusErrorBg";
 
             var icon = new PathIcon
             {
@@ -497,7 +508,7 @@ public partial class AppSettingsControl : UserControl
                     : "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"),
                 Width = 10,
                 Height = 10,
-                Foreground = new SolidColorBrush(color),
+                [!TextElement.ForegroundProperty] = AppTheme.Brush(color),
                 VerticalAlignment = VerticalAlignment.Center
             };
 
@@ -506,7 +517,7 @@ public partial class AppSettingsControl : UserControl
                 Text = file,
                 FontFamily = new FontFamily("Consolas,Courier New,monospace"),
                 FontSize = 11,
-                Foreground = new SolidColorBrush(color),
+                [!TextElement.ForegroundProperty] = AppTheme.Brush(color),
                 VerticalAlignment = VerticalAlignment.Center
             };
 
@@ -516,7 +527,7 @@ public partial class AppSettingsControl : UserControl
 
             FilesStatusPanel.Children.Add(new Border
             {
-                Background = new SolidColorBrush(bg),
+                [!Border.BackgroundProperty] = AppTheme.Brush(bg),
                 CornerRadius = new Avalonia.CornerRadius(4),
                 Padding = new Avalonia.Thickness(8, 4),
                 Child = inner
