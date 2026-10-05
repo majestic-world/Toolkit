@@ -60,6 +60,8 @@ public partial class AppSettingsControl : UserControl
             AssetsDirBox.Text = saved;
 
         ConfigPathText.Text = ConfigFilePath;
+        // O caminho é cortado com reticências no card; o tooltip mostra inteiro.
+        ToolTip.SetTip(ConfigPathText, ConfigFilePath);
 
         RefreshFileStatus();
 
@@ -343,7 +345,9 @@ public partial class AppSettingsControl : UserControl
             {
                 [!Border.BackgroundProperty] = AppTheme.Brush(bg),
                 CornerRadius = new Avalonia.CornerRadius(4),
-                Padding = new Avalonia.Thickness(8, 4),
+                Padding = new Avalonia.Thickness(8, 3),
+                // WrapPanel não tem espaçamento próprio; a margem separa os chips.
+                Margin = new Avalonia.Thickness(0, 0, 6, 4),
                 Child = inner
             });
         }
