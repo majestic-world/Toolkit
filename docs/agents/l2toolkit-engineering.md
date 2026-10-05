@@ -7,7 +7,7 @@ Read `CONTEXT.md` first. This reference preserves the engineering constraints th
 L2Toolkit is a single-window Avalonia desktop suite for Lineage 2 server developers. It has more than fifteen data-processing tools and targets .NET 10 with nullable reference types enabled.
 
 - Build/run in development: `dotnet run`
-- Release publish: `dotnet publish -c Release`
+- Release publish: `make build` (Windows), `make macos`, `make linux`, `make dist` (Windows + Inno Setup installer). They run `scripts/build.ps1` under PowerShell 7; Native AOT must run on the target OS. Tool logs go to `obj/BuildLogs/<rid>/`.
 - There is no test project. Verify changed behavior in the running GUI, including the relevant file-processing path.
 
 ## UI and application structure

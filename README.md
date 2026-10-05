@@ -26,42 +26,17 @@ Acesse a documentação completa em:
 
 ---
 
-Build:
+## Build
 
-**Windows**
-```bash
-dotnet publish -r win-x64 -c Release -p:PublishAot=true -p:OptimizationPreference=Speed -p:StackTraceSupport=false -p:InvariantGlobalization=true
-```
+Requer PowerShell 7 (`pwsh`), GNU Make e o .NET 10 SDK. Todos os alvos publicam com Native AOT em `bin/Release/net10.0/<rid>/publish/`; os logs das ferramentas ficam em `obj/BuildLogs/<rid>/`. O Native AOT não compila entre sistemas operacionais: cada plataforma precisa ser gerada no próprio sistema.
 
-**Linux**
-```bash
-dotnet publish -r linux-x64 -c Release -p:PublishAot=true -p:OptimizationPreference=Speed -p:StackTraceSupport=false -p:InvariantGlobalization=true
-```
+| Comando | Resultado |
+|---|---|
+| `make build` | Windows (`win-x64`) |
+| `make macos` | macOS (`osx-arm64` ou `osx-x64`, conforme o Mac), com o bundle `L2 Toolkit.app` assinado ad-hoc |
+| `make linux` | Linux (`linux-x64` ou `linux-arm64`, conforme a máquina) |
+| `make dist` | Build Windows + instalador Inno Setup em `publish/Setup/L2 Toolkit Installer.exe` (requer Inno Setup 6) |
 
-**macOS (Intel)**
-```bash
-dotnet publish -r osx-x64 -c Release -p:PublishAot=true -p:OptimizationPreference=Speed -p:StackTraceSupport=false -p:InvariantGlobalization=true
-```
-
-**macOS (Apple Silicon)**
-```bash
-dotnet publish -r osx-arm64 -c Release -p:PublishAot=true -p:OptimizationPreference=Speed -p:StackTraceSupport=false -p:InvariantGlobalization=true
-```
-
----
-
-## Deploy
-
-**Windows** — compila e gera o instalador via Inno Setup:
-```powershell
-.\Deploy.ps1
-```
-
-**macOS (Apple Silicon)** — compila, monta o `.app` bundle e gera o instalador `.dmg`:
-```bash
-chmod +x Deploy-macOS.sh
-./Deploy-macOS.sh
-```
-Requer `create-dmg` instalado (`brew install create-dmg`). Os artefatos são gerados em `bin/Release/net10.0/osx-arm64/publish/`.
+O instalador `.dmg` do macOS sai de `pwsh scripts/build.ps1 -Platform macos -Installer` (requer `brew install create-dmg`). Use `-Architecture x64|arm64` para outra arquitetura do mesmo sistema.
 
 Desenvolvido por **Mk**
