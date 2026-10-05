@@ -1,13 +1,13 @@
 <UserControl x:Class="L2Toolkit.pages.PrimeShopGenerator"
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             Background="#393939">
+             Background="#333333">
 
     <UserControl.Resources>
         <ControlTheme x:Key="GhostButton" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="#B0B0B0"/>
-            <Setter Property="BorderBrush" Value="#565656"/>
+            <Setter Property="Foreground" Value="#C8C8C8"/>
+            <Setter Property="BorderBrush" Value="#6A6A6A"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -29,10 +29,10 @@
             </Setter>
             <Style Selector="^:pointerover /template/ Border#PART_Border">
                 <Setter Property="Background" Value="#3C3C3C"/>
-                <Setter Property="BorderBrush" Value="#646464"/>
+                <Setter Property="BorderBrush" Value="#808080"/>
             </Style>
             <Style Selector="^:pressed /template/ Border#PART_Border">
-                <Setter Property="Background" Value="#323232"/>
+                <Setter Property="Background" Value="#282828"/>
             </Style>
         </ControlTheme>
     </UserControl.Resources>
@@ -40,7 +40,7 @@
     <UserControl.Styles>
 
         <Style Selector="TextBox.FormField">
-            <Setter Property="Background" Value="#383838"/>
+            <Setter Property="Background" Value="#252525"/>
             <Setter Property="Foreground" Value="#D4D4D4"/>
             <Setter Property="CaretBrush" Value="#5B9BD5"/>
             <Setter Property="SelectionBrush" Value="#1E3A5A"/>
@@ -51,32 +51,32 @@
             <Setter Property="FontSize" Value="13"/>
         </Style>
         <Style Selector="TextBox.FormField /template/ Border#PART_BorderElement">
-            <Setter Property="Background" Value="#383838"/>
+            <Setter Property="Background" Value="#252525"/>
             <Setter Property="CornerRadius" Value="5"/>
         </Style>
         <Style Selector="TextBox.FormField:focus /template/ Border#PART_BorderElement">
             <Setter Property="BorderBrush" Value="#5B9BD5"/>
         </Style>
         <Style Selector="TextBox.FormField:pointerover /template/ Border#PART_BorderElement">
-            <Setter Property="BorderBrush" Value="#5E5E5E"/>
+            <Setter Property="BorderBrush" Value="#707070"/>
         </Style>
 
         <Style Selector="TextBox.Code /template/ Border#PART_BorderElement">
-            <Setter Property="Background" Value="#383838"/>
+            <Setter Property="Background" Value="#252525"/>
             <Setter Property="BorderThickness" Value="0"/>
         </Style>
         <Style Selector="TextBox.Code:focus /template/ Border#PART_BorderElement">
-            <Setter Property="Background" Value="#383838"/>
+            <Setter Property="Background" Value="#252525"/>
             <Setter Property="BorderBrush" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
         </Style>
         <Style Selector="TextBox.Code:pointerover /template/ Border#PART_BorderElement">
-            <Setter Property="Background" Value="#383838"/>
+            <Setter Property="Background" Value="#252525"/>
         </Style>
 
         <!-- ComboBox dark theme -->
         <Style Selector="ComboBox">
-            <Setter Property="Background" Value="#383838"/>
+            <Setter Property="Background" Value="#252525"/>
             <Setter Property="Foreground" Value="#D4D4D4"/>
             <Setter Property="BorderBrush" Value="#3C3C3C"/>
             <Setter Property="BorderThickness" Value="1"/>
@@ -85,13 +85,13 @@
             <Setter Property="FontSize" Value="13"/>
         </Style>
         <Style Selector="ComboBox:pointerover">
-            <Setter Property="BorderBrush" Value="#5E5E5E"/>
+            <Setter Property="BorderBrush" Value="#707070"/>
         </Style>
         <Style Selector="ComboBox:focus">
             <Setter Property="BorderBrush" Value="#5B9BD5"/>
         </Style>
         <Style Selector="ComboBoxItem">
-            <Setter Property="Background" Value="#383838"/>
+            <Setter Property="Background" Value="#252525"/>
             <Setter Property="Foreground" Value="#D4D4D4"/>
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
@@ -165,7 +165,7 @@
             <!-- ── Painel 01: Configuração ───────────────────────────── -->
             <Border Margin="32,0"
                     CornerRadius="8"
-                    Background="#323232"
+                    Background="#2C2C2C"
                     BorderBrush="#464646"
                     BorderThickness="1"
                     ClipToBounds="True">
@@ -180,13 +180,13 @@
                             <TextBlock Text="01"
                                        FontSize="24"
                                        FontWeight="Bold"
-                                       Foreground="#4A88B8"
+                                       Foreground="#6AA8DE"
                                        VerticalAlignment="Center"/>
-                            <Border Width="1" Height="18" Background="#565656" VerticalAlignment="Center"/>
+                            <Border Width="1" Height="18" Background="#6A6A6A" VerticalAlignment="Center"/>
                             <TextBlock Text="CONFIGURAÇÃO"
                                        FontSize="11"
                                        FontWeight="Bold"
-                                       Foreground="#9A9A9A"
+                                       Foreground="#B8B8B8"
                                        LetterSpacing="1.5"
                                        VerticalAlignment="Center"/>
                         </StackPanel>
@@ -200,7 +200,7 @@
                                 <TextBlock Text="IDs dos itens"
                                            FontSize="12"
                                            FontWeight="Medium"
-                                           Foreground="#9A9A9A"/>
+                                           Foreground="#B8B8B8"/>
                                 <TextBox x:Name="IdsTextBox"
                                          Classes="FormField"
                                          Watermark="ex: 57;35;36;37 (separados por ponto e vírgula)"/>
@@ -212,7 +212,7 @@
                                     <TextBlock Text="Categoria"
                                                FontSize="12"
                                                FontWeight="Medium"
-                                               Foreground="#9A9A9A"/>
+                                               Foreground="#B8B8B8"/>
                                     <ComboBox x:Name="CategoryComboBox"
                                               ItemContainerTheme="{StaticResource ComboBoxItemTheme}"/>
                                 </StackPanel>
@@ -220,7 +220,7 @@
                                     <TextBlock Text="Tipo"
                                                FontSize="12"
                                                FontWeight="Medium"
-                                               Foreground="#9A9A9A"/>
+                                               Foreground="#B8B8B8"/>
                                     <ComboBox x:Name="TypeComboBox"
                                               ItemContainerTheme="{StaticResource ComboBoxItemTheme}"/>
                                 </StackPanel>
@@ -232,7 +232,7 @@
                                     <TextBlock Text="Preço"
                                                FontSize="12"
                                                FontWeight="Medium"
-                                               Foreground="#9A9A9A"/>
+                                               Foreground="#B8B8B8"/>
                                     <TextBox x:Name="PriceTextBox"
                                              Classes="FormField"
                                              Watermark="ex: 1000"/>
@@ -241,7 +241,7 @@
                                     <TextBlock Text="Quantidade"
                                                FontSize="12"
                                                FontWeight="Medium"
-                                               Foreground="#9A9A9A"/>
+                                               Foreground="#B8B8B8"/>
                                     <TextBox x:Name="QuantidadeTextBox"
                                              Classes="FormField"
                                              Text="1"/>
@@ -285,7 +285,7 @@
                 <!-- Painel 02: Cliente -->
                 <Border Grid.Column="0"
                         CornerRadius="8"
-                        Background="#323232"
+                        Background="#2C2C2C"
                         BorderBrush="#464646"
                         BorderThickness="1"
                         ClipToBounds="True">
@@ -300,18 +300,18 @@
                                            Text="02"
                                            FontSize="20"
                                            FontWeight="Bold"
-                                           Foreground="#4A88B8"
+                                           Foreground="#6AA8DE"
                                            VerticalAlignment="Center"/>
                                 <Border Grid.Column="1"
                                         Width="1" Height="16"
-                                        Background="#565656"
+                                        Background="#6A6A6A"
                                         VerticalAlignment="Center"
                                         Margin="12,0"/>
                                 <TextBlock Grid.Column="2"
                                            Text="CLIENTE"
                                            FontSize="10"
                                            FontWeight="Bold"
-                                           Foreground="#9A9A9A"
+                                           Foreground="#B8B8B8"
                                            LetterSpacing="1.5"
                                            VerticalAlignment="Center"/>
                                 <Border Grid.Column="3"
@@ -340,7 +340,7 @@
                                         VerticalAlignment="Center"
                                         Theme="{StaticResource GhostButton}">
                                     <StackPanel Orientation="Horizontal" Spacing="6">
-                                        <PathIcon Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" Foreground="#9A9A9A" Width="12" Height="12" VerticalAlignment="Center"/>
+                                        <PathIcon Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" Foreground="#B8B8B8" Width="12" Height="12" VerticalAlignment="Center"/>
                                         <TextBlock Text="Copiar"
                                                    FontSize="11"
                                                    FontWeight="Medium"
@@ -364,7 +364,7 @@
                                      Height="180"
                                      Padding="16,10"
                                      BorderThickness="0"
-                                     Background="#383838"
+                                     Background="#252525"
                                      Foreground="#9CDCFE"
                                      CaretBrush="#5B9BD5"
                                      SelectionBrush="#1E3A5A"
@@ -380,7 +380,7 @@
                 <!-- Painel 03: Servidor -->
                 <Border Grid.Column="2"
                         CornerRadius="8"
-                        Background="#323232"
+                        Background="#2C2C2C"
                         BorderBrush="#464646"
                         BorderThickness="1"
                         ClipToBounds="True">
@@ -395,18 +395,18 @@
                                            Text="03"
                                            FontSize="20"
                                            FontWeight="Bold"
-                                           Foreground="#4A88B8"
+                                           Foreground="#6AA8DE"
                                            VerticalAlignment="Center"/>
                                 <Border Grid.Column="1"
                                         Width="1" Height="16"
-                                        Background="#565656"
+                                        Background="#6A6A6A"
                                         VerticalAlignment="Center"
                                         Margin="12,0"/>
                                 <TextBlock Grid.Column="2"
                                            Text="SERVIDOR"
                                            FontSize="10"
                                            FontWeight="Bold"
-                                           Foreground="#9A9A9A"
+                                           Foreground="#B8B8B8"
                                            LetterSpacing="1.5"
                                            VerticalAlignment="Center"/>
                                 <Border Grid.Column="3"
@@ -435,7 +435,7 @@
                                         VerticalAlignment="Center"
                                         Theme="{StaticResource GhostButton}">
                                     <StackPanel Orientation="Horizontal" Spacing="6">
-                                        <PathIcon Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" Foreground="#9A9A9A" Width="12" Height="12" VerticalAlignment="Center"/>
+                                        <PathIcon Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" Foreground="#B8B8B8" Width="12" Height="12" VerticalAlignment="Center"/>
                                         <TextBlock Text="Copiar"
                                                    FontSize="11"
                                                    FontWeight="Medium"
@@ -459,7 +459,7 @@
                                      Height="180"
                                      Padding="16,10"
                                      BorderThickness="0"
-                                     Background="#383838"
+                                     Background="#252525"
                                      Foreground="#9CDCFE"
                                      CaretBrush="#5B9BD5"
                                      SelectionBrush="#1E3A5A"
@@ -477,7 +477,7 @@
             <!-- ── Painel 04: Logs ───────────────────────────────────── -->
             <Border Margin="32,16,32,32"
                     CornerRadius="8"
-                    Background="#323232"
+                    Background="#2C2C2C"
                     BorderBrush="#464646"
                     BorderThickness="1"
                     ClipToBounds="True">
@@ -492,18 +492,18 @@
                                        Text="04"
                                        FontSize="24"
                                        FontWeight="Bold"
-                                       Foreground="#4A88B8"
+                                       Foreground="#6AA8DE"
                                        VerticalAlignment="Center"/>
                             <Border Grid.Column="1"
                                     Width="1" Height="18"
-                                    Background="#565656"
+                                    Background="#6A6A6A"
                                     VerticalAlignment="Center"
                                     Margin="14,0"/>
                             <TextBlock Grid.Column="2"
                                        Text="LOGS"
                                        FontSize="11"
                                        FontWeight="Bold"
-                                       Foreground="#9A9A9A"
+                                       Foreground="#B8B8B8"
                                        LetterSpacing="1.5"
                                        VerticalAlignment="Center"/>
                             <Border Grid.Column="3"
@@ -532,7 +532,7 @@
                                     VerticalAlignment="Center"
                                     Theme="{StaticResource GhostButton}">
                                 <StackPanel Orientation="Horizontal" Spacing="7">
-                                    <PathIcon Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" Foreground="#9A9A9A" Width="12" Height="12" VerticalAlignment="Center"/>
+                                    <PathIcon Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" Foreground="#B8B8B8" Width="12" Height="12" VerticalAlignment="Center"/>
                                     <TextBlock Text="Copiar"
                                                FontSize="12"
                                                FontWeight="Medium"
@@ -550,7 +550,7 @@
                                  Height="140"
                                  Padding="20,14"
                                  BorderThickness="0"
-                                 Background="#383838"
+                                 Background="#252525"
                                  Foreground="#D4D4D4"
                                  CaretBrush="#5B9BD5"
                                  SelectionBrush="#1E3A5A"

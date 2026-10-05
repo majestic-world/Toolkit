@@ -130,7 +130,7 @@ public partial class AppSettingsControl : UserControl
         if (!Directory.Exists(systemDir))
         {
             DatStatusText.Text = $"Pasta não encontrada: {systemDir}";
-            DatStatusText.Foreground = new SolidColorBrush(Color.Parse("#BF5D5D"));
+            DatStatusText.Foreground = new SolidColorBrush(Color.Parse("#E07A7A"));
             DatStatusText.IsVisible = true;
             return;
         }
@@ -208,13 +208,13 @@ public partial class AppSettingsControl : UserControl
             else
             {
                 DatStatusText.Text = $"Concluído: {success} ok, {failed} erro(s) — {string.Join(" | ", errors)}";
-                DatStatusText.Foreground = new SolidColorBrush(Color.Parse("#BF5D5D"));
+                DatStatusText.Foreground = new SolidColorBrush(Color.Parse("#E07A7A"));
             }
         }
         catch (Exception ex)
         {
             DatStatusText.Text = $"Erro: {ex.Message}";
-            DatStatusText.Foreground = new SolidColorBrush(Color.Parse("#BF5D5D"));
+            DatStatusText.Foreground = new SolidColorBrush(Color.Parse("#E07A7A"));
         }
         finally
         {
@@ -325,7 +325,7 @@ public partial class AppSettingsControl : UserControl
         if (string.IsNullOrEmpty(sourceDir) || !Directory.Exists(sourceDir))
         {
             BuildStatusText.Text = "Selecione uma pasta de origem válida.";
-            BuildStatusText.Foreground = new SolidColorBrush(Color.Parse("#BF5D5D"));
+            BuildStatusText.Foreground = new SolidColorBrush(Color.Parse("#E07A7A"));
             BuildStatusText.IsVisible = true;
             return;
         }
@@ -354,7 +354,7 @@ public partial class AppSettingsControl : UserControl
             BuildStatusText.Text = onlyRequired
                 ? "Nenhum dos arquivos necessários foi encontrado na pasta de origem."
                 : "Nenhum arquivo .txt encontrado na pasta de origem.";
-            BuildStatusText.Foreground = new SolidColorBrush(Color.Parse("#BF5D5D"));
+            BuildStatusText.Foreground = new SolidColorBrush(Color.Parse("#E07A7A"));
             BuildStatusText.IsVisible = true;
             return;
         }
@@ -432,7 +432,7 @@ public partial class AppSettingsControl : UserControl
             else
             {
                 BuildStatusText.Text = $"{success} ok, {failed} erro(s) — {string.Join(" | ", errors)}";
-                BuildStatusText.Foreground = new SolidColorBrush(Color.Parse("#BF5D5D"));
+                BuildStatusText.Foreground = new SolidColorBrush(Color.Parse("#E07A7A"));
             }
 
             BuildCurrentFile.Text = string.Empty;
@@ -440,7 +440,7 @@ public partial class AppSettingsControl : UserControl
         catch (Exception ex)
         {
             BuildStatusText.Text = $"Erro: {ex.Message}";
-            BuildStatusText.Foreground = new SolidColorBrush(Color.Parse("#BF5D5D"));
+            BuildStatusText.Foreground = new SolidColorBrush(Color.Parse("#E07A7A"));
         }
         finally
         {
@@ -487,7 +487,7 @@ public partial class AppSettingsControl : UserControl
         {
             bool exists = !string.IsNullOrEmpty(dir) && File.Exists(Path.Combine(dir, file));
 
-            var color = Color.Parse(exists ? "#5DBF6A" : "#BF5D5D");
+            var color = Color.Parse(exists ? "#5DBF6A" : "#E07A7A");
             var bg    = Color.Parse(exists ? "#182A1A" : "#2A1818");
 
             var icon = new PathIcon

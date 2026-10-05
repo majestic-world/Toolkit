@@ -591,7 +591,7 @@ public partial class EnchantEffect : UserControl
             var particleLabel = new TextBlock
             {
                 Text                = "—",
-                Foreground          = new SolidColorBrush(Color.Parse("#6B7280")),
+                Foreground          = new SolidColorBrush(Color.Parse("#A0A7B4")),
                 FontSize            = 12,
                 VerticalAlignment   = VerticalAlignment.Center,
                 HorizontalAlignment = HorizontalAlignment.Right
@@ -712,7 +712,7 @@ public partial class EnchantEffect : UserControl
             FontSize                 = 12,
             Height                   = 28,
             VerticalContentAlignment = VerticalAlignment.Center,
-            Background               = new SolidColorBrush(Color.Parse("#2A2A2A")),
+            Background               = new SolidColorBrush(Color.Parse("#252525")),
             Foreground               = new SolidColorBrush(Color.Parse("#D4D4D4")),
             BorderBrush              = new SolidColorBrush(Color.Parse("#464646")),
             BorderThickness          = new Thickness(1),
@@ -1136,7 +1136,7 @@ public partial class EnchantEffect : UserControl
             {
                 Text                = $"+{i + 1}",
                 FontSize            = 9,
-                Foreground          = new SolidColorBrush(Color.Parse("#6B7280")),
+                Foreground          = new SolidColorBrush(Color.Parse("#A0A7B4")),
                 HorizontalAlignment = HorizontalAlignment.Center
             };
             Grid.SetColumn(lbl, i);
@@ -1171,7 +1171,7 @@ public partial class EnchantEffect : UserControl
             {
                 Text                = $"+{entry.MinEnchantNum}",
                 FontSize            = 9,
-                Foreground          = new SolidColorBrush(Color.Parse("#6B7280")),
+                Foreground          = new SolidColorBrush(Color.Parse("#A0A7B4")),
                 HorizontalAlignment = HorizontalAlignment.Center
             };
             Grid.SetColumn(lbl, i);

@@ -1,13 +1,13 @@
 <UserControl x:Class="L2Toolkit.pages.SystemMsgColor"
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             Background="#393939">
+             Background="#333333">
 
     <UserControl.Resources>
         <ControlTheme x:Key="GhostButton" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="#B0B0B0"/>
-            <Setter Property="BorderBrush" Value="#565656"/>
+            <Setter Property="Foreground" Value="#C8C8C8"/>
+            <Setter Property="BorderBrush" Value="#6A6A6A"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -28,10 +28,10 @@
             </Setter>
             <Style Selector="^:pointerover /template/ Border#PART_Border">
                 <Setter Property="Background" Value="#3C3C3C"/>
-                <Setter Property="BorderBrush" Value="#646464"/>
+                <Setter Property="BorderBrush" Value="#808080"/>
             </Style>
             <Style Selector="^:pressed /template/ Border#PART_Border">
-                <Setter Property="Background" Value="#323232"/>
+                <Setter Property="Background" Value="#282828"/>
             </Style>
         </ControlTheme>
 
@@ -105,7 +105,7 @@
                     <TextBlock Text="Cores de Mensagens do Sistema"
                                FontSize="22" FontWeight="Light" Foreground="#E8E8E8"/>
                     <TextBlock Text="Editor de text-color individual por mensagem"
-                               FontSize="13" Foreground="#9CA3AF"/>
+                               FontSize="13" Foreground="#B8BEC8"/>
                 </StackPanel>
             </Grid>
 
@@ -144,7 +144,7 @@
                                    VerticalAlignment="Center"
                                    Text="Faça um backup antes de editar"/>
                     </StackPanel>
-                    <TextBlock Foreground="#9A7510" FontSize="12" TextWrapping="Wrap"
+                    <TextBlock Foreground="#D4A017" FontSize="12" TextWrapping="Wrap"
                                Text="Edições incorretas podem corromper o arquivo do cliente. Ao salvar, um backup automático é gerado na mesma pasta com a extensão .dat.bak — mas recomendamos manter uma cópia manual em local seguro."/>
                 </StackPanel>
             </Border>
@@ -155,7 +155,7 @@
                 <!-- Stats + actions -->
                 <Grid ColumnDefinitions="*,Auto,8,Auto,8,Auto">
                     <TextBlock x:Name="StatsLabel" Grid.Column="0"
-                               Foreground="#6B7280" FontSize="12" VerticalAlignment="Center"/>
+                               Foreground="#A0A7B4" FontSize="12" VerticalAlignment="Center"/>
                     <Button x:Name="ClearSelectionBtn" Grid.Column="1" Click="ClearSelection_Click"
                             IsVisible="False"
                             Theme="{StaticResource GhostButton}" Height="30" Padding="12,0">
@@ -198,15 +198,15 @@
                 <!-- Presets -->
                 <Border Background="#2C2C2C" CornerRadius="8" Padding="12,10">
                     <StackPanel Spacing="8">
-                        <TextBlock Text="PRESETS" Foreground="#6B7280" FontSize="10"
+                        <TextBlock Text="PRESETS" Foreground="#A0A7B4" FontSize="10"
                                    FontWeight="Bold" LetterSpacing="1"/>
                         <WrapPanel x:Name="PresetWrapPanel"/>
                         <Border Height="1" Background="#3A3A3A"/>
                         <Grid ColumnDefinitions="Auto,10,150,10,Auto,10,Auto,8,Auto,8,Auto">
-                            <TextBlock Grid.Column="0" Text="NOME" Foreground="#6B7280" FontSize="10"
+                            <TextBlock Grid.Column="0" Text="NOME" Foreground="#A0A7B4" FontSize="10"
                                        FontWeight="Bold" LetterSpacing="1" VerticalAlignment="Center"/>
                             <TextBox Grid.Column="2" x:Name="PresetNameBox"
-                                     Background="#2A2A2A" Foreground="#D4D4D4" BorderBrush="#464646"
+                                     Background="#252525" Foreground="#D4D4D4" BorderBrush="#464646"
                                      BorderThickness="1" CornerRadius="4" Padding="8,0" Height="26"
                                      FontSize="12" VerticalContentAlignment="Center"
                                      Watermark="Nome do preset..."/>
@@ -265,13 +265,13 @@
                 <!-- Column headers -->
                 <Grid ColumnDefinitions="52,8,22,6,76,6,26,12,*" Margin="12,0,0,0">
                     <TextBlock Grid.Column="0" Text="ID"
-                               Foreground="#6B7280" FontSize="10" FontWeight="Bold" LetterSpacing="1"/>
+                               Foreground="#A0A7B4" FontSize="10" FontWeight="Bold" LetterSpacing="1"/>
                     <TextBlock Grid.Column="2" Text="COR"
-                               Foreground="#6B7280" FontSize="10" FontWeight="Bold" LetterSpacing="1"/>
+                               Foreground="#A0A7B4" FontSize="10" FontWeight="Bold" LetterSpacing="1"/>
                     <TextBlock Grid.Column="4" Text="HEX"
-                               Foreground="#6B7280" FontSize="10" FontWeight="Bold" LetterSpacing="1"/>
+                               Foreground="#A0A7B4" FontSize="10" FontWeight="Bold" LetterSpacing="1"/>
                     <TextBlock Grid.Column="8" Text="MENSAGEM"
-                               Foreground="#6B7280" FontSize="10" FontWeight="Bold" LetterSpacing="1"/>
+                               Foreground="#A0A7B4" FontSize="10" FontWeight="Bold" LetterSpacing="1"/>
                 </Grid>
 
             </StackPanel>
@@ -285,7 +285,7 @@
             <StackPanel Spacing="4">
                 <StackPanel x:Name="MsgRowsPanel" Spacing="2"/>
                 <TextBlock x:Name="OverflowLabel" IsVisible="False"
-                           Text="" Foreground="#6B7280" FontSize="12"
+                           Text="" Foreground="#A0A7B4" FontSize="12"
                            HorizontalAlignment="Center" Margin="0,4,0,0"/>
             </StackPanel>
         </ScrollViewer>
@@ -315,7 +315,7 @@
         <!-- Colors from file modal -->
         <Grid x:Name="ColorsModal" Grid.RowSpan="2" IsVisible="False" ZIndex="300"
               Background="#CC000000" PointerPressed="ColorsModal_OverlayClick">
-            <Border Background="#2A2A2A" BorderBrush="#505050" BorderThickness="1"
+            <Border Background="#252525" BorderBrush="#505050" BorderThickness="1"
                     CornerRadius="10" Padding="20" Width="520" MaxHeight="520"
                     VerticalAlignment="Center" HorizontalAlignment="Center"
                     BoxShadow="0 12 48 8 #BB000000">
@@ -325,13 +325,13 @@
                     <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
                         <StackPanel Grid.Column="0" Spacing="2">
                             <TextBlock Text="Cores no Arquivo" FontSize="16" FontWeight="SemiBold" Foreground="#E8E8E8"/>
-                            <TextBlock x:Name="ModalSubtitle" FontSize="12" Foreground="#6B7280"/>
+                            <TextBlock x:Name="ModalSubtitle" FontSize="12" Foreground="#A0A7B4"/>
                         </StackPanel>
                         <Button Grid.Column="1" Click="CloseColorsModal_Click"
                                 Background="Transparent" BorderThickness="0"
                                 Width="28" Height="28" Padding="0"
                                 Cursor="Hand" VerticalAlignment="Top">
-                            <PathIcon Width="12" Height="12" Foreground="#9CA3AF"
+                            <PathIcon Width="12" Height="12" Foreground="#B8BEC8"
                                       Data="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
                         </Button>
                     </Grid>

@@ -4,6 +4,11 @@
              x:CompileBindings="True">
     <Application.Styles>
         <FluentTheme />
+        <!-- O template Fluent fixa Opacity="0.5" no watermark (não sobrescrevível por estilo);
+             branco a 50% resulta em ~#929292 sobre os campos escuros (#252525), contraste ~5:1. -->
+        <Style Selector="TextBox /template/ TextBlock#PART_Watermark">
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+        </Style>
     </Application.Styles>
 
     <Application.Resources>
@@ -47,7 +52,7 @@
 
 
             <ControlTheme x:Key="{x:Type ComboBox}" TargetType="ComboBox">
-                <Setter Property="Background" Value="#383838"/>
+                <Setter Property="Background" Value="#252525"/>
                 <Setter Property="Foreground" Value="#D4D4D4"/>
                 <Setter Property="BorderBrush" Value="#464646"/>
                 <Setter Property="BorderThickness" Value="1"/>
@@ -76,7 +81,7 @@
                                               Content="{TemplateBinding SelectionBoxItem}"
                                               ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
                                               Foreground="{TemplateBinding Foreground}"/>
-                            <PathIcon Grid.Column="1" Data="M7 10l5 5 5-5z" Width="10" Height="10" Foreground="#9A9A9A" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,10,0"/>
+                            <PathIcon Grid.Column="1" Data="M7 10l5 5 5-5z" Width="10" Height="10" Foreground="#B8B8B8" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,10,0"/>
                             <Popup Grid.ColumnSpan="2"
                                    x:Name="PART_Popup"
                                    WindowManagerAddShadowHint="False"
@@ -87,7 +92,7 @@
                                    PlacementTarget="PART_Border"
                                    IsLightDismissEnabled="True"
                                    Placement="BottomEdgeAlignedLeft">
-                                <Border Background="#383838"
+                                <Border Background="#252525"
                                         BorderBrush="#464646"
                                         BorderThickness="1"
                                         CornerRadius="5"
@@ -104,7 +109,7 @@
                     </ControlTemplate>
                 </Setter>
                 <Style Selector="^:pointerover /template/ Border#PART_Border">
-                    <Setter Property="BorderBrush" Value="#5E5E5E"/>
+                    <Setter Property="BorderBrush" Value="#707070"/>
                 </Style>
                 <Style Selector="^:focus /template/ Border#PART_Border">
                     <Setter Property="BorderBrush" Value="#5B9BD5"/>
@@ -196,7 +201,7 @@
 
 
             <ControlTheme x:Key="SecondaryButton" TargetType="Button">
-                <Setter Property="Background" Value="#2596be"/>
+                <Setter Property="Background" Value="#1F7AA8"/>
                 <Setter Property="Foreground" Value="White"/>
                 <Setter Property="BorderThickness" Value="0"/>
                 <Setter Property="Cursor" Value="Hand"/>
@@ -222,10 +227,10 @@
                     </ControlTemplate>
                 </Setter>
                 <Style Selector="^:pointerover /template/ Border#PART_Border">
-                    <Setter Property="Background" Value="#24789F"/>
+                    <Setter Property="Background" Value="#19648C"/>
                 </Style>
                 <Style Selector="^:pressed /template/ Border#PART_Border">
-                    <Setter Property="Background" Value="#24789F"/>
+                    <Setter Property="Background" Value="#19648C"/>
                 </Style>
                 <Style Selector="^:disabled /template/ Border#PART_Border">
                     <Setter Property="Background" Value="Gray"/>

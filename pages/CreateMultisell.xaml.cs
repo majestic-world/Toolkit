@@ -67,7 +67,7 @@ public partial class CreateMultisell : UserControl
             Text = $"{id}-{count}",
             FontFamily = new FontFamily("Consolas,Courier New,monospace"),
             FontSize = 12,
-            Foreground = new SolidColorBrush(Color.Parse("#B0B0B0")),
+            Foreground = new SolidColorBrush(Color.Parse("#C8C8C8")),
             VerticalAlignment = VerticalAlignment.Center
         };
 
@@ -76,7 +76,7 @@ public partial class CreateMultisell : UserControl
             Text = "\uE711",
             FontFamily = new FontFamily("Segoe MDL2 Assets"),
             FontSize = 10,
-            Foreground = new SolidColorBrush(Color.Parse("#707070")),
+            Foreground = new SolidColorBrush(Color.Parse("#A0A0A0")),
             VerticalAlignment = VerticalAlignment.Center,
             Margin = new Avalonia.Thickness(4, 0, 0, 0)
         };

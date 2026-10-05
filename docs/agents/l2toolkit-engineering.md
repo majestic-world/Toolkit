@@ -29,7 +29,8 @@ L2Toolkit is a single-window Avalonia desktop suite for Lineage 2 server develop
 
 - Keep common control appearance in the `ControlTheme` resources in `App.axaml`; controls use the shared ComboBox, Button, TextBox, `PrimaryButton`, and `SecondaryButton` themes.
 - Keep button themes free of `BrushTransition`; it produces a two-tone hover flicker.
-- Preserve the dark professional visual language: `#2C2C2C` base, blue accent around `#5B9BD5`, and page subtitles in `#E8E8E8`.
+- Preserve the dark professional visual language and its restrained surface steps: titlebar/sidebar `#2A2A2A`, page `#333333`, panels/cards `#2C2C2C`, recessed inputs `#252525`, borders `#464646`, blue accent around `#5B9BD5`, page subtitles in `#E8E8E8`, secondary labels no darker than `#B8B8B8`. Get contrast from text and borders, not from large gaps between surface grays.
+- Fluent's `TextBox` watermark has a template-fixed `Opacity="0.5"`; `App.axaml` sets its foreground to white so the effective placeholder stays legible (~`#929292` on inputs). Do not set watermark colors per page.
 - The custom titlebar supports drag-to-move and double-click maximize. Do not replace that behavior when changing window chrome.
 
 ### Shared runtime services

@@ -365,7 +365,7 @@ public partial class SystemMsgColor : UserControl
             FontFamily               = new FontFamily("Consolas,Courier New,monospace"),
             FontSize                 = 12,
             VerticalContentAlignment = VerticalAlignment.Center,
-            Background               = new SolidColorBrush(Color.Parse("#2A2A2A")),
+            Background               = new SolidColorBrush(Color.Parse("#252525")),
             Foreground               = new SolidColorBrush(Color.Parse("#D4D4D4")),
             BorderBrush              = new SolidColorBrush(Color.Parse("#464646")),
             BorderThickness          = new Thickness(1),
@@ -622,7 +622,7 @@ public partial class SystemMsgColor : UserControl
             {
                 Width      = 9,
                 Height     = 9,
-                Foreground = new SolidColorBrush(Color.Parse("#6B7280")),
+                Foreground = new SolidColorBrush(Color.Parse("#A0A7B4")),
                 Data       = Geometry.Parse("M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z")
             }
         };
@@ -830,7 +830,7 @@ public partial class SystemMsgColor : UserControl
             FontSize                 = 12,
             Height                   = 28,
             VerticalContentAlignment = VerticalAlignment.Center,
-            Background               = new SolidColorBrush(Color.Parse("#2A2A2A")),
+            Background               = new SolidColorBrush(Color.Parse("#252525")),
             Foreground               = new SolidColorBrush(Color.Parse("#D4D4D4")),
             BorderBrush              = new SolidColorBrush(Color.Parse("#464646")),
             BorderThickness          = new Thickness(1),
