@@ -18,7 +18,7 @@
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="6"
+                            CornerRadius="4"
                             Padding="{TemplateBinding Padding}">
                         <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
@@ -40,7 +40,7 @@
     <UserControl.Styles>
         <Style Selector="TextBox.FilePath /template/ Border#PART_BorderElement">
             <Setter Property="Background" Value="{DynamicResource ThemeSurfaceInput}"/>
-            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="CornerRadius" Value="4"/>
         </Style>
         <Style Selector="TextBox.FilePath:pointerover /template/ Border#PART_BorderElement">
             <Setter Property="Background" Value="{DynamicResource ThemeSurfaceFieldHover}"/>

@@ -19,7 +19,7 @@
                            Background="{TemplateBinding Background}"
                            BorderBrush="{TemplateBinding BorderBrush}"
                            BorderThickness="{TemplateBinding BorderThickness}"
-                           CornerRadius="6"
+                           CornerRadius="4"
                            Padding="{TemplateBinding Padding}">
                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
@@ -40,7 +40,7 @@
            <Setter Property="Foreground" Value="{DynamicResource ThemeTextIcon}"/>
            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderMuted}"/>
            <Setter Property="BorderThickness" Value="1"/>
-           <Setter Property="CornerRadius" Value="6"/>
+           <Setter Property="CornerRadius" Value="4"/>
            <Setter Property="Cursor" Value="Hand"/>
            <Setter Property="HorizontalContentAlignment" Value="Center"/>
            <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -72,7 +72,7 @@
            <Setter Property="Background" Value="{DynamicResource ThemeAccentTintHover}"/>
            <Setter Property="Foreground" Value="{DynamicResource ThemeAccent}"/>
            <Setter Property="BorderThickness" Value="0"/>
-           <Setter Property="CornerRadius" Value="6"/>
+           <Setter Property="CornerRadius" Value="4"/>
            <Setter Property="Cursor" Value="Hand"/>
            <Setter Property="HorizontalContentAlignment" Value="Center"/>
            <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -99,7 +99,7 @@
            <Setter Property="Background" Value="Transparent"/>
            <Setter Property="Foreground" Value="{DynamicResource ThemeTextHint}"/>
            <Setter Property="BorderThickness" Value="0"/>
-           <Setter Property="CornerRadius" Value="6"/>
+           <Setter Property="CornerRadius" Value="4"/>
            <Setter Property="Cursor" Value="Hand"/>
            <Setter Property="HorizontalContentAlignment" Value="Center"/>
            <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -187,7 +187,7 @@
                    <TextBlock Text="ARQUIVO" Foreground="{DynamicResource ThemeTextHint}" FontSize="10"
                               FontWeight="Bold" LetterSpacing="1"/>
                    <Grid ColumnDefinitions="*,12,Auto">
-                       <Border Grid.Column="0" Background="{DynamicResource ThemeSurfaceCard}" CornerRadius="6"
+                       <Border Grid.Column="0" Background="{DynamicResource ThemeSurfaceCard}" CornerRadius="4"
                                BorderBrush="{DynamicResource ThemeBorder}" BorderThickness="1" Height="34"
                                Cursor="Hand" PointerPressed="FilePath_OnClick">
                            <TextBox x:Name="FilePath" IsReadOnly="True"
@@ -306,7 +306,7 @@
                    <TextBlock Text="ARQUIVO" Foreground="{DynamicResource ThemeTextHint}" FontSize="10"
                               FontWeight="Bold" LetterSpacing="1"/>
                    <Grid ColumnDefinitions="*,12,Auto">
-                       <Border Grid.Column="0" Background="{DynamicResource ThemeSurfaceCard}" CornerRadius="6"
+                       <Border Grid.Column="0" Background="{DynamicResource ThemeSurfaceCard}" CornerRadius="4"
                                BorderBrush="{DynamicResource ThemeBorder}" BorderThickness="1" Height="34"
                                Cursor="Hand" PointerPressed="ArmorFilePath_OnClick">
                            <TextBox x:Name="ArmorFilePath" IsReadOnly="True"

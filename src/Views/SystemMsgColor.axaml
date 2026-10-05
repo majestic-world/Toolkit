@@ -19,7 +19,7 @@
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="6"
+                            CornerRadius="4"
                             Padding="{TemplateBinding Padding}">
                         <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
@@ -41,7 +41,7 @@
             <Setter Property="Foreground" Value="{DynamicResource ThemeTextIcon}"/>
             <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderMuted}"/>
             <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="CornerRadius" Value="4"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -96,7 +96,7 @@
 
             <!-- File loader -->
             <Grid ColumnDefinitions="*,10,Auto">
-                <Border Grid.Column="0" Background="{DynamicResource ThemeSurfaceCard}" CornerRadius="6"
+                <Border Grid.Column="0" Background="{DynamicResource ThemeSurfaceCard}" CornerRadius="4"
                         BorderBrush="{DynamicResource ThemeBorder}" BorderThickness="1" Height="32"
                         Cursor="Hand" PointerPressed="FilePath_OnClick">
                     <TextBox x:Name="FilePath" IsReadOnly="True" Focusable="False"
@@ -227,7 +227,7 @@
 
                 <!-- Search -->
                 <Grid ColumnDefinitions="*,8,Auto">
-                    <Border Grid.Column="0" Background="{DynamicResource ThemeSurfaceCard}" CornerRadius="6"
+                    <Border Grid.Column="0" Background="{DynamicResource ThemeSurfaceCard}" CornerRadius="4"
                             BorderBrush="{DynamicResource ThemeBorder}" BorderThickness="1" Height="32">
                         <TextBox x:Name="SearchBox"
                                  Background="Transparent" BorderThickness="0"

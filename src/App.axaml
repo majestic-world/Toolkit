@@ -22,6 +22,8 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceInclude Source="/Themes/Colors.axaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <!-- Raio único de botões e campos; os controles Fluent sem tema próprio usam este recurso. -->
+            <CornerRadius x:Key="ControlCornerRadius">4</CornerRadius>
             <ControlTheme x:Key="{x:Type ComboBoxItem}" TargetType="ComboBoxItem">
                 <Setter Property="Background" Value="Transparent"/>
                 <Setter Property="Foreground" Value="{DynamicResource ThemeTextBody}"/>
@@ -81,7 +83,7 @@
                                     Background="{TemplateBinding Background}"
                                     BorderBrush="{TemplateBinding BorderBrush}"
                                     BorderThickness="{TemplateBinding BorderThickness}"
-                                    CornerRadius="5"
+                                    CornerRadius="4"
                                     MinHeight="32"/>
                             <ContentPresenter Grid.Column="0"
                                               Margin="{TemplateBinding Padding}"
@@ -104,7 +106,7 @@
                                 <Border Background="{DynamicResource ThemeSurfaceInput}"
                                         BorderBrush="{DynamicResource ThemeBorder}"
                                         BorderThickness="1"
-                                        CornerRadius="5"
+                                        CornerRadius="4"
                                         Padding="0,4"
                                         HorizontalAlignment="Stretch">
                                     <ScrollViewer HorizontalScrollBarVisibility="Disabled"
@@ -142,7 +144,7 @@
                     <ControlTemplate>
                         <Border x:Name="PART_Border"
                                 Background="{TemplateBinding Background}"
-                                CornerRadius="8"
+                                CornerRadius="4"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}">
                             <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
@@ -183,7 +185,7 @@
                     <ControlTemplate>
                         <Border x:Name="PART_Border"
                                 Background="{TemplateBinding Background}"
-                                CornerRadius="8"
+                                CornerRadius="4"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}">
                             <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
@@ -224,7 +226,7 @@
                     <ControlTemplate>
                         <Border x:Name="PART_Border"
                                 Background="{TemplateBinding Background}"
-                                CornerRadius="8"
+                                CornerRadius="4"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}">
                             <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
