@@ -1,0 +1,379 @@
+<UserControl x:Class="L2Toolkit.Views.SearchIcon"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="#333333">
+
+    <UserControl.Resources>
+        <ControlTheme x:Key="GhostButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#C8C8C8"/>
+            <Setter Property="BorderBrush" Value="#6A6A6A"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border x:Name="PART_Border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="6"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Content="{TemplateBinding Content}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+            <Style Selector="^:pointerover /template/ Border#PART_Border">
+                <Setter Property="Background" Value="#3C3C3C"/>
+                <Setter Property="BorderBrush" Value="#808080"/>
+            </Style>
+            <Style Selector="^:pressed /template/ Border#PART_Border">
+                <Setter Property="Background" Value="#282828"/>
+            </Style>
+        </ControlTheme>
+    </UserControl.Resources>
+
+    <UserControl.Styles>
+
+        <Style Selector="TextBox.FormField">
+            <Setter Property="Background" Value="#252525"/>
+            <Setter Property="Foreground" Value="#D4D4D4"/>
+            <Setter Property="CaretBrush" Value="#5B9BD5"/>
+            <Setter Property="SelectionBrush" Value="#1E3A5A"/>
+            <Setter Property="BorderBrush" Value="#464646"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="Padding" Value="10,7"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+        <Style Selector="TextBox.FormField /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="#252525"/>
+            <Setter Property="CornerRadius" Value="5"/>
+        </Style>
+        <Style Selector="TextBox.FormField:focus /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="#5B9BD5"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+        <Style Selector="TextBox.FormField:pointerover /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="#707070"/>
+        </Style>
+
+        <!-- ComboBox dark theme -->
+        <Style Selector="ComboBox">
+            <Setter Property="Background" Value="#252525"/>
+            <Setter Property="Foreground" Value="#D4D4D4"/>
+            <Setter Property="BorderBrush" Value="#464646"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10,7"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+        <Style Selector="ComboBox:pointerover">
+            <Setter Property="BorderBrush" Value="#707070"/>
+        </Style>
+        <Style Selector="ComboBox:focus">
+            <Setter Property="BorderBrush" Value="#5B9BD5"/>
+        </Style>
+        <Style Selector="ComboBoxItem">
+            <Setter Property="Background" Value="#252525"/>
+            <Setter Property="Foreground" Value="#D4D4D4"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        </Style>
+        <Style Selector="ComboBoxItem:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#414141"/>
+        </Style>
+
+    </UserControl.Styles>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+
+            <!-- ── Page Header ──────────────────────────────────────── -->
+            <StackPanel Margin="32,28,32,24" Spacing="3">
+                <TextBlock Text="Pesquisar Ícone"
+                           FontSize="22"
+                           FontWeight="SemiBold"
+                           Foreground="#E8E8E8"/>
+                <TextBlock Text="Pesquisa do ícone do item pelo Id"
+                           FontSize="13"
+                           Foreground="#E8E8E8"/>
+            </StackPanel>
+
+            <!-- ── Aviso: pasta de assets não configurada ───────────── -->
+            <Border x:Name="AssetsWarnBorder"
+                    Margin="32,0,32,12"
+                    Background="#1A0C00"
+                    BorderBrush="#7A4A00"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Padding="14,10"
+                    Cursor="Hand"
+                    IsVisible="False">
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                    <PathIcon Data="M12 2L1 21h22L12 2zm1 16h-2v-2h2v2zm0-4h-2V9h2v5z" Width="14" Height="14" Foreground="#E07020" VerticalAlignment="Center"/>
+                    <TextBlock Text="Pasta de assets não configurada."
+                               Foreground="#E07020"
+                               FontSize="13"
+                               VerticalAlignment="Center"/>
+                    <TextBlock Text="Clique aqui para configurar."
+                               Foreground="#E07020"
+                               FontSize="13"
+                               FontWeight="SemiBold"
+                               TextDecorations="Underline"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+
+            <!-- ── Banner de erro ────────────────────────────────────── -->
+            <Border x:Name="NotificacaoBorder"
+                    Margin="32,0,32,16"
+                    Background="#1F1A0A"
+                    BorderBrush="#5C4A00"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Padding="14,10"
+                    IsVisible="False">
+                <Grid ColumnDefinitions="Auto,*">
+                    <PathIcon Grid.Column="0" Data="M12 2L1 21h22L12 2zm1 16h-2v-2h2v2zm0-4h-2V9h2v5z" Width="14" Height="14" Foreground="#D4A017" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                    <TextBlock Grid.Column="1"
+                               x:Name="StatusNotificacao"
+                               Foreground="#D4A017"
+                               TextWrapping="Wrap"
+                               FontSize="13"
+                               VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
+
+            <!-- ── Painel 01: Pesquisa ───────────────────────────────── -->
+            <Border Margin="32,0"
+                    CornerRadius="8"
+                    Background="#2C2C2C"
+                    BorderBrush="#464646"
+                    BorderThickness="1"
+                    ClipToBounds="True">
+                <Grid ColumnDefinitions="4,*">
+                    <Border Grid.Column="0" Background="#5B9BD5"/>
+                    <StackPanel Grid.Column="1">
+
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="20,0"
+                                    Height="52"
+                                    Spacing="14"
+                                    VerticalAlignment="Center">
+                            <TextBlock Text="PESQUISA"
+                                       FontSize="11"
+                                       FontWeight="Bold"
+                                       Foreground="#B8B8B8"
+                                       LetterSpacing="1.5"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <Border Height="1" Background="#464646"/>
+
+                        <StackPanel Margin="20,16,20,20" Spacing="14">
+
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="ID do item"
+                                           FontSize="12"
+                                           Foreground="#B8B8B8"
+                                           FontWeight="Medium"/>
+                                <TextBox x:Name="ItemId"
+                                         Classes="FormField"
+                                         Height="38"
+                                         Padding="12,0"
+                                         VerticalContentAlignment="Center"
+                                         FontFamily="Consolas,Courier New,monospace"
+                                         FontSize="12"
+                                         Watermark="Ex: 49"/>
+                            </StackPanel>
+
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Tipo do item"
+                                           FontSize="12"
+                                           Foreground="#B8B8B8"
+                                           FontWeight="Medium"/>
+                                <ComboBox x:Name="ItemType" SelectedIndex="0">
+                                    <ComboBoxItem HorizontalAlignment="Stretch" Content="Weapon"/>
+                                    <ComboBoxItem HorizontalAlignment="Stretch" Content="Armor"/>
+                                    <ComboBoxItem HorizontalAlignment="Stretch" Content="Items"/>
+                                    <ComboBoxItem HorizontalAlignment="Stretch" Content="Skills"/>
+                                </ComboBox>
+                            </StackPanel>
+
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- ── Ação: Pesquisar (separador de pipeline) ───────────── -->
+            <Grid Margin="32,16" ColumnDefinitions="*,Auto,*">
+                <Border Grid.Column="0"
+                        Height="1"
+                        Background="#464646"
+                        VerticalAlignment="Center"/>
+                <Button Grid.Column="1"
+                        x:Name="SearchButton"
+                        Click="SearchButton_OnClick"
+                        Height="40"
+                        Padding="28,0"
+                        Margin="20,0"
+                        Theme="{StaticResource SecondaryButton}">
+                    <StackPanel Orientation="Horizontal" Spacing="9">
+                        <PathIcon Foreground="White" Data="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" Width="14" Height="14" VerticalAlignment="Center"/>
+                        <TextBlock Text="Pesquisar"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <Border Grid.Column="2"
+                        Height="1"
+                        Background="#464646"
+                        VerticalAlignment="Center"/>
+            </Grid>
+
+            <!-- ── Painel 02: Resultado ──────────────────────────────── -->
+            <Border Margin="32,0,32,32"
+                    CornerRadius="8"
+                    Background="#2C2C2C"
+                    BorderBrush="#464646"
+                    BorderThickness="1"
+                    ClipToBounds="True">
+                <Grid ColumnDefinitions="4,*">
+                    <Border Grid.Column="0" Background="#5B9BD5"/>
+                    <StackPanel Grid.Column="1">
+
+                        <Grid ColumnDefinitions="Auto,Auto,*,Auto"
+                              Margin="20,0"
+                              Height="52">
+                            <TextBlock Grid.Column="2"
+                                       x:Name="StatusBox"
+                                       Text="RESULTADO"
+                                       FontSize="11"
+                                       FontWeight="Bold"
+                                       Foreground="#B8B8B8"
+                                       LetterSpacing="1.5"
+                                       VerticalAlignment="Center"/>
+                            <!-- Badge "Copiado!" -->
+                            <Border Grid.Column="3"
+                                    x:Name="CopyBlock"
+                                    IsVisible="False"
+                                    Background="#142B1A"
+                                    BorderBrush="#245230"
+                                    BorderThickness="1"
+                                    CornerRadius="5"
+                                    Padding="10,4"
+                                    VerticalAlignment="Center">
+                                <StackPanel Orientation="Horizontal" Spacing="5">
+                                    <PathIcon Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Width="10" Height="10" Foreground="#52C97A" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Copiado!"
+                                               FontSize="11"
+                                               FontWeight="Medium"
+                                               Foreground="#52C97A"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+
+                        <Border Height="1" Background="#464646"/>
+
+                        <StackPanel Margin="20,16,20,20" Spacing="12">
+
+                            <!-- Nome -->
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Nome"
+                                           FontSize="12"
+                                           Foreground="#B8B8B8"
+                                           FontWeight="Medium"/>
+                                <Grid ColumnDefinitions="*,8,Auto">
+                                    <TextBox x:Name="NameOutput"
+                                             Grid.Column="0"
+                                             Classes="FormField"
+                                             IsReadOnly="True"
+                                             Height="38"
+                                             Padding="12,0"
+                                             VerticalContentAlignment="Center"
+                                             FontFamily="Consolas,Courier New,monospace"
+                                             FontSize="12"
+                                             Watermark="—"/>
+                                    <Button Grid.Column="2"
+                                            x:Name="CopyNameButton"
+                                            Click="CopyNameButton_OnClick"
+                                            Height="38"
+                                            Padding="14,0"
+                                            Theme="{StaticResource GhostButton}">
+                                        <PathIcon Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" Foreground="#B8B8B8" Width="14" Height="14" VerticalAlignment="Center"/>
+                                    </Button>
+                                </Grid>
+                            </StackPanel>
+
+                            <!-- Icon -->
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Icon"
+                                           FontSize="12"
+                                           Foreground="#B8B8B8"
+                                           FontWeight="Medium"/>
+                                <Grid ColumnDefinitions="*,8,Auto">
+                                    <TextBox x:Name="IconOutput"
+                                             Grid.Column="0"
+                                             Classes="FormField"
+                                             IsReadOnly="True"
+                                             Height="38"
+                                             Padding="12,0"
+                                             VerticalContentAlignment="Center"
+                                             FontFamily="Consolas,Courier New,monospace"
+                                             FontSize="12"
+                                             Watermark="—"/>
+                                    <Button Grid.Column="2"
+                                            x:Name="CopyIconButton"
+                                            Click="CopyIconButton_OnClick"
+                                            Height="38"
+                                            Padding="14,0"
+                                            Theme="{StaticResource GhostButton}">
+                                        <PathIcon Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" Foreground="#B8B8B8" Width="14" Height="14" VerticalAlignment="Center"/>
+                                    </Button>
+                                </Grid>
+                            </StackPanel>
+
+                            <!-- Icon Panel -->
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Icon Panel"
+                                           FontSize="12"
+                                           Foreground="#B8B8B8"
+                                           FontWeight="Medium"/>
+                                <Grid ColumnDefinitions="*,8,Auto">
+                                    <TextBox x:Name="IconPanelOutput"
+                                             Grid.Column="0"
+                                             Classes="FormField"
+                                             IsReadOnly="True"
+                                             Height="38"
+                                             Padding="12,0"
+                                             VerticalContentAlignment="Center"
+                                             FontFamily="Consolas,Courier New,monospace"
+                                             FontSize="12"
+                                             Watermark="—"/>
+                                    <Button Grid.Column="2"
+                                            x:Name="CopyIconPanelButton"
+                                            Click="CopyIconPanelButton_OnClick"
+                                            Height="38"
+                                            Padding="14,0"
+                                            Theme="{StaticResource GhostButton}">
+                                        <PathIcon Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" Foreground="#B8B8B8" Width="14" Height="14" VerticalAlignment="Center"/>
+                                    </Button>
+                                </Grid>
+                            </StackPanel>
+
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

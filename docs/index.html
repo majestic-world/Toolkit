@@ -560,16 +560,20 @@
                 </div>
                 <h3 style="margin-top:1.7rem">Estrutura do projeto</h3>
                 <pre class="tree"><code>L2Toolkit/
-├── pages/        # Páginas UI (AXAML + code-behind)
-├── DatReader/    # Parser .dat e compressão .l2dat
-├── Tables/       # Recursos .l2dat embutidos
-├── database/     # Persistência (AppDatabase)
-├── DataMap/      # Modelos de dados
-├── Parse/        # Parsers de texto
-├── ProcessData/  # Transformação (game → XML)
-├── Utilities/    # Logs, Parser, MaterialType
-├── images/       # Recursos de imagem
-└── docs/         # Documentação</code></pre>
+├── src/              # Projeto do app (pasta = namespace L2Toolkit.*)
+│   ├── Views/        # Janela principal e páginas (AXAML + code-behind)
+│   ├── ClientDat/    # Leitura/escrita de client .dat e compressão .l2dat
+│   ├── Models/       # Modelos de dados
+│   ├── Parsing/      # Parsers de texto
+│   ├── Processing/   # Transformação (game → XML), Geodata
+│   ├── Settings/     # Persistência (AppDatabase)
+│   ├── Utilities/    # Logs, Parser, MaterialType, TableManager
+│   ├── Data/         # Dados embutidos (H5Names, Presets)
+│   ├── Tables/       # Recursos .l2dat embutidos
+│   └── Assets/       # Ícones
+├── packaging/        # Inno Setup (Windows) e Info.plist (macOS)
+├── scripts/          # build.ps1 usado pelo Makefile
+└── docs/             # Documentação</code></pre>
             </section>
 
             <section class="doc-section" id="build">

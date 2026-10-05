@@ -1,0 +1,722 @@
+<UserControl x:Class="L2Toolkit.Views.SkinBuilder"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="#333333">
+
+    <UserControl.Resources>
+        <ControlTheme x:Key="GhostButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#C8C8C8"/>
+            <Setter Property="BorderBrush" Value="#6A6A6A"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border x:Name="PART_Border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="6"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Content="{TemplateBinding Content}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+            <Style Selector="^:pointerover /template/ Border#PART_Border">
+                <Setter Property="Background" Value="#3C3C3C"/>
+                <Setter Property="BorderBrush" Value="#808080"/>
+            </Style>
+            <Style Selector="^:pressed /template/ Border#PART_Border">
+                <Setter Property="Background" Value="#282828"/>
+            </Style>
+        </ControlTheme>
+    </UserControl.Resources>
+
+    <UserControl.Styles>
+
+        <Style Selector="TextBox.FormField">
+            <Setter Property="Background" Value="#252525"/>
+            <Setter Property="Foreground" Value="#D4D4D4"/>
+            <Setter Property="CaretBrush" Value="#5B9BD5"/>
+            <Setter Property="SelectionBrush" Value="#1E3A5A"/>
+            <Setter Property="BorderBrush" Value="#464646"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="Padding" Value="10,7"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+        <Style Selector="TextBox.FormField /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="#252525"/>
+            <Setter Property="CornerRadius" Value="5"/>
+        </Style>
+        <Style Selector="TextBox.FormField:focus /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="#5B9BD5"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+        <Style Selector="TextBox.FormField:pointerover /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="#707070"/>
+        </Style>
+
+        <Style Selector="TextBox.Code /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="#252525"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        <Style Selector="TextBox.Code:focus /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="#252525"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        <Style Selector="TextBox.Code:pointerover /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="#252525"/>
+        </Style>
+
+        <!-- ComboBox dark theme -->
+        <Style Selector="ComboBox">
+            <Setter Property="Background" Value="#252525"/>
+            <Setter Property="Foreground" Value="#D4D4D4"/>
+            <Setter Property="BorderBrush" Value="#464646"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10,7"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+        <Style Selector="ComboBox:pointerover">
+            <Setter Property="BorderBrush" Value="#707070"/>
+        </Style>
+        <Style Selector="ComboBox:focus">
+            <Setter Property="BorderBrush" Value="#5B9BD5"/>
+        </Style>
+        <Style Selector="ComboBoxItem">
+            <Setter Property="Background" Value="#252525"/>
+            <Setter Property="Foreground" Value="#D4D4D4"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        </Style>
+        <Style Selector="ComboBoxItem:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#414141"/>
+        </Style>
+
+    </UserControl.Styles>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel>
+
+            <!-- ── Page Header ──────────────────────────────────────── -->
+            <StackPanel Margin="32,28,32,24" Spacing="3">
+                <TextBlock Text="Skin Builder"
+                           FontSize="22"
+                           FontWeight="SemiBold"
+                           Foreground="#E8E8E8"/>
+                <TextBlock Text="Gerador de skins para Appearance System (Live)"
+                           FontSize="13"
+                           Foreground="#E8E8E8"/>
+            </StackPanel>
+
+            <!-- ── Banner de erro ────────────────────────────────────── -->
+            <Border x:Name="NotificacaoBorder"
+                    Margin="32,0,32,16"
+                    Background="#1F1A0A"
+                    BorderBrush="#5C4A00"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Padding="14,10"
+                    IsVisible="False">
+                <Grid ColumnDefinitions="Auto,*">
+                    <PathIcon Grid.Column="0" Data="M12 2L1 21h22L12 2zm1 16h-2v-2h2v2zm0-4h-2V9h2v5z" Width="14" Height="14" Foreground="#D4A017" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                    <TextBlock Grid.Column="1"
+                               x:Name="StatusNotificacao"
+                               Foreground="#D4A017"
+                               TextWrapping="Wrap"
+                               FontSize="13"
+                               VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
+
+            <!-- ── Painel 01: Configurações ──────────────────────────── -->
+            <Border Margin="32,0"
+                    CornerRadius="8"
+                    Background="#2C2C2C"
+                    BorderBrush="#464646"
+                    BorderThickness="1"
+                    ClipToBounds="True">
+                <Grid ColumnDefinitions="4,*">
+                    <Border Grid.Column="0" Background="#5B9BD5"/>
+                    <StackPanel Grid.Column="1">
+
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="20,0"
+                                    Height="52"
+                                    Spacing="14"
+                                    VerticalAlignment="Center">
+                            <TextBlock Text="CONFIGURAÇÕES"
+                                       FontSize="11"
+                                       FontWeight="Bold"
+                                       Foreground="#B8B8B8"
+                                       LetterSpacing="1.5"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <Border Height="1" Background="#464646"/>
+
+                        <StackPanel Margin="20,16,20,20" Spacing="14">
+
+                            <!-- Tipo de processamento -->
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Tipo de processamento"
+                                           FontSize="12"
+                                           Foreground="#B8B8B8"
+                                           FontWeight="Medium"/>
+                                <ComboBox x:Name="TypeProcess"
+                                          SelectedIndex="0"
+                                          SelectionChanged="TypeProcess_OnSelectionChanged">
+                                    <ComboBoxItem HorizontalAlignment="Stretch">Weapons</ComboBoxItem>
+                                    <ComboBoxItem HorizontalAlignment="Stretch">Armor</ComboBoxItem>
+                                </ComboBox>
+                            </StackPanel>
+
+                            <!-- Preset -->
+                            <StackPanel x:Name="PresetPanel" Spacing="6" IsVisible="False">
+                                <TextBlock Text="Preset"
+                                           FontSize="12"
+                                           Foreground="#B8B8B8"
+                                           FontWeight="Medium"/>
+                                <ComboBox x:Name="PresetComboBox"
+                                          PlaceholderText="Selecione um preset..."
+                                          SelectionChanged="PresetComboBox_OnSelectionChanged"/>
+                            </StackPanel>
+
+                            <!-- IDs dos itens -->
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="IDs dos itens (separados por ; ou intervalo com ...)"
+                                           FontSize="12"
+                                           Foreground="#B8B8B8"
+                                           FontWeight="Medium"/>
+                                <TextBox x:Name="ProcessClientId"
+                                         Classes="FormField"
+                                         Height="38"
+                                         Padding="12,0"
+                                         VerticalContentAlignment="Center"
+                                         FontFamily="Consolas,Courier New,monospace"
+                                         FontSize="12"
+                                         Watermark="Ex: 100;101;102 ou 100...150"/>
+                            </StackPanel>
+
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- ── Ação: Gerar (separador de pipeline) ──────────────── -->
+            <Grid Margin="32,16" ColumnDefinitions="*,Auto,*">
+                <Border Grid.Column="0"
+                        Height="1"
+                        Background="#464646"
+                        VerticalAlignment="Center"/>
+                <StackPanel Grid.Column="1"
+                            Orientation="Horizontal"
+                            Spacing="10"
+                            Margin="20,0">
+                    <Button x:Name="GerarButton"
+                            Click="GerarButton_OnClick"
+                            Height="40"
+                            Padding="28,0"
+                            Theme="{StaticResource SecondaryButton}">
+                        <StackPanel Orientation="Horizontal" Spacing="9">
+                            <PathIcon Foreground="White" Data="M8 5v14l11-7z" Width="14" Height="14" VerticalAlignment="Center"/>
+                            <TextBlock Text="Gerar Dados"
+                                       FontSize="13"
+                                       FontWeight="SemiBold"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="ResetButton"
+                            Click="ResetButton_OnClick"
+                            Height="40"
+                            Padding="20,0"
+                            Theme="{StaticResource GhostButton}">
+                        <StackPanel Orientation="Horizontal" Spacing="9">
+                            <PathIcon Foreground="#C8C8C8" Data="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z" Width="14" Height="14" VerticalAlignment="Center"/>
+                            <TextBlock Text="Resetar"
+                                       FontSize="13"
+                                       FontWeight="SemiBold"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+                <Border Grid.Column="2"
+                        Height="1"
+                        Background="#464646"
+                        VerticalAlignment="Center"/>
+            </Grid>
+
+            <!-- ── Painel 02: Dados GRP + Nomes (2 colunas) ──────────── -->
+            <Border Margin="32,0"
+                    CornerRadius="8"
+                    Background="#2C2C2C"
+                    BorderBrush="#464646"
+                    BorderThickness="1"
+                    ClipToBounds="True">
+                <Grid ColumnDefinitions="4,*">
+                    <Border Grid.Column="0" Background="#5B9BD5"/>
+                    <StackPanel Grid.Column="1">
+
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="20,0"
+                                    Height="52"
+                                    Spacing="14"
+                                    VerticalAlignment="Center">
+                            <TextBlock Text="DADOS GRP + NOMES"
+                                       FontSize="11"
+                                       FontWeight="Bold"
+                                       Foreground="#B8B8B8"
+                                       LetterSpacing="1.5"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <Border Height="1" Background="#464646"/>
+
+                        <Grid Margin="20,16,20,20" ColumnDefinitions="*,16,*">
+
+                            <!-- Coluna esquerda: Dados GRP -->
+                            <StackPanel Grid.Column="0" Spacing="8">
+                                <Grid ColumnDefinitions="*,Auto,Auto" Height="28">
+                                    <TextBlock Grid.Column="0"
+                                               Text="DADOS GRP"
+                                               FontSize="11"
+                                               FontWeight="SemiBold"
+                                               Foreground="#B8B8B8"
+                                               LetterSpacing="1"
+                                               VerticalAlignment="Center"/>
+                                    <Border Grid.Column="1"
+                                            x:Name="GrpCopyData"
+                                            IsVisible="False"
+                                            Background="#142B1A"
+                                            BorderBrush="#245230"
+                                            BorderThickness="1"
+                                            CornerRadius="4"
+                                            Padding="8,3"
+                                            VerticalAlignment="Center"
+                                            Margin="0,0,8,0">
+                                        <StackPanel Orientation="Horizontal" Spacing="4">
+                                            <PathIcon Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Width="10" Height="10" Foreground="#52C97A" VerticalAlignment="Center"/>
+                                            <TextBlock Text="Copiado!"
+                                                       FontSize="10"
+                                                       Foreground="#52C97A"
+                                                       VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <Button Grid.Column="2"
+                                            x:Name="CopiarClienteButton"
+                                            Click="CopiarClienteButton_OnClick"
+                                            Height="28"
+                                            Padding="12,0"
+                                            Theme="{StaticResource GhostButton}">
+                                        <StackPanel Orientation="Horizontal" Spacing="6">
+                                            <PathIcon Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" Foreground="#B8B8B8" Width="12" Height="12" VerticalAlignment="Center"/>
+                                            <TextBlock Text="Copiar"
+                                                       FontSize="11"
+                                                       FontWeight="Medium"
+                                                       VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+                                </Grid>
+                                <TextBox x:Name="ClientTextBox"
+                                         Classes="Code"
+                                         AcceptsReturn="True"
+                                         TextWrapping="Wrap"
+                                         Height="200"
+                                         Padding="14,12"
+                                         BorderThickness="0"
+                                         Background="#252525"
+                                         Foreground="#9CDCFE"
+                                         CaretBrush="#5B9BD5"
+                                         SelectionBrush="#1E3A5A"
+                                         FontFamily="Consolas,Courier New,monospace"
+                                         FontSize="12"
+                                         IsReadOnly="True"
+                                         Watermark="Dados GRP aparecerão aqui..."/>
+                            </StackPanel>
+
+                            <!-- Coluna direita: Nomes -->
+                            <StackPanel Grid.Column="2" Spacing="8">
+                                <Grid ColumnDefinitions="*,Auto,Auto" Height="28">
+                                    <TextBlock Grid.Column="0"
+                                               Text="NOMES"
+                                               FontSize="11"
+                                               FontWeight="SemiBold"
+                                               Foreground="#B8B8B8"
+                                               LetterSpacing="1"
+                                               VerticalAlignment="Center"/>
+                                    <Border Grid.Column="1"
+                                            x:Name="NameCopyContent"
+                                            IsVisible="False"
+                                            Background="#142B1A"
+                                            BorderBrush="#245230"
+                                            BorderThickness="1"
+                                            CornerRadius="4"
+                                            Padding="8,3"
+                                            VerticalAlignment="Center"
+                                            Margin="0,0,8,0">
+                                        <StackPanel Orientation="Horizontal" Spacing="4">
+                                            <PathIcon Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Width="10" Height="10" Foreground="#52C97A" VerticalAlignment="Center"/>
+                                            <TextBlock Text="Copiado!"
+                                                       FontSize="10"
+                                                       Foreground="#52C97A"
+                                                       VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <Button Grid.Column="2"
+                                            x:Name="CopiarServidorButton"
+                                            Click="CopiarServidorButton_OnClick"
+                                            Height="28"
+                                            Padding="12,0"
+                                            Theme="{StaticResource GhostButton}">
+                                        <StackPanel Orientation="Horizontal" Spacing="6">
+                                            <PathIcon Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" Foreground="#B8B8B8" Width="12" Height="12" VerticalAlignment="Center"/>
+                                            <TextBlock Text="Copiar"
+                                                       FontSize="11"
+                                                       FontWeight="Medium"
+                                                       VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+                                </Grid>
+                                <TextBox x:Name="NameData"
+                                         Classes="Code"
+                                         AcceptsReturn="True"
+                                         TextWrapping="Wrap"
+                                         Height="200"
+                                         Padding="14,12"
+                                         BorderThickness="0"
+                                         Background="#252525"
+                                         Foreground="#9CDCFE"
+                                         CaretBrush="#5B9BD5"
+                                         SelectionBrush="#1E3A5A"
+                                         FontFamily="Consolas,Courier New,monospace"
+                                         FontSize="12"
+                                         IsReadOnly="True"
+                                         Watermark="Nomes aparecerão aqui..."/>
+                            </StackPanel>
+
+                        </Grid>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- ── Painel 03: Dados XML ───────────────────────────────── -->
+            <Border Margin="32,16,32,0"
+                    CornerRadius="8"
+                    Background="#2C2C2C"
+                    BorderBrush="#464646"
+                    BorderThickness="1"
+                    ClipToBounds="True">
+                <Grid ColumnDefinitions="4,*">
+                    <Border Grid.Column="0" Background="#5B9BD5"/>
+                    <StackPanel Grid.Column="1">
+
+                        <Grid ColumnDefinitions="Auto,Auto,*,Auto,Auto"
+                              Margin="20,0"
+                              Height="52">
+                            <TextBlock Grid.Column="2"
+                                       Text="DADOS XML"
+                                       FontSize="11"
+                                       FontWeight="Bold"
+                                       Foreground="#B8B8B8"
+                                       LetterSpacing="1.5"
+                                       VerticalAlignment="Center"/>
+                            <Border Grid.Column="3"
+                                    x:Name="XmlCopied"
+                                    IsVisible="False"
+                                    Background="#142B1A"
+                                    BorderBrush="#245230"
+                                    BorderThickness="1"
+                                    CornerRadius="5"
+                                    Padding="10,4"
+                                    VerticalAlignment="Center"
+                                    Margin="0,0,10,0">
+                                <StackPanel Orientation="Horizontal" Spacing="5">
+                                    <PathIcon Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Width="10" Height="10" Foreground="#52C97A" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Copiado!"
+                                               FontSize="11"
+                                               Foreground="#52C97A"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+                            <Button Grid.Column="4"
+                                    x:Name="CopyXml"
+                                    Click="CopyXml_OnClick"
+                                    Height="30"
+                                    Padding="14,0"
+                                    VerticalAlignment="Center"
+                                    Theme="{StaticResource GhostButton}">
+                                <StackPanel Orientation="Horizontal" Spacing="7">
+                                    <PathIcon Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" Foreground="#B8B8B8" Width="12" Height="12" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Copiar"
+                                               FontSize="12"
+                                               FontWeight="Medium"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+
+                        <Border Height="1" Background="#464646"/>
+
+                        <TextBox x:Name="XmlData"
+                                 Classes="Code"
+                                 AcceptsReturn="True"
+                                 TextWrapping="Wrap"
+                                 Height="240"
+                                 Padding="20,14"
+                                 BorderThickness="0"
+                                 Background="#252525"
+                                 Foreground="#9CDCFE"
+                                 CaretBrush="#5B9BD5"
+                                 SelectionBrush="#1E3A5A"
+                                 FontFamily="Consolas,Courier New,monospace"
+                                 FontSize="12"
+                                 IsReadOnly="True"
+                                 Watermark="Dados XML aparecerão aqui..."/>
+
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- ── Painel 04: Skins + Status (2 colunas) ─────────────── -->
+            <Border Margin="32,16,32,0"
+                    CornerRadius="8"
+                    Background="#2C2C2C"
+                    BorderBrush="#464646"
+                    BorderThickness="1"
+                    ClipToBounds="True">
+                <Grid ColumnDefinitions="4,*">
+                    <Border Grid.Column="0" Background="#5B9BD5"/>
+                    <StackPanel Grid.Column="1">
+
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="20,0"
+                                    Height="52"
+                                    Spacing="14"
+                                    VerticalAlignment="Center">
+                            <TextBlock Text="SKINS + STATUS"
+                                       FontSize="11"
+                                       FontWeight="Bold"
+                                       Foreground="#B8B8B8"
+                                       LetterSpacing="1.5"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <Border Height="1" Background="#464646"/>
+
+                        <Grid Margin="20,16,20,20" ColumnDefinitions="*,16,*">
+
+                            <!-- Coluna esquerda: Skins Data -->
+                            <StackPanel Grid.Column="0" Spacing="8">
+                                <Grid ColumnDefinitions="*,Auto,Auto" Height="28">
+                                    <TextBlock Grid.Column="0"
+                                               Text="SKINS DATA"
+                                               FontSize="11"
+                                               FontWeight="SemiBold"
+                                               Foreground="#B8B8B8"
+                                               LetterSpacing="1"
+                                               VerticalAlignment="Center"/>
+                                    <Border Grid.Column="1"
+                                            x:Name="ButtonCopySkins"
+                                            IsVisible="False"
+                                            Background="#142B1A"
+                                            BorderBrush="#245230"
+                                            BorderThickness="1"
+                                            CornerRadius="4"
+                                            Padding="8,3"
+                                            VerticalAlignment="Center"
+                                            Margin="0,0,8,0">
+                                        <StackPanel Orientation="Horizontal" Spacing="4">
+                                            <PathIcon Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Width="10" Height="10" Foreground="#52C97A" VerticalAlignment="Center"/>
+                                            <TextBlock Text="Copiado!"
+                                                       FontSize="10"
+                                                       Foreground="#52C97A"
+                                                       VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <Button Grid.Column="2"
+                                            x:Name="CopySkins"
+                                            Click="CopySkins_OnClick"
+                                            Height="28"
+                                            Padding="12,0"
+                                            Theme="{StaticResource GhostButton}">
+                                        <StackPanel Orientation="Horizontal" Spacing="6">
+                                            <PathIcon Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" Foreground="#B8B8B8" Width="12" Height="12" VerticalAlignment="Center"/>
+                                            <TextBlock Text="Copiar"
+                                                       FontSize="11"
+                                                       FontWeight="Medium"
+                                                       VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+                                </Grid>
+                                <TextBox x:Name="SkinData"
+                                         Classes="Code"
+                                         AcceptsReturn="True"
+                                         TextWrapping="Wrap"
+                                         Height="160"
+                                         Padding="14,12"
+                                         BorderThickness="0"
+                                         Background="#252525"
+                                         Foreground="#9CDCFE"
+                                         CaretBrush="#5B9BD5"
+                                         SelectionBrush="#1E3A5A"
+                                         FontFamily="Consolas,Courier New,monospace"
+                                         FontSize="12"
+                                         IsReadOnly="True"
+                                         Watermark="Skins IDs aparecerão aqui..."/>
+                            </StackPanel>
+
+                            <!-- Coluna direita: Status Data -->
+                            <StackPanel Grid.Column="2" Spacing="8">
+                                <Grid ColumnDefinitions="*,Auto,Auto" Height="28">
+                                    <TextBlock Grid.Column="0"
+                                               Text="STATUS DATA"
+                                               FontSize="11"
+                                               FontWeight="SemiBold"
+                                               Foreground="#B8B8B8"
+                                               LetterSpacing="1"
+                                               VerticalAlignment="Center"/>
+                                    <Border Grid.Column="1"
+                                            x:Name="ButtonCopyStatus"
+                                            IsVisible="False"
+                                            Background="#142B1A"
+                                            BorderBrush="#245230"
+                                            BorderThickness="1"
+                                            CornerRadius="4"
+                                            Padding="8,3"
+                                            VerticalAlignment="Center"
+                                            Margin="0,0,8,0">
+                                        <StackPanel Orientation="Horizontal" Spacing="4">
+                                            <PathIcon Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Width="10" Height="10" Foreground="#52C97A" VerticalAlignment="Center"/>
+                                            <TextBlock Text="Copiado!"
+                                                       FontSize="10"
+                                                       Foreground="#52C97A"
+                                                       VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <Button Grid.Column="2"
+                                            x:Name="CopyStatus"
+                                            Click="CopyStatus_OnClick"
+                                            Height="28"
+                                            Padding="12,0"
+                                            Theme="{StaticResource GhostButton}">
+                                        <StackPanel Orientation="Horizontal" Spacing="6">
+                                            <PathIcon Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" Foreground="#B8B8B8" Width="12" Height="12" VerticalAlignment="Center"/>
+                                            <TextBlock Text="Copiar"
+                                                       FontSize="11"
+                                                       FontWeight="Medium"
+                                                       VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+                                </Grid>
+                                <TextBox x:Name="StatusData"
+                                         Classes="Code"
+                                         AcceptsReturn="True"
+                                         TextWrapping="Wrap"
+                                         Height="160"
+                                         Padding="14,12"
+                                         BorderThickness="0"
+                                         Background="#252525"
+                                         Foreground="#9CDCFE"
+                                         CaretBrush="#5B9BD5"
+                                         SelectionBrush="#1E3A5A"
+                                         FontFamily="Consolas,Courier New,monospace"
+                                         FontSize="12"
+                                         IsReadOnly="True"
+                                         Watermark="Status data aparecerá aqui..."/>
+                            </StackPanel>
+
+                        </Grid>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- ── Painel 05: Logs ───────────────────────────────────── -->
+            <Border Margin="32,16,32,32"
+                    CornerRadius="8"
+                    Background="#2C2C2C"
+                    BorderBrush="#464646"
+                    BorderThickness="1"
+                    ClipToBounds="True">
+                <Grid ColumnDefinitions="4,*">
+                    <Border Grid.Column="0" Background="#5B9BD5"/>
+                    <StackPanel Grid.Column="1">
+
+                        <Grid ColumnDefinitions="Auto,Auto,*,Auto,Auto"
+                              Margin="20,0"
+                              Height="52">
+                            <TextBlock Grid.Column="2"
+                                       Text="LOGS"
+                                       FontSize="11"
+                                       FontWeight="Bold"
+                                       Foreground="#B8B8B8"
+                                       LetterSpacing="1.5"
+                                       VerticalAlignment="Center"/>
+                            <Border Grid.Column="3"
+                                    x:Name="ItensCopiadoTextBlock"
+                                    IsVisible="False"
+                                    Background="#142B1A"
+                                    BorderBrush="#245230"
+                                    BorderThickness="1"
+                                    CornerRadius="5"
+                                    Padding="10,4"
+                                    VerticalAlignment="Center"
+                                    Margin="0,0,10,0">
+                                <StackPanel Orientation="Horizontal" Spacing="5">
+                                    <PathIcon Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Width="10" Height="10" Foreground="#52C97A" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Copiado!"
+                                               FontSize="11"
+                                               Foreground="#52C97A"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+                            <Button Grid.Column="4"
+                                    x:Name="CopiarItensButton"
+                                    Click="CopiarItensButton_OnClick"
+                                    Height="30"
+                                    Padding="14,0"
+                                    VerticalAlignment="Center"
+                                    Theme="{StaticResource GhostButton}">
+                                <StackPanel Orientation="Horizontal" Spacing="7">
+                                    <PathIcon Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" Foreground="#B8B8B8" Width="12" Height="12" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Copiar"
+                                               FontSize="12"
+                                               FontWeight="Medium"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+
+                        <Border Height="1" Background="#464646"/>
+
+                        <TextBox x:Name="LogContent"
+                                 Classes="Code"
+                                 AcceptsReturn="True"
+                                 TextWrapping="Wrap"
+                                 Height="160"
+                                 Padding="20,14"
+                                 BorderThickness="0"
+                                 Background="#252525"
+                                 Foreground="#B0C4B1"
+                                 CaretBrush="#5B9BD5"
+                                 SelectionBrush="#1E3A5A"
+                                 FontFamily="Consolas,Courier New,monospace"
+                                 FontSize="12"
+                                 IsReadOnly="True"
+                                 Watermark="Logs de processamento aparecerão aqui..."/>
+
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

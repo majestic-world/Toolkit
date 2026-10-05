@@ -6,7 +6,7 @@ Read `CONTEXT.md` first. This reference preserves the engineering constraints th
 
 L2Toolkit is a single-window Avalonia desktop suite for Lineage 2 server developers. It has more than fifteen data-processing tools and targets .NET 10 with nullable reference types enabled.
 
-- Build/run in development: `dotnet run`
+- Build/run in development: `dotnet run --project src` (`dotnet build` at the root uses `L2Toolkit.sln`)
 - Release publish: `make build` (Windows), `make macos`, `make linux`, `make dist` (Windows + Inno Setup installer). They run `scripts/build.ps1` under PowerShell 7; Native AOT must run on the target OS. Publish output: `build/Release/<rid>/publish/`; tool logs: `build/logs/<rid>/`.
 - Build outputs: `Directory.Build.props` sends everything to `build/` (`build/<Config>/[<rid>/]`, intermediates in `build/obj/`, no target-framework folder). There are no `bin/` or `obj/` folders; do not reintroduce paths to them.
 - App version: `APP_VERSION` in `.env` is the only source. `L2Toolkit.csproj` turns it into the assembly/file/informational version (the titlebar badge reads the informational version), and `scripts/build.ps1` passes it to Inno Setup (`/DMyAppVersion`) and the macOS bundle `Info.plist`. Do not hardcode versions elsewhere; `Setup.iss` refuses to compile without the define.
@@ -14,18 +14,25 @@ L2Toolkit is a single-window Avalonia desktop suite for Lineage 2 server develop
 
 ## UI and application structure
 
-`pages/MainWindow` owns the sidebar and content region. Its generic navigation path caches each `UserControl`, assigns it to `MainContent.Content`, then marks the selected sidebar button. New tools normally remain an AXAML plus code-behind pair under `pages/`.
+The repository root holds only repository-level files (`L2Toolkit.sln`, `Directory.Build.props`, `Makefile`, `.env`, docs). App code lives in `src/`, where each folder is a namespace under `L2Toolkit` (folder `Views/` → `L2Toolkit.Views`). Keep that folder/namespace match for new code. Installer inputs live in `packaging/` (`windows/Setup.iss`, `macos/Info.plist`).
 
-| Location | Responsibility |
-| --- | --- |
-| `pages/` | Avalonia views and tool-specific UI logic |
-| `DataMap/` | Plain C# models and records |
-| `Parse/` | Low-level text parsers for game data |
-| `ProcessData/` | Transformations from game formats to XML or text |
-| `DatReader/` | Client `.dat` reading/writing and `.l2dat` packing |
-| `Tables/` | Embedded `.l2dat` tables shipped with the app |
-| `Utilities/` | Shared UI and data helpers, including logs and table loading |
-| `database/` | User settings persistence |
+`Views/MainWindow` owns the sidebar and content region. Its generic navigation path caches each `UserControl`, assigns it to `MainContent.Content`, then marks the selected sidebar button. New tools normally remain an AXAML plus code-behind pair under `Views/`.
+
+| Location (`src/`) | Namespace | Responsibility |
+| --- | --- | --- |
+| `App.axaml`, `Program.cs` | `L2Toolkit` | Application entry and shared control themes |
+| `Views/` | `L2Toolkit.Views` | Avalonia views (main window and tool pages) and tool-specific UI logic |
+| `Models/` | `L2Toolkit.Models` | Plain C# models and records |
+| `Parsing/` | `L2Toolkit.Parsing` | Low-level text parsers for game data |
+| `Processing/` | `L2Toolkit.Processing` (`.Geodata`) | Transformations from game formats to XML or text |
+| `ClientDat/` | `L2Toolkit.ClientDat` | Client `.dat` reading/writing and `.l2dat` packing |
+| `Settings/` | `L2Toolkit.Settings` | User settings persistence (`AppDatabase`) |
+| `Utilities/` | `L2Toolkit.Utilities` | Shared UI and data helpers, including logs and table loading |
+| `Data/` | `L2Toolkit.Data` | Built-in data (`H5Names`, embedded `Presets.dat`) |
+| `Tables/` | — | Embedded `.l2dat` tables shipped with the app |
+| `Assets/` | — | App and installer icons |
+
+Embedded resource names follow the folder under the project (`L2Toolkit.Tables.<name>.l2dat`, `L2Toolkit.Data.Presets.dat`); moving `Tables/` or `Data/` changes those names and breaks their loaders.
 
 ### Avalonia conventions
 
@@ -96,10 +103,10 @@ For every file marked `isSafePackage="true"` in the structure XML, the serialize
 
 ### Adding a directly editable file type
 
-1. Add a mutable `DatXxx` record under `DatReader/`.
+1. Add a mutable `DatXxx` record under `ClientDat/`.
 2. Add matching `ParseXxx(byte[])` and `SerializeXxx(List<DatXxx>)` methods to `L2DatFile`.
 3. Check the structure XML for `isSafePackage`; append the SafePackage footer when required.
-4. Add the filename pattern to `SupportedPatterns` in `pages/AppSettingsControl.xaml.cs` so Test DAT discovers it.
+4. Add the filename pattern to `SupportedPatterns` in `Views/AppSettingsControl.xaml.cs` so Test DAT discovers it.
 5. Wire page load through decrypt → parse → UI mapping, and save through UI mapping → serialize → encrypt → write.
 
-`pages/AppSettingsControl.xaml.cs` also owns Test DAT and the L2DAT Converter. Test DAT discovers supported files, loads the Name table before dependent files, and exports text. The converter packs text to `.l2dat` and verifies the round trip byte for byte.
+`Views/AppSettingsControl.xaml.cs` also owns Test DAT and the L2DAT Converter. Test DAT discovers supported files, loads the Name table before dependent files, and exports text. The converter packs text to `.l2dat` and verifies the round trip byte for byte.

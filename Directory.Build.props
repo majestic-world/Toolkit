@@ -5,7 +5,8 @@
          build/logs/<rid>/                  logs de scripts/build.ps1
        Precisa estar aqui: BaseIntermediateOutputPath deve ser definido antes dos props do SDK. -->
   <PropertyGroup>
-    <BuildRoot>$(MSBuildThisFileDirectory)build\</BuildRoot>
+    <RepoRoot>$(MSBuildThisFileDirectory)</RepoRoot>
+    <BuildRoot>$(RepoRoot)build\</BuildRoot>
     <BaseOutputPath>$(BuildRoot)</BaseOutputPath>
     <BaseIntermediateOutputPath>$(BuildRoot)obj\</BaseIntermediateOutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>

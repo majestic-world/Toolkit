@@ -1,0 +1,54 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ApplicationIcon>Assets\4game_icon.ico</ApplicationIcon>
+
+    <!-- Informações do executável -->
+    <Company>Majestic World Studio</Company>
+    <Product>Lineage Toolkit</Product>
+    <Description>Lineage Toolkit</Description>
+    <Copyright>Copyright © 2025 Majestic World Studio</Copyright>
+    <!-- Versão única do app: APP_VERSION em .env na raiz (lida aqui, em scripts/build.ps1 e repassada ao Setup.iss). -->
+    <AppEnvFile>$(RepoRoot).env</AppEnvFile>
+    <AppVersion Condition="Exists('$(AppEnvFile)')">$([System.Text.RegularExpressions.Regex]::Match($([System.IO.File]::ReadAllText('$(AppEnvFile)')), '(?m)(?&lt;=^APP_VERSION=)[0-9.]+').Value)</AppVersion>
+    <Version>$(AppVersion)</Version>
+    <FileVersion>$(AppVersion)</FileVersion>
+    <AssemblyVersion>$(AppVersion)</AssemblyVersion>
+    <InformationalVersion>$(AppVersion)</InformationalVersion>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+    <AssemblyName>L2 Toolkit</AssemblyName>
+    <Nullable>enable</Nullable>
+    <NoWarn>$(NoWarn);IL2104</NoWarn>
+  </PropertyGroup>
+
+  <!-- ═══ macOS App Bundle ═══ -->
+  <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+    <CFBundleIdentifier>com.majesticworld.l2toolkit</CFBundleIdentifier>
+    <CFBundleName>L2 Toolkit</CFBundleName>
+    <CFBundleDisplayName>L2 Toolkit</CFBundleDisplayName>
+    <CFBundleShortVersionString>$(AppVersion)</CFBundleShortVersionString>
+    <CFBundleVersion>$(AppVersion)</CFBundleVersion>
+  </PropertyGroup>
+
+  <Target Name="ValidateAppVersion" BeforeTargets="BeforeBuild;GenerateAssemblyInfo">
+    <Error Condition="'$(AppVersion)' == ''" Text="APP_VERSION ausente ou inválido em $(AppEnvFile). Use o formato APP_VERSION=3.8.0." />
+  </Target>
+
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.2.0" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.2.0" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.0" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.0" />
+    <PackageReference Include="MsBox.Avalonia" Version="3.0.0-rc2" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.119" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+    <PackageReference Include="Tmds.DBus.Protocol" Version="0.21.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Tables\*.l2dat" />
+    <EmbeddedResource Include="Data\Presets.dat" />
+  </ItemGroup>
+</Project>

@@ -3,7 +3,7 @@
 .SYNOPSIS
     Publishes L2 Toolkit as a Native AOT app and optionally packages its installer.
 .DESCRIPTION
-    windows: dotnet publish win-<arch>; -Installer runs Inno Setup (Setup.iss).
+    windows: dotnet publish win-<arch>; -Installer runs Inno Setup (packaging/windows/Setup.iss).
     macos:   dotnet publish osx-<arch>, assembles and ad-hoc signs "L2 Toolkit.app";
              -Installer creates the .dmg with create-dmg.
     linux:   dotnet publish linux-<arch>.
@@ -31,7 +31,8 @@ Import-Module (Join-Path $PSScriptRoot 'BuildConsole.psm1') -Force
 
 $root = Split-Path -Parent $PSScriptRoot
 $appName = 'L2 Toolkit'
-$project = Join-Path $root 'L2Toolkit.csproj'
+$project = Join-Path $root 'src/L2Toolkit.csproj'
+$assets = Join-Path $root 'src/Assets'
 $rid = @{ windows = 'win'; macos = 'osx'; linux = 'linux' }[$Platform] + "-$Architecture"
 $publishDir = Join-Path $root "build/$Configuration/$rid/publish"
 $logs = Join-Path $root "build/logs/$rid"
@@ -173,7 +174,7 @@ try {
             }
             Start-BuildStep 'Creating installer'
             $log = Join-Path $logs 'installer.log'
-            $arguments = @("/DMyAppVersion=$version", (Join-Path $root 'Setup.iss'))
+            $arguments = @("/DMyAppVersion=$version", (Join-Path $root 'packaging/windows/Setup.iss'))
             if ((Invoke-BuildTool $iscc $arguments $log $root 'Inno Setup') -ne 0) {
                 Stop-BuildStep 'failed' (Get-DiagnosticLog $log) 'Error|error'
                 throw "Inno Setup failed. See $log"
@@ -192,10 +193,10 @@ try {
             $files | Copy-Item -Destination $macosDir
             [IO.File]::SetUnixFileMode((Join-Path $macosDir $appName), [IO.UnixFileMode]'UserRead, UserWrite, UserExecute, GroupRead, GroupExecute, OtherRead, OtherExecute')
             # Info.plist versions follow APP_VERSION in the bundle copy.
-            $plist = [IO.File]::ReadAllText((Join-Path $root 'Info.plist'))
+            $plist = [IO.File]::ReadAllText((Join-Path $root 'packaging/macos/Info.plist'))
             $plist = $plist -replace '(<key>CFBundle(ShortVersionString|Version)</key>\s*<string>)[^<]*', "`${1}$version"
             [IO.File]::WriteAllText((Join-Path $bundle 'Contents/Info.plist'), $plist)
-            Copy-Item -LiteralPath (Join-Path $root 'images/favicon.icns') -Destination $resourcesDir
+            Copy-Item -LiteralPath (Join-Path $assets 'favicon.icns') -Destination $resourcesDir
             Complete-BuildStep (Format-Count $files.Count 'file' 'files')
 
             Start-BuildStep 'Signing bundle (ad-hoc)'
@@ -217,7 +218,7 @@ try {
             $log = Join-Path $logs 'installer.log'
             $arguments = @(
                 '--volname', $appName,
-                '--volicon', (Join-Path $root 'images/favicon.icns'),
+                '--volicon', (Join-Path $assets 'favicon.icns'),
                 '--window-pos', '200', '120',
                 '--window-size', '560', '400',
                 '--icon-size', '128',
