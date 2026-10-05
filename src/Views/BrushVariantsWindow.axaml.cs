@@ -43,7 +43,7 @@ public partial class BrushVariantsWindow : Window
     public event Action<BrushSettings>? VariantChosen;
 
     /// <summary>Só para o designer do Avalonia.</summary>
-    public BrushVariantsWindow() : this(seed => new BrushSettings(seed, 0.5, 0.5, 0.5, 0.5, 0), () => 512)
+    public BrushVariantsWindow() : this(seed => new BrushSettings(seed, 0.5, 0.5, 0.5, 0.5, 0, 0), () => 512)
     {
     }
 

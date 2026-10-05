@@ -37,7 +37,7 @@ public partial class SplashComposeWindow : Window
             _debounce.Stop();
             Refresh();
         };
-        foreach (var slider in new[] { SpikesSlider, CracksSlider, ClawsSlider, DebrisSlider, SoftnessSlider, ScaleSlider, OffsetXSlider, OffsetYSlider })
+        foreach (var slider in new[] { SpikesSlider, CracksSlider, ClawsSlider, DebrisSlider, SoftnessSlider, SymmetrySlider, ScaleSlider, OffsetXSlider, OffsetYSlider })
             slider.ValueChanged += (_, _) => ScheduleRefresh();
         FillCheck.IsCheckedChanged += (_, _) =>
         {
@@ -71,7 +71,8 @@ public partial class SplashComposeWindow : Window
         CracksSlider.Value / 100,
         ClawsSlider.Value / 100,
         DebrisSlider.Value / 100,
-        SoftnessSlider.Value / 100);
+        SoftnessSlider.Value / 100,
+        SymmetrySlider.Value / 100);
 
     // ─── Entrada ──────────────────────────────────────────────────────────────
 

@@ -164,6 +164,14 @@
                         </Grid>
                         <Slider x:Name="SoftnessSlider" Minimum="0" Maximum="100" Value="30"/>
                     </StackPanel>
+                    <StackPanel>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Text="Simetria" Classes="Field"
+                                       ToolTip.Tip="Retângulo arredondado com pontas regulares, espelhado na vertical"/>
+                            <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #SymmetrySlider.Value, StringFormat={}{0:0}}"/>
+                        </Grid>
+                        <Slider x:Name="SymmetrySlider" Minimum="0" Maximum="100" Value="0"/>
+                    </StackPanel>
 
                     <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
                     <TextBlock Text="POSIÇÃO" Classes="Section"/>

@@ -10,8 +10,10 @@ namespace L2Toolkit.Processing.Brush;
 /// <summary>
 /// Parâmetros de um brush. As intensidades vão de 0 a 1; 0,5 é o estilo padrão das
 /// splash do L2. A mesma semente com as mesmas intensidades gera sempre o mesmo brush.
+/// <see cref="Symmetry"/> 0 é o brush orgânico de sempre; 1 é retangular arredondado,
+/// sem giro, com pontas miúdas e regulares e espelhado na vertical.
 /// </summary>
-public sealed record BrushSettings(int Seed, double Spikes, double Cracks, double Claws, double Debris, double Softness);
+public sealed record BrushSettings(int Seed, double Spikes, double Cracks, double Claws, double Debris, double Softness, double Symmetry);
 
 /// <summary>
 /// Gera brushes procedurais no estilo das bordas rasgadas das splash do Lineage 2:
@@ -158,6 +160,7 @@ public static class BrushGenerator
         private readonly PerlinNoise _noise;
         private readonly double[] _offsets = new double[12];
         private readonly double _rotation, _aspect, _baseRadius, _lobeAmp, _spikeAmp, _spikeFreq, _notchAmp, _crackFreq;
+        private readonly double _symmetry, _squareness, _tear;
 
         public Shape(BrushSettings settings)
         {
@@ -173,6 +176,18 @@ public static class BrushGenerator
             _spikeFreq = Range(random, 3.0, 5.0);
             _notchAmp = Range(random, 0.06, 0.14);
             _crackFreq = Range(random, 4, 6);
+
+            // Simetria: silhueta de superelipse (retângulo arredondado), sem giro nem lóbulos
+            // grandes, e muitas pontas pequenas no lugar de poucos espinhos e entalhes fundos.
+            // Os sorteios acima não mudam, então a semente continua sendo a mesma família.
+            _symmetry = Math.Clamp(settings.Symmetry, 0, 1);
+            _squareness = 2 + 2.5 * _symmetry;
+            _rotation *= 1 - _symmetry;
+            _lobeAmp *= 1 - 0.7 * _symmetry;
+            _notchAmp *= 1 - _symmetry;
+            _spikeFreq *= 1 + 1.6 * _symmetry;
+            _spikeAmp *= 1 - 0.35 * _symmetry;
+            _tear = 0.05 * (1 + 0.6 * _symmetry);
         }
 
         /// <summary>0 → nada, 0,5 → padrão, 1 → dobro.</summary>
@@ -184,7 +199,13 @@ public static class BrushGenerator
         private static double Range(Random random, double min, double max) => min + random.NextDouble() * (max - min);
 
         private double SmoothRadius(double angle)
-            => _baseRadius * (1 + _lobeAmp * _noise.Fbm(_offsets[0] + Math.Cos(angle) * 1.3, _offsets[1] + Math.Sin(angle) * 1.3, 3));
+        {
+            var radius = _baseRadius * (1 + _lobeAmp * _noise.Fbm(_offsets[0] + Math.Cos(angle) * 1.3, _offsets[1] + Math.Sin(angle) * 1.3, 3));
+            if (_symmetry == 0) return radius;
+            // Superelipse |x|^n + |y|^n = 1 em polar; n = 2 é o círculo.
+            var n = _squareness;
+            return radius * Math.Pow(Math.Pow(Math.Abs(Math.Cos(angle)), n) + Math.Pow(Math.Abs(Math.Sin(angle)), n), -1 / n);
+        }
 
         /// <summary>Raio do contorno no ângulo, periódico em θ (o ruído é amostrado num círculo).</summary>
         private double Radius(double angle)
@@ -196,43 +217,28 @@ public static class BrushGenerator
             return SmoothRadius(angle) + _spikeAmp * spikes - _notchAmp * notch + 0.008 * micro;
         }
 
+        /// <summary>
+        /// Raio onde a borda realmente fica depois do espelhamento do <see cref="FillRow"/>: no lado
+        /// esquerdo é a mistura com o raio do ângulo espelhado. Ancora os traços desenhados.
+        /// </summary>
+        private double MirroredRadius(Func<double, double> radius, double angle)
+            => _symmetry == 0 || Math.Cos(angle) >= 0
+                ? radius(angle)
+                : (1 - _symmetry) * radius(angle) + _symmetry * radius(Math.PI - angle);
+
         public void FillRow(byte[] pixels, int y, int width, Placement placement)
         {
             var pixel = 1.0 / placement.Half;
-            var cracks = Scale(_settings.Cracks);
             var softness = Math.Clamp(_settings.Softness, 0, 1);
             var softWidth = pixel * 0.5 + softness * 0.035;
             var v = placement.V(y);
             for (var x = 0; x < width; x++)
             {
                 var u = placement.U(x);
-                // Distorção do espaço: o contorno não fica perfeitamente radial.
-                var wu = u + 0.06 * _noise.Fbm(_offsets[8] + u * 2.2, _offsets[9] + v * 2.2, 3);
-                var wv = v + 0.06 * _noise.Fbm(_offsets[9] + u * 2.2, _offsets[8] + v * 2.2, 3);
-                var ru = wu * Math.Cos(_rotation) - wv * Math.Sin(_rotation);
-                var rv = (wu * Math.Sin(_rotation) + wv * Math.Cos(_rotation)) / _aspect;
-                var angle = Math.Atan2(rv, ru);
-                var body = Radius(angle) - Math.Sqrt(ru * ru + rv * rv);
-
-                if (body > -0.25)
-                {
-                    // Borda rasgada: ruído fino só perto do contorno.
-                    var band = Math.Exp(-Math.Pow(body / 0.08, 2));
-                    body += band * 0.05 * _noise.Fbm(_offsets[10] + u * 9, _offsets[11] + v * 9, 3);
-
-                    // Rachaduras: cortes estreitos em θ entrando da borda, com profundidade variável.
-                    if (cracks > 0)
-                    {
-                        var crack = Math.Pow(_noise.Ridged(_offsets[6] + Math.Cos(angle) * _crackFreq, _offsets[7] + Math.Sin(angle) * _crackFreq, 1), 80);
-                        var depth = 0.12 + 0.18 * (0.5 + 0.5 * _noise.Noise(_offsets[5] + Math.Cos(angle) * 2, _offsets[4] + Math.Sin(angle) * 2));
-                        body -= crack * depth * cracks;
-
-                        // Buracos só na faixa da borda; o miolo fica inteiro para a arte.
-                        var hole = _noise.Fbm(_offsets[11] + u * 6, _offsets[10] + v * 6, 3);
-                        var holeThreshold = 0.28 + (1 - Math.Min(cracks, 1)) * 0.3;
-                        if (body > 0 && body < 0.14 && hole > holeThreshold) body -= (hole - holeThreshold) * 0.9;
-                    }
-                }
+                // Espelho na vertical: o lado esquerdo mistura o campo com o do lado direito.
+                var body = Body(u, v);
+                if (_symmetry > 0 && u < 0)
+                    body = (1 - _symmetry) * body + _symmetry * Body(-u, v);
 
                 var alpha = Math.Clamp(body / (2 * softWidth) + 0.5, 0, 1);
                 if (softness > 0 && alpha > 0)
@@ -250,6 +256,39 @@ public static class BrushGenerator
             }
         }
 
+        /// <summary>Distância assinada até o contorno: positiva dentro do brush.</summary>
+        private double Body(double u, double v)
+        {
+            var cracks = Scale(_settings.Cracks);
+            // Distorção do espaço: o contorno não fica perfeitamente radial.
+            var wu = u + 0.06 * _noise.Fbm(_offsets[8] + u * 2.2, _offsets[9] + v * 2.2, 3);
+            var wv = v + 0.06 * _noise.Fbm(_offsets[9] + u * 2.2, _offsets[8] + v * 2.2, 3);
+            var ru = wu * Math.Cos(_rotation) - wv * Math.Sin(_rotation);
+            var rv = (wu * Math.Sin(_rotation) + wv * Math.Cos(_rotation)) / _aspect;
+            var angle = Math.Atan2(rv, ru);
+            var body = Radius(angle) - Math.Sqrt(ru * ru + rv * rv);
+            if (body <= -0.25) return body;
+
+            // Borda rasgada: ruído fino só perto do contorno.
+            var band = Math.Exp(-Math.Pow(body / 0.08, 2));
+            body += band * _tear * _noise.Fbm(_offsets[10] + u * 9, _offsets[11] + v * 9, 3);
+
+            // Rachaduras: cortes estreitos em θ entrando da borda, com profundidade variável.
+            if (cracks > 0)
+            {
+                var crack = Math.Pow(_noise.Ridged(_offsets[6] + Math.Cos(angle) * _crackFreq, _offsets[7] + Math.Sin(angle) * _crackFreq, 1), 80);
+                var depth = 0.12 + 0.18 * (0.5 + 0.5 * _noise.Noise(_offsets[5] + Math.Cos(angle) * 2, _offsets[4] + Math.Sin(angle) * 2));
+                body -= crack * depth * cracks;
+
+                // Buracos só na faixa da borda; o miolo fica inteiro para a arte. Espelhados
+                // eles viram "manchas de Rorschach", então a simetria os deixa mais raros.
+                var hole = _noise.Fbm(_offsets[11] + u * 6, _offsets[10] + v * 6, 3);
+                var holeThreshold = 0.28 + (1 - Math.Min(cracks, 1)) * 0.3 + 0.2 * _symmetry;
+                if (body > 0 && body < 0.14 && hole > holeThreshold) body -= (hole - holeThreshold) * 0.9;
+            }
+            return body;
+        }
+
         public void DrawStrokes(SKCanvas canvas, Placement placement)
         {
             using var ink = new SKPaint { Color = SKColors.Black, IsAntialias = true, Style = SKPaintStyle.Fill };
@@ -257,9 +296,37 @@ public static class BrushGenerator
             if (softness > 0)
                 ink.MaskFilter = SKMaskFilter.CreateBlur(SKBlurStyle.Normal, (float)(softness * placement.Half * 0.008));
 
-            DrawShards(canvas, placement, ink);
-            DrawClaws(canvas, placement, ink);
-            DrawDebris(canvas, placement, ink);
+            var mirror = Stream(4);
+            DrawShards(canvas, placement, ink, mirror);
+            DrawClaws(canvas, placement, ink, mirror);
+            DrawDebris(canvas, placement, ink, mirror);
+        }
+
+        /// <summary>
+        /// Com simetria, cada traço tem chance <c>Symmetry</c> de ser espelhado (<see cref="Fold"/>),
+        /// então a quantidade cai na mesma proporção para a densidade não dobrar.
+        /// </summary>
+        private int Thinned(int count) => _symmetry == 0 ? count : (int)Math.Round(count * (1 - _symmetry / 2));
+
+        /// <summary>
+        /// Sorteia se o traço é espelhado; se for, leva o ângulo para o lado direito e o
+        /// <see cref="Draw"/> desenha a cópia refletida. Sem simetria não consome sorteio.
+        /// </summary>
+        private bool Fold(Random mirror, ref double angle)
+        {
+            if (_symmetry == 0 || mirror.NextDouble() >= _symmetry) return false;
+            angle = Math.Atan2(Math.Sin(angle), Math.Abs(Math.Cos(angle)));
+            return true;
+        }
+
+        private static void Draw(SKCanvas canvas, Placement p, SKPaint ink, SKPath path, bool mirrored)
+        {
+            canvas.DrawPath(path, ink);
+            if (!mirrored) return;
+            canvas.Save();
+            canvas.Scale(-1, 1, (float)p.CenterX, 0);
+            canvas.DrawPath(path, ink);
+            canvas.Restore();
         }
 
         /// <summary>Ponto no contorno (sem a distorção) de volta às coordenadas da tela.</summary>
@@ -270,14 +337,15 @@ public static class BrushGenerator
         }
 
         /// <summary>Espinhos afunilados e levemente curvos saindo da borda.</summary>
-        private void DrawShards(SKCanvas canvas, Placement p, SKPaint ink)
+        private void DrawShards(SKCanvas canvas, Placement p, SKPaint ink, Random mirror)
         {
             var random = Stream(1);
-            var count = (int)Math.Round(random.Next(7, 16) * Scale(_settings.Spikes));
+            var count = Thinned((int)Math.Round(random.Next(7, 16) * Scale(_settings.Spikes)));
             for (var i = 0; i < count; i++)
             {
                 var angle = Range(random, 0, Math.PI * 2);
-                var (bu, bv) = EdgePoint(angle, Radius(angle) - 0.04);
+                var mirrored = Fold(mirror, ref angle);
+                var (bu, bv) = EdgePoint(angle, MirroredRadius(Radius, angle) - 0.04);
                 var direction = Math.Atan2(bv, bu) + Range(random, -0.6, 0.6);
                 var length = Math.Min(Range(random, 0.05, 0.18), 0.97 - Math.Sqrt(bu * bu + bv * bv));
                 var width = Range(random, 0.02, 0.07);
@@ -293,21 +361,24 @@ public static class BrushGenerator
                 path.QuadTo(p.ToPixel(midU + nu * width * 0.4, midV + nv * width * 0.4), p.ToPixel(tipU, tipV));
                 path.QuadTo(p.ToPixel(midU - nu * width * 0.4, midV - nv * width * 0.4), p.ToPixel(bu - nu * width, bv - nv * width));
                 path.Close();
-                canvas.DrawPath(path, ink);
+                Draw(canvas, p, ink, path, mirrored);
             }
         }
 
         /// <summary>Faixas em meia-lua afuniladas que acompanham o contorno.</summary>
-        private void DrawClaws(SKCanvas canvas, Placement p, SKPaint ink)
+        private void DrawClaws(SKCanvas canvas, Placement p, SKPaint ink, Random mirror)
         {
             var random = Stream(2);
-            var count = (int)Math.Round(random.Next(1, 4) * Scale(_settings.Claws));
+            var count = Thinned((int)Math.Round(random.Next(1, 4) * Scale(_settings.Claws)));
             const int segments = 48;
             for (var i = 0; i < count; i++)
             {
                 var start = Range(random, 0, Math.PI * 2);
+                var mirrored = Fold(mirror, ref start);
                 var sweep = Range(random, 0.6, 1.6) * (random.Next(2) == 0 ? -1 : 1);
-                var offset = Range(random, 0.98, 1.07);
+                // Com simetria a garra encosta no contorno: solta, ela vira uma moldura e alarga a
+                // caixa medida no "Ocupar a arte toda", deixando os cantos vazios.
+                var offset = Range(random, 0.98, 1.07) - 0.07 * _symmetry;
                 var maxWidth = Range(random, 0.05, 0.10);
 
                 using var path = new SKPath();
@@ -316,7 +387,7 @@ public static class BrushGenerator
                 {
                     var f = (double)k / segments;
                     var angle = start + sweep * f;
-                    var radius = Math.Min(SmoothRadius(angle) * offset, 0.95);
+                    var radius = Math.Min(MirroredRadius(SmoothRadius, angle) * offset, 0.95);
                     var width = maxWidth * Math.Pow(Math.Sin(Math.PI * f), 0.8);
                     var (ou, ov) = EdgePoint(angle, radius + width / 2);
                     var (iu, iv) = EdgePoint(angle, radius - width / 2);
@@ -326,20 +397,21 @@ public static class BrushGenerator
                 }
                 for (var k = segments; k >= 0; k--) path.LineTo(inner[k]);
                 path.Close();
-                canvas.DrawPath(path, ink);
+                Draw(canvas, p, ink, path, mirrored);
             }
         }
 
         /// <summary>Fragmentos poligonais soltos, mais densos junto da borda.</summary>
-        private void DrawDebris(SKCanvas canvas, Placement p, SKPaint ink)
+        private void DrawDebris(SKCanvas canvas, Placement p, SKPaint ink, Random mirror)
         {
             var random = Stream(3);
-            var count = (int)Math.Round(random.Next(10, 28) * Scale(_settings.Debris));
+            var count = Thinned((int)Math.Round(random.Next(10, 28) * Scale(_settings.Debris)));
             for (var i = 0; i < count; i++)
             {
                 var angle = Range(random, 0, Math.PI * 2);
+                var mirrored = Fold(mirror, ref angle);
                 var gap = Math.Pow(random.NextDouble(), 2) * 0.12 + 0.01;
-                var (cu, cv) = EdgePoint(angle, Math.Min(Radius(angle) + gap, 0.96));
+                var (cu, cv) = EdgePoint(angle, Math.Min(MirroredRadius(Radius, angle) + gap, 0.96));
                 var fragment = Range(random, 0.006, 0.025) * (1 - gap * 4);
                 var vertices = random.Next(3, 7);
 
@@ -352,7 +424,7 @@ public static class BrushGenerator
                     if (k == 0) path.MoveTo(point); else path.LineTo(point);
                 }
                 path.Close();
-                canvas.DrawPath(path, ink);
+                Draw(canvas, p, ink, path, mirrored);
             }
         }
     }

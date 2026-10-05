@@ -44,7 +44,7 @@ public partial class BrushGeneratorPage : UserControl
             RefreshPreview();
         };
 
-        foreach (var slider in new[] { SpikesSlider, CracksSlider, ClawsSlider, DebrisSlider, SoftnessSlider })
+        foreach (var slider in new[] { SpikesSlider, CracksSlider, ClawsSlider, DebrisSlider, SoftnessSlider, SymmetrySlider })
             slider.ValueChanged += (_, _) => SchedulePreview();
         SizeCombo.SelectionChanged += (_, _) => UpdateInfo();
         SeedBox.LostFocus += (_, _) => ApplySeedText();
@@ -64,7 +64,8 @@ public partial class BrushGeneratorPage : UserControl
         CracksSlider.Value / 100,
         ClawsSlider.Value / 100,
         DebrisSlider.Value / 100,
-        SoftnessSlider.Value / 100);
+        SoftnessSlider.Value / 100,
+        SymmetrySlider.Value / 100);
 
     // ─── Semente ──────────────────────────────────────────────────────────────
 
@@ -98,6 +99,7 @@ public partial class BrushGeneratorPage : UserControl
         ClawsSlider.Value = settings.Claws * 100;
         DebrisSlider.Value = settings.Debris * 100;
         SoftnessSlider.Value = settings.Softness * 100;
+        SymmetrySlider.Value = settings.Symmetry * 100;
         _previewDebounce.Stop();
         SetSeed(settings.Seed);
     }
