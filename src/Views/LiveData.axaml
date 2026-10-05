@@ -143,11 +143,11 @@
 
     </UserControl.Styles>
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-        <StackPanel>
+    <!-- Sem scroll: o resultado ocupa a altura que sobra (linha *). -->
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,*">
 
             <!-- ── Page Header ──────────────────────────────────────── -->
-            <StackPanel Margin="32,28,32,24" Spacing="3">
+            <StackPanel Grid.Row="0" Margin="32,24,32,16" Spacing="3">
                 <TextBlock Text="Live Data"
                            FontSize="22"
                            FontWeight="SemiBold"
@@ -159,7 +159,8 @@
 
             <!-- ── Banner de erro ────────────────────────────────────── -->
             <Border x:Name="NotificacaoBorder"
-                    Margin="32,0,32,16"
+                    Grid.Row="1"
+                    Margin="32,0,32,12"
                     Background="{DynamicResource ThemeWarningBg}"
                     BorderBrush="{DynamicResource ThemeWarningBorder}"
                     BorderThickness="1"
@@ -178,7 +179,7 @@
             </Border>
 
             <!-- ── Painel 01: Configurações ──────────────────────────── -->
-            <Border Margin="32,0"
+            <Border Grid.Row="2" Margin="32,0"
                     CornerRadius="8"
                     Background="{DynamicResource ThemeSurfaceCard}"
                     BorderBrush="{DynamicResource ThemeBorder}"
@@ -190,7 +191,7 @@
 
                         <StackPanel Orientation="Horizontal"
                                     Margin="20,0"
-                                    Height="52"
+                                    Height="40"
                                     Spacing="14"
                                     VerticalAlignment="Center">
                             <TextBlock Text="CONFIGURAÇÕES"
@@ -203,7 +204,7 @@
 
                         <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
 
-                        <StackPanel Margin="20,16,20,20" Spacing="14">
+                        <StackPanel Margin="20,12,20,16" Spacing="10">
 
                             <!-- Tipo de processamento e Preset na mesma linha; o tipo fica sempre à esquerda -->
                             <Grid ColumnDefinitions="*,14,*">
@@ -233,37 +234,40 @@
                                 </StackPanel>
                             </Grid>
 
-                            <!-- IDs dos itens -->
-                            <StackPanel Spacing="6">
-                                <TextBlock Text="IDs dos itens (separados por ; ou intervalo com ...)"
-                                           FontSize="12"
-                                           Foreground="{DynamicResource ThemeTextLabel}"
-                                           FontWeight="Medium"/>
-                                <TextBox x:Name="ProcessClientId"
-                                         Classes="FormField"
-                                         Height="38"
-                                         Padding="12,0"
-                                         VerticalContentAlignment="Center"
-                                         FontFamily="Consolas,Courier New,monospace"
-                                         FontSize="12"
-                                         Watermark="Ex: 100;101;102 ou 100...150"/>
-                            </StackPanel>
+                            <!-- IDs e, em Armor, o próximo ID do Item Set na mesma linha -->
+                            <Grid ColumnDefinitions="*,Auto">
+                                <StackPanel Grid.Column="0" Spacing="6">
+                                    <TextBlock Text="IDs dos itens (separados por ; ou intervalo com ...)"
+                                               FontSize="12"
+                                               Foreground="{DynamicResource ThemeTextLabel}"
+                                               FontWeight="Medium"/>
+                                    <TextBox x:Name="ProcessClientId"
+                                             Classes="FormField"
+                                             Height="34"
+                                             Padding="12,0"
+                                             VerticalContentAlignment="Center"
+                                             FontFamily="Consolas,Courier New,monospace"
+                                             FontSize="12"
+                                             Watermark="Ex: 100;101;102 ou 100...150"/>
+                                </StackPanel>
 
-                            <!-- Próximo ID do Item Set -->
-                            <StackPanel x:Name="SetItemIdPanel" Spacing="6" IsVisible="False">
-                                <TextBlock Text="Próximo ID do Item Set"
-                                           FontSize="12"
-                                           Foreground="{DynamicResource ThemeTextLabel}"
-                                           FontWeight="Medium"/>
-                                <TextBox x:Name="SetItemNextId"
-                                         Classes="FormField"
-                                         Height="38"
-                                         Padding="12,0"
-                                         VerticalContentAlignment="Center"
-                                         FontFamily="Consolas,Courier New,monospace"
-                                         FontSize="12"
-                                         Watermark="Ex: 30 (os IDs serão atribuídos sequencialmente)"/>
-                            </StackPanel>
+                                <StackPanel x:Name="SetItemIdPanel" Grid.Column="1" Width="260" Margin="14,0,0,0"
+                                            Spacing="6" IsVisible="False">
+                                    <TextBlock Text="Próximo ID do Item Set"
+                                               FontSize="12"
+                                               Foreground="{DynamicResource ThemeTextLabel}"
+                                               FontWeight="Medium"/>
+                                    <TextBox x:Name="SetItemNextId"
+                                             Classes="FormField"
+                                             Height="34"
+                                             Padding="12,0"
+                                             VerticalContentAlignment="Center"
+                                             FontFamily="Consolas,Courier New,monospace"
+                                             FontSize="12"
+                                             ToolTip.Tip="Os IDs serão atribuídos sequencialmente a partir deste"
+                                             Watermark="Ex: 30 (sequencial)"/>
+                                </StackPanel>
+                            </Grid>
 
                             <!-- Checkboxes lado a lado -->
                             <StackPanel Orientation="Horizontal" Spacing="28">
@@ -285,7 +289,7 @@
             </Border>
 
             <!-- ── Ação: Gerar (separador de pipeline) ──────────────── -->
-            <Grid Margin="32,16" ColumnDefinitions="*,Auto,*">
+            <Grid Grid.Row="3" Margin="32,12" ColumnDefinitions="*,Auto,*">
                 <Border Grid.Column="0"
                         Height="1"
                         Background="{DynamicResource ThemeBorder}"
@@ -296,7 +300,7 @@
                             Margin="20,0">
                     <Button x:Name="GerarButton"
                             Click="GerarButton_OnClick"
-                            Height="40"
+                            Height="36"
                             Padding="28,0"
                             Theme="{StaticResource SecondaryButton}">
                         <StackPanel Orientation="Horizontal" Spacing="9">
@@ -309,7 +313,7 @@
                     </Button>
                     <Button x:Name="ResetButton"
                             Click="ResetButton_OnClick"
-                            Height="40"
+                            Height="36"
                             Padding="20,0"
                             Theme="{StaticResource GhostButton}">
                         <StackPanel Orientation="Horizontal" Spacing="9">
@@ -328,7 +332,7 @@
             </Grid>
 
             <!-- ── Painel 02: Resultado em abas (uma área de texto por vez) ── -->
-            <Border Margin="32,0,32,32"
+            <Border Grid.Row="4" Margin="32,0,32,24"
                     CornerRadius="8"
                     Background="{DynamicResource ThemeSurfaceCard}"
                     BorderBrush="{DynamicResource ThemeBorder}"
@@ -336,9 +340,9 @@
                     ClipToBounds="True">
                 <Grid ColumnDefinitions="4,*">
                     <Border Grid.Column="0" Background="{DynamicResource ThemeAccent}"/>
-                    <StackPanel Grid.Column="1">
+                    <Grid Grid.Column="1" RowDefinitions="Auto,Auto,*">
 
-                        <Grid ColumnDefinitions="Auto,18,*,Auto,Auto" Margin="20,0,16,0">
+                        <Grid Grid.Row="0" ColumnDefinitions="Auto,18,*,Auto,Auto" Margin="20,0,16,0">
                             <TextBlock Grid.Column="0"
                                        Text="RESULTADO"
                                        FontSize="11"
@@ -395,10 +399,10 @@
                             </Button>
                         </Grid>
 
-                        <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
+                        <Border Grid.Row="1" Height="1" Background="{DynamicResource ThemeBorder}"/>
 
                         <!-- Uma área por aba; só a da aba ativa fica visível -->
-                        <Panel Height="320">
+                        <Panel Grid.Row="2" MinHeight="160">
                             <TextBox x:Name="ClientTextBox"
                                      Classes="Code"
                                      AcceptsReturn="True"
@@ -460,11 +464,8 @@
                                      Watermark="Dados XML aparecerão aqui..."/>
                         </Panel>
 
-                    </StackPanel>
+                    </Grid>
                 </Grid>
             </Border>
-
-
-        </StackPanel>
-    </ScrollViewer>
+    </Grid>
 </UserControl>
