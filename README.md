@@ -16,31 +16,47 @@ Acesse a documentação completa em:
 
 ---
 
-## Stack
-
-| Tecnologia   | Versão |
-|--------------|--------|
-| .NET         | 10.0   |
-| Avalonia UI  | 11.2   |
-| Native AOT   | —      |
-
----
-
 ## Build
 
-Requer PowerShell 7 (`pwsh`), GNU Make e o .NET 10 SDK. Todas as saídas de build ficam em `build/` (não há `bin/` nem `obj/`): `build/Debug/` e `build/Release/` para os binários, `build/obj/` para os intermediários. Os alvos abaixo publicam com Native AOT em `build/Release/<rid>/publish/`; os logs das ferramentas ficam em `build/logs/<rid>/`. O Native AOT não compila entre sistemas operacionais: cada plataforma precisa ser gerada no próprio sistema.
+### Requisitos
 
-O código do app fica em `src/` (cada pasta é um namespace `L2Toolkit.*`); os insumos dos instaladores ficam em `packaging/`. Para rodar em desenvolvimento: `make run` (equivale a `dotnet run --project src`).
+- .NET 10 SDK
+- PowerShell 7 (`pwsh`)
+- GNU Make
+- Inno Setup 6, só para `make dist`
+- `create-dmg` (`brew install create-dmg`), só para o `.dmg` do macOS
 
-| Comando | Resultado |
-|---|---|
-| `make build` | Windows (`win-x64`) |
-| `make macos` | macOS (`osx-arm64` ou `osx-x64`, conforme o Mac), com o bundle `L2 Toolkit.app` assinado ad-hoc |
-| `make linux` | Linux (`linux-x64` ou `linux-arm64`, conforme a máquina) |
-| `make dist` | Build Windows + instalador Inno Setup em `publish/Setup/L2 Toolkit Installer.exe` (requer Inno Setup 6) |
+### Comandos
 
-O instalador `.dmg` do macOS sai de `pwsh scripts/build.ps1 -Platform macos -Installer` (requer `brew install create-dmg`). Use `-Architecture x64|arm64` para outra arquitetura do mesmo sistema.
+- `make run`: roda o app em desenvolvimento (`dotnet run --project src`)
+- `make build`: publica para Windows (`win-x64`)
+- `make macos`: publica para macOS (`osx-arm64` ou `osx-x64`, conforme o Mac) e monta o `L2 Toolkit.app` assinado ad-hoc
+- `make linux`: publica para Linux (`linux-x64` ou `linux-arm64`, conforme a máquina)
+- `make dist`: publica para Windows e gera o instalador Inno Setup
 
-A versão do app vem de `APP_VERSION` no `.env`: ela vira a versão do executável e do badge na titlebar, e o `make dist` a repassa ao instalador Inno Setup.
+O Native AOT não compila entre sistemas operacionais: gere cada plataforma no próprio sistema. Para o instalador `.dmg` do macOS, rode `pwsh scripts/build.ps1 -Platform macos -Installer`; para outra arquitetura do mesmo sistema, acrescente `-Architecture x64` ou `-Architecture arm64`.
+
+### Saídas
+
+Tudo fica em `build/`, sem pastas `bin/` ou `obj/`:
+
+- `build/Debug/`: binários de desenvolvimento
+- `build/Release/<rid>/publish/`: executável Native AOT
+- `build/Release/win-x64/publish/Setup/L2 Toolkit Installer.exe`: instalador do Windows
+- `build/logs/<rid>/`: logs das ferramentas de build
+- `build/obj/`: arquivos intermediários
+
+### Versão
+
+A versão vem de `APP_VERSION` no `.env`. Ela vira a versão do executável e do badge na titlebar, e o `make dist` a repassa ao instalador.
+
+### Estrutura
+
+- `src/`: código do app; cada pasta é um namespace `L2Toolkit.*`
+- `packaging/`: insumos dos instaladores (Inno Setup e `Info.plist` do macOS)
+- `scripts/`: `build.ps1`, usado pelo `Makefile`
+- `docs/`: documentação
+
+---
 
 Desenvolvido por **Mk**
