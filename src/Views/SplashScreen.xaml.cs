@@ -39,6 +39,7 @@ public partial class SplashScreen : UserControl
     private int _previewColors;
     private bool _busy;
     private SplashLibraryWindow? _library;
+    private SplashComposeWindow? _compose;
 
     public SplashScreen()
     {
@@ -222,6 +223,44 @@ public partial class SplashScreen : UserControl
         });
     }
 
+    /// <summary>
+    /// Janela independente que recorta uma arte com um brush procedural. Abre com a
+    /// imagem do editor (se houver) e devolve o recorte, que entra aqui como uma
+    /// substituição: respeita "Manter o tamanho atual" e passa para 32 bits com alpha.
+    /// </summary>
+    private void Compose_Click(object? sender, RoutedEventArgs e)
+    {
+        if (_compose != null)
+        {
+            _compose.Activate();
+            return;
+        }
+
+        var compose = new SplashComposeWindow();
+        compose.ResultSent += ApplyComposed;
+        compose.Closed += (_, _) => _compose = null;
+        // Sem dono para não ficar sempre por cima do editor; fecha junto com o app.
+        if (TopLevel.GetTopLevel(this) is Window main)
+            main.Closed += (_, _) => compose.Close();
+        _compose = compose;
+        if (_canvas != null)
+            compose.SetArt(_canvas, _document?.FileName ?? "imagem do editor");
+        compose.Show();
+    }
+
+    private void ApplyComposed(RgbaImage image)
+    {
+        if (_busy) return;
+        _canvas = KeepSizeCheck.IsChecked == true && _canvas != null
+            ? image.Resized(_canvas.Width, _canvas.Height)
+            : image;
+        _modified = true;
+        // O recorte só existe com alpha real; em 256 cores ele vira a cor-chave.
+        FormatCombo.SelectedIndex = Array.IndexOf(Formats, SplashFormat.Bgra32);
+        RefreshPreview();
+        ShowSuccess("Recorte recebido do Compor com brush · salve para gravar a splash.");
+    }
+
     private void KeyOut_Click(object? sender, RoutedEventArgs e)
     {
         if (_canvas == null) return;
@@ -301,7 +340,7 @@ public partial class SplashScreen : UserControl
 
         foreach (var control in new Control[] { SaveButton, SaveAsButton, ExportButton, KeyOutButton })
             control.IsEnabled = hasCanvas && !_busy;
-        OpenButton.IsEnabled = ReplaceButton.IsEnabled = !_busy;
+        OpenButton.IsEnabled = ReplaceButton.IsEnabled = ComposeButton.IsEnabled = !_busy;
 
         KeepSizeCheck.IsEnabled = hasCanvas && !_busy;
         KeepSizeCheck.Content = hasCanvas ? $"Manter o tamanho atual ({_canvas!.Width} × {_canvas.Height})" : "Manter o tamanho atual";

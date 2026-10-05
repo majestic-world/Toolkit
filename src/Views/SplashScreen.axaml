@@ -225,6 +225,11 @@
                                             HorizontalAlignment="Stretch" Height="32" Click="Replace_Click">
                                         <TextBlock Text="Substituir imagem…" FontSize="12" FontWeight="Medium"/>
                                     </Button>
+                                    <Button x:Name="ComposeButton" Theme="{StaticResource GhostButton}"
+                                            HorizontalAlignment="Stretch" Height="32" Click="Compose_Click"
+                                            ToolTip.Tip="Recorta uma arte com um brush aleatório, como uma máscara do Photoshop">
+                                        <TextBlock Text="Compor com brush…" FontSize="12" FontWeight="Medium"/>
+                                    </Button>
                                     <CheckBox x:Name="KeepSizeCheck" IsChecked="True" IsEnabled="False"
                                               Content="Manter o tamanho atual"/>
                                 </StackPanel>

@@ -24,34 +24,75 @@ public static class BrushGenerator
 
     public static RgbaImage Preview(BrushSettings settings, int size)
     {
-        using var bitmap = Render(settings, size);
+        using var bitmap = RenderSquare(settings, size);
         return new RgbaImage(size, size, bitmap.Bytes);
     }
 
     /// <summary>Grava o brush como PNG em tons de cinza.</summary>
     public static void ExportPng(BrushSettings settings, int size, string path)
     {
-        using var bitmap = Render(settings, size);
+        using var bitmap = RenderSquare(settings, size);
         using var gray = bitmap.Copy(SKColorType.Gray8) ?? throw new InvalidOperationException("Falha ao converter o brush para tons de cinza.");
         using var data = gray.Encode(SKEncodedImageFormat.Png, 100) ?? throw new InvalidOperationException("Falha ao gerar o PNG.");
         using var stream = File.Create(path);
         data.SaveTo(stream);
     }
 
-    private static SKBitmap Render(BrushSettings settings, int size)
+    /// <summary>
+    /// Máscara de corte do tamanho de uma arte: 255 onde o brush pinta, 0 fora dele.
+    /// Com escala 1 e deslocamento 0, o brush ocupa a largura da arte (o lado maior),
+    /// centralizado, como um pincel aplicado sobre a imagem no Photoshop.
+    /// </summary>
+    /// <param name="scale">Tamanho do brush em relação ao lado maior da arte.</param>
+    /// <param name="offsetX">Deslocamento horizontal em fração da largura.</param>
+    /// <param name="offsetY">Deslocamento vertical em fração da altura.</param>
+    public static byte[] Mask(BrushSettings settings, int width, int height, double scale, double offsetX, double offsetY)
+    {
+        var placement = new Placement(width / 2.0 + offsetX * width, height / 2.0 + offsetY * height, Math.Max(width, height) / 2.0 * scale);
+        using var bitmap = Render(settings, width, height, placement);
+        var rgba = bitmap.Bytes;
+        var mask = new byte[width * height];
+        for (var i = 0; i < mask.Length; i++)
+            mask[i] = (byte)(255 - rgba[i * 4]);
+        return mask;
+    }
+
+    /// <summary>Recorta a arte pela máscara do brush: o alpha de cada pixel é multiplicado pela máscara.</summary>
+    public static RgbaImage Cut(RgbaImage art, BrushSettings settings, double scale, double offsetX, double offsetY)
+    {
+        var mask = Mask(settings, art.Width, art.Height, scale, offsetX, offsetY);
+        var pixels = (byte[])art.Pixels.Clone();
+        for (var i = 0; i < mask.Length; i++)
+            pixels[i * 4 + 3] = (byte)((pixels[i * 4 + 3] * mask[i] + 127) / 255);
+        return new RgbaImage(art.Width, art.Height, pixels);
+    }
+
+    private static SKBitmap RenderSquare(BrushSettings settings, int size)
     {
         if (size is < 64 or > MaxSize)
             throw new ArgumentOutOfRangeException(nameof(size), size, $"O tamanho precisa ficar entre 64 e {MaxSize} px.");
+        return Render(settings, size, size, new Placement(size / 2.0, size / 2.0, size / 2.0));
+    }
 
+    private static SKBitmap Render(BrushSettings settings, int width, int height, Placement placement)
+    {
         var shape = new Shape(settings);
-        var bitmap = new SKBitmap(new SKImageInfo(size, size, SKColorType.Rgba8888, SKAlphaType.Premul));
-        var pixels = new byte[size * size * 4];
-        Parallel.For(0, size, y => shape.FillRow(pixels, y, size));
+        var bitmap = new SKBitmap(new SKImageInfo(width, height, SKColorType.Rgba8888, SKAlphaType.Premul));
+        var pixels = new byte[width * height * 4];
+        Parallel.For(0, height, y => shape.FillRow(pixels, y, width, placement));
         Marshal.Copy(pixels, 0, bitmap.GetPixels(), pixels.Length);
 
         using var canvas = new SKCanvas(bitmap);
-        shape.DrawStrokes(canvas, size);
+        shape.DrawStrokes(canvas, placement);
         return bitmap;
+    }
+
+    /// <summary>Onde o espaço normalizado [-1, 1] do brush cai na imagem: centro e meia extensão em pixels.</summary>
+    private readonly record struct Placement(double CenterX, double CenterY, double Half)
+    {
+        public double U(double x) => (x - CenterX) / Half;
+        public double V(double y) => (y - CenterY) / Half;
+        public SKPoint ToPixel(double u, double v) => new((float)(CenterX + u * Half), (float)(CenterY + v * Half));
     }
 
     /// <summary>Forma sorteada a partir da semente. Coordenadas normalizadas em [-1, 1].</summary>
@@ -99,16 +140,16 @@ public static class BrushGenerator
             return SmoothRadius(angle) + _spikeAmp * spikes - _notchAmp * notch + 0.008 * micro;
         }
 
-        public void FillRow(byte[] pixels, int y, int size)
+        public void FillRow(byte[] pixels, int y, int width, Placement placement)
         {
-            var pixel = 2.0 / size;
+            var pixel = 1.0 / placement.Half;
             var cracks = Scale(_settings.Cracks);
             var softness = Math.Clamp(_settings.Softness, 0, 1);
             var softWidth = pixel * 0.5 + softness * 0.035;
-            var v = y * 2.0 / size - 1;
-            for (var x = 0; x < size; x++)
+            var v = placement.V(y);
+            for (var x = 0; x < width; x++)
             {
-                var u = x * 2.0 / size - 1;
+                var u = placement.U(x);
                 // Distorção do espaço: o contorno não fica perfeitamente radial.
                 var wu = u + 0.06 * _noise.Fbm(_offsets[8] + u * 2.2, _offsets[9] + v * 2.2, 3);
                 var wv = v + 0.06 * _noise.Fbm(_offsets[9] + u * 2.2, _offsets[8] + v * 2.2, 3);
@@ -147,25 +188,23 @@ public static class BrushGenerator
                 }
 
                 var gray = (byte)Math.Round(255 * (1 - alpha));
-                var offset = (y * size + x) * 4;
+                var offset = (y * width + x) * 4;
                 pixels[offset] = pixels[offset + 1] = pixels[offset + 2] = gray;
                 pixels[offset + 3] = 255;
             }
         }
 
-        public void DrawStrokes(SKCanvas canvas, int size)
+        public void DrawStrokes(SKCanvas canvas, Placement placement)
         {
             using var ink = new SKPaint { Color = SKColors.Black, IsAntialias = true, Style = SKPaintStyle.Fill };
             var softness = Math.Clamp(_settings.Softness, 0, 1);
             if (softness > 0)
-                ink.MaskFilter = SKMaskFilter.CreateBlur(SKBlurStyle.Normal, (float)(softness * size * 0.004));
+                ink.MaskFilter = SKMaskFilter.CreateBlur(SKBlurStyle.Normal, (float)(softness * placement.Half * 0.008));
 
-            DrawShards(canvas, size, ink);
-            DrawClaws(canvas, size, ink);
-            DrawDebris(canvas, size, ink);
+            DrawShards(canvas, placement, ink);
+            DrawClaws(canvas, placement, ink);
+            DrawDebris(canvas, placement, ink);
         }
-
-        private SKPoint ToPixel(double u, double v, int size) => new((float)((u + 1) / 2 * size), (float)((v + 1) / 2 * size));
 
         /// <summary>Ponto no contorno (sem a distorção) de volta às coordenadas da tela.</summary>
         private (double U, double V) EdgePoint(double angle, double radius)
@@ -175,7 +214,7 @@ public static class BrushGenerator
         }
 
         /// <summary>Espinhos afunilados e levemente curvos saindo da borda.</summary>
-        private void DrawShards(SKCanvas canvas, int size, SKPaint ink)
+        private void DrawShards(SKCanvas canvas, Placement p, SKPaint ink)
         {
             var random = Stream(1);
             var count = (int)Math.Round(random.Next(7, 16) * Scale(_settings.Spikes));
@@ -194,16 +233,16 @@ public static class BrushGenerator
                 double midU = bu + Math.Cos(direction) * length * 0.55 + nu * bend;
                 double midV = bv + Math.Sin(direction) * length * 0.55 + nv * bend;
                 using var path = new SKPath();
-                path.MoveTo(ToPixel(bu + nu * width, bv + nv * width, size));
-                path.QuadTo(ToPixel(midU + nu * width * 0.4, midV + nv * width * 0.4, size), ToPixel(tipU, tipV, size));
-                path.QuadTo(ToPixel(midU - nu * width * 0.4, midV - nv * width * 0.4, size), ToPixel(bu - nu * width, bv - nv * width, size));
+                path.MoveTo(p.ToPixel(bu + nu * width, bv + nv * width));
+                path.QuadTo(p.ToPixel(midU + nu * width * 0.4, midV + nv * width * 0.4), p.ToPixel(tipU, tipV));
+                path.QuadTo(p.ToPixel(midU - nu * width * 0.4, midV - nv * width * 0.4), p.ToPixel(bu - nu * width, bv - nv * width));
                 path.Close();
                 canvas.DrawPath(path, ink);
             }
         }
 
         /// <summary>Faixas em meia-lua afuniladas que acompanham o contorno.</summary>
-        private void DrawClaws(SKCanvas canvas, int size, SKPaint ink)
+        private void DrawClaws(SKCanvas canvas, Placement p, SKPaint ink)
         {
             var random = Stream(2);
             var count = (int)Math.Round(random.Next(1, 4) * Scale(_settings.Claws));
@@ -225,9 +264,9 @@ public static class BrushGenerator
                     var width = maxWidth * Math.Pow(Math.Sin(Math.PI * f), 0.8);
                     var (ou, ov) = EdgePoint(angle, radius + width / 2);
                     var (iu, iv) = EdgePoint(angle, radius - width / 2);
-                    var outer = ToPixel(ou, ov, size);
+                    var outer = p.ToPixel(ou, ov);
                     if (k == 0) path.MoveTo(outer); else path.LineTo(outer);
-                    inner[k] = ToPixel(iu, iv, size);
+                    inner[k] = p.ToPixel(iu, iv);
                 }
                 for (var k = segments; k >= 0; k--) path.LineTo(inner[k]);
                 path.Close();
@@ -236,7 +275,7 @@ public static class BrushGenerator
         }
 
         /// <summary>Fragmentos poligonais soltos, mais densos junto da borda.</summary>
-        private void DrawDebris(SKCanvas canvas, int size, SKPaint ink)
+        private void DrawDebris(SKCanvas canvas, Placement p, SKPaint ink)
         {
             var random = Stream(3);
             var count = (int)Math.Round(random.Next(10, 28) * Scale(_settings.Debris));
@@ -253,7 +292,7 @@ public static class BrushGenerator
                 {
                     var a = k * Math.PI * 2 / vertices + Range(random, -0.4, 0.4);
                     var r = fragment * Range(random, 0.4, 1.3);
-                    var point = ToPixel(cu + Math.Cos(a) * r, cv + Math.Sin(a) * r, size);
+                    var point = p.ToPixel(cu + Math.Cos(a) * r, cv + Math.Sin(a) * r);
                     if (k == 0) path.MoveTo(point); else path.LineTo(point);
                 }
                 path.Close();

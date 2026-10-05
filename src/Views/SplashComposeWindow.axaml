@@ -1,0 +1,216 @@
+<Window x:Class="L2Toolkit.Views.SplashComposeWindow"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:L2Toolkit.Views.Controls"
+        Title="Compor com brush — Splash Screen"
+        Width="1100" Height="760" MinWidth="760" MinHeight="520"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource ThemeSurfacePage}">
+
+    <Window.Resources>
+        <ControlTheme x:Key="GhostButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextButton}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderStrong}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border x:Name="PART_Border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="6"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Content="{TemplateBinding Content}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+            <Style Selector="^:pointerover /template/ Border#PART_Border">
+                <Setter Property="Background" Value="{DynamicResource ThemeSurfaceHover}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderHoverStrong}"/>
+            </Style>
+            <Style Selector="^:pressed /template/ Border#PART_Border">
+                <Setter Property="Background" Value="{DynamicResource ThemeSurfacePressed}"/>
+            </Style>
+            <Style Selector="^:disabled">
+                <Setter Property="Opacity" Value="0.45"/>
+            </Style>
+        </ControlTheme>
+    </Window.Resources>
+
+    <Window.Styles>
+        <Style Selector="TextBox.FormField">
+            <Setter Property="Background" Value="{DynamicResource ThemeSurfaceInput}"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextBody}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorder}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+        <Style Selector="TextBox.FormField /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="{DynamicResource ThemeSurfaceInput}"/>
+            <Setter Property="CornerRadius" Value="5"/>
+        </Style>
+        <Style Selector="TextBox.FormField:focus /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeAccent}"/>
+        </Style>
+        <Style Selector="TextBlock.Section">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="LetterSpacing" Value="1.5"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextLabel}"/>
+        </Style>
+        <Style Selector="TextBlock.Field">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextLabel}"/>
+        </Style>
+        <Style Selector="TextBlock.Value">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextBody}"/>
+        </Style>
+        <Style Selector="TextBlock.Hint">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextHint}"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+        <Style Selector="Slider">
+            <Setter Property="TickFrequency" Value="1"/>
+            <Setter Property="IsSnapToTickEnabled" Value="True"/>
+            <Setter Property="Margin" Value="0,-6,0,-4"/>
+        </Style>
+    </Window.Styles>
+
+    <Grid RowDefinitions="*,Auto" ColumnDefinitions="*,Auto">
+
+        <!-- Prévia: a arte recortada pelo brush sobre o xadrez da transparência -->
+        <Border Grid.Row="0" Grid.Column="0" Padding="20" Background="{DynamicResource ThemeSurfaceInput}">
+            <Grid>
+                <TextBlock x:Name="EmptyText" Classes="Hint" FontSize="13" TextAlignment="Center"
+                           HorizontalAlignment="Center" VerticalAlignment="Center" Width="380"
+                           Text="Escolha a arte da splash. O brush recorta as bordas como uma máscara do Photoshop."/>
+                <Grid x:Name="PreviewFrame" IsVisible="False"
+                      HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <controls:Checkerboard LightBrush="{DynamicResource ThemeSurfaceCard}"
+                                           DarkBrush="{DynamicResource ThemeSurfaceRaised}"/>
+                    <Image x:Name="PreviewImage" Stretch="Uniform"
+                           RenderOptions.BitmapInterpolationMode="HighQuality"/>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <!-- Painel -->
+        <Border Grid.Row="0" Grid.Column="1" Width="290"
+                BorderBrush="{DynamicResource ThemeBorder}" BorderThickness="1,0,0,0">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="16,14" Spacing="10">
+
+                    <TextBlock Text="ARTE" Classes="Section"/>
+                    <Button x:Name="ArtButton" Theme="{StaticResource GhostButton}"
+                            HorizontalAlignment="Stretch" Height="32" Click="ChooseArt_Click">
+                        <TextBlock Text="Escolher imagem…" FontSize="12" FontWeight="Medium"/>
+                    </Button>
+                    <TextBlock x:Name="ArtText" Classes="Hint" Text="Nenhuma arte carregada."/>
+
+                    <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
+                    <TextBlock Text="BRUSH" Classes="Section"/>
+                    <Grid ColumnDefinitions="*,8,Auto">
+                        <TextBox x:Name="SeedBox" Classes="FormField" Height="32" Padding="10,0"
+                                 VerticalContentAlignment="Center"
+                                 FontFamily="Consolas,Courier New,monospace"
+                                 ToolTip.Tip="A mesma semente gera sempre o mesmo brush"/>
+                        <Button Grid.Column="2" Theme="{StaticResource GhostButton}"
+                                Height="32" Padding="12,0" Click="Shuffle_Click">
+                            <TextBlock Text="Outro brush" FontSize="12" FontWeight="Medium"/>
+                        </Button>
+                    </Grid>
+
+                    <StackPanel>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Text="Pontas" Classes="Field"/>
+                            <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #SpikesSlider.Value, StringFormat={}{0:0}}"/>
+                        </Grid>
+                        <Slider x:Name="SpikesSlider" Minimum="0" Maximum="100" Value="50"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Text="Rachaduras" Classes="Field"/>
+                            <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #CracksSlider.Value, StringFormat={}{0:0}}"/>
+                        </Grid>
+                        <Slider x:Name="CracksSlider" Minimum="0" Maximum="100" Value="50"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Text="Garras" Classes="Field"/>
+                            <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #ClawsSlider.Value, StringFormat={}{0:0}}"/>
+                        </Grid>
+                        <Slider x:Name="ClawsSlider" Minimum="0" Maximum="100" Value="50"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Text="Estilhaços" Classes="Field"/>
+                            <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #DebrisSlider.Value, StringFormat={}{0:0}}"/>
+                        </Grid>
+                        <Slider x:Name="DebrisSlider" Minimum="0" Maximum="100" Value="50"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Text="Borda suave" Classes="Field"/>
+                            <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #SoftnessSlider.Value, StringFormat={}{0:0}}"/>
+                        </Grid>
+                        <Slider x:Name="SoftnessSlider" Minimum="0" Maximum="100" Value="30"/>
+                    </StackPanel>
+
+                    <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
+                    <TextBlock Text="POSIÇÃO" Classes="Section"/>
+                    <StackPanel>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Text="Tamanho" Classes="Field"/>
+                            <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #ScaleSlider.Value, StringFormat={}{0:0}%}"/>
+                        </Grid>
+                        <Slider x:Name="ScaleSlider" Minimum="50" Maximum="160" Value="100"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Text="Horizontal" Classes="Field"/>
+                            <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #OffsetXSlider.Value, StringFormat={}{0:0}%}"/>
+                        </Grid>
+                        <Slider x:Name="OffsetXSlider" Minimum="-30" Maximum="30" Value="0"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Text="Vertical" Classes="Field"/>
+                            <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #OffsetYSlider.Value, StringFormat={}{0:0}%}"/>
+                        </Grid>
+                        <Slider x:Name="OffsetYSlider" Minimum="-30" Maximum="30" Value="0"/>
+                    </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+
+        <!-- Rodapé -->
+        <Border Grid.Row="1" Grid.ColumnSpan="2" Padding="16,10"
+                BorderBrush="{DynamicResource ThemeBorder}" BorderThickness="0,1,0,0">
+            <Grid ColumnDefinitions="*,Auto,8,Auto">
+                <TextBlock x:Name="StatusText" Grid.Column="0" Classes="Hint" FontSize="12"
+                           VerticalAlignment="Center" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
+                <Button x:Name="ExportButton" Grid.Column="1" Theme="{StaticResource GhostButton}"
+                        Height="34" Padding="14,0" Click="Export_Click">
+                    <TextBlock Text="Exportar PNG…" FontSize="12" FontWeight="Medium"/>
+                </Button>
+                <Button x:Name="SendButton" Grid.Column="3" Theme="{StaticResource SecondaryButton}"
+                        Height="34" Padding="20,0" Click="Send_Click">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <PathIcon Data="M2.01 21 23 12 2.01 3 2 10l15 2-15 2z"
+                                  Foreground="White" Width="13" Height="13" VerticalAlignment="Center"/>
+                        <TextBlock Text="Enviar para o editor" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
