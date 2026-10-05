@@ -35,6 +35,39 @@
                 <Setter Property="Background" Value="{DynamicResource ThemeSurfacePressed}"/>
             </Style>
         </ControlTheme>
+
+        <!-- Aba do resultado: sublinhado no ativo (classe "active"), só texto nos demais. -->
+        <ControlTheme x:Key="TabButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextHint}"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0,0,0,2"/>
+            <Setter Property="Padding" Value="14,0"/>
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border x:Name="PART_Border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Content="{TemplateBinding Content}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+            <Style Selector="^:pointerover">
+                <Setter Property="Foreground" Value="{DynamicResource ThemeTextBody}"/>
+            </Style>
+            <Style Selector="^.active">
+                <Setter Property="Foreground" Value="{DynamicResource ThemeTextTitle}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource ThemeAccent}"/>
+            </Style>
+        </ControlTheme>
     </UserControl.Resources>
 
     <UserControl.Styles>
@@ -77,11 +110,11 @@
 
     </UserControl.Styles>
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel>
+    <!-- Sem scroll: o resultado ocupa a altura que sobra (linha *). -->
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,*">
 
             <!-- ── Page Header ──────────────────────────────────────── -->
-            <StackPanel Margin="32,28,32,24" Spacing="3">
+            <StackPanel Grid.Row="0" Margin="32,24,32,16" Spacing="3">
                 <TextBlock Text="Criar Multisell"
                            FontSize="22"
                            FontWeight="SemiBold"
@@ -93,6 +126,7 @@
 
             <!-- ── Aviso: pasta de assets não configurada ───────────── -->
             <Border x:Name="AssetsWarnBorder"
+                    Grid.Row="1"
                     Margin="32,0,32,12"
                     Background="{DynamicResource ThemeCautionBg}"
                     BorderBrush="{DynamicResource ThemeCautionBorder}"
@@ -118,7 +152,8 @@
 
             <!-- ── Banner de erro ────────────────────────────────────── -->
             <Border x:Name="NotificacaoBorder"
-                    Margin="32,0,32,16"
+                    Grid.Row="2"
+                    Margin="32,0,32,12"
                     Background="{DynamicResource ThemeWarningBg}"
                     BorderBrush="{DynamicResource ThemeWarningBorder}"
                     BorderThickness="1"
@@ -137,7 +172,7 @@
             </Border>
 
             <!-- ── Painel 01: Dados de Entrada ───────────────────────── -->
-            <Border Margin="32,0"
+            <Border Grid.Row="3" Margin="32,0"
                     CornerRadius="8"
                     Background="{DynamicResource ThemeSurfaceCard}"
                     BorderBrush="{DynamicResource ThemeBorder}"
@@ -149,7 +184,7 @@
 
                         <StackPanel Orientation="Horizontal"
                                     Margin="20,0"
-                                    Height="52"
+                                    Height="40"
                                     Spacing="14"
                                     VerticalAlignment="Center">
                             <TextBlock Text="DADOS DE ENTRADA"
@@ -162,16 +197,17 @@
 
                         <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
 
-                        <StackPanel Margin="20,16,20,20" Spacing="14">
+                        <!-- IDs de produção à esquerda, ingredientes à direita -->
+                        <Grid Margin="20,12,20,16" ColumnDefinitions="*,14,*">
 
-                            <StackPanel Spacing="6">
+                            <StackPanel Grid.Column="0" Spacing="6">
                                 <TextBlock Text="IDs de produção (separados por ; ou intervalo com ...)"
                                            FontSize="12"
                                            Foreground="{DynamicResource ThemeTextLabel}"
                                            FontWeight="Medium"/>
                                 <TextBox x:Name="ProductionId"
                                          Classes="FormField"
-                                         Height="38"
+                                         Height="34"
                                          Padding="12,0"
                                          VerticalContentAlignment="Center"
                                          FontFamily="Consolas,Courier New,monospace"
@@ -179,7 +215,7 @@
                                          Watermark="Ex: 1000;1001;1002 ou 1000...1050"/>
                             </StackPanel>
 
-                            <StackPanel Spacing="6">
+                            <StackPanel Grid.Column="2" Spacing="6">
                                 <TextBlock Text="Ingredientes (formato: id;quantidade)"
                                            FontSize="12"
                                            Foreground="{DynamicResource ThemeTextLabel}"
@@ -188,7 +224,7 @@
                                     <TextBox x:Name="MaterialInput"
                                              Grid.Column="0"
                                              Classes="FormField"
-                                             Height="38"
+                                             Height="34"
                                              Padding="12,0"
                                              VerticalContentAlignment="Center"
                                              FontFamily="Consolas,Courier New,monospace"
@@ -196,7 +232,7 @@
                                              Watermark="Ex: 57;500"/>
                                     <Button x:Name="AddIngredientBtn"
                                             Grid.Column="2"
-                                            Height="38"
+                                            Height="34"
                                             Padding="16,0"
                                             Theme="{StaticResource GhostButton}">
                                         <StackPanel Orientation="Horizontal" Spacing="7">
@@ -211,13 +247,13 @@
                                 <WrapPanel x:Name="IngredientsPanel" IsVisible="False"/>
                             </StackPanel>
 
-                        </StackPanel>
+                        </Grid>
                     </StackPanel>
                 </Grid>
             </Border>
 
             <!-- ── Ação: Gerar (separador de pipeline) ──────────────── -->
-            <Grid Margin="32,16" ColumnDefinitions="*,Auto,*">
+            <Grid Grid.Row="4" Margin="32,12" ColumnDefinitions="*,Auto,*">
                 <Border Grid.Column="0"
                         Height="1"
                         Background="{DynamicResource ThemeBorder}"
@@ -225,7 +261,7 @@
                 <Button Grid.Column="1"
                         x:Name="GenerateData"
                         Click="GenerateData_OnClick"
-                        Height="40"
+                        Height="36"
                         Padding="28,0"
                         Margin="20,0"
                         Theme="{StaticResource SecondaryButton}">
@@ -243,8 +279,8 @@
                         VerticalAlignment="Center"/>
             </Grid>
 
-            <!-- ── Painel 02: Dados de Multisell ─────────────────────── -->
-            <Border Margin="32,0"
+            <!-- ── Painel 02: Resultado em abas (uma área de texto por vez) ── -->
+            <Border Grid.Row="5" Margin="32,0,32,24"
                     CornerRadius="8"
                     Background="{DynamicResource ThemeSurfaceCard}"
                     BorderBrush="{DynamicResource ThemeBorder}"
@@ -252,45 +288,51 @@
                     ClipToBounds="True">
                 <Grid ColumnDefinitions="4,*">
                     <Border Grid.Column="0" Background="{DynamicResource ThemeAccent}"/>
-                    <StackPanel Grid.Column="1">
+                    <Grid Grid.Column="1" RowDefinitions="Auto,Auto,*">
 
-                        <Grid ColumnDefinitions="Auto,Auto,*,Auto,Auto"
-                              Margin="20,0"
-                              Height="52">
-                            <TextBlock Grid.Column="2"
-                                       Text="DADOS MULTISELL"
+                        <Grid Grid.Row="0" ColumnDefinitions="Auto,18,*,Auto,Auto" Margin="20,0,16,0">
+                            <TextBlock Grid.Column="0"
+                                       Text="RESULTADO"
                                        FontSize="11"
                                        FontWeight="Bold"
                                        Foreground="{DynamicResource ThemeTextLabel}"
                                        LetterSpacing="1.5"
                                        VerticalAlignment="Center"/>
+
+                            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                <Button x:Name="XmlTab" Classes="active" Theme="{StaticResource TabButton}"
+                                        Content="Dados Multisell" Click="ResultTab_OnClick"/>
+                                <Button x:Name="LogTab" Theme="{StaticResource TabButton}"
+                                        Content="Logs" Click="ResultTab_OnClick"/>
+                            </StackPanel>
+
                             <Border Grid.Column="3"
-                                    x:Name="ClienteCopiadoTextBlock"
+                                    x:Name="CopiedBadge"
                                     IsVisible="False"
                                     Background="{DynamicResource ThemeSuccessBg}"
                                     BorderBrush="{DynamicResource ThemeSuccessBorder}"
                                     BorderThickness="1"
-                                    CornerRadius="5"
-                                    Padding="10,4"
+                                    CornerRadius="4"
+                                    Padding="8,3"
                                     VerticalAlignment="Center"
-                                    Margin="0,0,10,0">
-                                <StackPanel Orientation="Horizontal" Spacing="5">
+                                    Margin="0,0,8,0">
+                                <StackPanel Orientation="Horizontal" Spacing="4">
                                     <PathIcon Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Width="10" Height="10" Foreground="{DynamicResource ThemeSuccess}" VerticalAlignment="Center"/>
                                     <TextBlock Text="Copiado!"
-                                               FontSize="11"
-                                               FontWeight="Medium"
+                                               FontSize="10"
                                                Foreground="{DynamicResource ThemeSuccess}"
                                                VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Border>
                             <Button Grid.Column="4"
-                                    x:Name="CopiarClienteButton"
-                                    Click="CopiarClienteButton_OnClick"
+                                    x:Name="CopyButton"
+                                    Click="Copy_OnClick"
                                     Height="30"
-                                    Padding="14,0"
+                                    Padding="12,0"
                                     VerticalAlignment="Center"
+                                    ToolTip.Tip="Copia o conteúdo da aba aberta"
                                     Theme="{StaticResource GhostButton}">
-                                <StackPanel Orientation="Horizontal" Spacing="7">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
                                     <PathIcon Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" Foreground="{DynamicResource ThemeTextLabel}" Width="12" Height="12" VerticalAlignment="Center"/>
                                     <TextBlock Text="Copiar"
                                                FontSize="12"
@@ -300,107 +342,43 @@
                             </Button>
                         </Grid>
 
-                        <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
+                        <Border Grid.Row="1" Height="1" Background="{DynamicResource ThemeBorder}"/>
 
-                        <TextBox x:Name="XmlData"
-                                 Classes="Code"
-                                 AcceptsReturn="True"
-                                 TextWrapping="Wrap"
-                                 Height="280"
-                                 Padding="20,14"
-                                 BorderThickness="0"
-                                 Background="{DynamicResource ThemeSurfaceInput}"
-                                 Foreground="{DynamicResource ThemeTextCode}"
-                                 CaretBrush="{DynamicResource ThemeAccent}"
-                                 SelectionBrush="{DynamicResource ThemeSelection}"
-                                 FontFamily="Consolas,Courier New,monospace"
-                                 FontSize="12"
-                                 IsReadOnly="True"
-                                 Watermark="O XML do multisell aparecerá aqui..."/>
+                        <!-- Uma área por aba; só a da aba ativa fica visível -->
+                        <Panel Grid.Row="2" MinHeight="160">
+                            <TextBox x:Name="XmlData"
+                                     Classes="Code"
+                                     AcceptsReturn="True"
+                                     TextWrapping="Wrap"
+                                     Padding="20,14"
+                                     BorderThickness="0"
+                                     Background="{DynamicResource ThemeSurfaceInput}"
+                                     Foreground="{DynamicResource ThemeTextCode}"
+                                     CaretBrush="{DynamicResource ThemeAccent}"
+                                     SelectionBrush="{DynamicResource ThemeSelection}"
+                                     FontFamily="Consolas,Courier New,monospace"
+                                     FontSize="12"
+                                     IsReadOnly="True"
+                                     Watermark="O XML do multisell aparecerá aqui..."/>
+                            <TextBox x:Name="BoxLog"
+                                     IsVisible="False"
+                                     Classes="Code"
+                                     AcceptsReturn="True"
+                                     TextWrapping="Wrap"
+                                     Padding="20,14"
+                                     BorderThickness="0"
+                                     Background="{DynamicResource ThemeSurfaceInput}"
+                                     Foreground="{DynamicResource ThemeTextLog}"
+                                     CaretBrush="{DynamicResource ThemeAccent}"
+                                     SelectionBrush="{DynamicResource ThemeSelection}"
+                                     FontFamily="Consolas,Courier New,monospace"
+                                     FontSize="12"
+                                     IsReadOnly="True"
+                                     Watermark="Logs de processamento aparecerão aqui..."/>
+                        </Panel>
 
-                    </StackPanel>
+                    </Grid>
                 </Grid>
             </Border>
-
-            <!-- ── Painel 03: Logs ───────────────────────────────────── -->
-            <Border Margin="32,16,32,32"
-                    CornerRadius="8"
-                    Background="{DynamicResource ThemeSurfaceCard}"
-                    BorderBrush="{DynamicResource ThemeBorder}"
-                    BorderThickness="1"
-                    ClipToBounds="True">
-                <Grid ColumnDefinitions="4,*">
-                    <Border Grid.Column="0" Background="{DynamicResource ThemeAccent}"/>
-                    <StackPanel Grid.Column="1">
-
-                        <Grid ColumnDefinitions="Auto,Auto,*,Auto,Auto"
-                              Margin="20,0"
-                              Height="52">
-                            <TextBlock Grid.Column="2"
-                                       Text="LOGS"
-                                       FontSize="11"
-                                       FontWeight="Bold"
-                                       Foreground="{DynamicResource ThemeTextLabel}"
-                                       LetterSpacing="1.5"
-                                       VerticalAlignment="Center"/>
-                            <Border Grid.Column="3"
-                                    x:Name="CopyContentLog"
-                                    IsVisible="False"
-                                    Background="{DynamicResource ThemeSuccessBg}"
-                                    BorderBrush="{DynamicResource ThemeSuccessBorder}"
-                                    BorderThickness="1"
-                                    CornerRadius="5"
-                                    Padding="10,4"
-                                    VerticalAlignment="Center"
-                                    Margin="0,0,10,0">
-                                <StackPanel Orientation="Horizontal" Spacing="5">
-                                    <PathIcon Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Width="10" Height="10" Foreground="{DynamicResource ThemeSuccess}" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Copiado!"
-                                               FontSize="11"
-                                               FontWeight="Medium"
-                                               Foreground="{DynamicResource ThemeSuccess}"
-                                               VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </Border>
-                            <Button Grid.Column="4"
-                                    x:Name="CopiarItensButton"
-                                    Click="CopiarItensButton_OnClick"
-                                    Height="30"
-                                    Padding="14,0"
-                                    VerticalAlignment="Center"
-                                    Theme="{StaticResource GhostButton}">
-                                <StackPanel Orientation="Horizontal" Spacing="7">
-                                    <PathIcon Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" Foreground="{DynamicResource ThemeTextLabel}" Width="12" Height="12" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Copiar"
-                                               FontSize="12"
-                                               FontWeight="Medium"
-                                               VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </Button>
-                        </Grid>
-
-                        <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
-
-                        <TextBox x:Name="BoxLog"
-                                 Classes="Code"
-                                 AcceptsReturn="True"
-                                 TextWrapping="Wrap"
-                                 Height="140"
-                                 Padding="20,14"
-                                 BorderThickness="0"
-                                 Background="{DynamicResource ThemeSurfaceInput}"
-                                 Foreground="{DynamicResource ThemeTextLog}"
-                                 CaretBrush="{DynamicResource ThemeAccent}"
-                                 SelectionBrush="{DynamicResource ThemeSelection}"
-                                 FontFamily="Consolas,Courier New,monospace"
-                                 FontSize="12"
-                                 IsReadOnly="True"
-                                 Watermark="Logs de processamento aparecerão aqui..."/>
-
-                    </StackPanel>
-                </Grid>
-            </Border>
-
-        </StackPanel>
-    </ScrollViewer>
+    </Grid>
 </UserControl>

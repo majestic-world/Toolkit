@@ -49,9 +49,6 @@ public partial class PrimeShopGenerator : UserControl
     private static readonly Regex ObjectIdRegex = new(@"id=(\d+)", RegexOptions.Compiled);
     private static readonly Regex IconRegex = new(@"\[\s*([^;\[\]{}]+)\s*\]", RegexOptions.Compiled);
 
-    private readonly DispatcherTimer _clienteTimer = new();
-    private readonly DispatcherTimer _serverTimer = new();
-    private readonly DispatcherTimer _itemsTimer = new();
     private readonly DispatcherTimer _statusTimer = new();
 
     private int _lastId;
@@ -68,9 +65,6 @@ public partial class PrimeShopGenerator : UserControl
         _lastId = AppDatabase.GetInstance().GetInt("lastPrimeShopId", 9999);
 
         GerarButton.Click += async (s, e) => await GenerateItemsAsync();
-        CopiarClienteButton.Click += async (s, e) => await CopyText(ClientTextBox, ClienteCopiadoTextBlock, _clienteTimer);
-        CopiarServidorButton.Click += async (s, e) => await CopyText(ServerTextBox, ServidorCopiadoTextBlock, _serverTimer);
-        CopiarItensButton.Click += async (s, e) => await CopyText(ItemsGeneratedTextBox, ItensCopiadoTextBlock, _itemsTimer);
         DetachedFromVisualTree += UserControl_Unloaded;
 
         if (string.IsNullOrEmpty(AssetsDir))
@@ -82,25 +76,11 @@ public partial class PrimeShopGenerator : UserControl
 
     private void CreateTimers()
     {
-        ConfigureTimer(_clienteTimer, ClienteCopiadoTextBlock);
-        ConfigureTimer(_serverTimer, ServidorCopiadoTextBlock);
-        ConfigureTimer(_itemsTimer, ItensCopiadoTextBlock);
-
         _statusTimer.Interval = TimeSpan.FromSeconds(8);
         _statusTimer.Tick += (s, e) =>
         {
             NotificacaoBorder.IsVisible = false;
             _statusTimer.Stop();
-        };
-    }
-
-    private void ConfigureTimer(DispatcherTimer timer, Control elemento)
-    {
-        timer.Interval = TimeSpan.FromSeconds(3);
-        timer.Tick += (s, e) =>
-        {
-            elemento.IsVisible = false;
-            timer.Stop();
         };
     }
 
@@ -337,16 +317,32 @@ public partial class PrimeShopGenerator : UserControl
 
     private int CreateUniqId() => Interlocked.Increment(ref _lastId);
 
-    private async Task CopyText(TextBox textBox, Control notify, DispatcherTimer timer)
-    {
-        if (string.IsNullOrEmpty(textBox.Text)) return;
+    // ─── Resultado em abas ────────────────────────────────────────────────────
 
+    /// <summary>Cada aba mostra uma única área de texto; só a da aba ativa fica visível.</summary>
+    private (Button Tab, TextBox Output)[] ResultTabs =>
+        [(ClientTab, ClientTextBox), (ServerTab, ServerTextBox), (LogsTab, ItemsGeneratedTextBox)];
+
+    private void ResultTab_OnClick(object? sender, RoutedEventArgs e)
+    {
+        if (sender is not Button active) return;
+        foreach (var (tab, output) in ResultTabs)
+        {
+            tab.Classes.Set("active", tab == active);
+            output.IsVisible = tab == active;
+        }
+    }
+
+    private async void Copy_OnClick(object? sender, RoutedEventArgs e)
+    {
+        var text = ResultTabs.First(pair => pair.Tab.Classes.Contains("active")).Output.Text;
+        if (string.IsNullOrEmpty(text)) return;
         var topLevel = TopLevel.GetTopLevel(this);
         if (topLevel?.Clipboard != null)
-            await topLevel.Clipboard.SetTextAsync(textBox.Text);
-        notify.IsVisible = true;
-        timer.Stop();
-        timer.Start();
+            await topLevel.Clipboard.SetTextAsync(text);
+        CopiedBadge.IsVisible = true;
+        await Task.Delay(3000);
+        CopiedBadge.IsVisible = false;
     }
 
     private void SendNotify(string message)

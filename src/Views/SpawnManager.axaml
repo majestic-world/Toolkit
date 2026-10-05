@@ -77,11 +77,10 @@
 
     </UserControl.Styles>
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel>
+    <Grid RowDefinitions="Auto,Auto,Auto,*,Auto,*">
 
             <!-- ── Page Header ──────────────────────────────────────── -->
-            <StackPanel Margin="32,28,32,16" Spacing="3">
+            <StackPanel Grid.Row="0" Margin="32,24,32,16" Spacing="3">
                 <TextBlock Text="Gerenciador de Spawn"
                            FontSize="22"
                            FontWeight="SemiBold"
@@ -92,8 +91,9 @@
             </StackPanel>
 
             <!-- ── Banner de notificação (condicional) ───────────────── -->
-            <Border x:Name="NotificacaoBorder"
-                    Margin="32,0,32,16"
+            <Border Grid.Row="1"
+                    x:Name="NotificacaoBorder"
+                    Margin="32,0,32,12"
                     Background="{DynamicResource ThemeWarningBg}"
                     BorderBrush="{DynamicResource ThemeWarningBorder}"
                     BorderThickness="1"
@@ -112,7 +112,8 @@
             </Border>
 
             <!-- ── Painel 01: IDs dos NPCs ───────────────────────────── -->
-            <Border Margin="32,0"
+            <Border Grid.Row="2"
+                    Margin="32,0,32,12"
                     CornerRadius="8"
                     Background="{DynamicResource ThemeSurfaceCard}"
                     BorderBrush="{DynamicResource ThemeBorder}"
@@ -124,7 +125,7 @@
 
                         <StackPanel Orientation="Horizontal"
                                     Margin="20,0"
-                                    Height="52"
+                                    Height="40"
                                     Spacing="14"
                                     VerticalAlignment="Center">
                             <TextBlock Text="IDs DOS NPCS"
@@ -139,7 +140,9 @@
 
                         <TextBox x:Name="NpcIdsTextBox"
                                  Classes="FormField"
-                                 Margin="20,16,20,20"
+                                 Margin="20,12,20,16"
+                                 Height="34"
+                                 VerticalContentAlignment="Center"
                                  Watermark="ex: 20001;20002;20003"/>
 
                     </StackPanel>
@@ -147,7 +150,8 @@
             </Border>
 
             <!-- ── Painel 02: Dados originais de spawn ──────────────── -->
-            <Border Margin="32,16"
+            <Border Grid.Row="3"
+                    Margin="32,0"
                     CornerRadius="8"
                     Background="{DynamicResource ThemeSurfaceCard}"
                     BorderBrush="{DynamicResource ThemeBorder}"
@@ -155,11 +159,12 @@
                     ClipToBounds="True">
                 <Grid ColumnDefinitions="4,*">
                     <Border Grid.Column="0" Background="{DynamicResource ThemeAccent}"/>
-                    <StackPanel Grid.Column="1">
+                    <Grid Grid.Column="1" RowDefinitions="Auto,Auto,*">
 
-                        <StackPanel Orientation="Horizontal"
+                        <StackPanel Grid.Row="0"
+                                    Orientation="Horizontal"
                                     Margin="20,0"
-                                    Height="52"
+                                    Height="40"
                                     Spacing="14"
                                     VerticalAlignment="Center">
                             <TextBlock Text="DADOS ORIGINAIS DE SPAWN"
@@ -170,13 +175,14 @@
                                        VerticalAlignment="Center"/>
                         </StackPanel>
 
-                        <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
+                        <Border Grid.Row="1" Height="1" Background="{DynamicResource ThemeBorder}"/>
 
-                        <TextBox x:Name="OriginalSpawnTextBox"
+                        <TextBox Grid.Row="2"
+                                 x:Name="OriginalSpawnTextBox"
                                  Classes="Code"
                                  AcceptsReturn="True"
                                  TextWrapping="Wrap"
-                                 Height="200"
+                                 MinHeight="120"
                                  Padding="20,14"
                                  BorderThickness="0"
                                  Background="{DynamicResource ThemeSurfaceInput}"
@@ -187,19 +193,19 @@
                                  FontSize="12"
                                  Watermark="Cole os dados originais de spawn aqui..."/>
 
-                    </StackPanel>
+                    </Grid>
                 </Grid>
             </Border>
 
             <!-- ── Ação: Criar Spawns (separador de pipeline) ────────── -->
-            <Grid Margin="32,4" ColumnDefinitions="*,Auto,*">
+            <Grid Grid.Row="4" Margin="32,12" ColumnDefinitions="*,Auto,*">
                 <Border Grid.Column="0"
                         Height="1"
                         Background="{DynamicResource ThemeBorder}"
                         VerticalAlignment="Center"/>
                 <Button Grid.Column="1"
                         x:Name="CreateSpawnsButton"
-                        Height="40"
+                        Height="36"
                         Padding="28,0"
                         Margin="20,0"
                         Theme="{StaticResource SecondaryButton}">
@@ -218,7 +224,8 @@
             </Grid>
 
             <!-- ── Painel 03: Resultado ──────────────────────────────── -->
-            <Border Margin="32,10,32,32"
+            <Border Grid.Row="5"
+                    Margin="32,0,32,24"
                     CornerRadius="8"
                     Background="{DynamicResource ThemeSurfaceCard}"
                     BorderBrush="{DynamicResource ThemeBorder}"
@@ -226,13 +233,14 @@
                     ClipToBounds="True">
                 <Grid ColumnDefinitions="4,*">
                     <Border Grid.Column="0" Background="{DynamicResource ThemeAccent}"/>
-                    <StackPanel Grid.Column="1">
+                    <Grid Grid.Column="1" RowDefinitions="Auto,Auto,*">
 
-                        <Grid ColumnDefinitions="Auto,Auto,*,Auto,Auto"
-                              Margin="20,0"
-                              Height="52">
+                        <Grid Grid.Row="0"
+                              ColumnDefinitions="*,Auto,Auto"
+                              Margin="20,0,16,0"
+                              Height="40">
 
-                            <TextBlock Grid.Column="2"
+                            <TextBlock Grid.Column="0"
                                        Text="RESULTADO"
                                        FontSize="11"
                                        FontWeight="Bold"
@@ -241,34 +249,33 @@
                                        VerticalAlignment="Center"/>
 
                             <!-- Badge "Copiado!" -->
-                            <Border Grid.Column="3"
+                            <Border Grid.Column="1"
                                     x:Name="CopyBlock"
                                     IsVisible="False"
                                     Background="{DynamicResource ThemeSuccessBg}"
                                     BorderBrush="{DynamicResource ThemeSuccessBorder}"
                                     BorderThickness="1"
-                                    CornerRadius="5"
-                                    Padding="10,4"
+                                    CornerRadius="4"
+                                    Padding="8,3"
                                     VerticalAlignment="Center"
-                                    Margin="0,0,10,0">
-                                <StackPanel Orientation="Horizontal" Spacing="5">
+                                    Margin="0,0,8,0">
+                                <StackPanel Orientation="Horizontal" Spacing="4">
                                     <PathIcon Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Width="10" Height="10" Foreground="{DynamicResource ThemeSuccess}" VerticalAlignment="Center"/>
                                     <TextBlock Text="Copiado!"
-                                               FontSize="11"
-                                               FontWeight="Medium"
+                                               FontSize="10"
                                                Foreground="{DynamicResource ThemeSuccess}"
                                                VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Border>
 
                             <!-- Copy button -->
-                            <Button Grid.Column="4"
+                            <Button Grid.Column="2"
                                     x:Name="CopyResultButton"
                                     Height="30"
-                                    Padding="14,0"
+                                    Padding="12,0"
                                     VerticalAlignment="Center"
                                     Theme="{StaticResource GhostButton}">
-                                <StackPanel Orientation="Horizontal" Spacing="7">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
                                     <PathIcon Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" Foreground="{DynamicResource ThemeTextLabel}" Width="12" Height="12" VerticalAlignment="Center"/>
                                     <TextBlock Text="Copiar"
                                                FontSize="12"
@@ -279,13 +286,14 @@
 
                         </Grid>
 
-                        <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
+                        <Border Grid.Row="1" Height="1" Background="{DynamicResource ThemeBorder}"/>
 
-                        <TextBox x:Name="ResultTextBox"
+                        <TextBox Grid.Row="2"
+                                 x:Name="ResultTextBox"
                                  Classes="Code"
                                  AcceptsReturn="True"
                                  TextWrapping="Wrap"
-                                 Height="200"
+                                 MinHeight="160"
                                  Padding="20,14"
                                  BorderThickness="0"
                                  Background="{DynamicResource ThemeSurfaceInput}"
@@ -297,10 +305,9 @@
                                  IsReadOnly="True"
                                  Watermark="O resultado aparecerá aqui..."/>
 
-                    </StackPanel>
+                    </Grid>
                 </Grid>
             </Border>
 
-        </StackPanel>
-    </ScrollViewer>
+    </Grid>
 </UserControl>

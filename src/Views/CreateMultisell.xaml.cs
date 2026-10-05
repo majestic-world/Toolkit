@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Avalonia.Controls;
@@ -210,25 +211,29 @@ public partial class CreateMultisell : UserControl
         }
     }
 
-    private async void CopiarClienteButton_OnClick(object sender, RoutedEventArgs e)
+    // ─── Resultado em abas ────────────────────────────────────────────────────
+
+    /// <summary>Cada aba mostra uma única área de texto; só a da aba ativa fica visível.</summary>
+    private (Button Tab, TextBox Output)[] ResultTabs => [(XmlTab, XmlData), (LogTab, BoxLog)];
+
+    private void ResultTab_OnClick(object? sender, RoutedEventArgs e)
     {
-        var text = XmlData.Text?.Trim() ?? string.Empty;
-        if (string.IsNullOrEmpty(text)) return;
-        var topLevel = TopLevel.GetTopLevel(this);
-        await topLevel!.Clipboard!.SetTextAsync(text);
-        ClienteCopiadoTextBlock.IsVisible = true;
-        await Task.Delay(3000);
-        ClienteCopiadoTextBlock.IsVisible = false;
+        if (sender is not Button active) return;
+        foreach (var (tab, output) in ResultTabs)
+        {
+            tab.Classes.Set("active", tab == active);
+            output.IsVisible = tab == active;
+        }
     }
 
-    private async void CopiarItensButton_OnClick(object sender, RoutedEventArgs e)
+    private async void Copy_OnClick(object? sender, RoutedEventArgs e)
     {
-        var text = BoxLog.Text?.Trim() ?? string.Empty;
+        var text = ResultTabs.First(pair => pair.Tab.Classes.Contains("active")).Output.Text?.Trim() ?? string.Empty;
         if (string.IsNullOrEmpty(text)) return;
         var topLevel = TopLevel.GetTopLevel(this);
         await topLevel!.Clipboard!.SetTextAsync(text);
-        CopyContentLog.IsVisible = true;
+        CopiedBadge.IsVisible = true;
         await Task.Delay(3000);
-        CopyContentLog.IsVisible = false;
+        CopiedBadge.IsVisible = false;
     }
 }
