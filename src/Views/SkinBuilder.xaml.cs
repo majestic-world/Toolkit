@@ -660,15 +660,34 @@ public partial class SkinBuilder : UserControl
         StatusData.Text = list.ToString();
     }
 
-    private async void CopiarClienteButton_OnClick(object sender, RoutedEventArgs e)
+    // ─── Resultado em abas ────────────────────────────────────────────────────
+
+    /// <summary>Cada aba mostra uma única área de texto; só a da aba ativa fica visível.</summary>
+    private (Button Tab, TextBox Output)[] ResultTabs =>
+    [
+        (GrpTab, ClientTextBox), (NameTab, NameData), (XmlTab, XmlData),
+        (SkinTab, SkinData), (StatusTab, StatusData), (LogTab, LogContent),
+    ];
+
+    private void ResultTab_OnClick(object? sender, RoutedEventArgs e)
     {
-        var text = ClientTextBox.Text;
+        if (sender is not Button active) return;
+        foreach (var (tab, output) in ResultTabs)
+        {
+            tab.Classes.Set("active", tab == active);
+            output.IsVisible = tab == active;
+        }
+    }
+
+    private async void Copy_OnClick(object? sender, RoutedEventArgs e)
+    {
+        var text = ResultTabs.First(pair => pair.Tab.Classes.Contains("active")).Output.Text;
         if (string.IsNullOrEmpty(text)) return;
         var topLevel = TopLevel.GetTopLevel(this);
         await topLevel!.Clipboard!.SetTextAsync(text);
-        GrpCopyData.IsVisible = true;
+        CopiedBadge.IsVisible = true;
         await Task.Delay(3000);
-        GrpCopyData.IsVisible = false;
+        CopiedBadge.IsVisible = false;
     }
 
     private string ConvertCrystal(string line)
@@ -701,79 +720,4 @@ public partial class SkinBuilder : UserControl
         return result;
     }
 
-    private async void CopiarServidorButton_OnClick(object sender, RoutedEventArgs e)
-    {
-        try
-        {
-            var text = NameData.Text;
-            if (string.IsNullOrEmpty(text)) return;
-            var topLevel = TopLevel.GetTopLevel(this);
-            await topLevel!.Clipboard!.SetTextAsync(text);
-            NameCopyContent.IsVisible = true;
-            await Task.Delay(3000);
-            NameCopyContent.IsVisible = false;
-        }
-        catch (Exception)
-        {
-            //ignore
-        }
-    }
-
-    private async void CopyXml_OnClick(object sender, RoutedEventArgs e)
-    {
-        try
-        {
-            var text = XmlData.Text;
-            if (string.IsNullOrEmpty(text)) return;
-            var topLevel = TopLevel.GetTopLevel(this);
-            await topLevel!.Clipboard!.SetTextAsync(text);
-            XmlCopied.IsVisible = true;
-            await Task.Delay(3000);
-            XmlCopied.IsVisible = false;
-        }
-        catch (Exception)
-        {
-            //ignore
-        }
-    }
-
-    private async void CopySkins_OnClick(object sender, RoutedEventArgs e)
-    {
-        try
-        {
-            var text = SkinData.Text;
-            if (string.IsNullOrEmpty(text)) return;
-            var topLevel = TopLevel.GetTopLevel(this);
-            await topLevel!.Clipboard!.SetTextAsync(text);
-            ButtonCopySkins.IsVisible = true;
-            await Task.Delay(3000);
-            ButtonCopySkins.IsVisible = false;
-        }
-        catch (Exception)
-        {
-            //ignore
-        }
-    }
-
-    private async void CopyStatus_OnClick(object sender, RoutedEventArgs e)
-    {
-        var text = StatusData.Text;
-        if (string.IsNullOrEmpty(text)) return;
-        var topLevel = TopLevel.GetTopLevel(this);
-        await topLevel!.Clipboard!.SetTextAsync(text);
-        ButtonCopyStatus.IsVisible = true;
-        await Task.Delay(3000);
-        ButtonCopyStatus.IsVisible = false;
-    }
-
-    private async void CopiarItensButton_OnClick(object sender, RoutedEventArgs e)
-    {
-        var text = LogContent.Text;
-        if (string.IsNullOrEmpty(text)) return;
-        var topLevel = TopLevel.GetTopLevel(this);
-        await topLevel!.Clipboard!.SetTextAsync(text);
-        ItensCopiadoTextBlock.IsVisible = true;
-        await Task.Delay(3000);
-        ItensCopiadoTextBlock.IsVisible = false;
-    }
 }
