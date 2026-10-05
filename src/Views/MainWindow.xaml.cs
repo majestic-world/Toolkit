@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using L2Toolkit.Utilities;
@@ -14,6 +17,7 @@ namespace L2Toolkit.Views
         private readonly Dictionary<Type, UserControl> _pageCache = new();
         private readonly Dictionary<Type, Button> _sidebarButtons;
         private Button? _activeSidebarButton;
+        private CancellationTokenSource? _updateCts;
 
         public MainWindow()
         {
@@ -54,6 +58,76 @@ namespace L2Toolkit.Views
                 if (e.Property == WindowStateProperty)
                     UpdateMaximizeIcon();
             };
+
+            Opened += async (_, _) =>
+            {
+                AppUpdater.CleanupDownloads();
+                await CheckUpdateOnOpenAsync();
+            };
+        }
+
+        // ── Atualização ───────────────────────────────────────────────────
+
+        /// <summary>Na abertura: se houver versão nova, baixa e instala sem perguntar (só no app instalado).</summary>
+        private async Task CheckUpdateOnOpenAsync()
+        {
+            var check = await AppUpdater.CheckAsync();
+            if (check is { Status: UpdateStatus.Available, Release: { } release } && AppUpdater.ShouldAutoInstall(release))
+                await InstallUpdateAsync(release);
+        }
+
+        /// <summary>
+        /// Baixa o instalador com progresso, abre em modo silencioso e encerra o app para
+        /// liberar os arquivos. Fora do Windows não há instalador: abre a página da release.
+        /// </summary>
+        public async Task InstallUpdateAsync(AppRelease release)
+        {
+            if (_updateCts != null) return;
+            if (!OperatingSystem.IsWindows())
+            {
+                AppUpdater.OpenReleasePage(release);
+                return;
+            }
+
+            using var cts = _updateCts = new CancellationTokenSource();
+            UpdateTitle.Text = $"Atualizando para a versão {release.Tag}";
+            UpdateProgress.Value = 0;
+            UpdateProgressText.Text = "Conectando…";
+            UpdateCancelText.Text = "Cancelar";
+            UpdateOverlay.IsVisible = true;
+            try
+            {
+                var progress = new Progress<(long Done, long Total)>(p =>
+                {
+                    if (cts.IsCancellationRequested) return;
+                    UpdateProgress.Value = p.Total > 0 ? (double)p.Done / p.Total : 0;
+                    UpdateProgressText.Text = $"{p.Done / 1048576.0:0.0} de {p.Total / 1048576.0:0.0} MB";
+                });
+                var installer = await AppUpdater.DownloadAsync(release, progress, cts.Token);
+                UpdateProgressText.Text = "Abrindo o instalador…";
+                AppUpdater.LaunchInstaller(release, installer);
+                (Application.Current?.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)?.Shutdown();
+            }
+            catch (OperationCanceledException)
+            {
+                UpdateOverlay.IsVisible = false;
+            }
+            catch (Exception ex)
+            {
+                UpdateProgressText.Text = "Falha ao atualizar: " + ex.Message;
+                UpdateCancelText.Text = "Fechar";
+            }
+            finally
+            {
+                _updateCts = null;
+            }
+        }
+
+        /// <summary>Cancela o download em andamento ou fecha o aviso de falha.</summary>
+        private void UpdateCancel_Click(object? sender, RoutedEventArgs e)
+        {
+            if (_updateCts != null) _updateCts.Cancel();
+            else UpdateOverlay.IsVisible = false;
         }
 
         // Mantém uma única instância de cada página para preservar o estado

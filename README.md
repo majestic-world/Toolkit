@@ -50,6 +50,8 @@ Tudo fica em `build/`, sem pastas `bin/` ou `obj/`:
 
 A versão vem de `APP_VERSION` no `.env`. Ela vira a versão do executável e do badge na titlebar, e o `make dist` a repassa ao instalador.
 
+O app se atualiza sozinho pelas Releases do GitHub: publique cada versão com a tag igual ao `APP_VERSION` (ex.: `3.9`) e anexe o instalador gerado pelo `make dist`.
+
 ### Estrutura
 
 - `src/`: código do app; cada pasta é um namespace `L2Toolkit.*`

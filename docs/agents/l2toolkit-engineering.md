@@ -57,6 +57,15 @@ Pages select files or folders through Avalonia's storage provider, process async
 
 `docs/index.html` is the public, single-page product documentation. It is standalone HTML/CSS with Font Awesome and Google Fonts; update it directly when product documentation changes.
 
+## App updates
+
+`Utilities/AppUpdater` updates the app from GitHub Releases of `majestic-world/Toolkit` (`releases/latest`). A release counts as newer when its tag (`3.9`, `v3.9.1`; missing parts are 0) is above `APP_VERSION`, so publish each release with the tag equal to the `.env` version and the Inno Setup installer (`.exe`) as an asset.
+
+- `CheckAsync` is the only way to query: at most one request every 10 s (anti-flood, in memory), concurrent callers share the running request, and the throttled result carries the remaining wait.
+- On open, `MainWindow` checks and, when a newer release exists, downloads and installs without asking — only in the installed app (`unins000.exe` next to the exe), never from the repo build, and only once per tag (`update_attempted_tag`), so a cancelled install or a tag above the published `APP_VERSION` does not loop. Settings → Aplicativo → "Verificar atualizações" runs the same flow on demand, also from the repo build.
+- `DownloadAsync` saves to `%TEMP%\L2Toolkit`, checks size and the asset's GitHub `digest` (SHA-256). `LaunchInstaller` runs it with `/SILENT /SP- /SUPPRESSMSGBOXES /NORESTART /CLOSEAPPLICATIONS /UPDATE=1` and the app shuts down; `Setup.iss` reopens the app only when `/UPDATE=1` is present (installers built before this change do not reopen it). The next start deletes leftover installers.
+- The main-window overlay shows progress and can cancel the download. Outside Windows there is no installer: the flow opens the release page.
+
 ## Embedded tables
 
 `Tables/*.l2dat` are embedded resources. Application startup calls `TableManager.EnsureTables()`, which materializes any missing resource in `AppContext.BaseDirectory/tables/`.

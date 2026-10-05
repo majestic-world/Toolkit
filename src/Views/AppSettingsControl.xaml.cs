@@ -109,6 +109,43 @@ public partial class AppSettingsControl : UserControl
         };
 
         BuildBtn.Click += async (_, _) => await BuildTablesAsync();
+
+        AppVersionText.Text = AppUpdater.CurrentVersion.ToString(3);
+        CheckUpdatesBtn.Click += async (_, _) => await CheckUpdatesAsync();
+    }
+
+    private async Task CheckUpdatesAsync()
+    {
+        CheckUpdatesBtn.IsEnabled = false;
+        ShowUpdateStatus("Verificando…", "ThemeTextHint");
+        var check = await AppUpdater.CheckAsync();
+        CheckUpdatesBtn.IsEnabled = true;
+        switch (check.Status)
+        {
+            case UpdateStatus.UpToDate:
+                ShowUpdateStatus($"Você já está na versão mais recente ({AppUpdater.CurrentVersion.ToString(3)}).", "ThemeStatusOk");
+                break;
+            case UpdateStatus.Throttled:
+                ShowUpdateStatus($"Aguarde {Math.Ceiling(check.Wait.TotalSeconds)} s para verificar de novo.", "ThemeTextHint");
+                break;
+            case UpdateStatus.Failed:
+                ShowUpdateStatus("Não foi possível verificar: " + check.Error, "ThemeStatusError");
+                break;
+            case UpdateStatus.Available:
+                ShowUpdateStatus($"Versão {check.Release!.Tag} disponível.", "ThemeStatusOk");
+                if (TopLevel.GetTopLevel(this) is MainWindow main)
+                    await main.InstallUpdateAsync(check.Release);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(check), check.Status, null);
+        }
+    }
+
+    private void ShowUpdateStatus(string text, string brushKey)
+    {
+        UpdateStatusText.Text = text;
+        UpdateStatusText[!TextBlock.ForegroundProperty] = AppTheme.Brush(brushKey);
+        UpdateStatusText.IsVisible = true;
     }
 
     private void ThemeComboBox_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
