@@ -45,12 +45,7 @@ public partial class SystemMsgColor : UserControl
     private double           _spinAngle;
 
     // Shared color picker
-    private bool      _pickerBuilt;
-    private bool      _sliderUpdating;
     private TextBox?  _activeHexBox;
-    private Border    _pickerPreview = null!;
-    private Slider    _rSlider = null!, _gSlider = null!, _bSlider = null!;
-    private TextBlock _hexDisplay = null!;
 
     // Preset add picker
     private TextBox _presetNewHexBox  = null!;
@@ -70,6 +65,7 @@ public partial class SystemMsgColor : UserControl
     public SystemMsgColor()
     {
         InitializeComponent();
+        ColorPicker.ColorChanged += OnPickerColorChanged;
         EnsurePresetsDir();
         LoadPresets();
         BuildPresetNewPicker();
@@ -883,120 +879,17 @@ public partial class SystemMsgColor : UserControl
 
     // ─── Color picker popup ───────────────────────────────────────────────────
 
-    private void EnsurePickerBuilt()
+    private void OnPickerColorChanged(object? sender, Color color)
     {
-        if (_pickerBuilt) return;
-        _pickerBuilt = true;
-
-        _pickerPreview = new Border
-        {
-            Height       = 52,
-            CornerRadius = new CornerRadius(7),
-            Background   = new SolidColorBrush(Colors.Black)
-        };
-
-        _hexDisplay = new TextBlock
-        {
-            FontFamily          = new FontFamily("Consolas,Courier New,monospace"),
-            FontSize            = 13,
-            Foreground          = new SolidColorBrush(Color.Parse("#C0C0C0")),
-            HorizontalAlignment = HorizontalAlignment.Center
-        };
-
-        _rSlider = MakePickerSlider("#E05050");
-        _gSlider = MakePickerSlider("#50C050");
-        _bSlider = MakePickerSlider("#5090E0");
-
-        _rSlider.PropertyChanged += OnPickerSliderChanged;
-        _gSlider.PropertyChanged += OnPickerSliderChanged;
-        _bSlider.PropertyChanged += OnPickerSliderChanged;
-
-        PickerPanel.Children.Add(_pickerPreview);
-        PickerPanel.Children.Add(_hexDisplay);
-        PickerPanel.Children.Add(MakeSliderRow("R", _rSlider));
-        PickerPanel.Children.Add(MakeSliderRow("G", _gSlider));
-        PickerPanel.Children.Add(MakeSliderRow("B", _bSlider));
-    }
-
-    private static Slider MakePickerSlider(string accentHex) => new Slider
-    {
-        Classes    = { "PickerSlider" },
-        Minimum    = 0,
-        Maximum    = 255,
-        Value      = 0,
-        Foreground = new SolidColorBrush(Color.Parse(accentHex))
-    };
-
-    private static Grid MakeSliderRow(string label, Slider slider)
-    {
-        var grid = new Grid();
-        grid.ColumnDefinitions.Add(new ColumnDefinition(14, GridUnitType.Pixel));
-        grid.ColumnDefinitions.Add(new ColumnDefinition(8,  GridUnitType.Pixel));
-        grid.ColumnDefinitions.Add(new ColumnDefinition(1,  GridUnitType.Star));
-        grid.ColumnDefinitions.Add(new ColumnDefinition(8,  GridUnitType.Pixel));
-        grid.ColumnDefinitions.Add(new ColumnDefinition(30, GridUnitType.Pixel));
-
-        var lbl = new TextBlock
-        {
-            Text              = label,
-            FontSize          = 11,
-            FontWeight        = FontWeight.SemiBold,
-            Foreground        = new SolidColorBrush(Color.Parse("#9CA3AF")),
-            VerticalAlignment = VerticalAlignment.Center
-        };
-        Grid.SetColumn(lbl,    0);
-        Grid.SetColumn(slider, 2);
-
-        var val = new TextBlock
-        {
-            FontSize          = 11,
-            FontFamily        = new FontFamily("Consolas,Courier New,monospace"),
-            Foreground        = new SolidColorBrush(Color.Parse("#D4D4D4")),
-            VerticalAlignment = VerticalAlignment.Center,
-            TextAlignment     = TextAlignment.Right,
-            Text              = "0"
-        };
-        Grid.SetColumn(val, 4);
-
-        slider.PropertyChanged += (_, e) =>
-        {
-            if (e.Property.Name == "Value") val.Text = $"{(int)slider.Value}";
-        };
-
-        grid.Children.Add(lbl);
-        grid.Children.Add(slider);
-        grid.Children.Add(val);
-        return grid;
-    }
-
-    private void OnPickerSliderChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
-    {
-        if (e.Property.Name != "Value" || _sliderUpdating) return;
-        var r   = (byte)_rSlider.Value;
-        var g   = (byte)_gSlider.Value;
-        var b   = (byte)_bSlider.Value;
-        var hex = $"{r:X2}{g:X2}{b:X2}";
-        _pickerPreview.Background = new SolidColorBrush(Color.FromRgb(r, g, b));
-        _hexDisplay.Text          = $"#{hex}";
         if (_activeHexBox != null)
-            _activeHexBox.Text = hex;
+            _activeHexBox.Text = $"{color.R:X2}{color.G:X2}{color.B:X2}";
     }
 
     private void ShowColorPicker(Border swatch, TextBox hexBox)
     {
-        EnsurePickerBuilt();
         _activeHexBox = hexBox;
-
         if (TryParseHex(hexBox.Text?.Trim() ?? "", out var color))
-        {
-            _sliderUpdating = true;
-            _rSlider.Value  = color.R;
-            _gSlider.Value  = color.G;
-            _bSlider.Value  = color.B;
-            _sliderUpdating = false;
-            _pickerPreview.Background = new SolidColorBrush(color);
-            _hexDisplay.Text          = $"#{color.R:X2}{color.G:X2}{color.B:X2}";
-        }
+            ColorPicker.SetColor(color);
 
         ColorPickerPopup.PlacementTarget = swatch;
         ColorPickerPopup.IsOpen          = true;

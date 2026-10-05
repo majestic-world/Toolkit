@@ -86,7 +86,6 @@ public partial class EnchantEffect : UserControl
     private bool                         _suppressHexUpdate;
     private bool                         _pickerUpdating;
     private TextBox?                     _activeHexBox;
-    private bool                         _pickerBuilt;
 
     // Weapon row control references (indexed 0-19)
     private readonly List<Border>     _radSwatches    = [];
@@ -118,20 +117,12 @@ public partial class EnchantEffect : UserControl
 
     private bool _isWeaponMode = true;
 
-    // ─── Picker shared state ──────────────────────────────────────────────────
-
-    private Border    _pickerPreview = null!;
-    private Slider    _rSlider       = null!;
-    private Slider    _gSlider       = null!;
-    private Slider    _bSlider       = null!;
-    private TextBlock _hexDisplay    = null!;
-    private bool      _sliderUpdating;
-
     // ─── Init ─────────────────────────────────────────────────────────────────
 
     public EnchantEffect()
     {
         InitializeComponent();
+        ColorPicker.ColorChanged += OnPickerColorChanged;
         BuildRows();
 
         var db = Settings.AppDatabase.GetInstance();
@@ -982,128 +973,19 @@ public partial class EnchantEffect : UserControl
 
     // ─── Color picker popup ───────────────────────────────────────────────────
 
-    private void EnsurePickerBuilt()
+    private void OnPickerColorChanged(object? sender, Color color)
     {
-        if (_pickerBuilt) return;
-        _pickerBuilt = true;
-
-        _pickerPreview = new Border
-        {
-            Height       = 52,
-            CornerRadius = new CornerRadius(7),
-            Background   = new SolidColorBrush(Colors.Black)
-        };
-
-        _hexDisplay = new TextBlock
-        {
-            FontFamily          = new FontFamily("Consolas,Courier New,monospace"),
-            FontSize            = 13,
-            Foreground          = new SolidColorBrush(Color.Parse("#C0C0C0")),
-            HorizontalAlignment = HorizontalAlignment.Center
-        };
-
-        _rSlider = MakePickerSlider("#E05050");
-        _gSlider = MakePickerSlider("#50C050");
-        _bSlider = MakePickerSlider("#5090E0");
-
-        _rSlider.PropertyChanged += OnPickerSliderChanged;
-        _gSlider.PropertyChanged += OnPickerSliderChanged;
-        _bSlider.PropertyChanged += OnPickerSliderChanged;
-
-        PickerPanel.Children.Add(_pickerPreview);
-        PickerPanel.Children.Add(_hexDisplay);
-        PickerPanel.Children.Add(MakeSliderRow("R", _rSlider));
-        PickerPanel.Children.Add(MakeSliderRow("G", _gSlider));
-        PickerPanel.Children.Add(MakeSliderRow("B", _bSlider));
-    }
-
-    private static Slider MakePickerSlider(string accentHex)
-    {
-        return new Slider
-        {
-            Classes    = { "PickerSlider" },
-            Minimum    = 0,
-            Maximum    = 255,
-            Value      = 0,
-            Foreground = new SolidColorBrush(Color.Parse(accentHex))
-        };
-    }
-
-    private static Grid MakeSliderRow(string label, Slider slider)
-    {
-        var grid = new Grid();
-        grid.ColumnDefinitions.Add(new ColumnDefinition(14, GridUnitType.Pixel));
-        grid.ColumnDefinitions.Add(new ColumnDefinition(8,  GridUnitType.Pixel));
-        grid.ColumnDefinitions.Add(new ColumnDefinition(1,  GridUnitType.Star));
-        grid.ColumnDefinitions.Add(new ColumnDefinition(8,  GridUnitType.Pixel));
-        grid.ColumnDefinitions.Add(new ColumnDefinition(30, GridUnitType.Pixel));
-
-        var lbl = new TextBlock
-        {
-            Text              = label,
-            FontSize          = 11,
-            FontWeight        = FontWeight.SemiBold,
-            Foreground        = new SolidColorBrush(Color.Parse("#9CA3AF")),
-            VerticalAlignment = VerticalAlignment.Center
-        };
-        Grid.SetColumn(lbl, 0);
-        Grid.SetColumn(slider, 2);
-
-        var val = new TextBlock
-        {
-            FontSize          = 11,
-            FontFamily        = new FontFamily("Consolas,Courier New,monospace"),
-            Foreground        = new SolidColorBrush(Color.Parse("#D4D4D4")),
-            VerticalAlignment = VerticalAlignment.Center,
-            TextAlignment     = TextAlignment.Right
-        };
-        Grid.SetColumn(val, 4);
-
-        slider.PropertyChanged += (_, e) =>
-        {
-            if (e.Property.Name == "Value")
-                val.Text = $"{(int)slider.Value}";
-        };
-        val.Text = "0";
-
-        grid.Children.Add(lbl);
-        grid.Children.Add(slider);
-        grid.Children.Add(val);
-        return grid;
-    }
-
-    private void OnPickerSliderChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
-    {
-        if (e.Property.Name != "Value" || _sliderUpdating) return;
-        var r   = (byte)_rSlider.Value;
-        var g   = (byte)_gSlider.Value;
-        var b   = (byte)_bSlider.Value;
-        var hex = $"{r:X2}{g:X2}{b:X2}";
-        _pickerPreview.Background = new SolidColorBrush(Color.FromRgb(r, g, b));
-        _hexDisplay.Text          = $"#{hex}";
-        if (_activeHexBox != null)
-        {
-            _pickerUpdating = true;
-            _activeHexBox.Text = hex;
-            _pickerUpdating = false;
-        }
+        if (_activeHexBox == null) return;
+        _pickerUpdating = true;
+        _activeHexBox.Text = $"{color.R:X2}{color.G:X2}{color.B:X2}";
+        _pickerUpdating = false;
     }
 
     private void ShowColorPicker(Border swatch, TextBox hexBox)
     {
-        EnsurePickerBuilt();
         _activeHexBox = hexBox;
-
         if (TryParseHex(hexBox.Text, out var color))
-        {
-            _sliderUpdating = true;
-            _rSlider.Value  = color.R;
-            _gSlider.Value  = color.G;
-            _bSlider.Value  = color.B;
-            _sliderUpdating = false;
-            _pickerPreview.Background = new SolidColorBrush(color);
-            _hexDisplay.Text          = $"#{color.R:X2}{color.G:X2}{color.B:X2}";
-        }
+            ColorPicker.SetColor(color);
 
         ColorPickerPopup.PlacementTarget = swatch;
         ColorPickerPopup.IsOpen          = true;

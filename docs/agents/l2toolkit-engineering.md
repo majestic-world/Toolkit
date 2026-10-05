@@ -40,6 +40,7 @@ Embedded resource names follow the folder under the project (`L2Toolkit.Tables.<
 - Keep button themes free of `BrushTransition`; it produces a two-tone hover flicker.
 - Preserve the dark professional visual language and its restrained surface steps: titlebar/sidebar `#2A2A2A`, page `#333333`, panels/cards `#2C2C2C`, recessed inputs `#252525`, borders `#464646`, blue accent around `#5B9BD5`, page subtitles in `#E8E8E8`, secondary labels no darker than `#B8B8B8`. Get contrast from text and borders, not from large gaps between surface grays.
 - Fluent's `TextBox` watermark has a template-fixed `Opacity="0.5"`; `App.axaml` sets its foreground to white so the effective placeholder stays legible (~`#929292` on inputs). Do not set watermark colors per page.
+- Color selection uses the shared `Views/Controls/HsvColorPicker` (saturation/value square + hue strip, RGB only) hosted in a page `Popup`; pages call `SetColor` when opening it and react to `ColorChanged`. Do not build per-page slider pickers.
 - The custom titlebar supports drag-to-move and double-click maximize. Do not replace that behavior when changing window chrome.
 
 ### Shared runtime services

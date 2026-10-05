@@ -1,6 +1,7 @@
 <UserControl x:Class="L2Toolkit.Views.EnchantEffect"
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="using:L2Toolkit.Views.Controls"
              Background="#333333">
 
    <UserControl.Resources>
@@ -145,23 +146,6 @@
            <Setter Property="Foreground" Value="#D4D4D4"/>
            <Setter Property="BorderBrush" Value="#464646"/>
            <Setter Property="Height" Value="34"/>
-       </Style>
-
-       <!-- Slider track style for the color picker -->
-       <Style Selector="Slider.PickerSlider">
-           <Setter Property="Minimum" Value="0"/>
-           <Setter Property="Maximum" Value="255"/>
-           <Setter Property="Height" Value="20"/>
-       </Style>
-       <Style Selector="Slider.PickerSlider /template/ Track">
-           <Setter Property="Height" Value="6"/>
-       </Style>
-       <Style Selector="Slider.PickerSlider /template/ Track#PART_Track Thumb">
-           <Setter Property="Width" Value="14"/>
-           <Setter Property="Height" Value="14"/>
-           <Setter Property="Background" Value="#E8E8E8"/>
-           <Setter Property="CornerRadius" Value="7"/>
-           <Setter Property="BorderThickness" Value="0"/>
        </Style>
    </UserControl.Styles>
 
@@ -505,7 +489,7 @@
                CornerRadius="10"
                Padding="14"
                BoxShadow="0 8 32 4 #AA000000">
-           <StackPanel x:Name="PickerPanel" Width="230" Spacing="10"/>
+           <controls:HsvColorPicker x:Name="ColorPicker"/>
        </Border>
    </Popup>
 
