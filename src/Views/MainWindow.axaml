@@ -286,15 +286,6 @@
                             </StackPanel>
                         </Button>
 
-                        <Button x:Name="BtnUpgradeButton" Click="BtnUpgrade_Click" Theme="{StaticResource SidebarButtonStyle}">
-                            <StackPanel Orientation="Horizontal">
-                                <!-- Upload / arrow up icon -->
-                                <PathIcon Data="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"
-                                          Width="16" Height="16" Foreground="{DynamicResource ThemeAccent}" VerticalAlignment="Center" Margin="0,0,12,0"/>
-                                <TextBlock Text="Upgrade System"/>
-                            </StackPanel>
-                        </Button>
-
                         <Button x:Name="BtnUpgradeNormalSystemButton" Click="ButtonUpgradeNormalSystem_OnClick" Theme="{StaticResource SidebarButtonStyle}">
                             <StackPanel Orientation="Horizontal">
                                 <!-- Wrench / build icon -->
@@ -327,15 +318,6 @@
                                 <PathIcon Data="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96C5 16.1 6.9 18 9 18h12v-2H9.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63H19c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1 1 0 0023.25 5H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"
                                           Width="16" Height="16" Foreground="{DynamicResource ThemeAccent}" VerticalAlignment="Center" Margin="0,0,12,0"/>
                                 <TextBlock Text="Criar MultiSell"/>
-                            </StackPanel>
-                        </Button>
-
-                        <Button x:Name="BtnMobiusButton" Click="ButtonMobius_OnClick" Theme="{StaticResource SidebarButtonStyle}">
-                            <StackPanel Orientation="Horizontal">
-                                <!-- Tag / label icon -->
-                                <PathIcon Data="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"
-                                          Width="16" Height="16" Foreground="{DynamicResource ThemeAccent}" VerticalAlignment="Center" Margin="0,0,12,0"/>
-                                <TextBlock Text="Commission Tag"/>
                             </StackPanel>
                         </Button>
 

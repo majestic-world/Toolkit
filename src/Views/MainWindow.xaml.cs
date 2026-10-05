@@ -29,12 +29,10 @@ namespace L2Toolkit.Views
                 [typeof(PrimeShopGenerator)]      = BtnPrimeShopButton,
                 [typeof(DescriptionFix)]          = BtnDescriptionFixButton,
                 [typeof(Missions)]                = BtnMissionsButton,
-                [typeof(UpgradeEquipment)]        = BtnUpgradeButton,
                 [typeof(UpgradeNormalSystem)]     = BtnUpgradeNormalSystemButton,
                 [typeof(LiveData)]                = BtnLiveModeButton,
                 [typeof(SkinBuilder)]             = SkinBuilderBtn,
                 [typeof(CreateMultisell)]         = BtnCreateMultisellButton,
-                [typeof(Commission)]              = BtnMobiusButton,
                 [typeof(EnchantEffect)]           = BtnEnchantEffectButton,
                 [typeof(SystemMsgColor)]          = BtnSystemMsgColorButton,
                 [typeof(SearchIcon)]              = BtnSearchIconButton,
@@ -141,9 +139,6 @@ namespace L2Toolkit.Views
         private void BtnMissions_Click(object sender, RoutedEventArgs e)
             => ShowPage<Missions>();
 
-        private void BtnUpgrade_Click(object sender, RoutedEventArgs e)
-            => ShowPage<UpgradeEquipment>();
-
         private void BtnSearchIcon_Click(object sender, RoutedEventArgs e)
             => ShowPage<SearchIcon>();
 
@@ -158,9 +153,6 @@ namespace L2Toolkit.Views
 
         private void ButtonUpgradeNormalSystem_OnClick(object sender, RoutedEventArgs e)
             => ShowPage<UpgradeNormalSystem>();
-
-        private void ButtonMobius_OnClick(object sender, RoutedEventArgs e)
-            => ShowPage<Commission>();
 
         private void SkinBuilder_OnClick(object sender, RoutedEventArgs e)
             => ShowPage<SkinBuilder>();
