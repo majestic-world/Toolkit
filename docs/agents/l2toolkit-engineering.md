@@ -109,10 +109,9 @@ For every file marked `isSafePackage="true"` in the structure XML, the serialize
 1. Add a mutable `DatXxx` record under `ClientDat/`.
 2. Add matching `ParseXxx(byte[])` and `SerializeXxx(List<DatXxx>)` methods to `L2DatFile`.
 3. Check the structure XML for `isSafePackage`; append the SafePackage footer when required.
-4. Add the filename pattern to `SupportedPatterns` in `Views/AppSettingsControl.xaml.cs` so Test DAT discovers it.
-5. Wire page load through decrypt → parse → UI mapping, and save through UI mapping → serialize → encrypt → write.
+4. Wire page load through decrypt → parse → UI mapping, and save through UI mapping → serialize → encrypt → write.
 
-`Views/AppSettingsControl.xaml.cs` also owns Test DAT and the L2DAT Converter. Test DAT discovers supported files, loads the Name table before dependent files, and exports text. The converter packs text to `.l2dat` and verifies the round trip byte for byte.
+`Views/AppSettingsControl.xaml.cs` also owns the L2DAT Converter, which packs text to `.l2dat` and verifies the round trip byte for byte.
 
 ## Splash screens
 

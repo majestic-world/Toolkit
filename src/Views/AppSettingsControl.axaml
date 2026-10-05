@@ -512,67 +512,6 @@
                     </StackPanel>
                 </Grid>
             </Border>
-
-            <!-- Panel: Test DAT (temporary) -->
-            <Border Margin="32,0,32,32"
-                    CornerRadius="8"
-                    Background="{DynamicResource ThemeSurfaceCard}"
-                    BorderBrush="{DynamicResource ThemeBorder}"
-                    BorderThickness="1"
-                    ClipToBounds="True">
-                <Grid ColumnDefinitions="4,*">
-                    <Border Grid.Column="0" Background="{DynamicResource ThemeWarningAccent}"/>
-                    <StackPanel Grid.Column="1">
-
-                        <StackPanel Orientation="Horizontal"
-                                    Margin="20,0"
-                                    Height="52"
-                                    Spacing="14"
-                                    VerticalAlignment="Center">
-                            <PathIcon Data="M12 2L1 21h22L12 2zm1 16h-2v-2h2v2zm0-4h-2V9h2v5z" Width="18" Height="18" Foreground="{DynamicResource ThemeWarningAccent}" VerticalAlignment="Center"/>
-                            <Border Width="1" Height="18" Background="{DynamicResource ThemeBorderStrong}" VerticalAlignment="Center"/>
-                            <TextBlock Text="TEST DAT (TEMPORÁRIO)"
-                                       FontSize="11"
-                                       FontWeight="Bold"
-                                       Foreground="{DynamicResource ThemeTextLabel}"
-                                       LetterSpacing="1.5"
-                                       VerticalAlignment="Center"/>
-                        </StackPanel>
-
-                        <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
-
-                        <StackPanel Margin="20,16,20,20" Spacing="14">
-                            <TextBlock TextWrapping="Wrap"
-                                       FontSize="13"
-                                       Foreground="{DynamicResource ThemeTextLabel}"
-                                       LineHeight="20">
-                                Selecione um arquivo .dat do cliente L2 para descriptografar e salvar como .txt na área de trabalho.
-                            </TextBlock>
-
-                            <StackPanel Orientation="Horizontal" Spacing="10">
-                                <Button x:Name="TestDatBtn"
-                                        Height="38"
-                                        Padding="16,0"
-                                        Theme="{StaticResource GhostButton}">
-                                    <StackPanel Orientation="Horizontal" Spacing="8">
-                                        <PathIcon Data="M14 6l-1-2H5v17h2v-7h5l1 2h7V6h-6zm4 8h-4l-1-2H7V6h5l1 2h5v6z" Width="14" Height="14" VerticalAlignment="Center" Foreground="{DynamicResource ThemeTextLabel}"/>
-                                        <TextBlock Text="Test DAT"
-                                                   FontSize="13"
-                                                   FontWeight="Medium"
-                                                   VerticalAlignment="Center"/>
-                                    </StackPanel>
-                                </Button>
-                                <TextBlock x:Name="DatStatusText"
-                                           FontSize="12"
-                                           Foreground="{DynamicResource ThemeTextLabel}"
-                                           VerticalAlignment="Center"
-                                           IsVisible="False"/>
-                            </StackPanel>
-                        </StackPanel>
-                    </StackPanel>
-                </Grid>
-            </Border>
-
         </StackPanel>
     </ScrollViewer>
 </UserControl>
