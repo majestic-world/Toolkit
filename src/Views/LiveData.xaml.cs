@@ -972,38 +972,15 @@ public partial class LiveData : UserControl
         XmlData.Text = string.Empty;
         SetItemGrpData.Text = string.Empty;
 
-        StackPanelXml.IsVisible = false;
         ConvertSPlusCheckBox.IsVisible = false;
         EnableEnchantGlowCheckBox.IsVisible = false;
         SetItemIdPanel.IsVisible = false;
-        SetItemGrpPanel.IsVisible = false;
-    }
-
-    private async void CopiarClienteButton_OnClick(object sender, RoutedEventArgs e)
-    {
-        var text = ClientTextBox.Text;
-        if (string.IsNullOrEmpty(text)) return;
-        var topLevel = TopLevel.GetTopLevel(this);
-        await topLevel!.Clipboard!.SetTextAsync(text);
-        GrpCopyData.IsVisible = true;
-        await Task.Delay(3000);
-        GrpCopyData.IsVisible = false;
-    }
-
-    private async void CopiarServidorButton_OnClick(object sender, RoutedEventArgs e)
-    {
-        var text = NameData.Text;
-        if (string.IsNullOrEmpty(text)) return;
-        var topLevel = TopLevel.GetTopLevel(this);
-        await topLevel!.Clipboard!.SetTextAsync(text);
-        NameCopyContent.IsVisible = true;
-        await Task.Delay(3000);
-        NameCopyContent.IsVisible = false;
+        SetOptionalTabs(setItemGrp: false, xml: false);
     }
 
     private void TypeProcess_OnDropDownClosed(object? sender, Avalonia.Controls.SelectionChangedEventArgs e)
     {
-        if (StackPanelXml == null) return;
+        if (XmlTab == null) return;
         var typeItem = TypeProcess.SelectedItem as ComboBoxItem;
         string? textBox = typeItem?.Content?.ToString() ?? TypeProcess.SelectedItem as string;
         if (string.IsNullOrEmpty(textBox)) return;
@@ -1013,58 +990,73 @@ public partial class LiveData : UserControl
         switch (textBox)
         {
             case "Armor":
-                StackPanelXml.IsVisible = true;
                 ConvertSPlusCheckBox.IsVisible = true;
                 EnableEnchantGlowCheckBox.IsVisible = true;
                 SetItemIdPanel.IsVisible = true;
-                SetItemGrpPanel.IsVisible = true;
+                SetOptionalTabs(setItemGrp: true, xml: true);
                 return;
             case "Items":
-                StackPanelXml.IsVisible = true;
                 ConvertSPlusCheckBox.IsVisible = false;
                 EnableEnchantGlowCheckBox.IsVisible = false;
                 SetItemIdPanel.IsVisible = false;
-                SetItemGrpPanel.IsVisible = false;
+                SetOptionalTabs(setItemGrp: false, xml: true);
                 SetItemGrpData.Text = "";
                 return;
             case "Weapons":
-                StackPanelXml.IsVisible = true;
                 ConvertSPlusCheckBox.IsVisible = true;
                 EnableEnchantGlowCheckBox.IsVisible = false;
                 SetItemIdPanel.IsVisible = false;
-                SetItemGrpPanel.IsVisible = false;
+                SetOptionalTabs(setItemGrp: false, xml: true);
                 SetItemGrpData.Text = "";
                 return;
         }
 
-        StackPanelXml.IsVisible = false;
         ConvertSPlusCheckBox.IsVisible = false;
         EnableEnchantGlowCheckBox.IsVisible = false;
         SetItemIdPanel.IsVisible = false;
-        SetItemGrpPanel.IsVisible = false;
+        SetOptionalTabs(setItemGrp: false, xml: false);
         SetItemGrpData.Text = "";
     }
 
-    private async void CopyXml_OnClick(object sender, RoutedEventArgs e)
+    // ─── Resultado em abas ────────────────────────────────────────────────────
+
+    /// <summary>Cada aba mostra uma única área de texto; só a da aba ativa fica visível.</summary>
+    private (Button Tab, TextBox Output)[] ResultTabs =>
+        [(GrpTab, ClientTextBox), (NameTab, NameData), (SetItemGrpTab, SetItemGrpData), (XmlTab, XmlData)];
+
+    private void ResultTab_OnClick(object? sender, RoutedEventArgs e)
     {
-        var text = XmlData.Text;
-        if (string.IsNullOrEmpty(text)) return;
-        var topLevel = TopLevel.GetTopLevel(this);
-        await topLevel!.Clipboard!.SetTextAsync(text);
-        XmlCopied.IsVisible = true;
-        await Task.Delay(3000);
-        XmlCopied.IsVisible = false;
+        if (sender is Button tab)
+            SelectTab(tab);
     }
 
-    private async void CopiarSetItemGrpButton_OnClick(object sender, RoutedEventArgs e)
+    private void SelectTab(Button active)
     {
-        var text = SetItemGrpData.Text;
+        foreach (var (tab, output) in ResultTabs)
+        {
+            tab.Classes.Set("active", tab == active);
+            output.IsVisible = tab == active;
+        }
+    }
+
+    /// <summary>Set Item GRP só existe em Armor; XML em Weapons, Armor e Items. Aba escondida não fica ativa.</summary>
+    private void SetOptionalTabs(bool setItemGrp, bool xml)
+    {
+        SetItemGrpTab.IsVisible = setItemGrp;
+        XmlTab.IsVisible = xml;
+        if (ResultTabs.Any(pair => pair.Tab.Classes.Contains("active") && !pair.Tab.IsVisible))
+            SelectTab(GrpTab);
+    }
+
+    private async void Copy_OnClick(object? sender, RoutedEventArgs e)
+    {
+        var text = ResultTabs.First(pair => pair.Tab.Classes.Contains("active")).Output.Text;
         if (string.IsNullOrEmpty(text)) return;
         var topLevel = TopLevel.GetTopLevel(this);
         await topLevel!.Clipboard!.SetTextAsync(text);
-        SetItemGrpCopyData.IsVisible = true;
+        CopiedBadge.IsVisible = true;
         await Task.Delay(3000);
-        SetItemGrpCopyData.IsVisible = false;
+        CopiedBadge.IsVisible = false;
     }
 
 }

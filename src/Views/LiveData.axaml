@@ -35,6 +35,39 @@
                 <Setter Property="Background" Value="{DynamicResource ThemeSurfacePressed}"/>
             </Style>
         </ControlTheme>
+
+        <!-- Aba do resultado: sublinhado no ativo (classe "active"), só texto nos demais. -->
+        <ControlTheme x:Key="TabButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextHint}"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0,0,0,2"/>
+            <Setter Property="Padding" Value="14,0"/>
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border x:Name="PART_Border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Content="{TemplateBinding Content}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+            <Style Selector="^:pointerover">
+                <Setter Property="Foreground" Value="{DynamicResource ThemeTextBody}"/>
+            </Style>
+            <Style Selector="^.active">
+                <Setter Property="Foreground" Value="{DynamicResource ThemeTextTitle}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource ThemeAccent}"/>
+            </Style>
+        </ControlTheme>
     </UserControl.Resources>
 
     <UserControl.Styles>
@@ -172,32 +205,33 @@
 
                         <StackPanel Margin="20,16,20,20" Spacing="14">
 
-                            <!-- Tipo de processamento -->
-                            <StackPanel Spacing="6">
-                                <TextBlock Text="Tipo de processamento"
-                                           FontSize="12"
-                                           Foreground="{DynamicResource ThemeTextLabel}"
-                                           FontWeight="Medium"/>
-                                <ComboBox x:Name="TypeProcess"
-                                          SelectionChanged="TypeProcess_OnDropDownClosed"
-                                          SelectedIndex="0">
-                                    <ComboBoxItem HorizontalAlignment="Stretch">Skills</ComboBoxItem>
-                                    <ComboBoxItem HorizontalAlignment="Stretch">Weapons</ComboBoxItem>
-                                    <ComboBoxItem HorizontalAlignment="Stretch">Armor</ComboBoxItem>
-                                    <ComboBoxItem HorizontalAlignment="Stretch">Items</ComboBoxItem>
-                                </ComboBox>
-                            </StackPanel>
+                            <!-- Tipo de processamento e Preset na mesma linha; o tipo fica sempre à esquerda -->
+                            <Grid ColumnDefinitions="*,14,*">
+                                <StackPanel Grid.Column="0" Spacing="6">
+                                    <TextBlock Text="Tipo de processamento"
+                                               FontSize="12"
+                                               Foreground="{DynamicResource ThemeTextLabel}"
+                                               FontWeight="Medium"/>
+                                    <ComboBox x:Name="TypeProcess"
+                                              SelectionChanged="TypeProcess_OnDropDownClosed"
+                                              SelectedIndex="0">
+                                        <ComboBoxItem HorizontalAlignment="Stretch">Skills</ComboBoxItem>
+                                        <ComboBoxItem HorizontalAlignment="Stretch">Weapons</ComboBoxItem>
+                                        <ComboBoxItem HorizontalAlignment="Stretch">Armor</ComboBoxItem>
+                                        <ComboBoxItem HorizontalAlignment="Stretch">Items</ComboBoxItem>
+                                    </ComboBox>
+                                </StackPanel>
 
-                            <!-- Preset -->
-                            <StackPanel x:Name="PresetPanel" Spacing="6" IsVisible="False">
-                                <TextBlock Text="Preset"
-                                           FontSize="12"
-                                           Foreground="{DynamicResource ThemeTextLabel}"
-                                           FontWeight="Medium"/>
-                                <ComboBox x:Name="PresetComboBox"
-                                          PlaceholderText="Selecione um preset..."
-                                          SelectionChanged="PresetComboBox_OnSelectionChanged"/>
-                            </StackPanel>
+                                <StackPanel x:Name="PresetPanel" Grid.Column="2" Spacing="6" IsVisible="False">
+                                    <TextBlock Text="Preset"
+                                               FontSize="12"
+                                               Foreground="{DynamicResource ThemeTextLabel}"
+                                               FontWeight="Medium"/>
+                                    <ComboBox x:Name="PresetComboBox"
+                                              PlaceholderText="Selecione um preset..."
+                                              SelectionChanged="PresetComboBox_OnSelectionChanged"/>
+                                </StackPanel>
+                            </Grid>
 
                             <!-- IDs dos itens -->
                             <StackPanel Spacing="6">
@@ -231,8 +265,8 @@
                                          Watermark="Ex: 30 (os IDs serão atribuídos sequencialmente)"/>
                             </StackPanel>
 
-                            <!-- Checkboxes -->
-                            <StackPanel Spacing="8">
+                            <!-- Checkboxes lado a lado -->
+                            <StackPanel Orientation="Horizontal" Spacing="28">
                                 <CheckBox x:Name="ConvertSPlusCheckBox"
                                           IsVisible="False"
                                           Foreground="{DynamicResource ThemeTextBody}"
@@ -293,7 +327,7 @@
                         VerticalAlignment="Center"/>
             </Grid>
 
-            <!-- ── Painel 02: Dados GRP + Nomes (2 colunas) ──────────── -->
+            <!-- ── Painel 02: Resultado em abas (uma área de texto por vez) ── -->
             <Border Margin="32,0,32,32"
                     CornerRadius="8"
                     Background="{DynamicResource ThemeSurfaceCard}"
@@ -304,261 +338,54 @@
                     <Border Grid.Column="0" Background="{DynamicResource ThemeAccent}"/>
                     <StackPanel Grid.Column="1">
 
-                        <StackPanel Orientation="Horizontal"
-                                    Margin="20,0"
-                                    Height="52"
-                                    Spacing="14"
-                                    VerticalAlignment="Center">
-                            <TextBlock Text="RESULTADO"
+                        <Grid ColumnDefinitions="Auto,18,*,Auto,Auto" Margin="20,0,16,0">
+                            <TextBlock Grid.Column="0"
+                                       Text="RESULTADO"
                                        FontSize="11"
                                        FontWeight="Bold"
                                        Foreground="{DynamicResource ThemeTextLabel}"
                                        LetterSpacing="1.5"
                                        VerticalAlignment="Center"/>
-                        </StackPanel>
 
-                        <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
-
-                        <StackPanel Margin="20,16,20,20" Spacing="16">
-
-                            <!-- Dados GRP -->
-                            <StackPanel Spacing="8">
-                                <Grid ColumnDefinitions="*,Auto,Auto" Height="28">
-                                    <TextBlock Grid.Column="0"
-                                               Text="Dados GRP"
-                                               FontSize="12"
-                                               FontWeight="SemiBold"
-                                               Foreground="{DynamicResource ThemeTextLabel}"
-                                               LetterSpacing="1"
-                                               VerticalAlignment="Center"/>
-                                    <Border Grid.Column="1"
-                                            x:Name="GrpCopyData"
-                                            IsVisible="False"
-                                            Background="{DynamicResource ThemeSuccessBg}"
-                                            BorderBrush="{DynamicResource ThemeSuccessBorder}"
-                                            BorderThickness="1"
-                                            CornerRadius="4"
-                                            Padding="8,3"
-                                            VerticalAlignment="Center"
-                                            Margin="0,0,8,0">
-                                        <StackPanel Orientation="Horizontal" Spacing="4">
-                                            <PathIcon Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Width="10" Height="10" Foreground="{DynamicResource ThemeSuccess}" VerticalAlignment="Center"/>
-                                            <TextBlock Text="Copiado!"
-                                                       FontSize="10"
-                                                       Foreground="{DynamicResource ThemeSuccess}"
-                                                       VerticalAlignment="Center"/>
-                                        </StackPanel>
-                                    </Border>
-                                    <Button Grid.Column="2"
-                                            x:Name="CopiarClienteButton"
-                                            Click="CopiarClienteButton_OnClick"
-                                            Height="28"
-                                            Padding="12,0"
-                                            VerticalAlignment="Center"
-                                            Theme="{StaticResource GhostButton}">
-                                        <StackPanel Orientation="Horizontal" Spacing="6">
-                                            <PathIcon Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" Foreground="{DynamicResource ThemeTextLabel}" Width="12" Height="12" VerticalAlignment="Center"/>
-                                            <TextBlock Text="Copiar"
-                                                       FontSize="11"
-                                                       FontWeight="Medium"
-                                                       VerticalAlignment="Center"/>
-                                        </StackPanel>
-                                    </Button>
-                                </Grid>
-                                <TextBox x:Name="ClientTextBox"
-                                         Classes="Code"
-                                         AcceptsReturn="True"
-                                         TextWrapping="Wrap"
-                                         Height="200"
-                                         Padding="14,12"
-                                         BorderThickness="0"
-                                         Background="{DynamicResource ThemeSurfaceInput}"
-                                         Foreground="{DynamicResource ThemeTextCode}"
-                                         CaretBrush="{DynamicResource ThemeAccent}"
-                                         SelectionBrush="{DynamicResource ThemeSelection}"
-                                         FontFamily="Consolas,Courier New,monospace"
-                                         FontSize="12"
-                                         IsReadOnly="True"
-                                         Watermark="Dados GRP aparecerão aqui..."/>
+                            <!-- Abas: Set Item GRP e XML só existem em alguns tipos -->
+                            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                <Button x:Name="GrpTab" Classes="active" Theme="{StaticResource TabButton}"
+                                        Content="Dados GRP" Click="ResultTab_OnClick"/>
+                                <Button x:Name="NameTab" Theme="{StaticResource TabButton}"
+                                        Content="Nomes" Click="ResultTab_OnClick"/>
+                                <Button x:Name="SetItemGrpTab" Theme="{StaticResource TabButton}" IsVisible="False"
+                                        Content="Set Item GRP" Click="ResultTab_OnClick"/>
+                                <Button x:Name="XmlTab" Theme="{StaticResource TabButton}" IsVisible="False"
+                                        Content="Dados XML" Click="ResultTab_OnClick"/>
                             </StackPanel>
 
-                            <!-- Nomes -->
-                            <StackPanel Spacing="8">
-                                <Grid ColumnDefinitions="*,Auto,Auto" Height="28">
-                                    <TextBlock Grid.Column="0"
-                                               Text="Nomes"
-                                               FontSize="12"
-                                               FontWeight="SemiBold"
-                                               Foreground="{DynamicResource ThemeTextLabel}"
-                                               LetterSpacing="1"
-                                               VerticalAlignment="Center"/>
-                                    <Border Grid.Column="1"
-                                            x:Name="NameCopyContent"
-                                            IsVisible="False"
-                                            Background="{DynamicResource ThemeSuccessBg}"
-                                            BorderBrush="{DynamicResource ThemeSuccessBorder}"
-                                            BorderThickness="1"
-                                            CornerRadius="4"
-                                            Padding="8,3"
-                                            VerticalAlignment="Center"
-                                            Margin="0,0,8,0">
-                                        <StackPanel Orientation="Horizontal" Spacing="4">
-                                            <PathIcon Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Width="10" Height="10" Foreground="{DynamicResource ThemeSuccess}" VerticalAlignment="Center"/>
-                                            <TextBlock Text="Copiado!"
-                                                       FontSize="10"
-                                                       Foreground="{DynamicResource ThemeSuccess}"
-                                                       VerticalAlignment="Center"/>
-                                        </StackPanel>
-                                    </Border>
-                                    <Button Grid.Column="2"
-                                            x:Name="CopiarServidorButton"
-                                            Click="CopiarServidorButton_OnClick"
-                                            Height="28"
-                                            Padding="12,0"
-                                            VerticalAlignment="Center"
-                                            Theme="{StaticResource GhostButton}">
-                                        <StackPanel Orientation="Horizontal" Spacing="6">
-                                            <PathIcon Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" Foreground="{DynamicResource ThemeTextLabel}" Width="12" Height="12" VerticalAlignment="Center"/>
-                                            <TextBlock Text="Copiar"
-                                                       FontSize="11"
-                                                       FontWeight="Medium"
-                                                       VerticalAlignment="Center"/>
-                                        </StackPanel>
-                                    </Button>
-                                </Grid>
-                                <TextBox x:Name="NameData"
-                                         Classes="Code"
-                                         AcceptsReturn="True"
-                                         TextWrapping="Wrap"
-                                         Height="200"
-                                         Padding="14,12"
-                                         BorderThickness="0"
-                                         Background="{DynamicResource ThemeSurfaceInput}"
-                                         Foreground="{DynamicResource ThemeTextCode}"
-                                         CaretBrush="{DynamicResource ThemeAccent}"
-                                         SelectionBrush="{DynamicResource ThemeSelection}"
-                                         FontFamily="Consolas,Courier New,monospace"
-                                         FontSize="12"
-                                         IsReadOnly="True"
-                                         Watermark="Nomes aparecerão aqui..."/>
-                            </StackPanel>
-
-                            <!-- Set Item GRP -->
-                            <StackPanel x:Name="SetItemGrpPanel" Spacing="8" IsVisible="False">
-                                <Grid ColumnDefinitions="*,Auto,Auto" Height="28">
-                                    <TextBlock Grid.Column="0"
-                                               Text="Set Item GRP"
-                                               FontSize="12"
-                                               FontWeight="SemiBold"
-                                               Foreground="{DynamicResource ThemeTextLabel}"
-                                               LetterSpacing="1"
-                                               VerticalAlignment="Center"/>
-                                    <Border Grid.Column="1"
-                                            x:Name="SetItemGrpCopyData"
-                                            IsVisible="False"
-                                            Background="{DynamicResource ThemeSuccessBg}"
-                                            BorderBrush="{DynamicResource ThemeSuccessBorder}"
-                                            BorderThickness="1"
-                                            CornerRadius="4"
-                                            Padding="8,3"
-                                            VerticalAlignment="Center"
-                                            Margin="0,0,8,0">
-                                        <StackPanel Orientation="Horizontal" Spacing="4">
-                                            <PathIcon Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Width="10" Height="10" Foreground="{DynamicResource ThemeSuccess}" VerticalAlignment="Center"/>
-                                            <TextBlock Text="Copiado!"
-                                                       FontSize="10"
-                                                       Foreground="{DynamicResource ThemeSuccess}"
-                                                       VerticalAlignment="Center"/>
-                                        </StackPanel>
-                                    </Border>
-                                    <Button Grid.Column="2"
-                                            x:Name="CopiarSetItemGrpButton"
-                                            Click="CopiarSetItemGrpButton_OnClick"
-                                            Height="28"
-                                            Padding="12,0"
-                                            VerticalAlignment="Center"
-                                            Theme="{StaticResource GhostButton}">
-                                        <StackPanel Orientation="Horizontal" Spacing="6">
-                                            <PathIcon Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" Foreground="{DynamicResource ThemeTextLabel}" Width="12" Height="12" VerticalAlignment="Center"/>
-                                            <TextBlock Text="Copiar"
-                                                       FontSize="11"
-                                                       FontWeight="Medium"
-                                                       VerticalAlignment="Center"/>
-                                        </StackPanel>
-                                    </Button>
-                                </Grid>
-                                <TextBox x:Name="SetItemGrpData"
-                                         Classes="Code"
-                                         AcceptsReturn="True"
-                                         TextWrapping="Wrap"
-                                         Height="200"
-                                         Padding="14,12"
-                                         BorderThickness="0"
-                                         Background="{DynamicResource ThemeSurfaceInput}"
-                                         Foreground="{DynamicResource ThemeTextCode}"
-                                         CaretBrush="{DynamicResource ThemeAccent}"
-                                         SelectionBrush="{DynamicResource ThemeSelection}"
-                                         FontFamily="Consolas,Courier New,monospace"
-                                         FontSize="12"
-                                         IsReadOnly="True"
-                                         Watermark="Set Item GRP aparecerá aqui..."/>
-                            </StackPanel>
-
-                        </StackPanel>
-                    </StackPanel>
-                </Grid>
-            </Border>
-
-            <!-- ── Painel 03: Dados XML (condicional) ────────────────── -->
-            <Border x:Name="StackPanelXml"
-                    Margin="32,16,32,32"
-                    CornerRadius="8"
-                    Background="{DynamicResource ThemeSurfaceCard}"
-                    BorderBrush="{DynamicResource ThemeBorder}"
-                    BorderThickness="1"
-                    ClipToBounds="True"
-                    IsVisible="False">
-                <Grid ColumnDefinitions="4,*">
-                    <Border Grid.Column="0" Background="{DynamicResource ThemeAccent}"/>
-                    <StackPanel Grid.Column="1">
-
-                        <Grid ColumnDefinitions="Auto,Auto,*,Auto,Auto"
-                              Margin="20,0"
-                              Height="52">
-                            <TextBlock Grid.Column="2"
-                                       Text="DADOS XML"
-                                       FontSize="11"
-                                       FontWeight="Bold"
-                                       Foreground="{DynamicResource ThemeTextLabel}"
-                                       LetterSpacing="1.5"
-                                       VerticalAlignment="Center"/>
                             <Border Grid.Column="3"
-                                    x:Name="XmlCopied"
+                                    x:Name="CopiedBadge"
                                     IsVisible="False"
                                     Background="{DynamicResource ThemeSuccessBg}"
                                     BorderBrush="{DynamicResource ThemeSuccessBorder}"
                                     BorderThickness="1"
-                                    CornerRadius="5"
-                                    Padding="10,4"
+                                    CornerRadius="4"
+                                    Padding="8,3"
                                     VerticalAlignment="Center"
-                                    Margin="0,0,10,0">
-                                <StackPanel Orientation="Horizontal" Spacing="5">
+                                    Margin="0,0,8,0">
+                                <StackPanel Orientation="Horizontal" Spacing="4">
                                     <PathIcon Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Width="10" Height="10" Foreground="{DynamicResource ThemeSuccess}" VerticalAlignment="Center"/>
                                     <TextBlock Text="Copiado!"
-                                               FontSize="11"
-                                               FontWeight="Medium"
+                                               FontSize="10"
                                                Foreground="{DynamicResource ThemeSuccess}"
                                                VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Border>
                             <Button Grid.Column="4"
-                                    x:Name="CopyXml"
-                                    Click="CopyXml_OnClick"
+                                    x:Name="CopyButton"
+                                    Click="Copy_OnClick"
                                     Height="30"
-                                    Padding="14,0"
+                                    Padding="12,0"
                                     VerticalAlignment="Center"
+                                    ToolTip.Tip="Copia o conteúdo da aba aberta"
                                     Theme="{StaticResource GhostButton}">
-                                <StackPanel Orientation="Horizontal" Spacing="7">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
                                     <PathIcon Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" Foreground="{DynamicResource ThemeTextLabel}" Width="12" Height="12" VerticalAlignment="Center"/>
                                     <TextBlock Text="Copiar"
                                                FontSize="12"
@@ -570,21 +397,68 @@
 
                         <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
 
-                        <TextBox x:Name="XmlData"
-                                 Classes="Code"
-                                 AcceptsReturn="True"
-                                 TextWrapping="Wrap"
-                                 Height="280"
-                                 Padding="20,14"
-                                 BorderThickness="0"
-                                 Background="{DynamicResource ThemeSurfaceInput}"
-                                 Foreground="{DynamicResource ThemeTextCode}"
-                                 CaretBrush="{DynamicResource ThemeAccent}"
-                                 SelectionBrush="{DynamicResource ThemeSelection}"
-                                 FontFamily="Consolas,Courier New,monospace"
-                                 FontSize="12"
-                                 IsReadOnly="True"
-                                 Watermark="Dados XML aparecerão aqui..."/>
+                        <!-- Uma área por aba; só a da aba ativa fica visível -->
+                        <Panel Height="320">
+                            <TextBox x:Name="ClientTextBox"
+                                     Classes="Code"
+                                     AcceptsReturn="True"
+                                     TextWrapping="Wrap"
+                                     Padding="20,14"
+                                     BorderThickness="0"
+                                     Background="{DynamicResource ThemeSurfaceInput}"
+                                     Foreground="{DynamicResource ThemeTextCode}"
+                                     CaretBrush="{DynamicResource ThemeAccent}"
+                                     SelectionBrush="{DynamicResource ThemeSelection}"
+                                     FontFamily="Consolas,Courier New,monospace"
+                                     FontSize="12"
+                                     IsReadOnly="True"
+                                     Watermark="Dados GRP aparecerão aqui..."/>
+                            <TextBox x:Name="NameData"
+                                     IsVisible="False"
+                                     Classes="Code"
+                                     AcceptsReturn="True"
+                                     TextWrapping="Wrap"
+                                     Padding="20,14"
+                                     BorderThickness="0"
+                                     Background="{DynamicResource ThemeSurfaceInput}"
+                                     Foreground="{DynamicResource ThemeTextCode}"
+                                     CaretBrush="{DynamicResource ThemeAccent}"
+                                     SelectionBrush="{DynamicResource ThemeSelection}"
+                                     FontFamily="Consolas,Courier New,monospace"
+                                     FontSize="12"
+                                     IsReadOnly="True"
+                                     Watermark="Nomes aparecerão aqui..."/>
+                            <TextBox x:Name="SetItemGrpData"
+                                     IsVisible="False"
+                                     Classes="Code"
+                                     AcceptsReturn="True"
+                                     TextWrapping="Wrap"
+                                     Padding="20,14"
+                                     BorderThickness="0"
+                                     Background="{DynamicResource ThemeSurfaceInput}"
+                                     Foreground="{DynamicResource ThemeTextCode}"
+                                     CaretBrush="{DynamicResource ThemeAccent}"
+                                     SelectionBrush="{DynamicResource ThemeSelection}"
+                                     FontFamily="Consolas,Courier New,monospace"
+                                     FontSize="12"
+                                     IsReadOnly="True"
+                                     Watermark="Set Item GRP aparecerá aqui..."/>
+                            <TextBox x:Name="XmlData"
+                                     IsVisible="False"
+                                     Classes="Code"
+                                     AcceptsReturn="True"
+                                     TextWrapping="Wrap"
+                                     Padding="20,14"
+                                     BorderThickness="0"
+                                     Background="{DynamicResource ThemeSurfaceInput}"
+                                     Foreground="{DynamicResource ThemeTextCode}"
+                                     CaretBrush="{DynamicResource ThemeAccent}"
+                                     SelectionBrush="{DynamicResource ThemeSelection}"
+                                     FontFamily="Consolas,Courier New,monospace"
+                                     FontSize="12"
+                                     IsReadOnly="True"
+                                     Watermark="Dados XML aparecerão aqui..."/>
+                        </Panel>
 
                     </StackPanel>
                 </Grid>
