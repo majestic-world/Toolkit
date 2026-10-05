@@ -4,7 +4,7 @@ POWERSHELL ?= pwsh
 BUILD_SCRIPT := scripts/build.ps1
 RUN_BUILD = $(POWERSHELL) -NoProfile -ExecutionPolicy Bypass -File "$(BUILD_SCRIPT)" -Configuration "$(CONFIGURATION)"
 
-.PHONY: build macos linux dist
+.PHONY: build macos linux dist run
 
 # Windows (win-x64, Native AOT)
 build:
@@ -21,3 +21,7 @@ linux:
 # Windows build + Inno Setup installer
 dist:
 	$(RUN_BUILD) -Platform windows -Installer
+
+# Development run (Debug, build/Debug/)
+run:
+	dotnet run --project src
