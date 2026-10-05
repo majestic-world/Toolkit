@@ -48,7 +48,51 @@ public static class BrushGenerator
     /// <param name="offsetY">Deslocamento vertical em fração da altura.</param>
     public static byte[] Mask(BrushSettings settings, int width, int height, double scale, double offsetX, double offsetY)
     {
-        var placement = new Placement(width / 2.0 + offsetX * width, height / 2.0 + offsetY * height, Math.Max(width, height) / 2.0 * scale);
+        var half = Math.Max(width, height) / 2.0 * scale;
+        return MaskAt(settings, width, height, new Placement(width / 2.0 + offsetX * width, height / 2.0 + offsetY * height, half, half));
+    }
+
+    /// <summary>
+    /// Máscara esticada para ocupar a arte inteira menos <paramref name="inset"/> px de cada lado
+    /// (640 × 480 com inset 5 → brush de 630 × 470). Mede a caixa do brush numa passada e
+    /// reescala cada eixo separadamente para a caixa alvo, centralizada.
+    /// </summary>
+    public static byte[] MaskFilled(BrushSettings settings, int width, int height, int inset)
+    {
+        // Medição com o brush menor: as pontas nunca passam da borda, então a caixa medida é a real.
+        var half = Math.Min(width, height) / 2.0 * 0.5;
+        var placement = new Placement(width / 2.0, height / 2.0, half, half);
+        var mask = MaskAt(settings, width, height, placement);
+        var targetW = Math.Max(1, width - 2 * inset);
+        var targetH = Math.Max(1, height - 2 * inset);
+
+        // Duas passadas: a segunda corrige o desvio do desfoque e do antialias, que não
+        // escalam junto com a forma (fica dentro de ~1 px do alvo).
+        for (var pass = 0; pass < 2; pass++)
+        {
+            if (!Bounds(mask, width, height, out var x0, out var y0, out var x1, out var y1))
+                return mask;
+            // Caixa medida em coordenadas normalizadas do brush; o pixel x cobre [x, x+1).
+            double u0 = placement.U(x0), u1 = placement.U(x1 + 1), v0 = placement.V(y0), v1 = placement.V(y1 + 1);
+            var halfX = targetW / (u1 - u0);
+            var halfY = targetH / (v1 - v0);
+            placement = new Placement(inset - u0 * halfX, inset - v0 * halfY, halfX, halfY);
+            mask = MaskAt(settings, width, height, placement);
+        }
+        return mask;
+    }
+
+    /// <summary>Recorta a arte pela máscara do brush: o alpha de cada pixel é multiplicado pela máscara.</summary>
+    public static RgbaImage Cut(RgbaImage art, byte[] mask)
+    {
+        var pixels = (byte[])art.Pixels.Clone();
+        for (var i = 0; i < mask.Length; i++)
+            pixels[i * 4 + 3] = (byte)((pixels[i * 4 + 3] * mask[i] + 127) / 255);
+        return new RgbaImage(art.Width, art.Height, pixels);
+    }
+
+    private static byte[] MaskAt(BrushSettings settings, int width, int height, Placement placement)
+    {
         using var bitmap = Render(settings, width, height, placement);
         var rgba = bitmap.Bytes;
         var mask = new byte[width * height];
@@ -57,21 +101,27 @@ public static class BrushGenerator
         return mask;
     }
 
-    /// <summary>Recorta a arte pela máscara do brush: o alpha de cada pixel é multiplicado pela máscara.</summary>
-    public static RgbaImage Cut(RgbaImage art, BrushSettings settings, double scale, double offsetX, double offsetY)
+    /// <summary>Caixa dos pixels pintados (máscara &gt; 0). Falso se o brush não tocou a imagem.</summary>
+    private static bool Bounds(byte[] mask, int width, int height, out int x0, out int y0, out int x1, out int y1)
     {
-        var mask = Mask(settings, art.Width, art.Height, scale, offsetX, offsetY);
-        var pixels = (byte[])art.Pixels.Clone();
-        for (var i = 0; i < mask.Length; i++)
-            pixels[i * 4 + 3] = (byte)((pixels[i * 4 + 3] * mask[i] + 127) / 255);
-        return new RgbaImage(art.Width, art.Height, pixels);
+        (x0, y0, x1, y1) = (width, height, -1, -1);
+        for (var y = 0; y < height; y++)
+        for (var x = 0; x < width; x++)
+        {
+            if (mask[y * width + x] == 0) continue;
+            if (x < x0) x0 = x;
+            if (x > x1) x1 = x;
+            if (y < y0) y0 = y;
+            if (y > y1) y1 = y;
+        }
+        return x1 >= 0;
     }
 
     private static SKBitmap RenderSquare(BrushSettings settings, int size)
     {
         if (size is < 64 or > MaxSize)
             throw new ArgumentOutOfRangeException(nameof(size), size, $"O tamanho precisa ficar entre 64 e {MaxSize} px.");
-        return Render(settings, size, size, new Placement(size / 2.0, size / 2.0, size / 2.0));
+        return Render(settings, size, size, new Placement(size / 2.0, size / 2.0, size / 2.0, size / 2.0));
     }
 
     private static SKBitmap Render(BrushSettings settings, int width, int height, Placement placement)
@@ -87,12 +137,18 @@ public static class BrushGenerator
         return bitmap;
     }
 
-    /// <summary>Onde o espaço normalizado [-1, 1] do brush cai na imagem: centro e meia extensão em pixels.</summary>
-    private readonly record struct Placement(double CenterX, double CenterY, double Half)
+    /// <summary>
+    /// Onde o espaço normalizado [-1, 1] do brush cai na imagem: centro e meia extensão em pixels
+    /// por eixo. Iguais nos dois eixos no brush quadrado; diferentes quando o brush é esticado
+    /// para ocupar uma arte retangular.
+    /// </summary>
+    private readonly record struct Placement(double CenterX, double CenterY, double HalfX, double HalfY)
     {
-        public double U(double x) => (x - CenterX) / Half;
-        public double V(double y) => (y - CenterY) / Half;
-        public SKPoint ToPixel(double u, double v) => new((float)(CenterX + u * Half), (float)(CenterY + v * Half));
+        /// <summary>Escala de referência para tamanhos em pixel (antialias, desfoque).</summary>
+        public double Half => Math.Min(HalfX, HalfY);
+        public double U(double x) => (x - CenterX) / HalfX;
+        public double V(double y) => (y - CenterY) / HalfY;
+        public SKPoint ToPixel(double u, double v) => new((float)(CenterX + u * HalfX), (float)(CenterY + v * HalfY));
     }
 
     /// <summary>Forma sorteada a partir da semente. Coordenadas normalizadas em [-1, 1].</summary>

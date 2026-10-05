@@ -39,6 +39,15 @@ public partial class SplashComposeWindow : Window
         };
         foreach (var slider in new[] { SpikesSlider, CracksSlider, ClawsSlider, DebrisSlider, SoftnessSlider, ScaleSlider, OffsetXSlider, OffsetYSlider })
             slider.ValueChanged += (_, _) => ScheduleRefresh();
+        FillCheck.IsCheckedChanged += (_, _) =>
+        {
+            // Esticado, o brush já ocupa a arte: tamanho e posição não se aplicam. O slider
+            // desabilitado do Fluent some no tema escuro, então só esmaece e bloqueia o clique.
+            var fill = FillCheck.IsChecked == true;
+            PositionPanel.IsHitTestVisible = !fill;
+            PositionPanel.Opacity = fill ? 0.4 : 1;
+            Refresh();
+        };
         SeedBox.LostFocus += (_, _) => ApplySeedText();
         SeedBox.KeyDown += (_, e) =>
         {
@@ -124,9 +133,12 @@ public partial class SplashComposeWindow : Window
         var version = ++_version;
         var settings = CurrentSettings();
         var (scale, offsetX, offsetY) = (ScaleSlider.Value / 100, OffsetXSlider.Value / 100, OffsetYSlider.Value / 100);
+        var fill = FillCheck.IsChecked == true;
         try
         {
-            var result = await Task.Run(() => BrushGenerator.Cut(art, settings, scale, offsetX, offsetY));
+            var result = await Task.Run(() => BrushGenerator.Cut(art, fill
+                ? BrushGenerator.MaskFilled(settings, art.Width, art.Height, inset: 5)
+                : BrushGenerator.Mask(settings, art.Width, art.Height, scale, offsetX, offsetY)));
             if (version != _version) return;
             _result = result;
             var previous = PreviewImage.Source as IDisposable;

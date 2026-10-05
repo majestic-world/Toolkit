@@ -167,6 +167,13 @@
 
                     <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
                     <TextBlock Text="POSIÇÃO" Classes="Section"/>
+                    <CheckBox x:Name="FillCheck"
+                              FontSize="12"
+                              Foreground="{DynamicResource ThemeTextBody}"
+                              ToolTip.Tip="Estica o brush para a arte inteira menos 5 px de cada lado (ex.: 640 × 480 → 630 × 470)">
+                        <TextBlock Text="Ocupar a arte toda (−10 px)" TextWrapping="Wrap"/>
+                    </CheckBox>
+                    <StackPanel x:Name="PositionPanel" Spacing="10">
                     <StackPanel>
                         <Grid ColumnDefinitions="*,Auto">
                             <TextBlock Text="Tamanho" Classes="Field"/>
@@ -187,6 +194,7 @@
                             <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #OffsetYSlider.Value, StringFormat={}{0:0}%}"/>
                         </Grid>
                         <Slider x:Name="OffsetYSlider" Minimum="-30" Maximum="30" Value="0"/>
+                    </StackPanel>
                     </StackPanel>
                 </StackPanel>
             </ScrollViewer>
