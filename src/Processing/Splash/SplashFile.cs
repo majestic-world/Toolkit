@@ -57,6 +57,19 @@ public static class SplashFile
         return Open(path);
     }
 
+    /// <summary>
+    /// Na primeira gravação por cima de um arquivo, guarda o original em <c>&lt;arquivo&gt;.bak</c>.
+    /// Devolve o caminho do backup criado agora, ou <c>null</c> se não havia o que guardar.
+    /// </summary>
+    public static string? BackupOnce(string path)
+    {
+        var backup = path + ".bak";
+        if (!File.Exists(path) || File.Exists(backup))
+            return null;
+        File.Copy(path, backup);
+        return backup;
+    }
+
     /// <summary>Lê uma arte para substituir o conteúdo: PNG, JPG, WEBP ou BMP (inclusive splash criptografada).</summary>
     public static RgbaImage Import(string path)
     {

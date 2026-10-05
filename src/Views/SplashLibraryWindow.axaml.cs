@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
@@ -21,22 +23,32 @@ namespace L2Toolkit.Views;
 /// <summary>
 /// Galeria não modal com os BMP da pasta do client. Clicar numa miniatura manda o
 /// arquivo para o editor da página Splash Screen; a janela continua aberta.
+/// "Trocar todos por imagem" aplica uma arte em todos só em memória; "Salvar todos"
+/// grava cada um no seu tamanho, formato e criptografia originais.
 /// </summary>
 public partial class SplashLibraryWindow : Window
 {
     private const string LastFolderKey = "splash_last_folder";
 
     private readonly Dictionary<string, Button> _tiles = new(StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<string, SplashLibraryEntry> _entries = new(StringComparer.OrdinalIgnoreCase);
+    /// <summary>Conteúdo novo, ainda não gravado, no tamanho de cada arquivo.</summary>
+    private readonly Dictionary<string, RgbaImage> _pending = new(StringComparer.OrdinalIgnoreCase);
     private string? _folder;
     private string? _current;
     private int _loadVersion;
+    private bool _busy;
 
     /// <summary>Caminho do BMP clicado.</summary>
     public event Action<string>? FileChosen;
 
+    /// <summary>Arquivos gravados pelo "Salvar todos".</summary>
+    public event Action<IReadOnlyCollection<string>>? FilesSaved;
+
     public SplashLibraryWindow()
     {
         InitializeComponent();
+        UpdateControls();
     }
 
     /// <summary>Pasta salva da última sessão ou, sem ela, a pasta do arquivo aberto no editor.</summary>
@@ -49,6 +61,7 @@ public partial class SplashLibraryWindow : Window
         return Directory.Exists(directory) ? directory : null;
     }
 
+    /// <summary>Lista a pasta. Trocas ainda não salvas são descartadas.</summary>
     public async Task LoadFolderAsync(string folder)
     {
         _folder = folder;
@@ -56,16 +69,22 @@ public partial class SplashLibraryWindow : Window
         AppDatabase.GetInstance().UpdateValue(LastFolderKey, folder);
 
         var version = ++_loadVersion;
-        RefreshButton.IsEnabled = false;
+        _busy = true;
+        UpdateControls();
         StatusText.Text = "Carregando…";
         TilesPanel.Children.Clear();
         _tiles.Clear();
+        _entries.Clear();
+        _pending.Clear();
         try
         {
             var entries = await Task.Run(() => SplashLibrary.List(folder));
             if (version != _loadVersion) return;
             foreach (var entry in entries)
-                AddTile(entry);
+            {
+                _entries[entry.FilePath] = entry;
+                AddTile(entry, entry.Thumbnail, pending: false);
+            }
             StatusText.Text = entries.Length == 0
                 ? "Nenhum BMP legível nesta pasta."
                 : $"{entries.Length} bitmaps · clique para abrir no editor";
@@ -76,7 +95,11 @@ public partial class SplashLibraryWindow : Window
         }
         finally
         {
-            if (version == _loadVersion) RefreshButton.IsEnabled = true;
+            if (version == _loadVersion)
+            {
+                _busy = false;
+                UpdateControls();
+            }
         }
     }
 
@@ -90,7 +113,7 @@ public partial class SplashLibraryWindow : Window
             tile.Classes.Add("current");
     }
 
-    /// <summary>Relê um arquivo gravado pelo editor, se ele pertence à pasta listada.</summary>
+    /// <summary>Relê um arquivo gravado, se ele pertence à pasta listada.</summary>
     public async Task RefreshFileAsync(string path)
     {
         if (_folder == null || !string.Equals(Path.GetDirectoryName(path), _folder.TrimEnd('\\', '/'), StringComparison.OrdinalIgnoreCase))
@@ -98,21 +121,116 @@ public partial class SplashLibraryWindow : Window
         var entry = await Task.Run(() => SplashLibrary.TryRead(path));
         if (entry == null) return;
 
-        if (_tiles.TryGetValue(path, out var existing))
-        {
-            var index = TilesPanel.Children.IndexOf(existing);
-            TilesPanel.Children.RemoveAt(index);
-            _tiles.Remove(path);
-            AddTile(entry, index);
-        }
-        else
-        {
-            AddTile(entry);
-        }
-        SetCurrent(_current);
+        _entries[path] = entry;
+        _pending.Remove(path);
+        ShowTile(entry, entry.Thumbnail, pending: false);
+        UpdateControls();
     }
 
-    private void AddTile(SplashLibraryEntry entry, int index = -1)
+    // ─── Troca em lote ────────────────────────────────────────────────────────
+
+    private async void ReplaceAll_Click(object? sender, RoutedEventArgs e)
+    {
+        var files = await StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+        {
+            Title = "Imagem para todos os BMP",
+            AllowMultiple = false,
+            FileTypeFilter = [new FilePickerFileType("Imagens") { Patterns = ["*.png", "*.jpg", "*.jpeg", "*.webp", "*.bmp"] }],
+        });
+        if (files.Count == 0) return;
+
+        var source = files[0].Path.LocalPath;
+        var entries = _entries.Values.ToArray();
+        await RunAsync(async () =>
+        {
+            StatusText.Text = $"Aplicando {Path.GetFileName(source)} em {entries.Length} arquivos…";
+            var results = await Task.Run(() =>
+            {
+                var image = SplashFile.Import(source);
+                return entries.AsParallel().AsOrdered().Select(entry =>
+                {
+                    // Cada arquivo recebe a arte no próprio tamanho; a miniatura mostra a
+                    // conversão que a gravação vai aplicar (256 cores, cor-chave).
+                    var canvas = image.Resized(entry.Width, entry.Height);
+                    var converted = SplashConverter.Convert(canvas, entry.Format, SplashConverter.RetailKeyColor, dither: false);
+                    return (Entry: entry, Canvas: canvas, Thumbnail: SplashLibrary.Thumbnail(converted.Image));
+                }).ToArray();
+            });
+
+            foreach (var (entry, canvas, thumbnail) in results)
+            {
+                _pending[entry.FilePath] = canvas;
+                ShowTile(entry, thumbnail, pending: true);
+            }
+            StatusText.Text = $"{results.Length} arquivos trocados em memória · nada foi gravado ainda · use Salvar todos";
+        });
+    }
+
+    private void Discard_Click(object? sender, RoutedEventArgs e)
+    {
+        foreach (var path in _pending.Keys.ToArray())
+            ShowTile(_entries[path], _entries[path].Thumbnail, pending: false);
+        _pending.Clear();
+        StatusText.Text = "Trocas descartadas.";
+        UpdateControls();
+    }
+
+    private async void SaveAll_Click(object? sender, RoutedEventArgs e)
+    {
+        var jobs = _pending.Select(pair => (Entry: _entries[pair.Key], Canvas: pair.Value)).ToArray();
+        if (jobs.Length == 0) return;
+
+        await RunAsync(async () =>
+        {
+            StatusText.Text = $"Gravando {jobs.Length} arquivos…";
+            var saved = new ConcurrentBag<string>();
+            var backups = new ConcurrentBag<string>();
+            var errors = new ConcurrentBag<string>();
+            await Task.Run(() => Parallel.ForEach(jobs, job =>
+            {
+                try
+                {
+                    // Mesmo caminho do "Salvar" da página: backup na primeira gravação,
+                    // formato e criptografia originais do arquivo.
+                    if (SplashFile.BackupOnce(job.Entry.FilePath) is { } backup)
+                        backups.Add(backup);
+                    SplashFile.Save(job.Entry.FilePath, job.Canvas, job.Entry.Format, job.Entry.Encryption,
+                        SplashConverter.RetailKeyColor, dither: false);
+                    saved.Add(job.Entry.FilePath);
+                }
+                catch (Exception ex)
+                {
+                    errors.Add($"{job.Entry.FileName}: {ex.Message}");
+                }
+            }));
+
+            foreach (var path in saved)
+                await RefreshFileAsync(path);
+            FilesSaved?.Invoke(saved.ToArray());
+
+            var message = $"{saved.Count} arquivos salvos";
+            if (backups.Count > 0) message += $" · originais preservados em .bak ({backups.Count})";
+            if (!errors.IsEmpty) message += $" · {errors.Count} falharam: {string.Join("; ", errors)}";
+            StatusText.Text = message;
+        });
+    }
+
+    // ─── Miniaturas ───────────────────────────────────────────────────────────
+
+    /// <summary>Troca a miniatura de um arquivo mantendo a posição na grade.</summary>
+    private void ShowTile(SplashLibraryEntry entry, RgbaImage thumbnail, bool pending)
+    {
+        var index = -1;
+        if (_tiles.TryGetValue(entry.FilePath, out var existing))
+        {
+            index = TilesPanel.Children.IndexOf(existing);
+            TilesPanel.Children.RemoveAt(index);
+            _tiles.Remove(entry.FilePath);
+        }
+        AddTile(entry, thumbnail, pending, index);
+    }
+
+    private void AddTile(SplashLibraryEntry entry, RgbaImage thumbnail, bool pending, int index = -1)
     {
         var preview = new Grid { HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
         preview.Children.Add(new Checkerboard
@@ -123,7 +241,7 @@ public partial class SplashLibraryWindow : Window
         });
         preview.Children.Add(new Image
         {
-            Source = RgbaBitmap.ToBitmap(entry.Thumbnail),
+            Source = RgbaBitmap.ToBitmap(thumbnail),
             Stretch = Stretch.Uniform,
             StretchDirection = StretchDirection.DownOnly,
         });
@@ -148,9 +266,11 @@ public partial class SplashLibraryWindow : Window
         });
         content.Children.Add(new TextBlock
         {
-            Text = $"{entry.Width} × {entry.Height} · {entry.BitsPerPixel} bits · {Describe(entry.Encryption)}",
+            Text = pending
+                ? "Trocado · não salvo"
+                : $"{entry.Width} × {entry.Height} · {entry.BitsPerPixel} bits · {Describe(entry.Encryption)}",
             FontSize = 11,
-            [!TextElement.ForegroundProperty] = AppTheme.Brush("ThemeTextHint"),
+            [!TextElement.ForegroundProperty] = AppTheme.Brush(pending ? "ThemeWarning" : "ThemeTextHint"),
         });
 
         var tile = new Button
@@ -158,7 +278,7 @@ public partial class SplashLibraryWindow : Window
             Content = content,
             Theme = (ControlTheme)this.FindResource("TileButton")!,
         };
-        ToolTip.SetTip(tile, entry.FilePath);
+        ToolTip.SetTip(tile, pending ? $"{entry.FilePath}\nO editor abre o arquivo do disco, sem a troca." : entry.FilePath);
         tile.Click += (_, _) => FileChosen?.Invoke(entry.FilePath);
 
         if (index < 0) TilesPanel.Children.Add(tile);
@@ -176,7 +296,12 @@ public partial class SplashLibraryWindow : Window
         _ => throw new ArgumentOutOfRangeException(nameof(encryption), encryption, null),
     };
 
-    private async void Folder_PointerPressed(object? sender, PointerPressedEventArgs e) => await PickFolderAsync();
+    // ─── Pasta e infra ────────────────────────────────────────────────────────
+
+    private async void Folder_PointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        if (!_busy) await PickFolderAsync();
+    }
 
     private async void Refresh_Click(object? sender, RoutedEventArgs e)
     {
@@ -197,5 +322,31 @@ public partial class SplashLibraryWindow : Window
         });
         if (folders.Count > 0)
             await LoadFolderAsync(folders[0].Path.LocalPath);
+    }
+
+    private async Task RunAsync(Func<Task> action)
+    {
+        _busy = true;
+        UpdateControls();
+        try
+        {
+            await action();
+        }
+        catch (Exception ex)
+        {
+            StatusText.Text = ex.Message;
+        }
+        finally
+        {
+            _busy = false;
+            UpdateControls();
+        }
+    }
+
+    private void UpdateControls()
+    {
+        RefreshButton.IsEnabled = !_busy;
+        ReplaceAllButton.IsEnabled = !_busy && _entries.Count > 0;
+        DiscardButton.IsEnabled = SaveAllButton.IsEnabled = !_busy && _pending.Count > 0;
     }
 }

@@ -14,6 +14,9 @@ public sealed record ConvertedSplash(RgbaImage Image, int[] Palette);
 /// </summary>
 public static class SplashConverter
 {
+    /// <summary>Verde que os arquivos oficiais usam como cor-chave.</summary>
+    public const int RetailKeyColor = 0x00FF00;
+
     /// <summary>Teto do cache "cor exata → índice": uma foto grande teria milhões de cores distintas.</summary>
     private const int NearestCacheLimit = 1 << 18;
     private const int HistogramBits = 5;

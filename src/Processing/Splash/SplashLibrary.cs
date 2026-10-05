@@ -10,6 +10,7 @@ public sealed record SplashLibraryEntry(
     string FilePath,
     int Width,
     int Height,
+    SplashFormat Format,
     int BitsPerPixel,
     SplashEncryption Encryption,
     RgbaImage Thumbnail)
@@ -47,7 +48,7 @@ public static class SplashLibrary
         {
             var document = SplashFile.Open(path);
             return new SplashLibraryEntry(path, document.Image.Width, document.Image.Height,
-                document.BitsPerPixel, document.Encryption, Thumbnail(document.Image));
+                document.Format, document.BitsPerPixel, document.Encryption, Thumbnail(document.Image));
         }
         catch (Exception ex) when (ex is IOException or InvalidOperationException or NotSupportedException or UnauthorizedAccessException)
         {
@@ -55,7 +56,7 @@ public static class SplashLibrary
         }
     }
 
-    private static RgbaImage Thumbnail(RgbaImage image)
+    public static RgbaImage Thumbnail(RgbaImage image)
     {
         if (image.Width <= ThumbnailEdge && image.Height <= ThumbnailEdge)
             return image;

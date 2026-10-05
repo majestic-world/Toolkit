@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
@@ -23,7 +24,6 @@ namespace L2Toolkit.Views;
 public partial class SplashScreen : UserControl
 {
     private const string LastPathKey = "splash_last_path";
-    private const int DefaultKeyColor = 0x00FF00;
 
     // Mesma ordem dos itens dos ComboBox.
     private static readonly SplashFormat[] Formats = [SplashFormat.Bgra32, SplashFormat.Indexed8, SplashFormat.Rgb24];
@@ -34,7 +34,7 @@ public partial class SplashScreen : UserControl
     private SplashDocument? _document;
     private RgbaImage? _canvas;
     private bool _modified;
-    private int _keyColor = DefaultKeyColor;
+    private int _keyColor = SplashConverter.RetailKeyColor;
     private int _previewVersion;
     private int _previewColors;
     private bool _busy;
@@ -135,12 +135,8 @@ public partial class SplashScreen : UserControl
         {
             var (saved, backup) = await Task.Run(() =>
             {
-                // A primeira gravação por cima de um arquivo guarda o original ao lado.
-                var backupPath = path + ".bak";
-                var createBackup = File.Exists(path) && !File.Exists(backupPath);
-                if (createBackup)
-                    File.Copy(path, backupPath);
-                return (SplashFile.Save(path, canvas, format, encryption, key, dither), createBackup ? backupPath : null);
+                var created = SplashFile.BackupOnce(path);
+                return (SplashFile.Save(path, canvas, format, encryption, key, dither), created);
             });
             AppDatabase.GetInstance().UpdateValue(LastPathKey, path);
             Adopt(saved);
@@ -182,6 +178,14 @@ public partial class SplashScreen : UserControl
         library.FileChosen += path =>
         {
             if (!_busy) _ = LoadAsync(path);
+        };
+        // O arquivo aberto no editor foi regravado pela galeria: mostra o novo, a menos
+        // que haja edição não salva aqui (essa não é descartada sem o usuário pedir).
+        library.FilesSaved += paths =>
+        {
+            if (_document is { } document && !_modified && !_busy
+                && paths.Contains(document.FilePath, StringComparer.OrdinalIgnoreCase))
+                _ = LoadAsync(document.FilePath);
         };
         library.Closed += (_, _) => _library = null;
         // Sem dono para não ficar sempre por cima do editor; fecha junto com o app.
