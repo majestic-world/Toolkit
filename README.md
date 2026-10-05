@@ -39,4 +39,6 @@ Requer PowerShell 7 (`pwsh`), GNU Make e o .NET 10 SDK. Todos os alvos publicam 
 
 O instalador `.dmg` do macOS sai de `pwsh scripts/build.ps1 -Platform macos -Installer` (requer `brew install create-dmg`). Use `-Architecture x64|arm64` para outra arquitetura do mesmo sistema.
 
+A versão do app vem de `APP_VERSION` no `.env`: ela vira a versão do executável e do badge na titlebar, e o `make dist` a repassa ao instalador Inno Setup.
+
 Desenvolvido por **Mk**

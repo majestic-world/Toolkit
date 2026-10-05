@@ -69,11 +69,21 @@ function Find-InnoSetupCompiler {
     return $candidates | Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
 }
 
+# APP_VERSION from .env; the csproj reads the same value for the assembly version.
+function Get-AppVersion {
+    $envFile = Join-Path $root '.env'
+    if (-not (Test-Path -LiteralPath $envFile)) { throw "Missing $envFile with APP_VERSION=<major.minor.patch>." }
+    $match = Select-String -LiteralPath $envFile -Pattern '^APP_VERSION=([0-9]+(\.[0-9]+){1,3})\s*$' | Select-Object -First 1
+    if (-not $match) { throw "APP_VERSION in $envFile must look like 3.8.0." }
+    return $match.Matches[0].Groups[1].Value
+}
+
 $exitCode = 0
 try {
     $platformTitle = @{ windows = 'Windows'; macos = 'macOS'; linux = 'Linux' }[$Platform]
     $installerSuffix = if ($Installer) { ' + installer' } else { '' }
-    Initialize-BuildConsole "$appName Build - $Configuration|$rid$installerSuffix" $root
+    $version = Get-AppVersion
+    Initialize-BuildConsole "$appName $version Build - $Configuration|$rid$installerSuffix" $root
     New-Item -ItemType Directory -Force -Path $logs | Out-Null
     Get-ChildItem -LiteralPath $logs -File | Remove-Item
 
@@ -162,7 +172,8 @@ try {
             }
             Start-BuildStep 'Creating installer'
             $log = Join-Path $logs 'installer.log'
-            if ((Invoke-BuildTool $iscc @((Join-Path $root 'Setup.iss')) $log $root 'Inno Setup') -ne 0) {
+            $arguments = @("/DMyAppVersion=$version", (Join-Path $root 'Setup.iss'))
+            if ((Invoke-BuildTool $iscc $arguments $log $root 'Inno Setup') -ne 0) {
                 Stop-BuildStep 'failed' (Get-DiagnosticLog $log) 'Error|error'
                 throw "Inno Setup failed. See $log"
             }
@@ -179,7 +190,10 @@ try {
             $files = @(Get-ChildItem -LiteralPath $publishDir -File | Where-Object Extension -ne '.dmg')
             $files | Copy-Item -Destination $macosDir
             [IO.File]::SetUnixFileMode((Join-Path $macosDir $appName), [IO.UnixFileMode]'UserRead, UserWrite, UserExecute, GroupRead, GroupExecute, OtherRead, OtherExecute')
-            Copy-Item -LiteralPath (Join-Path $root 'Info.plist') -Destination (Join-Path $bundle 'Contents/Info.plist')
+            # Info.plist versions follow APP_VERSION in the bundle copy.
+            $plist = [IO.File]::ReadAllText((Join-Path $root 'Info.plist'))
+            $plist = $plist -replace '(<key>CFBundle(ShortVersionString|Version)</key>\s*<string>)[^<]*', "`${1}$version"
+            [IO.File]::WriteAllText((Join-Path $bundle 'Contents/Info.plist'), $plist)
             Copy-Item -LiteralPath (Join-Path $root 'images/favicon.icns') -Destination $resourcesDir
             Complete-BuildStep (Format-Count $files.Count 'file' 'files')
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -18,6 +19,7 @@ namespace L2Toolkit
         public MainWindow()
         {
             InitializeComponent();
+            AppVersionText.Text = "v" + typeof(MainWindow).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
 
             _sidebarButtons = new Dictionary<Type, Button>
             {

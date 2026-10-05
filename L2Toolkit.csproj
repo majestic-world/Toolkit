@@ -9,9 +9,14 @@
     <Product>Lineage Toolkit</Product>
     <Description>Lineage Toolkit</Description>
     <Copyright>Copyright © 2025 Majestic World Studio</Copyright>
-    <Version>2.0.0.0</Version>
-    <FileVersion>3.0.0.0</FileVersion>
-    <AssemblyVersion>3.0.0.0</AssemblyVersion>
+    <!-- Versão única do app: APP_VERSION em .env (lida aqui, em scripts/build.ps1 e repassada ao Setup.iss). -->
+    <AppEnvFile>$(MSBuildProjectDirectory)/.env</AppEnvFile>
+    <AppVersion Condition="Exists('$(AppEnvFile)')">$([System.Text.RegularExpressions.Regex]::Match($([System.IO.File]::ReadAllText('$(AppEnvFile)')), '(?m)(?&lt;=^APP_VERSION=)[0-9.]+').Value)</AppVersion>
+    <Version>$(AppVersion)</Version>
+    <FileVersion>$(AppVersion)</FileVersion>
+    <AssemblyVersion>$(AppVersion)</AssemblyVersion>
+    <InformationalVersion>$(AppVersion)</InformationalVersion>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
     <AssemblyName>L2 Toolkit</AssemblyName>
     <Nullable>enable</Nullable>
     <NoWarn>$(NoWarn);IL2104</NoWarn>
@@ -22,9 +27,13 @@
     <CFBundleIdentifier>com.majesticworld.l2toolkit</CFBundleIdentifier>
     <CFBundleName>L2 Toolkit</CFBundleName>
     <CFBundleDisplayName>L2 Toolkit</CFBundleDisplayName>
-    <CFBundleShortVersionString>3.0</CFBundleShortVersionString>
-    <CFBundleVersion>3.0.0</CFBundleVersion>
+    <CFBundleShortVersionString>$(AppVersion)</CFBundleShortVersionString>
+    <CFBundleVersion>$(AppVersion)</CFBundleVersion>
   </PropertyGroup>
+
+  <Target Name="ValidateAppVersion" BeforeTargets="BeforeBuild;GenerateAssemblyInfo">
+    <Error Condition="'$(AppVersion)' == ''" Text="APP_VERSION ausente ou inválido em $(AppEnvFile). Use o formato APP_VERSION=3.8.0." />
+  </Target>
 
 
   <ItemGroup>

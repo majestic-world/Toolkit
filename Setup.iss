@@ -3,7 +3,10 @@
 ; Non-commercial use only
 
 #define MyAppName "L2 Toolkit"
-#define MyAppVersion "3.7"
+; MyAppVersion vem de APP_VERSION em .env: scripts/build.ps1 (make dist) passa /DMyAppVersion=<versão>.
+#ifndef MyAppVersion
+  #error MyAppVersion não definido. Gere o instalador com "make dist".
+#endif
 #define MyAppPublisher "Majestic World Studio"
 #define MyAppURL "https://majestic-world.studio"
 #define MyAppExeName "L2 Toolkit.exe"
