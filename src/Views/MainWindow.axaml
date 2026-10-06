@@ -391,32 +391,90 @@
             </Grid>
         </Grid>
 
-        <!-- Atualização: baixa o instalador, abre e fecha o app (ver AppUpdater). A titlebar fica livre. -->
+        <!-- Atualização (ver AppUpdater): modal com a versão nova para o usuário confirmar; confirmado,
+             a mesma modal mostra o download, abre o instalador e fecha o app. A titlebar fica livre. -->
         <Grid x:Name="UpdateOverlay" Grid.Row="1" IsVisible="False" ZIndex="500"
               Background="{DynamicResource ThemeOverlay}">
             <Border Background="{DynamicResource ThemeSurfaceCard}"
                     BorderBrush="{DynamicResource ThemeBorderMuted}" BorderThickness="1"
-                    CornerRadius="10" Padding="24,20" Width="420"
+                    CornerRadius="10" Padding="24,20" Width="480"
                     HorizontalAlignment="Center" VerticalAlignment="Center">
-                <StackPanel Spacing="12">
-                    <TextBlock x:Name="UpdateTitle" FontSize="15" FontWeight="SemiBold"
-                               Foreground="{DynamicResource ThemeTextTitle}"/>
-                    <TextBlock Text="Baixando o instalador. Ao terminar, o app fecha, a atualização é instalada e o app abre de novo."
-                               FontSize="12" TextWrapping="Wrap"
-                               Foreground="{DynamicResource ThemeTextHint}"/>
-                    <ProgressBar x:Name="UpdateProgress" Minimum="0" Maximum="1" Height="6"
-                                 Foreground="{DynamicResource ThemeAccent}"
-                                 Background="{DynamicResource ThemeSurfaceInput}"/>
-                    <Grid ColumnDefinitions="*,Auto">
-                        <TextBlock x:Name="UpdateProgressText" FontSize="12" VerticalAlignment="Center"
-                                   TextWrapping="Wrap"
-                                   Foreground="{DynamicResource ThemeTextLabel}"/>
-                        <Button x:Name="UpdateCancelButton" Grid.Column="1" Height="32" Padding="16,0"
-                                Margin="12,0,0,0" Click="UpdateCancel_Click">
-                            <TextBlock x:Name="UpdateCancelText" Text="Cancelar" FontSize="12" FontWeight="Medium"/>
-                        </Button>
-                    </Grid>
-                </StackPanel>
+                <Panel>
+                    <!-- Confirmação -->
+                    <StackPanel x:Name="UpdatePromptPanel" Spacing="14">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <PathIcon Data="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"
+                                      Width="16" Height="16" Foreground="{DynamicResource ThemeAccent}" VerticalAlignment="Center"/>
+                            <TextBlock Text="Nova versão disponível" FontSize="16" FontWeight="SemiBold"
+                                       Foreground="{DynamicResource ThemeTextTitle}" VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <Grid ColumnDefinitions="Auto,16,*" RowDefinitions="Auto,8,Auto,8,Auto,8,Auto">
+                            <TextBlock Grid.Row="0" Text="Versão" FontSize="12" Foreground="{DynamicResource ThemeTextLabel}"/>
+                            <TextBlock x:Name="UpdateVersions" Grid.Row="0" Grid.Column="2" FontSize="12" FontWeight="SemiBold"
+                                       Foreground="{DynamicResource ThemeStatusOk}"/>
+                            <TextBlock Grid.Row="2" Text="Release" FontSize="12" Foreground="{DynamicResource ThemeTextLabel}"/>
+                            <TextBlock x:Name="UpdateReleaseName" Grid.Row="2" Grid.Column="2" FontSize="12"
+                                       Foreground="{DynamicResource ThemeTextBody}" TextTrimming="CharacterEllipsis"/>
+                            <TextBlock Grid.Row="4" Text="Publicada em" FontSize="12" Foreground="{DynamicResource ThemeTextLabel}"/>
+                            <TextBlock x:Name="UpdatePublished" Grid.Row="4" Grid.Column="2" FontSize="12"
+                                       Foreground="{DynamicResource ThemeTextBody}"/>
+                            <TextBlock Grid.Row="6" Text="Download" FontSize="12" Foreground="{DynamicResource ThemeTextLabel}"/>
+                            <TextBlock x:Name="UpdateSize" Grid.Row="6" Grid.Column="2" FontSize="12"
+                                       Foreground="{DynamicResource ThemeTextBody}"/>
+                        </Grid>
+
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="NOVIDADES" FontSize="11" FontWeight="Bold" LetterSpacing="1.5"
+                                       Foreground="{DynamicResource ThemeTextLabel}"/>
+                            <Border Background="{DynamicResource ThemeSurfaceInput}" BorderBrush="{DynamicResource ThemeBorder}"
+                                    BorderThickness="1" CornerRadius="6" Padding="12,10">
+                                <ScrollViewer MaxHeight="200" VerticalScrollBarVisibility="Auto">
+                                    <SelectableTextBlock x:Name="UpdateNotes" FontSize="12" TextWrapping="Wrap"
+                                                         Foreground="{DynamicResource ThemeTextBody}"/>
+                                </ScrollViewer>
+                            </Border>
+                        </StackPanel>
+
+                        <TextBlock Text="Ao atualizar, o app baixa o instalador, fecha durante a instalação e abre de novo ao terminar."
+                                   FontSize="12" TextWrapping="Wrap" Foreground="{DynamicResource ThemeTextHint}"/>
+
+                        <Grid ColumnDefinitions="Auto,*,Auto,8,Auto">
+                            <Button Grid.Column="0" Height="34" Padding="14,0" Click="UpdateReleasePage_Click"
+                                    ToolTip.Tip="Abrir a release no navegador">
+                                <TextBlock Text="Ver no GitHub" FontSize="12" FontWeight="Medium"/>
+                            </Button>
+                            <Button Grid.Column="2" Height="34" Padding="16,0" Click="UpdateDismiss_Click">
+                                <TextBlock Text="Agora não" FontSize="12" FontWeight="Medium"/>
+                            </Button>
+                            <Button Grid.Column="4" Height="34" Padding="18,0" Theme="{StaticResource SecondaryButton}"
+                                    Click="UpdateConfirm_Click">
+                                <TextBlock Text="Atualizar agora" FontSize="12" FontWeight="SemiBold"/>
+                            </Button>
+                        </Grid>
+                    </StackPanel>
+
+                    <!-- Download -->
+                    <StackPanel x:Name="UpdateDownloadPanel" Spacing="12" IsVisible="False">
+                        <TextBlock x:Name="UpdateTitle" FontSize="15" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource ThemeTextTitle}"/>
+                        <TextBlock Text="Baixando o instalador. Ao terminar, o app fecha, a atualização é instalada e o app abre de novo."
+                                   FontSize="12" TextWrapping="Wrap"
+                                   Foreground="{DynamicResource ThemeTextHint}"/>
+                        <ProgressBar x:Name="UpdateProgress" Minimum="0" Maximum="1" Height="6"
+                                     Foreground="{DynamicResource ThemeAccent}"
+                                     Background="{DynamicResource ThemeSurfaceInput}"/>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock x:Name="UpdateProgressText" FontSize="12" VerticalAlignment="Center"
+                                       TextWrapping="Wrap"
+                                       Foreground="{DynamicResource ThemeTextLabel}"/>
+                            <Button Grid.Column="1" Height="32" Padding="16,0"
+                                    Margin="12,0,0,0" Click="UpdateCancel_Click">
+                                <TextBlock x:Name="UpdateCancelText" Text="Cancelar" FontSize="12" FontWeight="Medium"/>
+                            </Button>
+                        </Grid>
+                    </StackPanel>
+                </Panel>
             </Border>
         </Grid>
 

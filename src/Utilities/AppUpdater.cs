@@ -3,16 +3,19 @@ using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Reflection;
+using System.Runtime.Versioning;
 using System.Security.Cryptography;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using L2Toolkit.Settings;
+using Microsoft.Win32;
 
 namespace L2Toolkit.Utilities;
 
-/// <summary>Release mais nova do GitHub com o instalador do Windows.</summary>
-public sealed record AppRelease(string Tag, Version Version, string PageUrl, string InstallerUrl, long InstallerSize, string? Sha256);
+/// <summary>Release mais nova do GitHub com o instalador do Windows e o que mostrar ao usuário antes de atualizar.</summary>
+public sealed record AppRelease(
+    string Tag, Version Version, string Name, string Notes, DateTimeOffset? PublishedAt,
+    string PageUrl, string InstallerUrl, long InstallerSize, string? Sha256);
 
 public enum UpdateStatus
 {
@@ -35,7 +38,6 @@ public static class AppUpdater
     public static readonly TimeSpan MinInterval = TimeSpan.FromSeconds(10);
 
     private const string LatestReleaseUrl = "https://api.github.com/repos/majestic-world/Toolkit/releases/latest";
-    private const string AttemptedTagKey = "update_attempted_tag";
 
     private static readonly HttpClient Http = CreateClient();
     private static readonly Lock Gate = new();
@@ -44,13 +46,6 @@ public static class AppUpdater
 
     public static Version CurrentVersion { get; } = ParseVersion(
         typeof(AppUpdater).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion) ?? new Version(0, 0);
-
-    /// <summary>
-    /// App instalado pelo instalador (o desinstalador do Inno fica ao lado do exe). Rodando do
-    /// build do repositório não é: a atualização automática ali instalaria por cima do app do
-    /// usuário e fecharia a sessão de desenvolvimento.
-    /// </summary>
-    public static bool IsInstalled => OperatingSystem.IsWindows() && File.Exists(Path.Combine(AppContext.BaseDirectory, "unins000.exe"));
 
     /// <summary>
     /// Consulta a release mais nova. No máximo uma consulta a cada <see cref="MinInterval"/>;
@@ -68,13 +63,6 @@ public static class AppUpdater
             return _running = FetchAsync();
         }
     }
-
-    /// <summary>
-    /// Na abertura só instala sozinho uma vez por tag: se o app reabrir ainda abaixo da versão
-    /// (instalação cancelada ou tag maior que o APP_VERSION publicado), não entra em loop.
-    /// </summary>
-    public static bool ShouldAutoInstall(AppRelease release)
-        => IsInstalled && AppDatabase.GetInstance().GetValue(AttemptedTagKey) != release.Tag;
 
     /// <summary>
     /// Apaga instaladores e downloads parciais de atualizações anteriores. Melhor esforço: o
@@ -130,17 +118,37 @@ public static class AppUpdater
     }
 
     /// <summary>
-    /// Abre o instalador em modo silencioso (só a janela de progresso). /UPDATE=1 faz o
-    /// instalador reabrir o app no fim; o chamador fecha o app logo em seguida para liberar os
-    /// arquivos.
+    /// Roda o instalador em modo silencioso (só a janela de progresso) e reabre o app quando ele
+    /// termina. Quem espera é um cmd oculto, não o instalador: assim funciona com qualquer
+    /// instalador já publicado, inclusive os anteriores a esta atualização. O chamador fecha o
+    /// app logo em seguida para liberar os arquivos.
     /// </summary>
-    public static void LaunchInstaller(AppRelease release, string installerPath)
+    [SupportedOSPlatform("windows")]
+    public static void LaunchInstaller(string installerPath)
     {
-        AppDatabase.GetInstance().UpdateValue(AttemptedTagKey, release.Tag);
-        Process.Start(new ProcessStartInfo(installerPath, "/SILENT /SP- /SUPPRESSMSGBOXES /NORESTART /CLOSEAPPLICATIONS /UPDATE=1")
+        var command = $"start \"\" /wait \"{installerPath}\" /SILENT /SP- /SUPPRESSMSGBOXES /NORESTART /CLOSEAPPLICATIONS"
+                      + $" & start \"\" \"{InstalledExePath()}\"";
+        Process.Start(new ProcessStartInfo("cmd.exe", $"/d /s /c \"{command}\"")
         {
-            UseShellExecute = true,
+            UseShellExecute = false,
+            CreateNoWindow = true,
         });
+    }
+
+    /// <summary>
+    /// Exe que o instalador vai atualizar: a pasta registrada pelo Inno Setup (AppId do
+    /// Setup.iss) ou, sem instalação anterior, o padrão de PrivilegesRequired=lowest. Rodando do
+    /// build do repositório, reabre o app instalado, não o build.
+    /// </summary>
+    [SupportedOSPlatform("windows")]
+    private static string InstalledExePath()
+    {
+        const string uninstallKey = @"Software\Microsoft\Windows\CurrentVersion\Uninstall\{194686FD-F433-4E23-A57C-EF03BD82CDF6}_is1";
+        var folder = (Registry.CurrentUser.OpenSubKey(uninstallKey) ?? Registry.LocalMachine.OpenSubKey(uninstallKey))
+                     ?.GetValue("InstallLocation") as string;
+        if (string.IsNullOrWhiteSpace(folder))
+            folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Programs", "L2 Toolkit");
+        return Path.Combine(folder, "L2 Toolkit.exe");
     }
 
     public static void OpenReleasePage(AppRelease release)
@@ -169,7 +177,13 @@ public static class AppUpdater
                 if (!name.EndsWith(".exe", StringComparison.OrdinalIgnoreCase)) continue;
                 var digest = asset.TryGetProperty("digest", out var d) ? d.GetString() : null;
                 var sha256 = digest?.StartsWith("sha256:", StringComparison.Ordinal) == true ? digest["sha256:".Length..] : null;
+                var published = root.TryGetProperty("published_at", out var p) && p.ValueKind == JsonValueKind.String
+                    ? p.GetDateTimeOffset()
+                    : (DateTimeOffset?)null;
                 var release = new AppRelease(tag, version,
+                    root.TryGetProperty("name", out var n) ? n.GetString() ?? "" : "",
+                    root.TryGetProperty("body", out var b) ? b.GetString() ?? "" : "",
+                    published,
                     root.GetProperty("html_url").GetString() ?? "",
                     asset.GetProperty("browser_download_url").GetString() ?? "",
                     asset.GetProperty("size").GetInt64(),

@@ -134,7 +134,7 @@ public partial class AppSettingsControl : UserControl
             case UpdateStatus.Available:
                 ShowUpdateStatus($"Versão {check.Release!.Tag} disponível.", "ThemeStatusOk");
                 if (TopLevel.GetTopLevel(this) is MainWindow main)
-                    await main.InstallUpdateAsync(check.Release);
+                    main.PromptUpdate(check.Release);
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(check), check.Status, null);

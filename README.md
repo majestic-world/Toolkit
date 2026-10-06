@@ -9,13 +9,6 @@ Conjunto de ferramentas para gerenciamento do cliente do jogo **Lineage 2 (166p)
 
 ---
 
-## Documentação
-
-Acesse a documentação completa em:
-**https://majestic-world.github.io/Toolkit/**
-
----
-
 ## Build
 
 ### Requisitos
@@ -50,7 +43,7 @@ Tudo fica em `build/`, sem pastas `bin/` ou `obj/`:
 
 A versão vem de `APP_VERSION` no `.env`. Ela vira a versão do executável e do badge na titlebar, e o `make dist` a repassa ao instalador.
 
-O app se atualiza sozinho pelas Releases do GitHub: publique cada versão com a tag igual ao `APP_VERSION` (ex.: `3.9`) e anexe o instalador gerado pelo `make dist`.
+O app avisa sobre versões novas pelas Releases do GitHub e, se o usuário confirmar, baixa e instala: publique cada versão com a tag igual ao `APP_VERSION` (ex.: `3.9`), o instalador gerado pelo `make dist` anexado e as novidades na descrição da release (aparecem na modal).
 
 ### Estrutura
 

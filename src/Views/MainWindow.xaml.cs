@@ -18,6 +18,7 @@ namespace L2Toolkit.Views
         private readonly Dictionary<Type, Button> _sidebarButtons;
         private Button? _activeSidebarButton;
         private CancellationTokenSource? _updateCts;
+        private AppRelease? _pendingRelease;
 
         public MainWindow()
         {
@@ -68,23 +69,56 @@ namespace L2Toolkit.Views
 
         // ── Atualização ───────────────────────────────────────────────────
 
-        /// <summary>Na abertura: se houver versão nova, baixa e instala sem perguntar (só no app instalado).</summary>
+        /// <summary>Na abertura: se houver versão nova, pergunta ao usuário pela modal.</summary>
         private async Task CheckUpdateOnOpenAsync()
         {
             var check = await AppUpdater.CheckAsync();
-            if (check is { Status: UpdateStatus.Available, Release: { } release } && AppUpdater.ShouldAutoInstall(release))
+            if (check is { Status: UpdateStatus.Available, Release: { } release })
+                PromptUpdate(release);
+        }
+
+        /// <summary>
+        /// Modal com a versão nova (versão, release, data, tamanho e notas). Nada é baixado
+        /// até o usuário confirmar em "Atualizar agora".
+        /// </summary>
+        public void PromptUpdate(AppRelease release)
+        {
+            if (_updateCts != null) return;
+            _pendingRelease = release;
+            UpdateVersions.Text = $"{AppUpdater.CurrentVersion.ToString(3)}  →  {release.Tag}";
+            UpdateReleaseName.Text = string.IsNullOrWhiteSpace(release.Name) ? release.Tag : release.Name;
+            UpdatePublished.Text = release.PublishedAt?.ToLocalTime().ToString("dd/MM/yyyy HH:mm") ?? "—";
+            UpdateSize.Text = $"{release.InstallerSize / 1048576.0:0.0} MB";
+            UpdateNotes.Text = string.IsNullOrWhiteSpace(release.Notes) ? "Sem notas para esta versão." : release.Notes.Trim();
+            UpdatePromptPanel.IsVisible = true;
+            UpdateDownloadPanel.IsVisible = false;
+            UpdateOverlay.IsVisible = true;
+        }
+
+        private async void UpdateConfirm_Click(object? sender, RoutedEventArgs e)
+        {
+            if (_pendingRelease is { } release)
                 await InstallUpdateAsync(release);
+        }
+
+        private void UpdateDismiss_Click(object? sender, RoutedEventArgs e) => UpdateOverlay.IsVisible = false;
+
+        private void UpdateReleasePage_Click(object? sender, RoutedEventArgs e)
+        {
+            if (_pendingRelease is { } release)
+                AppUpdater.OpenReleasePage(release);
         }
 
         /// <summary>
         /// Baixa o instalador com progresso, abre em modo silencioso e encerra o app para
         /// liberar os arquivos. Fora do Windows não há instalador: abre a página da release.
         /// </summary>
-        public async Task InstallUpdateAsync(AppRelease release)
+        private async Task InstallUpdateAsync(AppRelease release)
         {
             if (_updateCts != null) return;
             if (!OperatingSystem.IsWindows())
             {
+                UpdateOverlay.IsVisible = false;
                 AppUpdater.OpenReleasePage(release);
                 return;
             }
@@ -94,7 +128,8 @@ namespace L2Toolkit.Views
             UpdateProgress.Value = 0;
             UpdateProgressText.Text = "Conectando…";
             UpdateCancelText.Text = "Cancelar";
-            UpdateOverlay.IsVisible = true;
+            UpdatePromptPanel.IsVisible = false;
+            UpdateDownloadPanel.IsVisible = true;
             try
             {
                 var progress = new Progress<(long Done, long Total)>(p =>
@@ -105,7 +140,7 @@ namespace L2Toolkit.Views
                 });
                 var installer = await AppUpdater.DownloadAsync(release, progress, cts.Token);
                 UpdateProgressText.Text = "Abrindo o instalador…";
-                AppUpdater.LaunchInstaller(release, installer);
+                AppUpdater.LaunchInstaller(installer);
                 (Application.Current?.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)?.Shutdown();
             }
             catch (OperationCanceledException)

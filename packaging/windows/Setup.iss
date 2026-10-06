@@ -20,6 +20,7 @@
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
+; AppUpdater (src/Utilities/AppUpdater.cs) acha a pasta instalada pela chave de desinstalação deste AppId: mudou aqui, mude lá.
 AppId={{194686FD-F433-4E23-A57C-EF03BD82CDF6}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
@@ -75,12 +76,4 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
-; Atualização pelo app (AppUpdater): instalador silencioso com /UPDATE=1 reabre o app no fim.
-Filename: "{app}\{#MyAppExeName}"; Flags: nowait; Check: IsUpdate
-
-[Code]
-function IsUpdate: Boolean;
-begin
-  Result := ExpandConstant('{param:UPDATE|0}') = '1';
-end;
 
