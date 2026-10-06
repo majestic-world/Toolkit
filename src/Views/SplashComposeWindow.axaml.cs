@@ -27,6 +27,9 @@ public partial class SplashComposeWindow : Window
     private RgbaImage? _result;
     private int _seed;
     private int _strokeColor = 0xFFFFFF;
+    private int _shadowColor = 0x000000;
+    /// <summary>Quem recebe a cor do seletor compartilhado (contorno ou sombra).</summary>
+    private Action<int>? _pickColor;
     private int _version;
 
     /// <summary>Arte já recortada, enviada para o editor.</summary>
@@ -40,14 +43,20 @@ public partial class SplashComposeWindow : Window
             _debounce.Stop();
             Refresh();
         };
-        foreach (var slider in new[] { SpikesSlider, CracksSlider, ClawsSlider, DebrisSlider, SoftnessSlider, SymmetrySlider, ScaleSlider, OffsetXSlider, OffsetYSlider, StrokeSlider })
+        foreach (var slider in new[]
+                 {
+                     SpikesSlider, CracksSlider, ClawsSlider, DebrisSlider, SoftnessSlider, SymmetrySlider, ScaleSlider, OffsetXSlider, OffsetYSlider,
+                     StrokeSlider, ShadowOpacitySlider, ShadowXSlider, ShadowYSlider, ShadowBlurSlider, ShadowSpreadSlider,
+                 })
             slider.ValueChanged += (_, _) => ScheduleRefresh();
         StrokePositionCombo.SelectionChanged += (_, _) => Refresh();
-        ColorPicker.ColorChanged += (_, color) =>
+        ColorPicker.ColorChanged += (_, color) => _pickColor?.Invoke((color.R << 16) | (color.G << 8) | color.B);
+        ShadowCheck.IsCheckedChanged += (_, _) =>
         {
-            _strokeColor = (color.R << 16) | (color.G << 8) | color.B;
-            ShowStrokeColor();
-            ScheduleRefresh();
+            var on = ShadowCheck.IsChecked == true;
+            ShadowPanel.IsHitTestVisible = on;
+            ShadowPanel.Opacity = on ? 1 : 0.4;
+            Refresh();
         };
         FillCheck.IsCheckedChanged += (_, _) =>
         {
@@ -63,7 +72,8 @@ public partial class SplashComposeWindow : Window
         {
             if (e.Key == Key.Enter) ApplySeedText();
         };
-        ShowStrokeColor();
+        ShowColor(StrokeColorSwatch, StrokeColorText, _strokeColor);
+        ShowColor(ShadowColorSwatch, ShadowColorText, _shadowColor);
         SetSeed(Random.Shared.Next(1, 1_000_000));
     }
 
@@ -129,19 +139,36 @@ public partial class SplashComposeWindow : Window
         Refresh();
     }
 
-    private void StrokeColor_Click(object? sender, RoutedEventArgs e)
+    private void StrokeColor_Click(object? sender, RoutedEventArgs e) => OpenColorPicker(StrokeColorButton, _strokeColor, color =>
     {
-        ColorPicker.SetColor(Color.FromRgb((byte)(_strokeColor >> 16), (byte)(_strokeColor >> 8), (byte)_strokeColor));
-        ColorPickerPopup.PlacementTarget = StrokeColorButton;
+        _strokeColor = color;
+        ShowColor(StrokeColorSwatch, StrokeColorText, color);
+        ScheduleRefresh();
+    });
+
+    private void ShadowColor_Click(object? sender, RoutedEventArgs e) => OpenColorPicker(ShadowColorButton, _shadowColor, color =>
+    {
+        _shadowColor = color;
+        ShowColor(ShadowColorSwatch, ShadowColorText, color);
+        ScheduleRefresh();
+    });
+
+    private void OpenColorPicker(Control target, int color, Action<int> apply)
+    {
+        _pickColor = apply;
+        ColorPicker.SetColor(ToColor(color));
+        ColorPickerPopup.PlacementTarget = target;
         ColorPickerPopup.IsOpen = true;
     }
 
-    private void ShowStrokeColor()
+    /// <summary>Cor de dado (a escolhida pelo usuário), não do tema.</summary>
+    private static void ShowColor(Border swatch, TextBlock text, int color)
     {
-        // Cor de dado (a do contorno), não do tema.
-        StrokeColorSwatch.Background = new SolidColorBrush(Color.FromRgb((byte)(_strokeColor >> 16), (byte)(_strokeColor >> 8), (byte)_strokeColor));
-        StrokeColorText.Text = $"#{_strokeColor:X6}";
+        swatch.Background = new SolidColorBrush(ToColor(color));
+        text.Text = $"#{color:X6}";
     }
+
+    private static Color ToColor(int color) => Color.FromRgb((byte)(color >> 16), (byte)(color >> 8), (byte)color);
 
     private StrokePosition SelectedStrokePosition => StrokePositionCombo.SelectedIndex switch
     {
@@ -168,6 +195,10 @@ public partial class SplashComposeWindow : Window
         var (scale, offsetX, offsetY) = (ScaleSlider.Value / 100, OffsetXSlider.Value / 100, OffsetYSlider.Value / 100);
         var fill = FillCheck.IsChecked == true;
         var (strokeWidth, strokeColor, strokePosition) = ((int)StrokeSlider.Value, _strokeColor, SelectedStrokePosition);
+        var shadow = ShadowCheck.IsChecked == true
+            ? new ShadowSettings(_shadowColor, ShadowOpacitySlider.Value / 100, (int)ShadowXSlider.Value, (int)ShadowYSlider.Value,
+                (int)ShadowBlurSlider.Value, (int)ShadowSpreadSlider.Value)
+            : null;
         try
         {
             var result = await Task.Run(() =>
@@ -175,16 +206,18 @@ public partial class SplashComposeWindow : Window
                 var cut = BrushGenerator.Cut(art, fill
                     ? BrushGenerator.MaskFilled(settings, art.Width, art.Height, inset: 5)
                     : BrushGenerator.Mask(settings, art.Width, art.Height, scale, offsetX, offsetY));
-                return SplashStroke.Apply(cut, strokeColor, strokeWidth, strokePosition);
+                var stroked = SplashStroke.Apply(cut, strokeColor, strokeWidth, strokePosition);
+                return shadow != null ? SplashShadow.Apply(stroked, shadow) : stroked;
             });
             if (version != _version) return;
             _result = result;
             var previous = PreviewImage.Source as IDisposable;
             PreviewImage.Source = RgbaBitmap.ToBitmap(result);
             previous?.Dispose();
-            StatusText.Text = strokeWidth > 0
-                ? $"Brush {settings.Seed} · {art.Width} × {art.Height} px · contorno {strokeWidth} px"
-                : $"Brush {settings.Seed} · {art.Width} × {art.Height} px";
+            var status = $"Brush {settings.Seed} · {art.Width} × {art.Height} px";
+            if (strokeWidth > 0) status += $" · contorno {strokeWidth} px";
+            if (shadow != null) status += " · sombra";
+            StatusText.Text = status;
             UpdateControls();
         }
         catch (Exception ex)

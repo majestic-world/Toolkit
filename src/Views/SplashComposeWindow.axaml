@@ -233,6 +233,63 @@
                             <ComboBoxItem Content="Centro"/>
                         </ComboBox>
                     </Grid>
+
+                    <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
+                    <TextBlock Text="SOMBRA" Classes="Section"/>
+                    <CheckBox x:Name="ShadowCheck"
+                              FontSize="12"
+                              Foreground="{DynamicResource ThemeTextBody}"
+                              ToolTip.Tip="Sombra projetada por baixo do recorte (e do contorno), como o box-shadow do CSS">
+                        <TextBlock Text="Sombra projetada" TextWrapping="Wrap"/>
+                    </CheckBox>
+                    <StackPanel x:Name="ShadowPanel" Spacing="10" Opacity="0.4" IsHitTestVisible="False">
+                        <Button x:Name="ShadowColorButton" Theme="{StaticResource GhostButton}"
+                                HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                                Height="32" Padding="8,0" Click="ShadowColor_Click">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <Border x:Name="ShadowColorSwatch" Width="22" Height="16" CornerRadius="3"
+                                        BorderBrush="{DynamicResource ThemeBorderStrong}" BorderThickness="1"/>
+                                <TextBlock x:Name="ShadowColorText" FontFamily="Consolas,Courier New,monospace"
+                                           FontSize="12" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <StackPanel>
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBlock Text="Opacidade" Classes="Field"/>
+                                <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #ShadowOpacitySlider.Value, StringFormat={}{0:0}%}"/>
+                            </Grid>
+                            <Slider x:Name="ShadowOpacitySlider" Minimum="0" Maximum="100" Value="60"/>
+                        </StackPanel>
+                        <StackPanel>
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBlock Text="Horizontal" Classes="Field"/>
+                                <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #ShadowXSlider.Value, StringFormat={}{0:0} px}"/>
+                            </Grid>
+                            <Slider x:Name="ShadowXSlider" Minimum="-50" Maximum="50" Value="6"/>
+                        </StackPanel>
+                        <StackPanel>
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBlock Text="Vertical" Classes="Field"/>
+                                <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #ShadowYSlider.Value, StringFormat={}{0:0} px}"/>
+                            </Grid>
+                            <Slider x:Name="ShadowYSlider" Minimum="-50" Maximum="50" Value="6"/>
+                        </StackPanel>
+                        <StackPanel>
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBlock Text="Desfoque" Classes="Field"/>
+                                <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #ShadowBlurSlider.Value, StringFormat={}{0:0} px}"/>
+                            </Grid>
+                            <Slider x:Name="ShadowBlurSlider" Minimum="0" Maximum="50" Value="12"/>
+                        </StackPanel>
+                        <StackPanel>
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBlock Text="Expansão" Classes="Field"
+                                           ToolTip.Tip="Engorda a silhueta da sombra antes do desfoque (spread do CSS)"/>
+                                <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #ShadowSpreadSlider.Value, StringFormat={}{0:0} px}"/>
+                            </Grid>
+                            <Slider x:Name="ShadowSpreadSlider" Minimum="0" Maximum="30" Value="0"/>
+                        </StackPanel>
+                    </StackPanel>
                 </StackPanel>
             </ScrollViewer>
         </Border>
@@ -258,7 +315,7 @@
             </Grid>
         </Border>
 
-        <!-- Seletor da cor do contorno -->
+        <!-- Seletor de cor do contorno e da sombra -->
         <Popup x:Name="ColorPickerPopup" IsLightDismissEnabled="True" Placement="Bottom" VerticalOffset="6">
             <Border Background="{DynamicResource ThemeSurfaceInput}" BorderBrush="{DynamicResource ThemeBorderMuted}"
                     BorderThickness="1" CornerRadius="10" Padding="14" BoxShadow="0 8 32 4 #AA000000">
