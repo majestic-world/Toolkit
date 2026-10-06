@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using L2Toolkit.Processing.Brush;
@@ -14,8 +15,9 @@ namespace L2Toolkit.Views;
 
 /// <summary>
 /// Monta o PNG de uma splash: a arte recortada por um brush procedural, como uma
-/// máscara de corte do Photoshop. "Outro brush" sorteia até achar um que combine;
-/// o resultado vai para o editor da página Splash Screen ou para um PNG.
+/// máscara de corte do Photoshop, com contorno opcional em volta do recorte. "Outro
+/// brush" sorteia até achar um que combine; o resultado vai para o editor da página
+/// Splash Screen ou para um PNG.
 /// </summary>
 public partial class SplashComposeWindow : Window
 {
@@ -24,6 +26,7 @@ public partial class SplashComposeWindow : Window
     private string _artName = "";
     private RgbaImage? _result;
     private int _seed;
+    private int _strokeColor = 0xFFFFFF;
     private int _version;
 
     /// <summary>Arte já recortada, enviada para o editor.</summary>
@@ -37,8 +40,15 @@ public partial class SplashComposeWindow : Window
             _debounce.Stop();
             Refresh();
         };
-        foreach (var slider in new[] { SpikesSlider, CracksSlider, ClawsSlider, DebrisSlider, SoftnessSlider, SymmetrySlider, ScaleSlider, OffsetXSlider, OffsetYSlider })
+        foreach (var slider in new[] { SpikesSlider, CracksSlider, ClawsSlider, DebrisSlider, SoftnessSlider, SymmetrySlider, ScaleSlider, OffsetXSlider, OffsetYSlider, StrokeSlider })
             slider.ValueChanged += (_, _) => ScheduleRefresh();
+        StrokePositionCombo.SelectionChanged += (_, _) => Refresh();
+        ColorPicker.ColorChanged += (_, color) =>
+        {
+            _strokeColor = (color.R << 16) | (color.G << 8) | color.B;
+            ShowStrokeColor();
+            ScheduleRefresh();
+        };
         FillCheck.IsCheckedChanged += (_, _) =>
         {
             // Esticado, o brush já ocupa a arte: tamanho e posição não se aplicam. O slider
@@ -53,6 +63,7 @@ public partial class SplashComposeWindow : Window
         {
             if (e.Key == Key.Enter) ApplySeedText();
         };
+        ShowStrokeColor();
         SetSeed(Random.Shared.Next(1, 1_000_000));
     }
 
@@ -118,6 +129,27 @@ public partial class SplashComposeWindow : Window
         Refresh();
     }
 
+    private void StrokeColor_Click(object? sender, RoutedEventArgs e)
+    {
+        ColorPicker.SetColor(Color.FromRgb((byte)(_strokeColor >> 16), (byte)(_strokeColor >> 8), (byte)_strokeColor));
+        ColorPickerPopup.PlacementTarget = StrokeColorButton;
+        ColorPickerPopup.IsOpen = true;
+    }
+
+    private void ShowStrokeColor()
+    {
+        // Cor de dado (a do contorno), não do tema.
+        StrokeColorSwatch.Background = new SolidColorBrush(Color.FromRgb((byte)(_strokeColor >> 16), (byte)(_strokeColor >> 8), (byte)_strokeColor));
+        StrokeColorText.Text = $"#{_strokeColor:X6}";
+    }
+
+    private StrokePosition SelectedStrokePosition => StrokePositionCombo.SelectedIndex switch
+    {
+        1 => StrokePosition.Inside,
+        2 => StrokePosition.Center,
+        _ => StrokePosition.Outside,
+    };
+
     // ─── Prévia ───────────────────────────────────────────────────────────────
 
     private void ScheduleRefresh()
@@ -135,17 +167,24 @@ public partial class SplashComposeWindow : Window
         var settings = CurrentSettings();
         var (scale, offsetX, offsetY) = (ScaleSlider.Value / 100, OffsetXSlider.Value / 100, OffsetYSlider.Value / 100);
         var fill = FillCheck.IsChecked == true;
+        var (strokeWidth, strokeColor, strokePosition) = ((int)StrokeSlider.Value, _strokeColor, SelectedStrokePosition);
         try
         {
-            var result = await Task.Run(() => BrushGenerator.Cut(art, fill
-                ? BrushGenerator.MaskFilled(settings, art.Width, art.Height, inset: 5)
-                : BrushGenerator.Mask(settings, art.Width, art.Height, scale, offsetX, offsetY)));
+            var result = await Task.Run(() =>
+            {
+                var cut = BrushGenerator.Cut(art, fill
+                    ? BrushGenerator.MaskFilled(settings, art.Width, art.Height, inset: 5)
+                    : BrushGenerator.Mask(settings, art.Width, art.Height, scale, offsetX, offsetY));
+                return SplashStroke.Apply(cut, strokeColor, strokeWidth, strokePosition);
+            });
             if (version != _version) return;
             _result = result;
             var previous = PreviewImage.Source as IDisposable;
             PreviewImage.Source = RgbaBitmap.ToBitmap(result);
             previous?.Dispose();
-            StatusText.Text = $"Brush {settings.Seed} · {art.Width} × {art.Height} px";
+            StatusText.Text = strokeWidth > 0
+                ? $"Brush {settings.Seed} · {art.Width} × {art.Height} px · contorno {strokeWidth} px"
+                : $"Brush {settings.Seed} · {art.Width} × {art.Height} px";
             UpdateControls();
         }
         catch (Exception ex)

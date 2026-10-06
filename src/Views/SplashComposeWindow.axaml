@@ -204,6 +204,35 @@
                         <Slider x:Name="OffsetYSlider" Minimum="-30" Maximum="30" Value="0"/>
                     </StackPanel>
                     </StackPanel>
+
+                    <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
+                    <TextBlock Text="CONTORNO" Classes="Section"/>
+                    <StackPanel>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Text="Espessura" Classes="Field"
+                                       ToolTip.Tip="Borda de cor sólida em volta do recorte, como o Traçado do Photoshop; 0 desliga"/>
+                            <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #StrokeSlider.Value, StringFormat={}{0:0} px}"/>
+                        </Grid>
+                        <Slider x:Name="StrokeSlider" Minimum="0" Maximum="50" Value="0"/>
+                    </StackPanel>
+                    <Grid ColumnDefinitions="*,8,*">
+                        <Button x:Name="StrokeColorButton" Theme="{StaticResource GhostButton}"
+                                HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                                Height="32" Padding="8,0" Click="StrokeColor_Click">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <Border x:Name="StrokeColorSwatch" Width="22" Height="16" CornerRadius="3"
+                                        BorderBrush="{DynamicResource ThemeBorderStrong}" BorderThickness="1"/>
+                                <TextBlock x:Name="StrokeColorText" FontFamily="Consolas,Courier New,monospace"
+                                           FontSize="12" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <ComboBox x:Name="StrokePositionCombo" Grid.Column="2" Height="32"
+                                  HorizontalAlignment="Stretch" SelectedIndex="0">
+                            <ComboBoxItem Content="Fora"/>
+                            <ComboBoxItem Content="Dentro"/>
+                            <ComboBoxItem Content="Centro"/>
+                        </ComboBox>
+                    </Grid>
                 </StackPanel>
             </ScrollViewer>
         </Border>
@@ -228,5 +257,13 @@
                 </Button>
             </Grid>
         </Border>
+
+        <!-- Seletor da cor do contorno -->
+        <Popup x:Name="ColorPickerPopup" IsLightDismissEnabled="True" Placement="Bottom" VerticalOffset="6">
+            <Border Background="{DynamicResource ThemeSurfaceInput}" BorderBrush="{DynamicResource ThemeBorderMuted}"
+                    BorderThickness="1" CornerRadius="10" Padding="14" BoxShadow="0 8 32 4 #AA000000">
+                <controls:HsvColorPicker x:Name="ColorPicker"/>
+            </Border>
+        </Popup>
     </Grid>
 </Window>
