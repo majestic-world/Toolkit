@@ -165,21 +165,21 @@
                                     <TextBlock Text="Rachaduras" Classes="Field"/>
                                     <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #CracksSlider.Value, StringFormat={}{0:0}}"/>
                                 </Grid>
-                                <Slider x:Name="CracksSlider" Value="50"/>
+                                <Slider x:Name="CracksSlider" Value="10"/>
                             </StackPanel>
                             <StackPanel>
                                 <Grid ColumnDefinitions="*,Auto">
                                     <TextBlock Text="Garras" Classes="Field"/>
                                     <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #ClawsSlider.Value, StringFormat={}{0:0}}"/>
                                 </Grid>
-                                <Slider x:Name="ClawsSlider" Value="50"/>
+                                <Slider x:Name="ClawsSlider" Value="0"/>
                             </StackPanel>
                             <StackPanel>
                                 <Grid ColumnDefinitions="*,Auto">
                                     <TextBlock Text="Estilhaços" Classes="Field"/>
                                     <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #DebrisSlider.Value, StringFormat={}{0:0}}"/>
                                 </Grid>
-                                <Slider x:Name="DebrisSlider" Value="50"/>
+                                <Slider x:Name="DebrisSlider" Value="10"/>
                             </StackPanel>
                             <StackPanel>
                                 <Grid ColumnDefinitions="*,Auto">
@@ -194,7 +194,7 @@
                                                ToolTip.Tip="Retângulo arredondado com pontas regulares, espelhado na vertical"/>
                                     <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #SymmetrySlider.Value, StringFormat={}{0:0}}"/>
                                 </Grid>
-                                <Slider x:Name="SymmetrySlider" Value="0"/>
+                                <Slider x:Name="SymmetrySlider" Value="30"/>
                             </StackPanel>
 
                             <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
