@@ -209,14 +209,10 @@ public partial class SplashScreen : UserControl
             new FilePickerFileType("Imagens") { Patterns = ["*.png", "*.jpg", "*.jpeg", "*.webp", "*.bmp"] });
         if (path == null) return;
 
-        var target = KeepSizeCheck.IsChecked == true ? _canvas : null;
         await RunAsync(async () =>
         {
-            var image = await Task.Run(() =>
-            {
-                var imported = SplashFile.Import(path);
-                return target != null ? imported.Resized(target.Width, target.Height) : imported;
-            });
+            // A splash é gravada na resolução da imagem escolhida, sem redimensionar.
+            var image = await Task.Run(() => SplashFile.Import(path));
             _canvas = image;
             _modified = true;
             RefreshPreview();
@@ -226,7 +222,7 @@ public partial class SplashScreen : UserControl
     /// <summary>
     /// Janela independente que recorta uma arte com um brush procedural. Abre com a
     /// imagem do editor (se houver) e devolve o recorte, que entra aqui como uma
-    /// substituição: respeita "Manter o tamanho atual" e passa para 32 bits com alpha.
+    /// substituição: fica na resolução do recorte e passa para 32 bits com alpha.
     /// </summary>
     private void Compose_Click(object? sender, RoutedEventArgs e)
     {
@@ -251,9 +247,7 @@ public partial class SplashScreen : UserControl
     private void ApplyComposed(RgbaImage image)
     {
         if (_busy) return;
-        _canvas = KeepSizeCheck.IsChecked == true && _canvas != null
-            ? image.Resized(_canvas.Width, _canvas.Height)
-            : image;
+        _canvas = image;
         _modified = true;
         // O recorte só existe com alpha real; em 256 cores ele vira a cor-chave.
         FormatCombo.SelectedIndex = Array.IndexOf(Formats, SplashFormat.Bgra32);
@@ -341,9 +335,6 @@ public partial class SplashScreen : UserControl
         foreach (var control in new Control[] { SaveButton, SaveAsButton, ExportButton, KeyOutButton })
             control.IsEnabled = hasCanvas && !_busy;
         OpenButton.IsEnabled = ReplaceButton.IsEnabled = ComposeButton.IsEnabled = !_busy;
-
-        KeepSizeCheck.IsEnabled = hasCanvas && !_busy;
-        KeepSizeCheck.Content = hasCanvas ? $"Manter o tamanho atual ({_canvas!.Width} × {_canvas.Height})" : "Manter o tamanho atual";
 
         var details = new List<string>();
         if (hasCanvas)

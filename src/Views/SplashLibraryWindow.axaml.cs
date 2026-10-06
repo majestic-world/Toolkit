@@ -24,7 +24,7 @@ namespace L2Toolkit.Views;
 /// Galeria não modal com os BMP da pasta do client. Clicar numa miniatura manda o
 /// arquivo para o editor da página Splash Screen; a janela continua aberta.
 /// "Trocar todos por imagem" aplica uma arte em todos só em memória; "Salvar todos"
-/// grava cada um no seu tamanho, formato e criptografia originais.
+/// grava cada um na resolução da arte, com o formato e a criptografia originais.
 /// </summary>
 public partial class SplashLibraryWindow : Window
 {
@@ -32,7 +32,7 @@ public partial class SplashLibraryWindow : Window
 
     private readonly Dictionary<string, Button> _tiles = new(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<string, SplashLibraryEntry> _entries = new(StringComparer.OrdinalIgnoreCase);
-    /// <summary>Conteúdo novo, ainda não gravado, no tamanho de cada arquivo.</summary>
+    /// <summary>Conteúdo novo, ainda não gravado, na resolução da imagem escolhida.</summary>
     private readonly Dictionary<string, RgbaImage> _pending = new(StringComparer.OrdinalIgnoreCase);
     private string? _folder;
     private string? _current;
@@ -144,25 +144,23 @@ public partial class SplashLibraryWindow : Window
         await RunAsync(async () =>
         {
             StatusText.Text = $"Aplicando {Path.GetFileName(source)} em {entries.Length} arquivos…";
-            var results = await Task.Run(() =>
+            // Todos recebem a arte na resolução dela, sem redimensionar. A miniatura mostra a
+            // conversão que a gravação vai aplicar (256 cores, cor-chave): uma por formato.
+            var (image, thumbnails) = await Task.Run(() =>
             {
                 var image = SplashFile.Import(source);
-                return entries.AsParallel().AsOrdered().Select(entry =>
-                {
-                    // Cada arquivo recebe a arte no próprio tamanho; a miniatura mostra a
-                    // conversão que a gravação vai aplicar (256 cores, cor-chave).
-                    var canvas = image.Resized(entry.Width, entry.Height);
-                    var converted = SplashConverter.Convert(canvas, entry.Format, SplashConverter.RetailKeyColor, dither: false);
-                    return (Entry: entry, Canvas: canvas, Thumbnail: SplashLibrary.Thumbnail(converted.Image));
-                }).ToArray();
+                var thumbnails = entries.Select(entry => entry.Format).Distinct().AsParallel()
+                    .ToDictionary(format => format, format => SplashLibrary.Thumbnail(
+                        SplashConverter.Convert(image, format, SplashConverter.RetailKeyColor, dither: false).Image));
+                return (image, thumbnails);
             });
 
-            foreach (var (entry, canvas, thumbnail) in results)
+            foreach (var entry in entries)
             {
-                _pending[entry.FilePath] = canvas;
-                ShowTile(entry, thumbnail, pending: true);
+                _pending[entry.FilePath] = image;
+                ShowTile(entry, thumbnails[entry.Format], pending: true);
             }
-            StatusText.Text = $"{results.Length} arquivos trocados em memória · nada foi gravado ainda · use Salvar todos";
+            StatusText.Text = $"{entries.Length} arquivos trocados em memória ({image.Width} × {image.Height}) · nada foi gravado ainda · use Salvar todos";
         });
     }
 
@@ -267,7 +265,7 @@ public partial class SplashLibraryWindow : Window
         content.Children.Add(new TextBlock
         {
             Text = pending
-                ? "Trocado · não salvo"
+                ? $"Trocado · {_pending[entry.FilePath].Width} × {_pending[entry.FilePath].Height} · não salvo"
                 : $"{entry.Width} × {entry.Height} · {entry.BitsPerPixel} bits · {Describe(entry.Encryption)}",
             FontSize = 11,
             [!TextElement.ForegroundProperty] = AppTheme.Brush(pending ? "ThemeWarning" : "ThemeTextHint"),

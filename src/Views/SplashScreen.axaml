@@ -230,8 +230,6 @@
                                             ToolTip.Tip="Recorta uma arte com um brush aleatório, como uma máscara do Photoshop">
                                         <TextBlock Text="Compor com brush…" FontSize="12" FontWeight="Medium"/>
                                     </Button>
-                                    <CheckBox x:Name="KeepSizeCheck" IsChecked="True" IsEnabled="False"
-                                              Content="Manter o tamanho atual"/>
                                 </StackPanel>
 
                                 <StackPanel Spacing="4">
