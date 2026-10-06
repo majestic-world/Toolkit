@@ -110,7 +110,7 @@ namespace L2Toolkit.Views
         }
 
         /// <summary>
-        /// Baixa o instalador com progresso, abre em modo silencioso e encerra o app para
+        /// Baixa o instalador com progresso, abre o assistente do instalador e encerra o app para
         /// liberar os arquivos. Fora do Windows não há instalador: abre a página da release.
         /// </summary>
         private async Task InstallUpdateAsync(AppRelease release)

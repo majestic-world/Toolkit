@@ -20,7 +20,6 @@
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-; AppUpdater (src/Utilities/AppUpdater.cs) acha a pasta instalada pela chave de desinstalação deste AppId: mudou aqui, mude lá.
 AppId={{194686FD-F433-4E23-A57C-EF03BD82CDF6}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}

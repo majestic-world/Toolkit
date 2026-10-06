@@ -3,12 +3,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Reflection;
-using System.Runtime.Versioning;
 using System.Security.Cryptography;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Win32;
 
 namespace L2Toolkit.Utilities;
 
@@ -31,7 +29,7 @@ public sealed record UpdateCheck(UpdateStatus Status, AppRelease? Release = null
 /// <summary>
 /// Atualização pelo GitHub Releases de majestic-world/Toolkit: compara a tag da release mais
 /// nova com a versão do app (APP_VERSION), baixa o instalador do Inno Setup, confere o
-/// SHA-256 publicado pelo GitHub e o executa em modo silencioso.
+/// SHA-256 publicado pelo GitHub e abre o assistente do instalador.
 /// </summary>
 public static class AppUpdater
 {
@@ -118,38 +116,15 @@ public static class AppUpdater
     }
 
     /// <summary>
-    /// Roda o instalador em modo silencioso (só a janela de progresso) e reabre o app quando ele
-    /// termina. Quem espera é um cmd oculto, não o instalador: assim funciona com qualquer
-    /// instalador já publicado, inclusive os anteriores a esta atualização. O chamador fecha o
-    /// app logo em seguida para liberar os arquivos.
+    /// Abre o assistente do instalador, igual à instalação manual: termina na página final com
+    /// "Abrir L2 Toolkit" (entrada postinstall do [Run] do Setup.iss). /CLOSEAPPLICATIONS fecha
+    /// o que ainda segurar os arquivos; o chamador fecha o app logo em seguida.
     /// </summary>
-    [SupportedOSPlatform("windows")]
     public static void LaunchInstaller(string installerPath)
-    {
-        var command = $"start \"\" /wait \"{installerPath}\" /SILENT /SP- /SUPPRESSMSGBOXES /NORESTART /CLOSEAPPLICATIONS"
-                      + $" & start \"\" \"{InstalledExePath()}\"";
-        Process.Start(new ProcessStartInfo("cmd.exe", $"/d /s /c \"{command}\"")
+        => Process.Start(new ProcessStartInfo(installerPath, "/SP- /NORESTART /CLOSEAPPLICATIONS")
         {
-            UseShellExecute = false,
-            CreateNoWindow = true,
+            UseShellExecute = true,
         });
-    }
-
-    /// <summary>
-    /// Exe que o instalador vai atualizar: a pasta registrada pelo Inno Setup (AppId do
-    /// Setup.iss) ou, sem instalação anterior, o padrão de PrivilegesRequired=lowest. Rodando do
-    /// build do repositório, reabre o app instalado, não o build.
-    /// </summary>
-    [SupportedOSPlatform("windows")]
-    private static string InstalledExePath()
-    {
-        const string uninstallKey = @"Software\Microsoft\Windows\CurrentVersion\Uninstall\{194686FD-F433-4E23-A57C-EF03BD82CDF6}_is1";
-        var folder = (Registry.CurrentUser.OpenSubKey(uninstallKey) ?? Registry.LocalMachine.OpenSubKey(uninstallKey))
-                     ?.GetValue("InstallLocation") as string;
-        if (string.IsNullOrWhiteSpace(folder))
-            folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Programs", "L2 Toolkit");
-        return Path.Combine(folder, "L2 Toolkit.exe");
-    }
 
     public static void OpenReleasePage(AppRelease release)
         => Process.Start(new ProcessStartInfo(release.PageUrl) { UseShellExecute = true });
