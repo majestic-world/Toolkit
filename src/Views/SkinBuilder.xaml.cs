@@ -11,6 +11,7 @@ using System.Xml.Linq;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
+using L2Toolkit.Localization;
 using L2Toolkit.Models;
 using L2Toolkit.ClientDat;
 using L2Toolkit.Processing;
@@ -20,8 +21,6 @@ namespace L2Toolkit.Views;
 
 public partial class SkinBuilder : UserControl
 {
-    private const string InvalidData = "Dados de parse inválidos!";
-
     private readonly GlobalLogs _log = new();
     private readonly DispatcherTimer _errorTimer;
 
@@ -92,13 +91,13 @@ public partial class SkinBuilder : UserControl
     {
         _errorTimer.Stop();
         NotificacaoBorder.IsVisible = true;
-        StatusNotificacao.Text = !string.IsNullOrWhiteSpace(message) ? message : "Ocorreu um erro inesperado.";
+        StatusNotificacao.Text = !string.IsNullOrWhiteSpace(message) ? message : Loc.Common.UnexpectedError;
         _errorTimer.Start();
     }
 
     private async Task CreateStatusData()
     {
-        _log.AddLog("Recuperando status do equipamento...");
+        _log.AddLog(Loc.SkinBuilder.StatusLoadingLog);
 
         var content = LoadTable("ItemStatData");
         using var render = new StringReader(content);
@@ -114,7 +113,7 @@ public partial class SkinBuilder : UserControl
 
         if (!_itemsStatus.IsEmpty)
         {
-            _log.AddLog($"Pronto, status recuperado, total de {_itemsStatus.Count:N0}");
+            _log.AddLog(Loc.SkinBuilder.StatusLoadedLog(_itemsStatus.Count));
         }
     }
 
@@ -152,7 +151,7 @@ public partial class SkinBuilder : UserControl
                     !int.TryParse(parts[1], out var max) ||
                     initial == 0 || max == 0)
                 {
-                    throw new Exception(InvalidData);
+                    throw new Exception(Loc.SkinBuilder.InvalidIdsError);
                 }
 
                 for (var i = initial; i <= max; i++)
@@ -207,13 +206,13 @@ public partial class SkinBuilder : UserControl
     {
         if (_itemsName.IsEmpty)
         {
-            _log.AddLog("Criando cache de nomes");
+            _log.AddLog(Loc.SkinBuilder.NameCacheCreatingLog);
             await GetItemsName();
-            _log.AddLog($"Cache de nomes criados, {_itemsName.Count:N0} nomes");
+            _log.AddLog(Loc.SkinBuilder.NameCacheCreatedLog(_itemsName.Count));
         }
         else
         {
-            _log.AddLog("Os nomes estão em cache!");
+            _log.AddLog(Loc.SkinBuilder.NamesCachedLog);
         }
 
         var weaponContent = LoadTable("Weapongrp");
@@ -221,7 +220,7 @@ public partial class SkinBuilder : UserControl
         var listIds = ParseIds(ids);
         var hashSet = new HashSet<string>(listIds);
 
-        _log.AddLog("Verificando as weapons no arquivo...");
+        _log.AddLog(Loc.SkinBuilder.WeaponsCheckingLog);
 
         var itemGrpBuild = new StringBuilder();
         var itemNameBuild = new StringBuilder();
@@ -262,22 +261,22 @@ public partial class SkinBuilder : UserControl
 
         if (itemGrpBuild.Length == 0 && itemNameBuild.Length == 0)
         {
-            _log.AddLog("Nada foi encontrado");
+            _log.AddLog(Loc.SkinBuilder.NothingFoundLog);
             return;
         }
 
         if (_itemsStatus.IsEmpty)
         {
-            _log.AddLog("Carregando status das armas...");
+            _log.AddLog(Loc.SkinBuilder.WeaponStatusLoadingLog);
             await CreateStatusData();
-            _log.AddLog($"Status das armas carregadas,  {_itemsName.Count:N0} items");
+            _log.AddLog(Loc.SkinBuilder.WeaponStatusLoadedLog(_itemsName.Count));
         }
 
-        _log.AddLog($"Dados GRP recuperados: {successId}");
-        _log.AddLog($"Dados de nomes recuperados: {successName}");
-        _log.AddLog("Pronto, os dados foram processados!");
+        _log.AddLog(Loc.SkinBuilder.GrpFoundLog(successId));
+        _log.AddLog(Loc.SkinBuilder.NamesFoundLog(successName));
+        _log.AddLog(Loc.SkinBuilder.ProcessedLog);
 
-        _log.AddLog("Criando XML das armas...");
+        _log.AddLog(Loc.SkinBuilder.WeaponsXmlLog);
 
         var root = new XElement("list");
 
@@ -382,7 +381,7 @@ public partial class SkinBuilder : UserControl
     {
         if (_itemsStatus.IsEmpty)
         {
-            _log.AddLog("Carregando status de itens");
+            _log.AddLog(Loc.SkinBuilder.ItemStatusLoadingLog);
             await CreateStatusData();
         }
 
@@ -454,13 +453,13 @@ public partial class SkinBuilder : UserControl
     {
         if (_itemsName.IsEmpty)
         {
-            _log.AddLog("Criando cache de nomes");
+            _log.AddLog(Loc.SkinBuilder.NameCacheCreatingLog);
             await GetItemsName();
-            _log.AddLog($"Cache de nomes criados, {_itemsName.Count:N0} nomes");
+            _log.AddLog(Loc.SkinBuilder.NameCacheCreatedLog(_itemsName.Count));
         }
         else
         {
-            _log.AddLog("Os nomes estão em cache!");
+            _log.AddLog(Loc.SkinBuilder.NamesCachedLog);
         }
 
         var armorContent = LoadTable("Armorgrp");
@@ -468,7 +467,7 @@ public partial class SkinBuilder : UserControl
         var listIds = ParseIds(ids);
         var hashSet = new HashSet<string>(listIds);
 
-        _log.AddLog("Verificando as armaduras no arquivo...");
+        _log.AddLog(Loc.SkinBuilder.ArmorsCheckingLog);
 
         var itemGrpBuild = new StringBuilder();
         var itemNameBuild = new StringBuilder();
@@ -511,7 +510,7 @@ public partial class SkinBuilder : UserControl
 
         if (itemGrpBuild.Length == 0 && itemNameBuild.Length == 0)
         {
-            _log.AddLog("Nada foi encontrado");
+            _log.AddLog(Loc.SkinBuilder.NothingFoundLog);
             return;
         }
 
@@ -520,13 +519,13 @@ public partial class SkinBuilder : UserControl
         Dispatcher.UIThread.Invoke(() => ClientTextBox.Text = itemGrpBuild.ToString());
         Dispatcher.UIThread.Invoke(() => NameData.Text = itemNameBuild.ToString());
 
-        _log.AddLog($"Dados GRP recuperados: {successId}");
-        _log.AddLog($"Dados de nomes recuperados: {successName}");
-        _log.AddLog("Gerando xml das armaduras...");
+        _log.AddLog(Loc.SkinBuilder.GrpFoundLog(successId));
+        _log.AddLog(Loc.SkinBuilder.NamesFoundLog(successName));
+        _log.AddLog(Loc.SkinBuilder.ArmorsXmlLog);
 
         await ProcessXmlArmors(recoveryArmors);
 
-        _log.AddLog("Pronto, os dados foram processados!");
+        _log.AddLog(Loc.SkinBuilder.ProcessedLog);
 
         itemGrpBuild.Clear();
         itemNameBuild.Clear();
@@ -572,7 +571,7 @@ public partial class SkinBuilder : UserControl
 
             if (string.IsNullOrEmpty(type) || string.IsNullOrEmpty(ids))
             {
-                throw new Exception("Preencha todos os campos");
+                throw new Exception(Loc.SkinBuilder.FieldsRequiredError);
             }
 
             _log.ClearLog();
@@ -586,11 +585,11 @@ public partial class SkinBuilder : UserControl
             switch (type)
             {
                 case "Weapons":
-                    _log.AddLog("Processando weapons...");
+                    _log.AddLog(Loc.SkinBuilder.ProcessingWeaponsLog);
                     await ProcessWeapons(ids);
                     break;
                 case "Armor":
-                    _log.AddLog("Processando armors...");
+                    _log.AddLog(Loc.SkinBuilder.ProcessingArmorsLog);
                     await ProcessArmors(ids);
                     break;
             }

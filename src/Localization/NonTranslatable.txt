@@ -15,6 +15,7 @@ L2 Toolkit (Fafurion) By Mk
 # ── Common ──
 
 # ── CreateMultisell ──
+Logs
 
 # ── DescriptionFix ──
 
@@ -27,6 +28,13 @@ L2 Toolkit (Fafurion) By Mk
 # ── Geodata ──
 
 # ── LiveData ──
+Armor
+Items
+Live Data
+Preset
+Set Item GRP
+Skills
+Weapons
 
 # ── LogParse ──
 
@@ -39,12 +47,26 @@ L2 Toolkit (Fafurion) By Mk
 # ── PawnData ──
 
 # ── PrimeShop ──
+Agathions
+Consumables
+Equipment
+Prime Shop Generator
+ProductName_Classic-eu.dat
+Reward Coin
+VIP
+prime_shop.xml
 
 # ── SearchIcon ──
+Icon
+Icon Panel
+Weapon
 
 # ── Settings ──
 
 # ── SkinBuilder ──
+Skin Builder
+Skins
+Status
 
 # ── SpawnManager ──
 

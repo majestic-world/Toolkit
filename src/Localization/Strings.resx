@@ -46,8 +46,77 @@
   <data name="Common.Save" xml:space="preserve">
     <value>Salvar</value>
   </data>
+  <data name="Common.CopiedStatus" xml:space="preserve">
+    <value>Copiado!</value>
+  </data>
+  <data name="Common.UnexpectedError" xml:space="preserve">
+    <value>Ocorreu um erro inesperado.</value>
+  </data>
 
   <!-- ═══ CreateMultisell ═══ -->
+  <data name="CreateMultisell.AddButton" xml:space="preserve">
+    <value>Adicionar</value>
+  </data>
+  <data name="CreateMultisell.AssetsConfigureButton" xml:space="preserve">
+    <value>Clique aqui para configurar.</value>
+  </data>
+  <data name="CreateMultisell.AssetsMissingLabel" xml:space="preserve">
+    <value>Pasta de assets não configurada.</value>
+  </data>
+  <data name="CreateMultisell.CopyTip" xml:space="preserve">
+    <value>Copia o conteúdo da aba aberta</value>
+  </data>
+  <data name="CreateMultisell.ErrorLog" xml:space="preserve">
+    <value>Erro: {message}</value>
+  </data>
+  <data name="CreateMultisell.GenerateButton" xml:space="preserve">
+    <value>Gerar MultiSell</value>
+  </data>
+  <data name="CreateMultisell.IngredientFormatError" xml:space="preserve">
+    <value>Formato inválido. Use id;quantidade — ex: 57;500</value>
+  </data>
+  <data name="CreateMultisell.IngredientWatermark" xml:space="preserve">
+    <value>Ex: 57;500</value>
+  </data>
+  <data name="CreateMultisell.IngredientsLabel" xml:space="preserve">
+    <value>Ingredientes (formato: id;quantidade)</value>
+  </data>
+  <data name="CreateMultisell.IngredientsRequiredError" xml:space="preserve">
+    <value>Adicione pelo menos um ingrediente.</value>
+  </data>
+  <data name="CreateMultisell.InputTitle" xml:space="preserve">
+    <value>DADOS DE ENTRADA</value>
+  </data>
+  <data name="CreateMultisell.LogsWatermark" xml:space="preserve">
+    <value>Logs de processamento aparecerão aqui...</value>
+  </data>
+  <data name="CreateMultisell.NamesLoadedLog" xml:space="preserve">
+    <value>Nomes de itens carregados, total de {count:N0}</value>
+  </data>
+  <data name="CreateMultisell.ProductionIdsLabel" xml:space="preserve">
+    <value>IDs de produção (separados por ; ou intervalo com ...)</value>
+  </data>
+  <data name="CreateMultisell.ProductionIdsRequiredError" xml:space="preserve">
+    <value>Digite os IDs de produção.</value>
+  </data>
+  <data name="CreateMultisell.ProductionIdsWatermark" xml:space="preserve">
+    <value>Ex: 1000;1001;1002 ou 1000...1050</value>
+  </data>
+  <data name="CreateMultisell.ResultTitle" xml:space="preserve">
+    <value>RESULTADO</value>
+  </data>
+  <data name="CreateMultisell.SubtitleLabel" xml:space="preserve">
+    <value>Crie bases para multisell de vendas</value>
+  </data>
+  <data name="CreateMultisell.Title" xml:space="preserve">
+    <value>Criar Multisell</value>
+  </data>
+  <data name="CreateMultisell.XmlTabButton" xml:space="preserve">
+    <value>Dados Multisell</value>
+  </data>
+  <data name="CreateMultisell.XmlWatermark" xml:space="preserve">
+    <value>O XML do multisell aparecerá aqui...</value>
+  </data>
 
   <!-- ═══ DescriptionFix ═══ -->
 
@@ -64,6 +133,81 @@
   <!-- ═══ Geodata ═══ -->
 
   <!-- ═══ LiveData ═══ -->
+  <data name="LiveData.ConvertSPlusLabel" xml:space="preserve">
+    <value>Converter S+ em S?</value>
+  </data>
+  <data name="LiveData.CopyTip" xml:space="preserve">
+    <value>Copia o conteúdo da aba aberta</value>
+  </data>
+  <data name="LiveData.EnchantGlowLabel" xml:space="preserve">
+    <value>Habilitar brilho no enchant?</value>
+  </data>
+  <data name="LiveData.FieldsRequiredError" xml:space="preserve">
+    <value>Preencha todos os campos</value>
+  </data>
+  <data name="LiveData.GenerateButton" xml:space="preserve">
+    <value>Gerar Dados</value>
+  </data>
+  <data name="LiveData.GrpTabButton" xml:space="preserve">
+    <value>Dados GRP</value>
+  </data>
+  <data name="LiveData.GrpWatermark" xml:space="preserve">
+    <value>Dados GRP aparecerão aqui...</value>
+  </data>
+  <data name="LiveData.IdsLabel" xml:space="preserve">
+    <value>IDs dos itens (separados por ; ou intervalo com ...)</value>
+  </data>
+  <data name="LiveData.IdsWatermark" xml:space="preserve">
+    <value>Ex: 100;101;102 ou 100...150</value>
+  </data>
+  <data name="LiveData.InvalidIdsError" xml:space="preserve">
+    <value>Dados de parse inválidos!</value>
+  </data>
+  <data name="LiveData.NamesTabButton" xml:space="preserve">
+    <value>Nomes</value>
+  </data>
+  <data name="LiveData.NamesWatermark" xml:space="preserve">
+    <value>Nomes aparecerão aqui...</value>
+  </data>
+  <data name="LiveData.PresetWatermark" xml:space="preserve">
+    <value>Selecione um preset...</value>
+  </data>
+  <data name="LiveData.ProcessTypeLabel" xml:space="preserve">
+    <value>Tipo de processamento</value>
+  </data>
+  <data name="LiveData.ResetButton" xml:space="preserve">
+    <value>Resetar</value>
+  </data>
+  <data name="LiveData.ResultTitle" xml:space="preserve">
+    <value>RESULTADO</value>
+  </data>
+  <data name="LiveData.SetItemGrpWatermark" xml:space="preserve">
+    <value>Set Item GRP aparecerá aqui...</value>
+  </data>
+  <data name="LiveData.SetItemNextIdLabel" xml:space="preserve">
+    <value>Próximo ID do Item Set</value>
+  </data>
+  <data name="LiveData.SetItemNextIdRequiredError" xml:space="preserve">
+    <value>Informe o próximo ID do Item Set para processar armaduras</value>
+  </data>
+  <data name="LiveData.SetItemNextIdTip" xml:space="preserve">
+    <value>Os IDs serão atribuídos sequencialmente a partir deste</value>
+  </data>
+  <data name="LiveData.SetItemNextIdWatermark" xml:space="preserve">
+    <value>Ex: 30 (sequencial)</value>
+  </data>
+  <data name="LiveData.SettingsTitle" xml:space="preserve">
+    <value>CONFIGURAÇÕES</value>
+  </data>
+  <data name="LiveData.SubtitleLabel" xml:space="preserve">
+    <value>Obter arquivos .dat Live para uso no Classic — skills, armas, armaduras e itens</value>
+  </data>
+  <data name="LiveData.XmlTabButton" xml:space="preserve">
+    <value>Dados XML</value>
+  </data>
+  <data name="LiveData.XmlWatermark" xml:space="preserve">
+    <value>Dados XML aparecerão aqui...</value>
+  </data>
 
   <!-- ═══ LogParse ═══ -->
 
@@ -76,12 +220,266 @@
   <!-- ═══ PawnData ═══ -->
 
   <!-- ═══ PrimeShop ═══ -->
+  <data name="PrimeShop.AssetsConfigureButton" xml:space="preserve">
+    <value>Clique aqui para configurar.</value>
+  </data>
+  <data name="PrimeShop.AssetsMissingLabel" xml:space="preserve">
+    <value>Pasta de assets não configurada.</value>
+  </data>
+  <data name="PrimeShop.CategoryLabel" xml:space="preserve">
+    <value>Categoria</value>
+  </data>
+  <data name="PrimeShop.ClientTabButton" xml:space="preserve">
+    <value>Client</value>
+  </data>
+  <data name="PrimeShop.ClientWatermark" xml:space="preserve">
+    <value>Saída do cliente aparecerá aqui...</value>
+  </data>
+  <data name="PrimeShop.CopyTip" xml:space="preserve">
+    <value>Copia o conteúdo da aba aberta</value>
+  </data>
+  <data name="PrimeShop.FileNotFoundError" xml:space="preserve">
+    <value>Arquivo '{path}' não encontrado!</value>
+    <comment>path é o caminho absoluto do arquivo de assets.</comment>
+  </data>
+  <data name="PrimeShop.GenerateButton" xml:space="preserve">
+    <value>Gerar</value>
+  </data>
+  <data name="PrimeShop.GenerateError" xml:space="preserve">
+    <value>Erro ao gerar itens: {message}</value>
+  </data>
+  <data name="PrimeShop.IconError" xml:space="preserve">
+    <value>Erro ao buscar ícone: {message}</value>
+  </data>
+  <data name="PrimeShop.IconsFileMissingError" xml:space="preserve">
+    <value>Atenção: Arquivo '{path}' não encontrado! Os ícones podem não ser exibidos corretamente.</value>
+  </data>
+  <data name="PrimeShop.IdAndPriceRequiredError" xml:space="preserve">
+    <value>Preencha os campos de ID e Preço.</value>
+  </data>
+  <data name="PrimeShop.IdsLabel" xml:space="preserve">
+    <value>IDs dos itens</value>
+  </data>
+  <data name="PrimeShop.IdsWatermark" xml:space="preserve">
+    <value>ex: 57;35;36;37 (separados por ponto e vírgula)</value>
+  </data>
+  <data name="PrimeShop.ItemNameError" xml:space="preserve">
+    <value>Erro ao buscar nome do item: {message}</value>
+  </data>
+  <data name="PrimeShop.ItemNamesFileMissingError" xml:space="preserve">
+    <value>Atenção: Arquivo '{path}' não encontrado! Os nomes dos itens não serão exibidos corretamente.</value>
+  </data>
+  <data name="PrimeShop.LogsWatermark" xml:space="preserve">
+    <value>IDs e nomes gerados aparecerão aqui...</value>
+  </data>
+  <data name="PrimeShop.PriceLabel" xml:space="preserve">
+    <value>Preço</value>
+  </data>
+  <data name="PrimeShop.PriceNotNumberError" xml:space="preserve">
+    <value>O preço deve ser um número.</value>
+  </data>
+  <data name="PrimeShop.PriceWatermark" xml:space="preserve">
+    <value>ex: 1000</value>
+  </data>
+  <data name="PrimeShop.QuantityInvalidError" xml:space="preserve">
+    <value>Quantidade inválida. Usando valor padrão 1.</value>
+  </data>
+  <data name="PrimeShop.QuantityLabel" xml:space="preserve">
+    <value>Quantidade</value>
+  </data>
+  <data name="PrimeShop.ResultTitle" xml:space="preserve">
+    <value>RESULTADO</value>
+  </data>
+  <data name="PrimeShop.ServerTabButton" xml:space="preserve">
+    <value>Servidor</value>
+  </data>
+  <data name="PrimeShop.ServerWatermark" xml:space="preserve">
+    <value>Saída do servidor aparecerá aqui...</value>
+  </data>
+  <data name="PrimeShop.SettingsTitle" xml:space="preserve">
+    <value>CONFIGURAÇÃO</value>
+  </data>
+  <data name="PrimeShop.SubtitleLabel" xml:space="preserve">
+    <value>Configure e gere produtos para a Prime Shop</value>
+  </data>
+  <data name="PrimeShop.TypeLabel" xml:space="preserve">
+    <value>Tipo</value>
+  </data>
+  <data name="PrimeShop.ValidIdRequiredError" xml:space="preserve">
+    <value>Insira ao menos um ID válido.</value>
+  </data>
 
   <!-- ═══ SearchIcon ═══ -->
+  <data name="SearchIcon.AssetsConfigureButton" xml:space="preserve">
+    <value>Clique aqui para configurar.</value>
+  </data>
+  <data name="SearchIcon.AssetsMissingLabel" xml:space="preserve">
+    <value>Pasta de assets não configurada.</value>
+  </data>
+  <data name="SearchIcon.FileNotFoundError" xml:space="preserve">
+    <value>Arquivo não encontrado: {path}</value>
+  </data>
+  <data name="SearchIcon.ItemIdLabel" xml:space="preserve">
+    <value>ID do item</value>
+  </data>
+  <data name="SearchIcon.ItemIdRequiredError" xml:space="preserve">
+    <value>Insira o ID do item.</value>
+  </data>
+  <data name="SearchIcon.ItemIdWatermark" xml:space="preserve">
+    <value>Ex: 49</value>
+  </data>
+  <data name="SearchIcon.ItemNotFoundError" xml:space="preserve">
+    <value>O item não foi encontrado!</value>
+  </data>
+  <data name="SearchIcon.ItemTypeLabel" xml:space="preserve">
+    <value>Tipo do item</value>
+  </data>
+  <data name="SearchIcon.LoadingStatus" xml:space="preserve">
+    <value>CARREGANDO...</value>
+    <comment>Título da seção de resultado enquanto o arquivo de assets é carregado.</comment>
+  </data>
+  <data name="SearchIcon.NameLabel" xml:space="preserve">
+    <value>Nome</value>
+  </data>
+  <data name="SearchIcon.NotFoundStatus" xml:space="preserve">
+    <value>Não encontrado</value>
+  </data>
+  <data name="SearchIcon.ResultTitle" xml:space="preserve">
+    <value>RESULTADO</value>
+  </data>
+  <data name="SearchIcon.SearchButton" xml:space="preserve">
+    <value>Pesquisar</value>
+  </data>
+  <data name="SearchIcon.SearchTitle" xml:space="preserve">
+    <value>PESQUISA</value>
+  </data>
+  <data name="SearchIcon.SubtitleLabel" xml:space="preserve">
+    <value>Pesquisa do ícone do item pelo Id</value>
+  </data>
+  <data name="SearchIcon.Title" xml:space="preserve">
+    <value>Pesquisar Ícone</value>
+  </data>
 
   <!-- ═══ Settings ═══ -->
 
   <!-- ═══ SkinBuilder ═══ -->
+  <data name="SkinBuilder.ArmorsCheckingLog" xml:space="preserve">
+    <value>Verificando as armaduras no arquivo...</value>
+  </data>
+  <data name="SkinBuilder.ArmorsXmlLog" xml:space="preserve">
+    <value>Gerando xml das armaduras...</value>
+  </data>
+  <data name="SkinBuilder.CopyTip" xml:space="preserve">
+    <value>Copia o conteúdo da aba aberta</value>
+  </data>
+  <data name="SkinBuilder.FieldsRequiredError" xml:space="preserve">
+    <value>Preencha todos os campos</value>
+  </data>
+  <data name="SkinBuilder.GenerateButton" xml:space="preserve">
+    <value>Gerar Dados</value>
+  </data>
+  <data name="SkinBuilder.GrpFoundLog" xml:space="preserve">
+    <value>Dados GRP recuperados: {count}</value>
+  </data>
+  <data name="SkinBuilder.GrpTabButton" xml:space="preserve">
+    <value>Dados GRP</value>
+  </data>
+  <data name="SkinBuilder.GrpWatermark" xml:space="preserve">
+    <value>Dados GRP aparecerão aqui...</value>
+  </data>
+  <data name="SkinBuilder.IdsLabel" xml:space="preserve">
+    <value>IDs dos itens (separados por ; ou intervalo com ...)</value>
+  </data>
+  <data name="SkinBuilder.IdsWatermark" xml:space="preserve">
+    <value>Ex: 100;101;102 ou 100...150</value>
+  </data>
+  <data name="SkinBuilder.InvalidIdsError" xml:space="preserve">
+    <value>Dados de parse inválidos!</value>
+  </data>
+  <data name="SkinBuilder.ItemStatusLoadingLog" xml:space="preserve">
+    <value>Carregando status de itens</value>
+  </data>
+  <data name="SkinBuilder.LogsWatermark" xml:space="preserve">
+    <value>Logs de processamento aparecerão aqui...</value>
+  </data>
+  <data name="SkinBuilder.NameCacheCreatedLog" xml:space="preserve">
+    <value>Cache de nomes criados, {count:N0} nomes</value>
+  </data>
+  <data name="SkinBuilder.NameCacheCreatingLog" xml:space="preserve">
+    <value>Criando cache de nomes</value>
+  </data>
+  <data name="SkinBuilder.NamesCachedLog" xml:space="preserve">
+    <value>Os nomes estão em cache!</value>
+  </data>
+  <data name="SkinBuilder.NamesFoundLog" xml:space="preserve">
+    <value>Dados de nomes recuperados: {count}</value>
+  </data>
+  <data name="SkinBuilder.NamesTabButton" xml:space="preserve">
+    <value>Nomes</value>
+  </data>
+  <data name="SkinBuilder.NamesWatermark" xml:space="preserve">
+    <value>Nomes aparecerão aqui...</value>
+  </data>
+  <data name="SkinBuilder.NothingFoundLog" xml:space="preserve">
+    <value>Nada foi encontrado</value>
+  </data>
+  <data name="SkinBuilder.PresetWatermark" xml:space="preserve">
+    <value>Selecione um preset...</value>
+  </data>
+  <data name="SkinBuilder.ProcessTypeLabel" xml:space="preserve">
+    <value>Tipo de processamento</value>
+  </data>
+  <data name="SkinBuilder.ProcessedLog" xml:space="preserve">
+    <value>Pronto, os dados foram processados!</value>
+  </data>
+  <data name="SkinBuilder.ProcessingArmorsLog" xml:space="preserve">
+    <value>Processando armors...</value>
+  </data>
+  <data name="SkinBuilder.ProcessingWeaponsLog" xml:space="preserve">
+    <value>Processando weapons...</value>
+  </data>
+  <data name="SkinBuilder.ResetButton" xml:space="preserve">
+    <value>Resetar</value>
+  </data>
+  <data name="SkinBuilder.ResultTitle" xml:space="preserve">
+    <value>RESULTADO</value>
+  </data>
+  <data name="SkinBuilder.SettingsTitle" xml:space="preserve">
+    <value>CONFIGURAÇÕES</value>
+  </data>
+  <data name="SkinBuilder.SkinsWatermark" xml:space="preserve">
+    <value>Skins IDs aparecerão aqui...</value>
+  </data>
+  <data name="SkinBuilder.StatusLoadedLog" xml:space="preserve">
+    <value>Pronto, status recuperado, total de {count:N0}</value>
+  </data>
+  <data name="SkinBuilder.StatusLoadingLog" xml:space="preserve">
+    <value>Recuperando status do equipamento...</value>
+  </data>
+  <data name="SkinBuilder.StatusWatermark" xml:space="preserve">
+    <value>Status data aparecerá aqui...</value>
+  </data>
+  <data name="SkinBuilder.SubtitleLabel" xml:space="preserve">
+    <value>Gerador de skins para Appearance System (Live)</value>
+  </data>
+  <data name="SkinBuilder.WeaponStatusLoadedLog" xml:space="preserve">
+    <value>Status das armas carregadas,  {count:N0} items</value>
+  </data>
+  <data name="SkinBuilder.WeaponStatusLoadingLog" xml:space="preserve">
+    <value>Carregando status das armas...</value>
+  </data>
+  <data name="SkinBuilder.WeaponsCheckingLog" xml:space="preserve">
+    <value>Verificando as weapons no arquivo...</value>
+  </data>
+  <data name="SkinBuilder.WeaponsXmlLog" xml:space="preserve">
+    <value>Criando XML das armas...</value>
+  </data>
+  <data name="SkinBuilder.XmlTabButton" xml:space="preserve">
+    <value>Dados XML</value>
+  </data>
+  <data name="SkinBuilder.XmlWatermark" xml:space="preserve">
+    <value>Dados XML aparecerão aqui...</value>
+  </data>
 
   <!-- ═══ SpawnManager ═══ -->
 
@@ -96,6 +494,14 @@
   <!-- ═══ SystemMsgColor ═══ -->
 
   <!-- ═══ Tables ═══ -->
+  <data name="Tables.InvalidIdsError" xml:space="preserve">
+    <value>Dados de parse inválidos!</value>
+    <comment>Exceção de Utilities/Parser.ParseId (lista de IDs malformada); aparece no log do CreateMultisell.</comment>
+  </data>
+  <data name="Tables.NotFoundError" xml:space="preserve">
+    <value>Tabela não encontrada: {name}</value>
+    <comment>name é o nome da tabela .l2dat embutida (ex.: Weapongrp).</comment>
+  </data>
 
   <!-- ═══ Update ═══ -->
 

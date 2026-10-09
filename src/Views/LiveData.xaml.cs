@@ -11,6 +11,7 @@ using System.Xml.Linq;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
+using L2Toolkit.Localization;
 using L2Toolkit.Models;
 using L2Toolkit.ClientDat;
 using L2Toolkit.Processing;
@@ -20,8 +21,6 @@ namespace L2Toolkit.Views;
 
 public partial class LiveData : UserControl
 {
-    private const string InvalidData = "Dados de parse inválidos!";
-
     private readonly DispatcherTimer _errorTimer;
 
     private readonly ConcurrentDictionary<string, string> _itemsName = new();
@@ -82,7 +81,7 @@ public partial class LiveData : UserControl
     {
         _errorTimer.Stop();
         NotificacaoBorder.IsVisible = true;
-        StatusNotificacao.Text = !string.IsNullOrWhiteSpace(message) ? message : "Ocorreu um erro inesperado.";
+        StatusNotificacao.Text = !string.IsNullOrWhiteSpace(message) ? message : Loc.Common.UnexpectedError;
         _errorTimer.Start();
     }
 
@@ -121,7 +120,7 @@ public partial class LiveData : UserControl
                     !int.TryParse(parts[1], out var max) ||
                     initial == 0 || max == 0)
                 {
-                    throw new Exception(InvalidData);
+                    throw new Exception(Loc.LiveData.InvalidIdsError);
                 }
 
                 for (var i = initial; i <= max; i++)
@@ -208,7 +207,7 @@ public partial class LiveData : UserControl
                     !int.TryParse(parts[1], out var max) ||
                     initial == 0 || max == 0)
                 {
-                    throw new Exception(InvalidData);
+                    throw new Exception(Loc.LiveData.InvalidIdsError);
                 }
 
                 for (var i = initial; i <= max; i++)
@@ -914,12 +913,12 @@ public partial class LiveData : UserControl
 
             if (string.IsNullOrEmpty(type) || string.IsNullOrEmpty(ids))
             {
-                throw new Exception("Preencha todos os campos");
+                throw new Exception(Loc.LiveData.FieldsRequiredError);
             }
 
             if (type == "Armor" && !int.TryParse(SetItemNextId.Text?.Trim(), out _))
             {
-                throw new Exception("Informe o próximo ID do Item Set para processar armaduras");
+                throw new Exception(Loc.LiveData.SetItemNextIdRequiredError);
             }
 
             ClientTextBox.Text = "";
