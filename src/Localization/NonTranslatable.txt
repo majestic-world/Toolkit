@@ -1,20 +1,27 @@
 # Literais que podem ficar em AXAML/C# sem catálogo (L2LOC007/L2LOC008): iguais nos dois idiomas.
 # Um por linha, comparado com o texto inteiro do literal (sem espaços nas pontas). Linhas com # são comentário.
-# Cada área tem um bloco, em ordem alfabética: adicione as linhas logo abaixo do comentário da área.
+# Só entra aqui: nome de produto ou ferramenta, termo de domínio do glossário (spec), formato ou versão,
+# número ou tamanho, endônimo de idioma e valor que vem dos dados do jogo. Rótulo, título, aba e cabeçalho
+# de coluna vão para o catálogo, mesmo quando o texto é igual nos dois idiomas.
+# Cada área tem um bloco, em ordem alfabética: adicione as linhas logo abaixo do comentário da área,
+# no grupo do motivo (ou num grupo novo com o motivo em #).
 
-# ── App (nome do produto) ──
+# ── App ──
+# Nome do produto.
 L2 Toolkit
 L2 Toolkit (Fafurion) By Mk
 
 # ── Brush ──
 
 # ── BrushGenerator ──
+# Tamanhos da imagem (número + unidade).
 512 px
 1024 px
 2048 px
 2500 px
 4096 px
 5000 px
+# Formato de arquivo.
 PNG
 
 # ── BrushVariants ──
@@ -22,45 +29,45 @@ PNG
 # ── Common ──
 
 # ── CreateMultisell ──
-Logs
 
 # ── DescriptionFix ──
 
 # ── DoorGenerate ──
 
 # ── EnchantEffect ──
+# Tipo do efeito lido do .dat (termo de domínio + valor hex do arquivo).
 Augmented (00000040)
-MIN COLOR
 Normal (00000000)
-PART.
-RADIANCE
-RING
 
 # ── Format ──
 
 # ── Geodata ──
+# Formatos de arquivo de geodata.
 CONV_DAT (_conv.dat)
 L2G (.l2g)
 L2J (.l2j)
 
 # ── LiveData ──
+# Nome da ferramenta (glossário: Live Data).
+Live Data
+# Nomes de tipo do domínio (spec D9).
 Armor
 Items
-Live Data
-Preset
-Set Item GRP
 Skills
 Weapons
 
 # ── LogParse ──
 
 # ── Main ──
+# Versão do app (formato "v" + número).
+v{version}
 
 # ── Missions ──
 
 # ── Nav ──
 
 # ── PawnData ──
+# Animações do PawnData: número da animação + nome interno do jogo.
 1 — Walk
 2 — Run
 8 — AtkWait
@@ -83,56 +90,56 @@ Weapons
 92 — Social Actions
 
 # ── PrimeShop ──
+# Nome da ferramenta (glossário: Prime Shop).
+Prime Shop Generator
+# Categorias do Prime Shop (valores dos dados, spec D9).
 Agathions
 Consumables
 Equipment
-Prime Shop Generator
-ProductName_Classic-eu.dat
 Reward Coin
 VIP
+# Nomes de arquivo.
+ProductName_Classic-eu.dat
 prime_shop.xml
 
 # ── SearchIcon ──
-Icon
-Icon Panel
+# Nome de tipo do domínio (spec D9).
 Weapon
 
 # ── Settings ──
-Build
+# Endônimos do seletor de idioma.
 English
-L2DAT BUILD
 Português (Brasil)
 
 # ── SkinBuilder ──
+# Nome da ferramenta (glossário: Skin Builder).
 Skin Builder
-Skins
-Status
 
 # ── SpawnManager ──
 
 # ── Splash ──
 
 # ── SplashCompose ──
-BRUSH
+# Formato de arquivo.
 PNG
 
 # ── SplashLibrary ──
 
 # ── SplashScreen ──
+# Nome da ferramenta (glossário: Splash Screen).
+Splash Screen
+# Versões de envelope do arquivo.
 Lineage2Ver111
 Lineage2Ver121
+# Formato de arquivo.
 PNG
-Splash Screen
 
 # ── SystemMsgColor ──
-HEX
-ID
-PRESETS
-Start L2
 
 # ── Tables ──
 
 # ── Update ──
 
 # ── UpgradeNormal ──
+# Nome da ferramenta (glossário: Upgrade Normal System).
 Upgrade Normal System

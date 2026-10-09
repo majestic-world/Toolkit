@@ -24,7 +24,8 @@ namespace L2Toolkit.Views
         public MainWindow()
         {
             InitializeComponent();
-            AppVersionText.Text = "v" + typeof(MainWindow).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion; // loc-ok
+            var version = typeof(MainWindow).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+            AppVersionText.Text = $"v{version}";
 
             _sidebarButtons = new Dictionary<Type, Button>
             {
@@ -86,7 +87,7 @@ namespace L2Toolkit.Views
         {
             if (_updateCts != null) return;
             _pendingRelease = release;
-            UpdateVersions.Text = $"{AppUpdater.CurrentVersion.ToString(3)}  →  {release.Tag}"; // loc-ok
+            UpdateVersions.Text = $"{AppUpdater.CurrentVersion.ToString(3)}  →  {release.Tag}";
             UpdateReleaseName.Text = string.IsNullOrWhiteSpace(release.Name) ? release.Tag : release.Name;
             UpdatePublished.Text = release.PublishedAt?.ToLocalTime().ToString(Loc.Format.DateTime) ?? "—";
             UpdateSize.Text = Loc.Update.SizeValue(release.InstallerSize / 1048576.0);

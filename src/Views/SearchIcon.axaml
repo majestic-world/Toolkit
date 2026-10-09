@@ -315,7 +315,7 @@
 
                             <!-- Icon -->
                             <StackPanel Spacing="6">
-                                <TextBlock Text="Icon"
+                                <TextBlock Text="{DynamicResource SearchIcon.IconLabel}"
                                            FontSize="12"
                                            Foreground="{DynamicResource ThemeTextLabel}"
                                            FontWeight="Medium"/>
@@ -343,7 +343,7 @@
 
                             <!-- Icon Panel -->
                             <StackPanel Spacing="6">
-                                <TextBlock Text="Icon Panel"
+                                <TextBlock Text="{DynamicResource SearchIcon.IconPanelLabel}"
                                            FontSize="12"
                                            Foreground="{DynamicResource ThemeTextLabel}"
                                            FontWeight="Medium"/>

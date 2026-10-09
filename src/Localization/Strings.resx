@@ -160,9 +160,6 @@
   <data name="Common.Copy" xml:space="preserve">
     <value>Copiar</value>
   </data>
-  <data name="Common.Done" xml:space="preserve">
-    <value>Pronto</value>
-  </data>
   <data name="Common.Error" xml:space="preserve">
     <value>Erro</value>
   </data>
@@ -215,6 +212,9 @@
   </data>
   <data name="CreateMultisell.InputTitle" xml:space="preserve">
     <value>DADOS DE ENTRADA</value>
+  </data>
+  <data name="CreateMultisell.LogsTabButton" xml:space="preserve">
+    <value>Logs</value>
   </data>
   <data name="CreateMultisell.LogsWatermark" xml:space="preserve">
     <value>Logs de processamento aparecerão aqui...</value>
@@ -385,6 +385,10 @@
   <data name="EnchantEffect.MinColorPreviewTitle" xml:space="preserve">
     <value>PRÉVIA — MIN COLOR</value>
   </data>
+  <data name="EnchantEffect.MinColorTitle" xml:space="preserve">
+    <value>MIN COLOR</value>
+    <comment>Cabeçalho da coluna min_color da armadura.</comment>
+  </data>
   <data name="EnchantEffect.MinEnchantTitle" xml:space="preserve">
     <value>GRAU MIN.</value>
     <comment>Cabeçalho da coluna min_enchant_num da armadura.</comment>
@@ -392,8 +396,20 @@
   <data name="EnchantEffect.OpenButton" xml:space="preserve">
     <value>Abrir</value>
   </data>
+  <data name="EnchantEffect.ParticleTitle" xml:space="preserve">
+    <value>PART.</value>
+    <comment>Cabeçalho da coluna de partícula da arma (abreviado).</comment>
+  </data>
   <data name="EnchantEffect.RadiancePreviewTitle" xml:space="preserve">
     <value>PRÉVIA — RADIANCE</value>
+  </data>
+  <data name="EnchantEffect.RadianceTitle" xml:space="preserve">
+    <value>RADIANCE</value>
+    <comment>Cabeçalho da coluna de radiance da arma.</comment>
+  </data>
+  <data name="EnchantEffect.RingTitle" xml:space="preserve">
+    <value>RING</value>
+    <comment>Cabeçalho da coluna de ring da arma.</comment>
   </data>
   <data name="EnchantEffect.SaveError" xml:space="preserve">
     <value>Erro ao salvar: {message}</value>
@@ -604,6 +620,9 @@
   <data name="LiveData.NamesWatermark" xml:space="preserve">
     <value>Nomes aparecerão aqui...</value>
   </data>
+  <data name="LiveData.PresetLabel" xml:space="preserve">
+    <value>Preset</value>
+  </data>
   <data name="LiveData.PresetWatermark" xml:space="preserve">
     <value>Selecione um preset...</value>
   </data>
@@ -615,6 +634,9 @@
   </data>
   <data name="LiveData.ResultTitle" xml:space="preserve">
     <value>RESULTADO</value>
+  </data>
+  <data name="LiveData.SetItemGrpTabButton" xml:space="preserve">
+    <value>Set Item GRP</value>
   </data>
   <data name="LiveData.SetItemGrpWatermark" xml:space="preserve">
     <value>Set Item GRP aparecerá aqui...</value>
@@ -910,6 +932,9 @@
   <data name="PrimeShop.ItemNamesFileMissingError" xml:space="preserve">
     <value>Atenção: Arquivo '{path}' não encontrado! Os nomes dos itens não serão exibidos corretamente.</value>
   </data>
+  <data name="PrimeShop.LogsTabButton" xml:space="preserve">
+    <value>Logs</value>
+  </data>
   <data name="PrimeShop.LogsWatermark" xml:space="preserve">
     <value>IDs e nomes gerados aparecerão aqui...</value>
   </data>
@@ -959,6 +984,14 @@
   </data>
   <data name="SearchIcon.FileNotFoundError" xml:space="preserve">
     <value>Arquivo não encontrado: {path}</value>
+  </data>
+  <data name="SearchIcon.IconLabel" xml:space="preserve">
+    <value>Icon</value>
+    <comment>Campo icon do item no .dat.</comment>
+  </data>
+  <data name="SearchIcon.IconPanelLabel" xml:space="preserve">
+    <value>Icon Panel</value>
+    <comment>Campo icon_panel do item no .dat.</comment>
   </data>
   <data name="SearchIcon.ItemIdLabel" xml:space="preserve">
     <value>ID do item</value>
@@ -1026,6 +1059,9 @@
   <data name="Settings.AssetsTitle" xml:space="preserve">
     <value>PASTA DE ASSETS</value>
   </data>
+  <data name="Settings.BuildButton" xml:space="preserve">
+    <value>Build</value>
+  </data>
   <data name="Settings.BuildDoneStatus.One" xml:space="preserve">
     <value>Build concluído: {count} arquivo — {original} → {packed} → {savings:P1}</value>
   </data>
@@ -1076,6 +1112,9 @@
   </data>
   <data name="Settings.BuildSourcePicker" xml:space="preserve">
     <value>Selecionar pasta de origem (.txt)</value>
+  </data>
+  <data name="Settings.BuildTitle" xml:space="preserve">
+    <value>L2DAT BUILD</value>
   </data>
   <data name="Settings.ClearButton" xml:space="preserve">
     <value>Limpar</value>
@@ -1196,6 +1235,9 @@
   <data name="SkinBuilder.ItemStatusLoadingLog" xml:space="preserve">
     <value>Carregando status de itens</value>
   </data>
+  <data name="SkinBuilder.LogsTabButton" xml:space="preserve">
+    <value>Logs</value>
+  </data>
   <data name="SkinBuilder.LogsWatermark" xml:space="preserve">
     <value>Logs de processamento aparecerão aqui...</value>
   </data>
@@ -1219,6 +1261,9 @@
   </data>
   <data name="SkinBuilder.NothingFoundLog" xml:space="preserve">
     <value>Nada foi encontrado</value>
+  </data>
+  <data name="SkinBuilder.PresetLabel" xml:space="preserve">
+    <value>Preset</value>
   </data>
   <data name="SkinBuilder.PresetWatermark" xml:space="preserve">
     <value>Selecione um preset...</value>
@@ -1244,6 +1289,9 @@
   <data name="SkinBuilder.SettingsTitle" xml:space="preserve">
     <value>CONFIGURAÇÕES</value>
   </data>
+  <data name="SkinBuilder.SkinsTabButton" xml:space="preserve">
+    <value>Skins</value>
+  </data>
   <data name="SkinBuilder.SkinsWatermark" xml:space="preserve">
     <value>Skins IDs aparecerão aqui...</value>
   </data>
@@ -1252,6 +1300,10 @@
   </data>
   <data name="SkinBuilder.StatusLoadingLog" xml:space="preserve">
     <value>Recuperando status do equipamento...</value>
+  </data>
+  <data name="SkinBuilder.StatusTabButton" xml:space="preserve">
+    <value>Status</value>
+    <comment>Aba com os atributos dos equipamentos.</comment>
   </data>
   <data name="SkinBuilder.StatusWatermark" xml:space="preserve">
     <value>Status data aparecerá aqui...</value>
@@ -1386,6 +1438,9 @@
   </data>
   <data name="SplashCompose.BlurLabel" xml:space="preserve">
     <value>Desfoque</value>
+  </data>
+  <data name="SplashCompose.BrushSectionTitle" xml:space="preserve">
+    <value>BRUSH</value>
   </data>
   <data name="SplashCompose.ChooseArtButton" xml:space="preserve">
     <value>Escolher imagem…</value>
@@ -1801,6 +1856,12 @@
   <data name="SystemMsgColor.FileWatermark" xml:space="preserve">
     <value>Clique para selecionar o arquivo SystemMsg.dat...</value>
   </data>
+  <data name="SystemMsgColor.HexColumnTitle" xml:space="preserve">
+    <value>HEX</value>
+  </data>
+  <data name="SystemMsgColor.IdColumnTitle" xml:space="preserve">
+    <value>ID</value>
+  </data>
   <data name="SystemMsgColor.L2ExeNotFoundError" xml:space="preserve">
     <value>l2.exe não encontrado em:&#10;{path}</value>
     <comment>path é o caminho completo esperado do l2.exe.</comment>
@@ -1826,6 +1887,9 @@
   </data>
   <data name="SystemMsgColor.PresetSavedStatus" xml:space="preserve">
     <value>Preset "{name}" salvo.</value>
+  </data>
+  <data name="SystemMsgColor.PresetsTitle" xml:space="preserve">
+    <value>PRESETS</value>
   </data>
   <data name="SystemMsgColor.SaveError" xml:space="preserve">
     <value>Erro ao salvar</value>
@@ -1855,6 +1919,10 @@
   </data>
   <data name="SystemMsgColor.SearchWatermark" xml:space="preserve">
     <value>Buscar por ID ou texto da mensagem...</value>
+  </data>
+  <data name="SystemMsgColor.StartL2Button" xml:space="preserve">
+    <value>Start L2</value>
+    <comment>Abre o l2.exe do cliente.</comment>
   </data>
   <data name="SystemMsgColor.StatsStatus" xml:space="preserve">
     <value>{messageCount} mensagens · {colorCount} cores únicas</value>

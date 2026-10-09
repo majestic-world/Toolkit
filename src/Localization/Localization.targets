@@ -571,19 +571,19 @@ public class L2LocalizationTask : Microsoft.Build.Utilities.Task
     static readonly Regex XmlCommentPattern = new Regex(@"<!--.*?-->", RegexOptions.Singleline);
     static readonly Regex CodeUsagePattern = new Regex(@"(?<!\w)(?:Loc|LocKey)\s*\.\s*([A-Z][A-Za-z0-9]*(?:\s*\.\s*[A-Z][A-Za-z0-9]*)*)");
     // ".Text =" etc. e a mesma propriedade em inicializador ("new TextBlock { Text = … }", "Title = …").
-    static readonly Regex AssignTrigger = new Regex(@"(?<!\w)(?:Text|Title|Content|Watermark)\s*\+?=(?![=>])");
+    static readonly Regex AssignTrigger = new Regex(@"(?<!\w)(?:Text|Title|Content|Watermark|PlaceholderText)\s*\+?=(?![=>])");
     static readonly Regex CallTrigger = new Regex(@"(?<!\w)(?:(?:AddLog|GetMessageBoxStandard|PickOpenAsync|PickSaveAsync|SendNotify|ShowNotification)\s*(?:<[^<>();]*>)?|new\s+FilePickerFileType|throw\s+new\s+(?:\w+\s*\.\s*)*\w*Exception)\s*\(");
     // Listas de padrões do FilePickerFileType ("*.png", "image/png") não são texto de UI.
     static readonly Regex FileTypeListTrigger = new Regex(@"(?<!\w)(?:Patterns|MimeTypes|AppleUniformTypeIdentifiers)\s*=(?![=>])");
     static readonly string[] CSharpTextFolders = { "Views", "Processing", "Utilities" };
-    static readonly HashSet<string> TextAttributes = new HashSet<string>(StringComparer.Ordinal) { "Text", "Content", "Header", "Watermark", "ToolTip.Tip", "Title" };
+    static readonly HashSet<string> TextAttributes = new HashSet<string>(StringComparer.Ordinal) { "Text", "Content", "Header", "Watermark", "PlaceholderText", "ToolTip.Tip", "Title" };
     static readonly HashSet<string> TextElements = new HashSet<string>(StringComparer.Ordinal)
     {
         "TextBlock", "SelectableTextBlock", "Run", "Span", "Bold", "Italic", "Underline", "ComboBoxItem", "ListBoxItem",
         "Button", "ToggleButton", "RepeatButton", "CheckBox", "RadioButton", "Label", "MenuItem", "TabItem", "Expander",
         "ToolTip", "ContentControl", "HeaderedContentControl", "HyperlinkButton", "String",
     };
-    static readonly string[] TextPropertyElements = { ".Text", ".Content", ".Header", ".Watermark", ".Title", ".Tip" };
+    static readonly string[] TextPropertyElements = { ".Text", ".Content", ".Header", ".Watermark", ".PlaceholderText", ".Title", ".Tip" };
 
     HashSet<string> _nonTranslatable;
     readonly HashSet<string> _usedPaths = new HashSet<string>(StringComparer.Ordinal);
@@ -676,7 +676,7 @@ public class L2LocalizationTask : Microsoft.Build.Utilities.Task
                 else if (value.TrimStart().StartsWith("{", StringComparison.Ordinal)) continue;   // markup extension
                 if (!IsTranslatableLiteral(value, value)) continue;
                 var info = (IXmlLineInfo)attribute;
-                Report("L2LOC007", false, path, info.LineNumber, info.LinePosition,
+                Report("L2LOC007", true, path, info.LineNumber, info.LinePosition,
                     "Literal \"" + Preview(value) + "\" em " + attribute.Name.LocalName + " sem catálogo: use {DynamicResource Área.Chave} ou NonTranslatable.txt.");
             }
             var name = element.Name.LocalName;
@@ -693,7 +693,7 @@ public class L2LocalizationTask : Microsoft.Build.Utilities.Task
                     if (text.Value[i] == '\n') { line++; column = 1; }
                     else if (text.Value[i] != '\r') column++;
                 }
-                Report("L2LOC007", false, path, line, column,
+                Report("L2LOC007", true, path, line, column,
                     "Literal \"" + Preview(value) + "\" em <" + name + "> sem catálogo: use {DynamicResource Área.Chave} ou NonTranslatable.txt.");
             }
         }
@@ -735,7 +735,7 @@ public class L2LocalizationTask : Microsoft.Build.Utilities.Task
             lines.Locate(literal.Start, out line, out column);
             if (lines.EndsWithLocOk(source, line) || lines.EndsWithLocOk(source, triggerLine)) continue;
             reported.Add(literal.Start);
-            Report("L2LOC008", false, path, line, column,
+            Report("L2LOC008", true, path, line, column,
                 "Literal \"" + Preview(literal.Raw) + "\" em C# sem catálogo: use Loc.Área.Chave, NonTranslatable.txt ou // loc-ok.");
         }
     }

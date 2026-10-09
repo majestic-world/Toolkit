@@ -364,7 +364,7 @@
                                 </Button>
                                 <Button x:Name="LogsTab" Theme="{StaticResource TabButton}" Click="ResultTab_OnClick">
                                     <StackPanel Orientation="Horizontal" Spacing="8">
-                                        <TextBlock Text="Logs" VerticalAlignment="Center"/>
+                                        <TextBlock Text="{DynamicResource PrimeShop.LogsTabButton}" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Button>
                             </StackPanel>

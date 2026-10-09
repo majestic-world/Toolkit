@@ -64,6 +64,8 @@ public partial class SystemMsgColor : UserControl
     // ─── Init ─────────────────────────────────────────────────────────────────
 
     private const string LastPathKey = "systemmsg_last_path";
+    // Cor RRGGBB inicial do picker de novo preset e fallback de preset sem cor.
+    private const string DefaultPresetHex = "799BB0";
 
     public SystemMsgColor()
     {
@@ -580,7 +582,7 @@ public partial class SystemMsgColor : UserControl
         PresetWrapPanel.Children.Clear();
         foreach (var (name, hex8) in _presets)
         {
-            var rgb  = hex8.Length >= 6 ? hex8[..6] : "799BB0";
+            var rgb  = hex8.Length >= 6 ? hex8[..6] : DefaultPresetHex;
             PresetWrapPanel.Children.Add(BuildPresetItem(name, rgb, hex8));
         }
     }
@@ -755,7 +757,7 @@ public partial class SystemMsgColor : UserControl
 
     private void ApplyPreset(string hex8)
     {
-        var hex6 = (hex8.Length >= 6 ? hex8[..6] : "799BB0").ToUpper();
+        var hex6 = (hex8.Length >= 6 ? hex8[..6] : DefaultPresetHex).ToUpper();
 
         if (_selectedIds.Count > 0)
         {
@@ -777,8 +779,8 @@ public partial class SystemMsgColor : UserControl
     private void BuildPresetNewPicker()
     {
         var (panel, swatch, hex, editBtn) = MakeColorPicker();
-        hex.Text = "799BB0"; // loc-ok
-        SetSwatchColor(swatch, "799BB0");
+        hex.Text = DefaultPresetHex;
+        SetSwatchColor(swatch, DefaultPresetHex);
 
         bool editing = false;
         hex.TextChanged       += (_, _) => { if (TryParseHex(hex.Text?.Trim() ?? "", out _)) SetSwatchColor(swatch, hex.Text!.Trim()); };
@@ -793,7 +795,7 @@ public partial class SystemMsgColor : UserControl
                 editBtn.Content = MakePencilIcon();
                 var raw = (hex.Text?.Trim().TrimStart('#') ?? "").ToUpper();
                 if (TryParseHex(raw, out _)) { if (hex.Text != raw) hex.Text = raw; }
-                else { hex.Text = "799BB0"; SetSwatchColor(swatch, "799BB0"); } // loc-ok
+                else { hex.Text = DefaultPresetHex; SetSwatchColor(swatch, DefaultPresetHex); }
             }
             else
             {
