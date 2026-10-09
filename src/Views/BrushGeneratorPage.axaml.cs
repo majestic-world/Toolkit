@@ -180,7 +180,7 @@ public partial class BrushGeneratorPage : UserControl
             await Task.Run(() => BrushGenerator.ExportPng(settings, size, path));
             RememberFolder(Path.GetDirectoryName(path));
             var fileName = Path.GetFileName(path);
-            ShowSuccess(() => Loc.BrushGenerator.ExportedStatus(fileName, size));
+            ShowSuccess(Loc.BrushGenerator.ExportedStatus(fileName, size));
         });
     }
 
@@ -235,16 +235,16 @@ public partial class BrushGeneratorPage : UserControl
     private void ShowError(string message)
     {
         SuccessBanner.IsVisible = false;
-        LiveText.Set(ErrorText, () => string.IsNullOrWhiteSpace(message) ? Loc.BrushGenerator.UnexpectedError : message);
+        ErrorText.Text = string.IsNullOrWhiteSpace(message) ? Loc.BrushGenerator.UnexpectedError : message;
         ErrorBanner.IsVisible = true;
         _bannerTimer.Stop();
         _bannerTimer.Start();
     }
 
-    private void ShowSuccess(Func<string> message)
+    private void ShowSuccess(string message)
     {
         ErrorBanner.IsVisible = false;
-        LiveText.Set(SuccessText, message);
+        SuccessText.Text = message;
         SuccessBanner.IsVisible = true;
         _bannerTimer.Stop();
         _bannerTimer.Start();
