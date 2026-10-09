@@ -50,6 +50,8 @@ PNG
 # ── SearchIcon ──
 
 # ── Settings ──
+English
+Português (Brasil)
 
 # ── SkinBuilder ──
 
