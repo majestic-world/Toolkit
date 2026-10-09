@@ -90,7 +90,7 @@
             <TextBlock Text="{DynamicResource BrushGenerator.Title}"
                        FontSize="22" FontWeight="SemiBold"
                        Foreground="{DynamicResource ThemeTextTitle}"/>
-            <TextBlock Text="{DynamicResource BrushGenerator.Subtitle}"
+            <TextBlock Text="{DynamicResource BrushGenerator.SubtitleLabel}"
                        FontSize="13"
                        Foreground="{DynamicResource ThemeTextTitle}"/>
         </StackPanel>

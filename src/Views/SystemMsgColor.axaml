@@ -89,7 +89,7 @@
                 <StackPanel Grid.Column="0" Spacing="1">
                     <TextBlock Text="{DynamicResource SystemMsgColor.Title}"
                                FontSize="22" FontWeight="Light" Foreground="{DynamicResource ThemeTextTitle}"/>
-                    <TextBlock Text="{DynamicResource SystemMsgColor.Subtitle}"
+                    <TextBlock Text="{DynamicResource SystemMsgColor.SubtitleLabel}"
                                FontSize="13" Foreground="{DynamicResource ThemeTextSubtitle}"/>
                 </StackPanel>
             </Grid>

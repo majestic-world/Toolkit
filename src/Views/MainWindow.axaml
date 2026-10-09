@@ -217,7 +217,7 @@
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                     <StackPanel Margin="0,4,0,0">
 
-                        <TextBlock Text="{DynamicResource Main.ToolsSection}"
+                        <TextBlock Text="{DynamicResource Main.ToolsSectionTitle}"
                                    Foreground="{DynamicResource ThemeTextSection}"
                                    FontSize="10"
                                    FontWeight="Bold"
@@ -356,7 +356,7 @@
 
                         <Border Height="1" Background="{DynamicResource ThemeSurfaceRaised}" Margin="12,6,12,0"/>
 
-                        <TextBlock Text="{DynamicResource Main.UtilitiesSection}"
+                        <TextBlock Text="{DynamicResource Main.UtilitiesSectionTitle}"
                                    Foreground="{DynamicResource ThemeTextSection}"
                                    FontSize="10"
                                    FontWeight="Bold"
@@ -425,7 +425,7 @@
                         </Grid>
 
                         <StackPanel Spacing="6">
-                            <TextBlock Text="{DynamicResource Update.NotesSection}" FontSize="11" FontWeight="Bold" LetterSpacing="1.5"
+                            <TextBlock Text="{DynamicResource Update.NotesTitle}" FontSize="11" FontWeight="Bold" LetterSpacing="1.5"
                                        Foreground="{DynamicResource ThemeTextLabel}"/>
                             <Border Background="{DynamicResource ThemeSurfaceInput}" BorderBrush="{DynamicResource ThemeBorder}"
                                     BorderThickness="1" CornerRadius="6" Padding="12,10">

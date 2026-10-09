@@ -73,7 +73,7 @@
   <data name="BrushGenerator.SpikesLabel" xml:space="preserve">
     <value>Spikes</value>
   </data>
-  <data name="BrushGenerator.Subtitle" xml:space="preserve">
+  <data name="BrushGenerator.SubtitleLabel" xml:space="preserve">
     <value>Torn-edge brushes in the style of the L2 splash screens — black PNG on a white background for Photoshop</value>
   </data>
   <data name="BrushGenerator.SymmetryLabel" xml:space="preserve">
@@ -89,7 +89,7 @@
     <value>An unexpected error occurred.</value>
   </data>
   <data name="BrushGenerator.VariantsButton" xml:space="preserve">
-    <value>Generate several…</value>
+    <value>Generate many…</value>
   </data>
   <data name="BrushGenerator.VariantsTip" xml:space="preserve">
     <value>Opens a window with several variations to choose from</value>
@@ -155,6 +155,9 @@
   <data name="Common.Close" xml:space="preserve">
     <value>Close</value>
   </data>
+  <data name="Common.CopiedStatus" xml:space="preserve">
+    <value>Copied!</value>
+  </data>
   <data name="Common.Copy" xml:space="preserve">
     <value>Copy</value>
   </data>
@@ -163,9 +166,6 @@
   </data>
   <data name="Common.Save" xml:space="preserve">
     <value>Save</value>
-  </data>
-  <data name="Common.CopiedStatus" xml:space="preserve">
-    <value>Copied!</value>
   </data>
   <data name="Common.SelectFilePicker" xml:space="preserve">
     <value>Select a file</value>
@@ -181,10 +181,10 @@
   <data name="CreateMultisell.AddButton" xml:space="preserve">
     <value>Add</value>
   </data>
-  <data name="CreateMultisell.AssetsConfigureButton" xml:space="preserve">
+  <data name="CreateMultisell.AssetsConfigureHint" xml:space="preserve">
     <value>Click here to set it up.</value>
   </data>
-  <data name="CreateMultisell.AssetsMissingLabel" xml:space="preserve">
+  <data name="CreateMultisell.AssetsMissingStatus" xml:space="preserve">
     <value>Assets folder not set.</value>
   </data>
   <data name="CreateMultisell.CopyTip" xml:space="preserve">
@@ -255,16 +255,16 @@
   <data name="DescriptionFix.FileMissingError" xml:space="preserve">
     <value>The selected file no longer exists.</value>
   </data>
-  <data name="DescriptionFix.InfoEmbeddedLabel" xml:space="preserve">
+  <data name="DescriptionFix.InfoEmbeddedHint" xml:space="preserve">
     <value>The H5 descriptions are embedded in the executable — no external file is needed.</value>
   </data>
-  <data name="DescriptionFix.InfoOnlyDescriptionLabel" xml:space="preserve">
+  <data name="DescriptionFix.InfoOnlyDescriptionHint" xml:space="preserve">
     <value>Only the "description" field is modified; everything else is preserved.</value>
   </data>
-  <data name="DescriptionFix.InfoSaveLabel" xml:space="preserve">
+  <data name="DescriptionFix.InfoSaveHint" xml:space="preserve">
     <value>After processing, the modified file is saved to a new location.</value>
   </data>
-  <data name="DescriptionFix.InfoSelectLabel" xml:space="preserve">
+  <data name="DescriptionFix.InfoSelectHint" xml:space="preserve">
     <value>Select a Classic items file and click Process to replace the descriptions.</value>
   </data>
   <data name="DescriptionFix.InfoTitle" xml:space="preserve">
@@ -301,7 +301,7 @@
     <value>Text files</value>
   </data>
   <data name="DescriptionFix.Title" xml:space="preserve">
-    <value>Fix descriptions</value>
+    <value>Description Fix</value>
   </data>
 
   <!-- ═══ DoorGenerate ═══ -->
@@ -330,7 +330,7 @@
     <value>Converts UnrealEd data to Lineage II XML</value>
   </data>
   <data name="DoorGenerate.Title" xml:space="preserve">
-    <value>Door generator</value>
+    <value>Door Generator</value>
   </data>
 
   <!-- ═══ EnchantEffect ═══ -->
@@ -409,7 +409,7 @@
   <data name="EnchantEffect.SavedStatus" xml:space="preserve">
     <value>File saved. Backup: .dat.bak</value>
   </data>
-  <data name="EnchantEffect.Subtitle" xml:space="preserve">
+  <data name="EnchantEffect.SubtitleLabel" xml:space="preserve">
     <value>Visual glow color editor for weapons and armor</value>
   </data>
   <data name="EnchantEffect.Title" xml:space="preserve">
@@ -440,16 +440,16 @@
   <data name="Geodata.ConvLog" xml:space="preserve">
     <value>[CONV] {fileName} -&gt; {outputFileName} ({format})…</value>
   </data>
-  <data name="Geodata.Converted.One" xml:space="preserve">
+  <data name="Geodata.ConvertedStatus.One" xml:space="preserve">
     <value>{count} converted</value>
   </data>
-  <data name="Geodata.Converted.Other" xml:space="preserve">
+  <data name="Geodata.ConvertedStatus.Other" xml:space="preserve">
     <value>{count} converted</value>
   </data>
-  <data name="Geodata.CopiedFile.One" xml:space="preserve">
+  <data name="Geodata.CopiedStatus.One" xml:space="preserve">
     <value>{count} copied</value>
   </data>
-  <data name="Geodata.CopiedFile.Other" xml:space="preserve">
+  <data name="Geodata.CopiedStatus.Other" xml:space="preserve">
     <value>{count} copied</value>
   </data>
   <data name="Geodata.CopyFailedLog" xml:space="preserve">
@@ -464,10 +464,10 @@
   <data name="Geodata.ErrorLog" xml:space="preserve">
     <value>[ERROR] {fileName} - {message}</value>
   </data>
-  <data name="Geodata.Failed.One" xml:space="preserve">
+  <data name="Geodata.FailedStatus.One" xml:space="preserve">
     <value>{count} error</value>
   </data>
-  <data name="Geodata.Failed.Other" xml:space="preserve">
+  <data name="Geodata.FailedStatus.Other" xml:space="preserve">
     <value>{count} errors</value>
   </data>
   <data name="Geodata.FatalErrorLog" xml:space="preserve">
@@ -555,7 +555,7 @@
     <value>Convert geodata files between the L2J, CONV_DAT and L2G formats</value>
   </data>
   <data name="Geodata.Title" xml:space="preserve">
-    <value>Geodata converter</value>
+    <value>Geodata Converter</value>
   </data>
   <data name="Geodata.UnknownFormatError" xml:space="preserve">
     <value>Unrecognized format</value>
@@ -721,7 +721,7 @@
     <value>Log splitter — for easier data analysis</value>
   </data>
   <data name="LogParse.Title" xml:space="preserve">
-    <value>Log manager</value>
+    <value>Log Manager</value>
   </data>
   <data name="LogParse.TotalLog" xml:space="preserve">
     <value>Total logs: {count:N0}</value>
@@ -731,10 +731,10 @@
   <data name="Main.SettingsTip" xml:space="preserve">
     <value>Settings</value>
   </data>
-  <data name="Main.ToolsSection" xml:space="preserve">
+  <data name="Main.ToolsSectionTitle" xml:space="preserve">
     <value>TOOLS</value>
   </data>
-  <data name="Main.UtilitiesSection" xml:space="preserve">
+  <data name="Main.UtilitiesSectionTitle" xml:space="preserve">
     <value>UTILITIES</value>
   </data>
 
@@ -770,7 +770,7 @@
     <value>Generates client data from OneDayReward.xml</value>
   </data>
   <data name="Missions.Title" xml:space="preserve">
-    <value>Daily missions</value>
+    <value>Daily Missions</value>
   </data>
 
   <!-- ═══ Nav ═══ -->
@@ -853,10 +853,10 @@
   </data>
 
   <!-- ═══ PrimeShop ═══ -->
-  <data name="PrimeShop.AssetsConfigureButton" xml:space="preserve">
+  <data name="PrimeShop.AssetsConfigureHint" xml:space="preserve">
     <value>Click here to set it up.</value>
   </data>
-  <data name="PrimeShop.AssetsMissingLabel" xml:space="preserve">
+  <data name="PrimeShop.AssetsMissingStatus" xml:space="preserve">
     <value>Assets folder not set.</value>
   </data>
   <data name="PrimeShop.CategoryLabel" xml:space="preserve">
@@ -946,10 +946,10 @@
   </data>
 
   <!-- ═══ SearchIcon ═══ -->
-  <data name="SearchIcon.AssetsConfigureButton" xml:space="preserve">
+  <data name="SearchIcon.AssetsConfigureHint" xml:space="preserve">
     <value>Click here to set it up.</value>
   </data>
-  <data name="SearchIcon.AssetsMissingLabel" xml:space="preserve">
+  <data name="SearchIcon.AssetsMissingStatus" xml:space="preserve">
     <value>Assets folder not set.</value>
   </data>
   <data name="SearchIcon.FileNotFoundError" xml:space="preserve">
@@ -1067,7 +1067,7 @@
     <value>Default: exePath/tables</value>
   </data>
   <data name="Settings.BuildRunningStatus" xml:space="preserve">
-    <value>Compiling...</value>
+    <value>Compiling…</value>
   </data>
   <data name="Settings.BuildSourceClearTip" xml:space="preserve">
     <value>Clear source folder</value>
@@ -1109,7 +1109,7 @@
     <value>Language</value>
   </data>
   <data name="Settings.NoFolderWatermark" xml:space="preserve">
-    <value>No folder selected...</value>
+    <value>No folder selected…</value>
   </data>
   <data name="Settings.QualityHighItem" xml:space="preserve">
     <value>High</value>
@@ -1126,7 +1126,7 @@
   <data name="Settings.RoundTripError" xml:space="preserve">
     <value>Round-trip failed for {fileName}</value>
   </data>
-  <data name="Settings.Subtitle" xml:space="preserve">
+  <data name="Settings.SubtitleLabel" xml:space="preserve">
     <value>Configure the app's paths and preferences</value>
   </data>
   <data name="Settings.ThemeDarkItem" xml:space="preserve">
@@ -1449,7 +1449,7 @@
   <data name="SplashCompose.ImagesFilter" xml:space="preserve">
     <value>Images</value>
   </data>
-  <data name="SplashCompose.NoArtLabel" xml:space="preserve">
+  <data name="SplashCompose.NoArtStatus" xml:space="preserve">
     <value>No artwork loaded.</value>
   </data>
   <data name="SplashCompose.OpacityLabel" xml:space="preserve">
@@ -1457,6 +1457,22 @@
   </data>
   <data name="SplashCompose.PositionSectionTitle" xml:space="preserve">
     <value>POSITION</value>
+  </data>
+  <data name="SplashCompose.PreviewShadowStatus" xml:space="preserve">
+    <value>Brush {seed} · {width} × {height} px · shadow</value>
+    <comment>Status da prévia com sombra; width × height é o tamanho da arte.</comment>
+  </data>
+  <data name="SplashCompose.PreviewStatus" xml:space="preserve">
+    <value>Brush {seed} · {width} × {height} px</value>
+    <comment>Status da prévia sem contorno nem sombra; width × height é o tamanho da arte.</comment>
+  </data>
+  <data name="SplashCompose.PreviewStrokeShadowStatus" xml:space="preserve">
+    <value>Brush {seed} · {width} × {height} px · stroke {strokeWidth} px · shadow</value>
+    <comment>Status da prévia com contorno e sombra; strokeWidth é a espessura do contorno.</comment>
+  </data>
+  <data name="SplashCompose.PreviewStrokeStatus" xml:space="preserve">
+    <value>Brush {seed} · {width} × {height} px · stroke {strokeWidth} px</value>
+    <comment>Status da prévia com contorno; strokeWidth é a espessura do contorno.</comment>
   </data>
   <data name="SplashCompose.SeedTip" xml:space="preserve">
     <value>The same seed always produces the same brush</value>
@@ -1472,10 +1488,6 @@
   </data>
   <data name="SplashCompose.ShadowSectionTitle" xml:space="preserve">
     <value>SHADOW</value>
-  </data>
-  <data name="SplashCompose.ShadowStatus" xml:space="preserve">
-    <value>shadow</value>
-    <comment>Sufixo do status da prévia quando a sombra está ligada.</comment>
   </data>
   <data name="SplashCompose.ShadowTip" xml:space="preserve">
     <value>Drop shadow under the cutout (and the stroke), like CSS box-shadow</value>
@@ -1509,10 +1521,6 @@
   </data>
   <data name="SplashCompose.StrokeSectionTitle" xml:space="preserve">
     <value>STROKE</value>
-  </data>
-  <data name="SplashCompose.StrokeStatus" xml:space="preserve">
-    <value>stroke {width} px</value>
-    <comment>Sufixo do status da prévia; width é a espessura do contorno.</comment>
   </data>
   <data name="SplashCompose.StrokeWidthLabel" xml:space="preserve">
     <value>Width</value>
@@ -1673,7 +1681,7 @@
     <value>No encryption</value>
   </data>
   <data name="SplashScreen.ExportButton" xml:space="preserve">
-    <value>Export PNG</value>
+    <value>Export PNG…</value>
   </data>
   <data name="SplashScreen.ExportPicker" xml:space="preserve">
     <value>Export PNG</value>
@@ -1845,7 +1853,7 @@
     <value>NAME</value>
   </data>
   <data name="SystemMsgColor.PresetNameWatermark" xml:space="preserve">
-    <value>Preset name</value>
+    <value>Preset name…</value>
   </data>
   <data name="SystemMsgColor.PresetSavedStatus" xml:space="preserve">
     <value>Preset "{name}" saved.</value>
@@ -1878,7 +1886,7 @@
     <value>{shown} of {count} results · {total} total</value>
   </data>
   <data name="SystemMsgColor.SearchWatermark" xml:space="preserve">
-    <value>Search by ID or message text</value>
+    <value>Search by ID or message text…</value>
   </data>
   <data name="SystemMsgColor.StartL2Button" xml:space="preserve">
     <value>Start L2</value>
@@ -1886,7 +1894,7 @@
   <data name="SystemMsgColor.StatsStatus" xml:space="preserve">
     <value>{messageCount} messages · {colorCount} unique colors</value>
   </data>
-  <data name="SystemMsgColor.Subtitle" xml:space="preserve">
+  <data name="SystemMsgColor.SubtitleLabel" xml:space="preserve">
     <value>Per-message text-color editor</value>
   </data>
   <data name="SystemMsgColor.Title" xml:space="preserve">
@@ -1952,7 +1960,7 @@
   <data name="Update.NoNotesStatus" xml:space="preserve">
     <value>No notes for this release.</value>
   </data>
-  <data name="Update.NotesSection" xml:space="preserve">
+  <data name="Update.NotesTitle" xml:space="preserve">
     <value>WHAT'S NEW</value>
   </data>
   <data name="Update.OpeningInstallerStatus" xml:space="preserve">
@@ -1973,7 +1981,7 @@
   <data name="Update.ReleasePageTip" xml:space="preserve">
     <value>Open the release in the browser</value>
   </data>
-  <data name="Update.SizeValue" xml:space="preserve">
+  <data name="Update.SizeLabel" xml:space="preserve">
     <value>{size:0.0} MB</value>
   </data>
   <data name="Update.TagFormatError" xml:space="preserve">

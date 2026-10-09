@@ -9,7 +9,7 @@ namespace L2Toolkit.Localization;
 
 /// <summary>
 /// State text built in code (status, counters, composed titles) that is rebuilt when the language changes:
-/// <c>LiveText.Set(StatusText, () =&gt; Loc.Geodata.Converted(count))</c>. Targets are held weakly, so closed
+/// <c>LiveText.Set(StatusText, () =&gt; Loc.Geodata.ConvertedStatus(count))</c>. Targets are held weakly, so closed
 /// pages and windows are not kept alive. Once registered, every write to that property must go through
 /// <see cref="Set(AvaloniaObject, AvaloniaProperty{string}, Func{string})"/> or <see cref="Clear"/>:
 /// a direct assignment is overwritten on the next language change. UI thread only.
