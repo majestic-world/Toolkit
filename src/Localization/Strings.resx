@@ -157,8 +157,161 @@
   <!-- ═══ SearchIcon ═══ -->
 
   <!-- ═══ Settings ═══ -->
+  <data name="Settings.AppFolderButton" xml:space="preserve">
+    <value>Pasta do aplicativo</value>
+  </data>
+  <data name="Settings.AppFolderTip" xml:space="preserve">
+    <value>Abrir pasta do aplicativo</value>
+  </data>
+  <data name="Settings.ApplicationTitle" xml:space="preserve">
+    <value>APLICATIVO</value>
+  </data>
+  <data name="Settings.AssetsHint" xml:space="preserve">
+    <value>Alguns módulos dependem de arquivos de dados do cliente Lineage 2 (ex: ItemName, Armorgrp, Weapongrp). Selecione a pasta onde esses arquivos estão localizados.</value>
+  </data>
+  <data name="Settings.AssetsModulesLabel" xml:space="preserve">
+    <value>Módulos que utilizam esta pasta:</value>
+  </data>
+  <data name="Settings.AssetsPathTip" xml:space="preserve">
+    <value>Localização da pasta de assets</value>
+  </data>
+  <data name="Settings.AssetsRequiredFilesLabel" xml:space="preserve">
+    <value>Arquivos necessários na pasta:</value>
+  </data>
+  <data name="Settings.AssetsTitle" xml:space="preserve">
+    <value>PASTA DE ASSETS</value>
+  </data>
+  <data name="Settings.BuildDoneStatus.One" xml:space="preserve">
+    <value>Build concluído: {count} arquivo — {original} → {packed} → {savings:P1}</value>
+  </data>
+  <data name="Settings.BuildDoneStatus.Other" xml:space="preserve">
+    <value>Build concluído: {count} arquivos — {original} → {packed} → {savings:P1}</value>
+  </data>
+  <data name="Settings.BuildErrorStatus" xml:space="preserve">
+    <value>Erro: {message}</value>
+  </data>
+  <data name="Settings.BuildFailedStatus.One" xml:space="preserve">
+    <value>{ok} ok, {count} erro — {errors}</value>
+  </data>
+  <data name="Settings.BuildFailedStatus.Other" xml:space="preserve">
+    <value>{ok} ok, {count} erros — {errors}</value>
+  </data>
+  <data name="Settings.BuildHint" xml:space="preserve">
+    <value>Compila arquivos .txt da pasta de origem em .l2dat na pasta de saída. Somente arquivos na raiz da pasta são processados.</value>
+  </data>
+  <data name="Settings.BuildNoFilesStatus" xml:space="preserve">
+    <value>Nenhum arquivo .txt encontrado na pasta de origem.</value>
+  </data>
+  <data name="Settings.BuildNoRequiredFilesStatus" xml:space="preserve">
+    <value>Nenhum dos arquivos necessários foi encontrado na pasta de origem.</value>
+  </data>
+  <data name="Settings.BuildOnlyRequiredLabel" xml:space="preserve">
+    <value>Apenas os necessários (empacota somente as tabelas usadas pelo sistema, ignora o resto)</value>
+  </data>
+  <data name="Settings.BuildOutputLabel" xml:space="preserve">
+    <value>Pasta de saída (.l2dat)</value>
+  </data>
+  <data name="Settings.BuildOutputPicker" xml:space="preserve">
+    <value>Selecionar pasta de saída (.l2dat)</value>
+  </data>
+  <data name="Settings.BuildOutputWatermark" xml:space="preserve">
+    <value>Padrão: exePath/tables</value>
+  </data>
+  <data name="Settings.BuildRunningStatus" xml:space="preserve">
+    <value>Compilando...</value>
+  </data>
+  <data name="Settings.BuildSourceClearTip" xml:space="preserve">
+    <value>Limpar pasta de origem</value>
+  </data>
+  <data name="Settings.BuildSourceInvalidStatus" xml:space="preserve">
+    <value>Selecione uma pasta de origem válida.</value>
+  </data>
+  <data name="Settings.BuildSourceLabel" xml:space="preserve">
+    <value>Pasta de origem (.txt)</value>
+  </data>
+  <data name="Settings.BuildSourcePicker" xml:space="preserve">
+    <value>Selecionar pasta de origem (.txt)</value>
+  </data>
+  <data name="Settings.ClearButton" xml:space="preserve">
+    <value>Limpar</value>
+  </data>
+  <data name="Settings.CompressionLabel" xml:space="preserve">
+    <value>Nível de compressão</value>
+  </data>
+  <data name="Settings.ConfigFileHint" xml:space="preserve">
+    <value>As configurações do aplicativo são salvas em um arquivo local no AppData. Localização do arquivo:</value>
+  </data>
+  <data name="Settings.ConfigFileTitle" xml:space="preserve">
+    <value>ARQUIVO DE CONFIGURAÇÃO</value>
+  </data>
+  <data name="Settings.ConfigFolderButton" xml:space="preserve">
+    <value>Pasta de configuração</value>
+  </data>
+  <data name="Settings.ConfigFolderTip" xml:space="preserve">
+    <value>Abrir pasta de configuração</value>
+  </data>
+  <data name="Settings.DefaultButton" xml:space="preserve">
+    <value>Padrão</value>
+  </data>
   <data name="Settings.LanguageLabel" xml:space="preserve">
     <value>Idioma</value>
+  </data>
+  <data name="Settings.NoFolderWatermark" xml:space="preserve">
+    <value>Nenhuma pasta selecionada...</value>
+  </data>
+  <data name="Settings.QualityHighItem" xml:space="preserve">
+    <value>Alta</value>
+  </data>
+  <data name="Settings.QualityMaximumItem" xml:space="preserve">
+    <value>Máxima</value>
+  </data>
+  <data name="Settings.QualityMediumItem" xml:space="preserve">
+    <value>Média</value>
+  </data>
+  <data name="Settings.QualityMinimumItem" xml:space="preserve">
+    <value>Mínima</value>
+  </data>
+  <data name="Settings.RoundTripError" xml:space="preserve">
+    <value>Round-trip falhou para {fileName}</value>
+  </data>
+  <data name="Settings.Subtitle" xml:space="preserve">
+    <value>Configure os caminhos e preferências do aplicativo</value>
+  </data>
+  <data name="Settings.ThemeDarkItem" xml:space="preserve">
+    <value>Escuro (padrão)</value>
+  </data>
+  <data name="Settings.ThemeLabel" xml:space="preserve">
+    <value>Tema</value>
+  </data>
+  <data name="Settings.ThemeLightItem" xml:space="preserve">
+    <value>Claro</value>
+  </data>
+  <data name="Settings.Title" xml:space="preserve">
+    <value>Configurações</value>
+  </data>
+  <data name="Settings.UpToDateStatus" xml:space="preserve">
+    <value>Você já está na versão mais recente ({version}).</value>
+  </data>
+  <data name="Settings.UpdateAvailableStatus" xml:space="preserve">
+    <value>Versão {version} disponível.</value>
+  </data>
+  <data name="Settings.UpdateCheckButton" xml:space="preserve">
+    <value>Verificar atualizações</value>
+  </data>
+  <data name="Settings.UpdateCheckTip" xml:space="preserve">
+    <value>Procura uma versão nova no GitHub e pergunta antes de baixar</value>
+  </data>
+  <data name="Settings.UpdateCheckingStatus" xml:space="preserve">
+    <value>Verificando…</value>
+  </data>
+  <data name="Settings.UpdateFailedStatus" xml:space="preserve">
+    <value>Não foi possível verificar: {error}</value>
+  </data>
+  <data name="Settings.UpdateThrottledStatus" xml:space="preserve">
+    <value>Aguarde {seconds} s para verificar de novo.</value>
+  </data>
+  <data name="Settings.VersionLabel" xml:space="preserve">
+    <value>Versão</value>
   </data>
 
   <!-- ═══ SkinBuilder ═══ -->

@@ -43,7 +43,9 @@ L2 Toolkit (Fafurion) By Mk
 # ── SearchIcon ──
 
 # ── Settings ──
+Build
 English
+L2DAT BUILD
 Português (Brasil)
 
 # ── SkinBuilder ──
