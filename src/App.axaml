@@ -1,5 +1,6 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="using:L2Toolkit.Localization"
              x:Class="L2Toolkit.App"
              x:CompileBindings="True"
              RequestedThemeVariant="Dark">
@@ -85,11 +86,13 @@
                                     BorderThickness="{TemplateBinding BorderThickness}"
                                     CornerRadius="4"
                                     MinHeight="32"/>
+                            <!-- ComboBoxLiveSelection.Content = SelectionBoxItem, mas segue o Content atual do
+                                 ComboBoxItem selecionado ({DynamicResource}) na troca de idioma ao vivo. -->
                             <ContentPresenter Grid.Column="0"
                                               Margin="{TemplateBinding Padding}"
                                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                              Content="{TemplateBinding SelectionBoxItem}"
+                                              Content="{TemplateBinding (loc:ComboBoxLiveSelection.Content)}"
                                               ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
                                               Foreground="{TemplateBinding Foreground}"/>
                             <PathIcon Grid.Column="1" Data="M7 10l5 5 5-5z" Width="10" Height="10" Foreground="{DynamicResource ThemeTextLabel}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,10,0"/>

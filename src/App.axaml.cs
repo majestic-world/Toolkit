@@ -16,6 +16,7 @@ namespace L2Toolkit
             AvaloniaXamlLoader.Load(this);
             AppTheme.ApplySaved();
             AppLanguage.ApplySaved();
+            ComboBoxLiveSelection.Register();
         }
 
         public override void OnFrameworkInitializationCompleted()

@@ -119,10 +119,16 @@
                 <Border Grid.Column="0" Classes="Card">
                     <Grid ColumnDefinitions="4,*">
                         <Border Grid.Column="0" Background="{DynamicResource ThemeAccent}"/>
-                        <StackPanel Grid.Column="1" Margin="20,14,20,18" Spacing="12">
+                        <!-- SharedSizeGroup "AppLabel": Tema, Idioma e Versão alinham a coluna de valor. -->
+                        <StackPanel Grid.Column="1" Margin="20,14,20,18" Spacing="12" Grid.IsSharedSizeScope="True">
                             <TextBlock Text="{DynamicResource Settings.ApplicationTitle}" Classes="CardTitle"/>
                             <Border Classes="Divider"/>
-                            <Grid ColumnDefinitions="Auto,12,*">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" SharedSizeGroup="AppLabel"/>
+                                    <ColumnDefinition Width="12"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
                                 <TextBlock Text="{DynamicResource Settings.ThemeLabel}" Classes="Label"/>
                                 <ComboBox x:Name="ThemeComboBox"
                                           Grid.Column="2"
@@ -132,7 +138,12 @@
                                     <ComboBoxItem Content="{DynamicResource Settings.ThemeLightItem}"/>
                                 </ComboBox>
                             </Grid>
-                            <Grid ColumnDefinitions="Auto,12,*">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" SharedSizeGroup="AppLabel"/>
+                                    <ColumnDefinition Width="12"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
                                 <TextBlock Text="{DynamicResource Settings.LanguageLabel}" Classes="Label"/>
                                 <ComboBox x:Name="LanguageComboBox"
                                           Grid.Column="2"
@@ -142,7 +153,14 @@
                                     <ComboBoxItem Content="English" Tag="en"/>
                                 </ComboBox>
                             </Grid>
-                            <Grid ColumnDefinitions="Auto,12,*,8,Auto">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" SharedSizeGroup="AppLabel"/>
+                                    <ColumnDefinition Width="12"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="8"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
                                 <TextBlock Text="{DynamicResource Settings.VersionLabel}" Classes="Label"/>
                                 <TextBlock x:Name="AppVersionText"
                                            Grid.Column="2"
