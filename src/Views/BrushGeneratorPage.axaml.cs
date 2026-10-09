@@ -6,6 +6,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
+using L2Toolkit.Localization;
 using L2Toolkit.Processing.Brush;
 using L2Toolkit.Settings;
 using L2Toolkit.Utilities;
@@ -164,7 +165,7 @@ public partial class BrushGeneratorPage : UserControl
         if (storage == null) return;
         var file = await storage.SaveFilePickerAsync(new FilePickerSaveOptions
         {
-            Title = "Exportar brush",
+            Title = Loc.BrushGenerator.ExportPicker,
             SuggestedFileName = $"l2brush_{_seed}.png",
             DefaultExtension = "png",
             SuggestedStartLocation = await StartFolderAsync(storage),
@@ -174,11 +175,12 @@ public partial class BrushGeneratorPage : UserControl
 
         var path = file.Path.LocalPath;
         var (settings, size) = (CurrentSettings(_seed), SelectedSize);
-        await RunAsync($"Gerando {size} × {size} px…", async () =>
+        await RunAsync(() => Loc.BrushGenerator.GeneratingStatus(size), async () =>
         {
             await Task.Run(() => BrushGenerator.ExportPng(settings, size, path));
             RememberFolder(Path.GetDirectoryName(path));
-            ShowSuccess($"{Path.GetFileName(path)} exportado ({size} × {size} px).");
+            var fileName = Path.GetFileName(path);
+            ShowSuccess(Loc.BrushGenerator.ExportedStatus(fileName, size));
         });
     }
 
@@ -196,12 +198,12 @@ public partial class BrushGeneratorPage : UserControl
 
     // ─── Infra ────────────────────────────────────────────────────────────────
 
-    private async Task RunAsync(string progress, Func<Task> action)
+    private async Task RunAsync(Func<string> progress, Func<Task> action)
     {
         _busy = true;
         HideBanners();
         UpdateControls();
-        InfoText.Text = progress;
+        LiveText.Set(InfoText, progress);
         try
         {
             await action();
@@ -226,13 +228,14 @@ public partial class BrushGeneratorPage : UserControl
     private void UpdateInfo()
     {
         if (_busy) return;
-        InfoText.Text = $"Semente {_seed}  ·  exporta em {SelectedSize} × {SelectedSize} px  ·  prévia em {PreviewSize} px";
+        var (seed, size) = (_seed, SelectedSize);
+        LiveText.Set(InfoText, () => Loc.BrushGenerator.InfoStatus(seed, size, PreviewSize));
     }
 
     private void ShowError(string message)
     {
         SuccessBanner.IsVisible = false;
-        ErrorText.Text = string.IsNullOrWhiteSpace(message) ? "Ocorreu um erro inesperado." : message;
+        ErrorText.Text = string.IsNullOrWhiteSpace(message) ? Loc.BrushGenerator.UnexpectedError : message;
         ErrorBanner.IsVisible = true;
         _bannerTimer.Stop();
         _bannerTimer.Start();

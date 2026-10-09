@@ -146,7 +146,7 @@
                        FontSize="22"
                        FontWeight="SemiBold"
                        Foreground="{DynamicResource ThemeTextTitle}"/>
-            <TextBlock Text="Gerador de skins para Appearance System (Live)"
+            <TextBlock Text="{DynamicResource SkinBuilder.SubtitleLabel}"
                        FontSize="13"
                        Foreground="{DynamicResource ThemeTextTitle}"/>
         </StackPanel>
@@ -189,7 +189,7 @@
                                 Height="40"
                                 Spacing="14"
                                 VerticalAlignment="Center">
-                        <TextBlock Text="CONFIGURAÇÕES"
+                        <TextBlock Text="{DynamicResource SkinBuilder.SettingsTitle}"
                                    FontSize="11"
                                    FontWeight="Bold"
                                    Foreground="{DynamicResource ThemeTextLabel}"
@@ -204,32 +204,32 @@
                         <!-- Tipo de processamento e Preset na mesma linha; o tipo fica sempre à esquerda -->
                         <Grid ColumnDefinitions="*,14,*">
                             <StackPanel Grid.Column="0" Spacing="6">
-                                <TextBlock Text="Tipo de processamento"
+                                <TextBlock Text="{DynamicResource SkinBuilder.ProcessTypeLabel}"
                                            FontSize="12"
                                            Foreground="{DynamicResource ThemeTextLabel}"
                                            FontWeight="Medium"/>
                                 <ComboBox x:Name="TypeProcess"
                                           SelectedIndex="0"
                                           SelectionChanged="TypeProcess_OnSelectionChanged">
-                                    <ComboBoxItem HorizontalAlignment="Stretch">Weapons</ComboBoxItem>
-                                    <ComboBoxItem HorizontalAlignment="Stretch">Armor</ComboBoxItem>
+                                    <ComboBoxItem HorizontalAlignment="Stretch" Tag="Weapons">Weapons</ComboBoxItem>
+                                    <ComboBoxItem HorizontalAlignment="Stretch" Tag="Armor">Armor</ComboBoxItem>
                                 </ComboBox>
                             </StackPanel>
 
                             <StackPanel x:Name="PresetPanel" Grid.Column="2" Spacing="6" IsVisible="False">
-                                <TextBlock Text="Preset"
+                                <TextBlock Text="{DynamicResource SkinBuilder.PresetLabel}"
                                            FontSize="12"
                                            Foreground="{DynamicResource ThemeTextLabel}"
                                            FontWeight="Medium"/>
                                 <ComboBox x:Name="PresetComboBox"
-                                          PlaceholderText="Selecione um preset..."
+                                          PlaceholderText="{DynamicResource SkinBuilder.PresetWatermark}"
                                           SelectionChanged="PresetComboBox_OnSelectionChanged"/>
                             </StackPanel>
                         </Grid>
 
                         <!-- IDs dos itens -->
                         <StackPanel Spacing="6">
-                            <TextBlock Text="IDs dos itens (separados por ; ou intervalo com ...)"
+                            <TextBlock Text="{DynamicResource SkinBuilder.IdsLabel}"
                                        FontSize="12"
                                        Foreground="{DynamicResource ThemeTextLabel}"
                                        FontWeight="Medium"/>
@@ -240,7 +240,7 @@
                                      VerticalContentAlignment="Center"
                                      FontFamily="Consolas,Courier New,monospace"
                                      FontSize="12"
-                                     Watermark="Ex: 100;101;102 ou 100...150"/>
+                                     Watermark="{DynamicResource SkinBuilder.IdsWatermark}"/>
                         </StackPanel>
 
                     </StackPanel>
@@ -265,7 +265,7 @@
                         Theme="{StaticResource SecondaryButton}">
                     <StackPanel Orientation="Horizontal" Spacing="9">
                         <PathIcon Foreground="White" Data="M8 5v14l11-7z" Width="14" Height="14" VerticalAlignment="Center"/>
-                        <TextBlock Text="Gerar Dados"
+                        <TextBlock Text="{DynamicResource SkinBuilder.GenerateButton}"
                                    FontSize="13"
                                    FontWeight="SemiBold"
                                    VerticalAlignment="Center"/>
@@ -278,7 +278,7 @@
                         Theme="{StaticResource GhostButton}">
                     <StackPanel Orientation="Horizontal" Spacing="9">
                         <PathIcon Foreground="{DynamicResource ThemeTextButton}" Data="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z" Width="14" Height="14" VerticalAlignment="Center"/>
-                        <TextBlock Text="Resetar"
+                        <TextBlock Text="{DynamicResource SkinBuilder.ResetButton}"
                                    FontSize="13"
                                    FontWeight="SemiBold"
                                    VerticalAlignment="Center"/>
@@ -305,7 +305,7 @@
 
                     <Grid Grid.Row="0" ColumnDefinitions="Auto,18,*,Auto,Auto" Margin="20,0,16,0">
                         <TextBlock Grid.Column="0"
-                                   Text="RESULTADO"
+                                   Text="{DynamicResource SkinBuilder.ResultTitle}"
                                    FontSize="11"
                                    FontWeight="Bold"
                                    Foreground="{DynamicResource ThemeTextLabel}"
@@ -314,17 +314,17 @@
 
                         <StackPanel Grid.Column="2" Orientation="Horizontal">
                             <Button x:Name="GrpTab" Classes="active" Theme="{StaticResource TabButton}"
-                                    Content="Dados GRP" Click="ResultTab_OnClick"/>
+                                    Content="{DynamicResource SkinBuilder.GrpTabButton}" Click="ResultTab_OnClick"/>
                             <Button x:Name="NameTab" Theme="{StaticResource TabButton}"
-                                    Content="Nomes" Click="ResultTab_OnClick"/>
+                                    Content="{DynamicResource SkinBuilder.NamesTabButton}" Click="ResultTab_OnClick"/>
                             <Button x:Name="XmlTab" Theme="{StaticResource TabButton}"
-                                    Content="Dados XML" Click="ResultTab_OnClick"/>
+                                    Content="{DynamicResource SkinBuilder.XmlTabButton}" Click="ResultTab_OnClick"/>
                             <Button x:Name="SkinTab" Theme="{StaticResource TabButton}"
-                                    Content="Skins" Click="ResultTab_OnClick"/>
+                                    Content="{DynamicResource SkinBuilder.SkinsTabButton}" Click="ResultTab_OnClick"/>
                             <Button x:Name="StatusTab" Theme="{StaticResource TabButton}"
-                                    Content="Status" Click="ResultTab_OnClick"/>
+                                    Content="{DynamicResource SkinBuilder.StatusTabButton}" Click="ResultTab_OnClick"/>
                             <Button x:Name="LogTab" Theme="{StaticResource TabButton}"
-                                    Content="Logs" Click="ResultTab_OnClick"/>
+                                    Content="{DynamicResource SkinBuilder.LogsTabButton}" Click="ResultTab_OnClick"/>
                         </StackPanel>
 
                         <Border Grid.Column="3"
@@ -339,7 +339,7 @@
                                 Margin="0,0,8,0">
                             <StackPanel Orientation="Horizontal" Spacing="4">
                                 <PathIcon Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Width="10" Height="10" Foreground="{DynamicResource ThemeSuccess}" VerticalAlignment="Center"/>
-                                <TextBlock Text="Copiado!"
+                                <TextBlock Text="{DynamicResource Common.CopiedStatus}"
                                            FontSize="10"
                                            Foreground="{DynamicResource ThemeSuccess}"
                                            VerticalAlignment="Center"/>
@@ -351,11 +351,11 @@
                                 Height="30"
                                 Padding="12,0"
                                 VerticalAlignment="Center"
-                                ToolTip.Tip="Copia o conteúdo da aba aberta"
+                                ToolTip.Tip="{DynamicResource SkinBuilder.CopyTip}"
                                 Theme="{StaticResource GhostButton}">
                             <StackPanel Orientation="Horizontal" Spacing="6">
                                 <PathIcon Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" Foreground="{DynamicResource ThemeTextLabel}" Width="12" Height="12" VerticalAlignment="Center"/>
-                                <TextBlock Text="Copiar"
+                                <TextBlock Text="{DynamicResource Common.Copy}"
                                            FontSize="12"
                                            FontWeight="Medium"
                                            VerticalAlignment="Center"/>
@@ -380,7 +380,7 @@
                                  FontFamily="Consolas,Courier New,monospace"
                                  FontSize="12"
                                  IsReadOnly="True"
-                                 Watermark="Dados GRP aparecerão aqui..."/>
+                                 Watermark="{DynamicResource SkinBuilder.GrpWatermark}"/>
                         <TextBox x:Name="NameData"
                                  IsVisible="False"
                                  Classes="Code"
@@ -395,7 +395,7 @@
                                  FontFamily="Consolas,Courier New,monospace"
                                  FontSize="12"
                                  IsReadOnly="True"
-                                 Watermark="Nomes aparecerão aqui..."/>
+                                 Watermark="{DynamicResource SkinBuilder.NamesWatermark}"/>
                         <TextBox x:Name="XmlData"
                                  IsVisible="False"
                                  Classes="Code"
@@ -410,7 +410,7 @@
                                  FontFamily="Consolas,Courier New,monospace"
                                  FontSize="12"
                                  IsReadOnly="True"
-                                 Watermark="Dados XML aparecerão aqui..."/>
+                                 Watermark="{DynamicResource SkinBuilder.XmlWatermark}"/>
                         <TextBox x:Name="SkinData"
                                  IsVisible="False"
                                  Classes="Code"
@@ -425,7 +425,7 @@
                                  FontFamily="Consolas,Courier New,monospace"
                                  FontSize="12"
                                  IsReadOnly="True"
-                                 Watermark="Skins IDs aparecerão aqui..."/>
+                                 Watermark="{DynamicResource SkinBuilder.SkinsWatermark}"/>
                         <TextBox x:Name="StatusData"
                                  IsVisible="False"
                                  Classes="Code"
@@ -440,7 +440,7 @@
                                  FontFamily="Consolas,Courier New,monospace"
                                  FontSize="12"
                                  IsReadOnly="True"
-                                 Watermark="Status data aparecerá aqui..."/>
+                                 Watermark="{DynamicResource SkinBuilder.StatusWatermark}"/>
                         <TextBox x:Name="LogContent"
                                  IsVisible="False"
                                  Classes="Code"
@@ -455,7 +455,7 @@
                                  FontFamily="Consolas,Courier New,monospace"
                                  FontSize="12"
                                  IsReadOnly="True"
-                                 Watermark="Logs de processamento aparecerão aqui..."/>
+                                 Watermark="{DynamicResource SkinBuilder.LogsWatermark}"/>
                     </Panel>
 
                 </Grid>

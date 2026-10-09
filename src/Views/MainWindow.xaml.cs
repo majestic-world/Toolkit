@@ -8,6 +8,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using L2Toolkit.Localization;
 using L2Toolkit.Utilities;
 
 namespace L2Toolkit.Views
@@ -23,7 +24,8 @@ namespace L2Toolkit.Views
         public MainWindow()
         {
             InitializeComponent();
-            AppVersionText.Text = "v" + typeof(MainWindow).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+            var version = typeof(MainWindow).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+            AppVersionText.Text = $"v{version}";
 
             _sidebarButtons = new Dictionary<Type, Button>
             {
@@ -87,9 +89,9 @@ namespace L2Toolkit.Views
             _pendingRelease = release;
             UpdateVersions.Text = $"{AppUpdater.CurrentVersion.ToString(3)}  →  {release.Tag}";
             UpdateReleaseName.Text = string.IsNullOrWhiteSpace(release.Name) ? release.Tag : release.Name;
-            UpdatePublished.Text = release.PublishedAt?.ToLocalTime().ToString("dd/MM/yyyy HH:mm") ?? "—";
-            UpdateSize.Text = $"{release.InstallerSize / 1048576.0:0.0} MB";
-            UpdateNotes.Text = string.IsNullOrWhiteSpace(release.Notes) ? "Sem notas para esta versão." : release.Notes.Trim();
+            UpdatePublished.Text = release.PublishedAt?.ToLocalTime().ToString(Loc.Format.DateTime) ?? "—";
+            UpdateSize.Text = Loc.Update.SizeLabel(release.InstallerSize / 1048576.0);
+            UpdateNotes.Text = string.IsNullOrWhiteSpace(release.Notes) ? Loc.Update.NoNotesStatus : release.Notes.Trim();
             UpdatePromptPanel.IsVisible = true;
             UpdateDownloadPanel.IsVisible = false;
             UpdateOverlay.IsVisible = true;
@@ -124,10 +126,10 @@ namespace L2Toolkit.Views
             }
 
             using var cts = _updateCts = new CancellationTokenSource();
-            UpdateTitle.Text = $"Atualizando para a versão {release.Tag}";
+            UpdateTitle.Text = Loc.Update.DownloadTitle(release.Tag);
             UpdateProgress.Value = 0;
-            UpdateProgressText.Text = "Conectando…";
-            UpdateCancelText.Text = "Cancelar";
+            UpdateProgressText.Text = Loc.Update.ConnectingStatus;
+            UpdateCancelText.Text = Loc.Common.Cancel;
             UpdatePromptPanel.IsVisible = false;
             UpdateDownloadPanel.IsVisible = true;
             try
@@ -136,10 +138,10 @@ namespace L2Toolkit.Views
                 {
                     if (cts.IsCancellationRequested) return;
                     UpdateProgress.Value = p.Total > 0 ? (double)p.Done / p.Total : 0;
-                    UpdateProgressText.Text = $"{p.Done / 1048576.0:0.0} de {p.Total / 1048576.0:0.0} MB";
+                    UpdateProgressText.Text = Loc.Update.ProgressStatus(p.Done / 1048576.0, p.Total / 1048576.0);
                 });
                 var installer = await AppUpdater.DownloadAsync(release, progress, cts.Token);
-                UpdateProgressText.Text = "Abrindo o instalador…";
+                UpdateProgressText.Text = Loc.Update.OpeningInstallerStatus;
                 AppUpdater.LaunchInstaller(installer);
                 (Application.Current?.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)?.Shutdown();
             }
@@ -149,8 +151,8 @@ namespace L2Toolkit.Views
             }
             catch (Exception ex)
             {
-                UpdateProgressText.Text = "Falha ao atualizar: " + ex.Message;
-                UpdateCancelText.Text = "Fechar";
+                UpdateProgressText.Text = Loc.Update.FailedError(ex.Message);
+                UpdateCancelText.Text = Loc.Common.Close;
             }
             finally
             {

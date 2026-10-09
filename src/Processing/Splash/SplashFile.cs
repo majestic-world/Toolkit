@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using L2Toolkit.Localization;
 using SkiaSharp;
 
 namespace L2Toolkit.Processing.Splash;
@@ -77,11 +78,10 @@ public static class SplashFile
             return Open(path).Image;
 
         using var codec = SKCodec.Create(path)
-            ?? throw new InvalidOperationException("Formato de imagem não suportado. Use PNG, JPG, WEBP ou BMP.");
+            ?? throw new InvalidOperationException(Loc.Splash.UnsupportedImageFormatError);
         var info = new SKImageInfo(codec.Info.Width, codec.Info.Height, SKColorType.Rgba8888, SKAlphaType.Unpremul);
         if ((long)info.Width * info.Height > RgbaImage.MaxPixels)
-            throw new InvalidOperationException(
-                $"A imagem tem {info.Width} × {info.Height} px e passa do limite de 4096 × 4096 px do editor.");
+            throw new InvalidOperationException(Loc.Splash.ImageTooLargeError(info.Width, info.Height));
 
         var pixels = new byte[info.BytesSize];
         var handle = GCHandle.Alloc(pixels, GCHandleType.Pinned);
@@ -89,7 +89,7 @@ public static class SplashFile
         {
             var result = codec.GetPixels(info, handle.AddrOfPinnedObject());
             if (result is not (SKCodecResult.Success or SKCodecResult.IncompleteInput))
-                throw new InvalidOperationException($"Não foi possível decodificar a imagem ({result}).");
+                throw new InvalidOperationException(Loc.Splash.DecodeError(result));
         }
         finally
         {
@@ -106,7 +106,7 @@ public static class SplashFile
         {
             using var pixmap = new SKPixmap(info, handle.AddrOfPinnedObject(), info.RowBytes);
             using var data = pixmap.Encode(SKEncodedImageFormat.Png, 100)
-                ?? throw new InvalidOperationException("Falha ao gerar o PNG.");
+                ?? throw new InvalidOperationException(Loc.Splash.PngEncodeError);
             using var stream = File.Create(path);
             data.SaveTo(stream);
         }

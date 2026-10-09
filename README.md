@@ -48,9 +48,12 @@ O app avisa sobre versões novas pelas Releases do GitHub e, se o usuário confi
 ### Estrutura
 
 - `src/`: código do app; cada pasta é um namespace `L2Toolkit.*`
+- `src/Localization/`: catálogos de textos da interface (`Strings.resx` em pt-BR, `Strings.en.resx` em inglês), seletor de idioma e o gerador/validador do build
 - `packaging/`: insumos dos instaladores (Inno Setup e `Info.plist` do macOS)
 - `scripts/`: `build.ps1`, usado pelo `Makefile`
 - `docs/`: documentação
+
+A interface está em português (Brasil) por padrão; o inglês é opcional e se escolhe em Configurações → APLICATIVO → Idioma, com troca na hora, sem reiniciar.
 
 ---
 

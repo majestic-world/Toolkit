@@ -67,11 +67,11 @@
 
             <!-- ── Page Header ──────────────────────────────────────── -->
             <StackPanel Margin="32,28,32,24" Spacing="3">
-                <TextBlock Text="Corrigir Descrição"
+                <TextBlock Text="{DynamicResource DescriptionFix.Title}"
                            FontSize="22"
                            FontWeight="SemiBold"
                            Foreground="{DynamicResource ThemeTextTitle}"/>
-                <TextBlock Text="Ideal para itens com (Not Used) na descrição"
+                <TextBlock Text="{DynamicResource DescriptionFix.SubtitleLabel}"
                            FontSize="13"
                            Foreground="{DynamicResource ThemeTextTitle}"/>
             </StackPanel>
@@ -132,7 +132,7 @@
                                     Height="52"
                                     Spacing="14"
                                     VerticalAlignment="Center">
-                            <TextBlock Text="ARQUIVO DE ENTRADA"
+                            <TextBlock Text="{DynamicResource DescriptionFix.InputFileTitle}"
                                        FontSize="11"
                                        FontWeight="Bold"
                                        Foreground="{DynamicResource ThemeTextLabel}"
@@ -148,7 +148,7 @@
                                      Classes="FormField"
                                      IsReadOnly="True"
                                      VerticalContentAlignment="Center"
-                                     Watermark="Nenhum arquivo selecionado..."
+                                     Watermark="{DynamicResource DescriptionFix.EmptyFileWatermark}"
                                      FontFamily="Consolas,Courier New,monospace"
                                      FontSize="12"/>
                             <Button x:Name="SelecionarArquivoButton"
@@ -158,7 +158,7 @@
                                     Theme="{StaticResource GhostButton}">
                                 <StackPanel Orientation="Horizontal" Spacing="8">
                                     <PathIcon Data="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" Foreground="{DynamicResource ThemeTextLabel}" Width="14" Height="14" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Selecionar"
+                                    <TextBlock Text="{DynamicResource Common.Browse}"
                                                FontSize="13"
                                                FontWeight="Medium"
                                                VerticalAlignment="Center"/>
@@ -184,7 +184,7 @@
                         Theme="{StaticResource SecondaryButton}">
                     <StackPanel Orientation="Horizontal" Spacing="9">
                         <PathIcon Data="M8 5v14l11-7z" Width="14" Height="14" VerticalAlignment="Center" Foreground="White"/>
-                        <TextBlock Text="Processar Arquivo"
+                        <TextBlock Text="{DynamicResource DescriptionFix.ProcessButton}"
                                    FontSize="13"
                                    FontWeight="SemiBold"
                                    VerticalAlignment="Center"/>
@@ -212,7 +212,7 @@
                                     Height="52"
                                     Spacing="14"
                                     VerticalAlignment="Center">
-                            <TextBlock Text="INFORMAÇÕES"
+                            <TextBlock Text="{DynamicResource DescriptionFix.InfoTitle}"
                                        FontSize="11"
                                        FontWeight="Bold"
                                        Foreground="{DynamicResource ThemeTextLabel}"
@@ -227,7 +227,7 @@
                             <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
                                 <Border Width="4" Height="4" CornerRadius="2"
                                         Background="{DynamicResource ThemeAccent}" VerticalAlignment="Center"/>
-                                <TextBlock Text="As descrições do H5 estão embutidas no executável — nenhum arquivo externo é necessário."
+                                <TextBlock Text="{DynamicResource DescriptionFix.InfoEmbeddedHint}"
                                            FontSize="13"
                                            Foreground="{DynamicResource ThemeTextButton}"
                                            TextWrapping="Wrap"/>
@@ -236,7 +236,7 @@
                             <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
                                 <Border Width="4" Height="4" CornerRadius="2"
                                         Background="{DynamicResource ThemeAccent}" VerticalAlignment="Center"/>
-                                <TextBlock Text="Selecione um arquivo de itens Classic e clique em Processar para substituir as descrições."
+                                <TextBlock Text="{DynamicResource DescriptionFix.InfoSelectHint}"
                                            FontSize="13"
                                            Foreground="{DynamicResource ThemeTextButton}"
                                            TextWrapping="Wrap"/>
@@ -245,7 +245,7 @@
                             <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
                                 <Border Width="4" Height="4" CornerRadius="2"
                                         Background="{DynamicResource ThemeAccent}" VerticalAlignment="Center"/>
-                                <TextBlock Text='Apenas o campo "description" será modificado, preservando todo o restante.'
+                                <TextBlock Text="{DynamicResource DescriptionFix.InfoOnlyDescriptionHint}"
                                            FontSize="13"
                                            Foreground="{DynamicResource ThemeTextButton}"
                                            TextWrapping="Wrap"/>
@@ -254,7 +254,7 @@
                             <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
                                 <Border Width="4" Height="4" CornerRadius="2"
                                         Background="{DynamicResource ThemeAccent}" VerticalAlignment="Center"/>
-                                <TextBlock Text="Após o processamento, o arquivo modificado será salvo em um novo local."
+                                <TextBlock Text="{DynamicResource DescriptionFix.InfoSaveHint}"
                                            FontSize="13"
                                            Foreground="{DynamicResource ThemeTextButton}"
                                            TextWrapping="Wrap"/>

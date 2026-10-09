@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
+using L2Toolkit.Localization;
 
 namespace L2Toolkit.Views
 {
@@ -55,7 +56,7 @@ namespace L2Toolkit.Views
                 var idsText = NpcIdsTextBox.Text?.Trim() ?? string.Empty;
                 if (string.IsNullOrEmpty(idsText))
                 {
-                    SendNotify("Por favor, insira os IDs dos NPCs.");
+                    SendNotify(Loc.SpawnManager.NoIdsError);
                     return;
                 }
 
@@ -63,14 +64,14 @@ namespace L2Toolkit.Views
 
                 if (npcIds.Length == 0)
                 {
-                    SendNotify("Nenhum ID válido encontrado.");
+                    SendNotify(Loc.SpawnManager.NoValidIdsError);
                     return;
                 }
 
                 var originalSpawns = OriginalSpawnTextBox.Text;
                 if (string.IsNullOrEmpty(originalSpawns))
                 {
-                    SendNotify("Por favor, insira os dados originais de spawn.");
+                    SendNotify(Loc.SpawnManager.NoSpawnDataError);
                     return;
                 }
 
@@ -81,7 +82,7 @@ namespace L2Toolkit.Views
             }
             catch (Exception ex)
             {
-                SendNotify($"Ocorreu um erro ao processar os spawns: {ex.Message}");
+                SendNotify(Loc.SpawnManager.ProcessError(ex.Message));
             }
         }
 

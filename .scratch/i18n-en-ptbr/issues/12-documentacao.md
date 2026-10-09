@@ -1,6 +1,6 @@
 # 12 — Documentação
 
-Status: ready-for-agent
+Status: resolved
 Type: task
 Blocked by: 11
 
@@ -25,3 +25,9 @@ Spec: `../spec.md`, seções [Convenção de chaves], [Fluxo para uma feature no
 
 - Um agente que só leia `AGENTS.md` e o guia de engenharia consegue adicionar uma string nova nos dois idiomas sem consultar esta spec.
 - Nenhum rótulo citado no guia diverge do texto en real da UI.
+
+## Comments
+
+- Impl12Docs: guia (`## Localization` em inglês, linha `Localization/` na tabela, regra em Avalonia conventions), `AGENTS.md`, `GLOSSARY.md` (seção Interface com 3 termos), `README.md` e `docs/index.html` (callout Idioma) atualizados a partir do código (`Localization.targets`, `AppLanguage`, `LiveText`, `NonTranslatable.txt`).
+- Rótulos do guia conferidos contra `Strings.resx`. Corrigidos: "Configurações → Aparência" (seção inexistente) → "Configurações → APLICATIVO → Tema"; "Settings → Aplicativo" → "Configurações → APLICATIVO" (também em `docs/index.html`); "Contorno" → "CONTORNO" (`SplashCompose.StrokeSectionTitle`). "Abrir L2 Toolkit" é do instalador (`Setup.iss`), fora do catálogo. "Trocado · W × H · não salvo" corresponde ao template `SplashLibrary.SwappedTileLabel`.
+- ComboBox: o guia descreve só `Tag` + `Content` traduzido e leitura por `Tag`/`SelectedIndex`, sem detalhes de refresh ao vivo.

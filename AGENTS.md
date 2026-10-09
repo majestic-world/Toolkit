@@ -14,4 +14,4 @@ Layout single-context com `CONTEXT.md` e `docs/adr/`. Veja `docs/agents/domain.m
 
 ### L2Toolkit engineering
 
-Antes de alterar UI Avalonia, processamento de dados, tabelas `.l2dat` ou client `.dat`, leia `docs/agents/l2toolkit-engineering.md`. Use os termos de `CONTEXT.md`.
+Antes de alterar UI Avalonia, textos de interface, processamento de dados, tabelas `.l2dat` ou client `.dat`, leia `docs/agents/l2toolkit-engineering.md`. Use os termos de `CONTEXT.md`.

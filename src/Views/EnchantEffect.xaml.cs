@@ -13,8 +13,10 @@ using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.Styling;
 using L2Toolkit.ClientDat;
+using L2Toolkit.Models;
 using MsBox.Avalonia;
 using Avalonia.Controls.Documents;
+using L2Toolkit.Localization;
 using L2Toolkit.Utilities;
 
 namespace L2Toolkit.Views;
@@ -174,12 +176,12 @@ public partial class EnchantEffect : UserControl
         var topLevel = TopLevel.GetTopLevel(this);
         var files = await topLevel!.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
-            Title = "Selecionar WeaponEnchantEffectData.dat",
+            Title = Loc.EnchantEffect.WeaponFilePicker,
             AllowMultiple = false,
             FileTypeFilter =
             [
-                new FilePickerFileType("DAT") { Patterns = ["*.dat"] },
-                new FilePickerFileType("All") { Patterns = ["*.*"] }
+                new FilePickerFileType(Loc.EnchantEffect.DatFilter) { Patterns = ["*.dat"] },
+                new FilePickerFileType(Loc.Common.AllFilesFilter)   { Patterns = ["*.*"] }
             ]
         });
         if (files.Count == 0) return;
@@ -193,7 +195,7 @@ public partial class EnchantEffect : UserControl
     {
         if (string.IsNullOrEmpty(path) || !File.Exists(path))
         {
-            ShowErrorBanner("Arquivo não encontrado.");
+            ShowErrorBanner(Loc.EnchantEffect.FileNotFoundError);
             return;
         }
 
@@ -259,11 +261,11 @@ public partial class EnchantEffect : UserControl
             var binary    = L2DatFile.SerializeWeaponEnchantEffectData(_datWeaponRecords);
             var encrypted = DatCrypto.EncryptFile(binary);
             await File.WriteAllBytesAsync(_loadedFilePath, encrypted);
-            ShowSuccessToast("Arquivo salvo com sucesso. Backup: .dat.bak");
+            ShowSuccessToast(Loc.EnchantEffect.SavedStatus);
         }
         catch (Exception ex)
         {
-            ShowErrorBanner($"Erro ao salvar: {ex.Message}");
+            ShowErrorBanner(Loc.EnchantEffect.SaveError(ex.Message));
         }
     }
 
@@ -286,12 +288,12 @@ public partial class EnchantEffect : UserControl
         var topLevel = TopLevel.GetTopLevel(this);
         var files = await topLevel!.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
-            Title = "Selecionar FullArmorEnchantEffectData.dat",
+            Title = Loc.EnchantEffect.ArmorFilePicker,
             AllowMultiple = false,
             FileTypeFilter =
             [
-                new FilePickerFileType("DAT") { Patterns = ["*.dat"] },
-                new FilePickerFileType("All") { Patterns = ["*.*"] }
+                new FilePickerFileType(Loc.EnchantEffect.DatFilter) { Patterns = ["*.dat"] },
+                new FilePickerFileType(Loc.Common.AllFilesFilter)   { Patterns = ["*.*"] }
             ]
         });
         if (files.Count == 0) return;
@@ -305,7 +307,7 @@ public partial class EnchantEffect : UserControl
     {
         if (string.IsNullOrEmpty(path) || !File.Exists(path))
         {
-            ShowErrorBanner("Arquivo não encontrado.");
+            ShowErrorBanner(Loc.EnchantEffect.FileNotFoundError);
             return;
         }
 
@@ -363,11 +365,11 @@ public partial class EnchantEffect : UserControl
             var binary    = L2DatFile.SerializeFullArmorEnchantEffectData(_datArmorRecords);
             var encrypted = DatCrypto.EncryptFile(binary);
             await File.WriteAllBytesAsync(_armorLoadedFilePath, encrypted);
-            ShowSuccessToast("Arquivo salvo com sucesso. Backup: .dat.bak");
+            ShowSuccessToast(Loc.EnchantEffect.SavedStatus);
         }
         catch (Exception ex)
         {
-            ShowErrorBanner($"Erro ao salvar: {ex.Message}");
+            ShowErrorBanner(Loc.EnchantEffect.SaveError(ex.Message));
         }
     }
 
@@ -477,7 +479,7 @@ public partial class EnchantEffect : UserControl
     private void PopulateSelectors()
     {
         var types  = _entries.Select(e => e.Type).Distinct().OrderBy(t => t)
-                             .Select(TypeLabel).ToList();
+                             .Select(t => new Option(t, TypeLabel(t))).ToList();
         var grades = _entries.Select(e => e.Grade).Distinct().ToList();
 
         TypeCombo.ItemsSource  = types;
@@ -489,13 +491,9 @@ public partial class EnchantEffect : UserControl
 
     private void OnEntrySelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
-        var label = TypeCombo.SelectedItem as string;
+        var type  = (TypeCombo.SelectedItem as Option)?.Id;
         var grade = GradeCombo.SelectedItem as string;
-        if (label == null || grade == null) return;
-
-        var type = label.Contains('(')
-            ? label[(label.LastIndexOf('(') + 1)..label.LastIndexOf(')')]
-            : label;
+        if (type == null || grade == null) return;
 
         _currentEntry = _entries.FirstOrDefault(en => en.Type == type && en.Grade == grade);
         if (_currentEntry == null) return;
@@ -1085,7 +1083,7 @@ public partial class EnchantEffect : UserControl
             }
         }
 
-        ShowSuccessToast($"Cores aplicadas a {targets.Count} grau(s) do tipo {_currentEntry.Type}.");
+        ShowSuccessToast(Loc.EnchantEffect.ColorsAppliedStatus(targets.Count, _currentEntry.Type));
     }
 
     // ─── Toast ────────────────────────────────────────────────────────────────

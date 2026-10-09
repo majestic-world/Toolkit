@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using L2Toolkit.Localization;
 using L2Toolkit.Utilities;
 using L2Toolkit.Views;
 using System.Text;
@@ -14,6 +15,8 @@ namespace L2Toolkit
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             AvaloniaXamlLoader.Load(this);
             AppTheme.ApplySaved();
+            AppLanguage.ApplySaved();
+            ComboBoxLiveSelection.Register();
         }
 
         public override void OnFrameworkInitializationCompleted()

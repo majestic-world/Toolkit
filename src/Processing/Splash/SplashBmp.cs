@@ -2,6 +2,7 @@ using System;
 using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.Numerics;
+using L2Toolkit.Localization;
 
 namespace L2Toolkit.Processing.Splash;
 
@@ -31,12 +32,12 @@ public static class SplashBmp
     public static DecodedBmp Decode(byte[] bytes)
     {
         if (bytes.Length < FileHeaderLength + 12 || bytes[0] != 'B' || bytes[1] != 'M')
-            throw new InvalidOperationException("O arquivo não é um bitmap (BMP) válido.");
+            throw new InvalidOperationException(Loc.Splash.NotBmpError);
 
         var dataOffset = (int)ReadU32(bytes, 10);
         var infoSize = (int)ReadU32(bytes, FileHeaderLength);
         if (infoSize < InfoHeaderLength)
-            throw new InvalidOperationException("Este BMP usa um cabeçalho antigo (BITMAPCOREHEADER) que não é suportado.");
+            throw new InvalidOperationException(Loc.Splash.CoreHeaderError);
 
         var width = (int)ReadU32(bytes, 18);
         var heightRaw = (int)ReadU32(bytes, 22);
@@ -44,23 +45,22 @@ public static class SplashBmp
         var compression = ReadU32(bytes, 30);
         var declaredPalette = ReadU32(bytes, 46);
 
-        if (width <= 0) throw new InvalidOperationException("O BMP possui largura inválida.");
+        if (width <= 0) throw new InvalidOperationException(Loc.Splash.InvalidWidthError);
         var topDown = heightRaw < 0;
         var height = Math.Abs(heightRaw);
-        if (height == 0) throw new InvalidOperationException("O BMP possui altura inválida.");
+        if (height == 0) throw new InvalidOperationException(Loc.Splash.InvalidHeightError);
         if (width > MaxDimension || height > MaxDimension)
-            throw new InvalidOperationException($"O BMP passa do tamanho máximo suportado de {MaxDimension} px.");
+            throw new InvalidOperationException(Loc.Splash.BmpTooLargeError(MaxDimension));
         if (compression != 0 && compression != 3)
-            throw new InvalidOperationException("BMPs comprimidos (RLE ou JPEG/PNG embutido) não são suportados.");
+            throw new InvalidOperationException(Loc.Splash.CompressedError);
 
         var masks = ReadMasks(bytes, infoSize, compression, bitsPerPixel);
         var palette = ReadPalette(bytes, infoSize, compression, bitsPerPixel, declaredPalette);
         var rowStride = (bitsPerPixel * width + 31) / 32 * 4;
         if (dataOffset < 0 || (long)dataOffset + (long)rowStride * height > bytes.Length)
-            throw new InvalidOperationException("O BMP está truncado: faltam linhas de pixels.");
+            throw new InvalidOperationException(Loc.Splash.TruncatedRowsError);
         if ((long)width * height > RgbaImage.MaxPixels)
-            throw new InvalidOperationException(
-                $"A imagem tem {width} × {height} px e passa do limite de 4096 × 4096 px do editor.");
+            throw new InvalidOperationException(Loc.Splash.ImageTooLargeError(width, height));
 
         var pixels = new byte[width * height * 4];
         for (var row = 0; row < height; row++)
@@ -200,7 +200,7 @@ public static class SplashBmp
         if (compression == 3 && infoSize == InfoHeaderLength)
             start += 12;
         if (start + entries * 4L > bytes.Length)
-            throw new InvalidOperationException("O BMP está truncado: a paleta está incompleta.");
+            throw new InvalidOperationException(Loc.Splash.TruncatedPaletteError);
 
         var palette = new int[entries];
         for (var i = 0; i < entries; i++)
@@ -238,14 +238,14 @@ public static class SplashBmp
                 Masked(BinaryPrimitives.ReadUInt32LittleEndian(line[(column * 4)..]), masks, target);
                 break;
             default:
-                throw new InvalidOperationException($"BMPs de {bitsPerPixel} bits não são suportados.");
+                throw new InvalidOperationException(Loc.Splash.UnsupportedBitsError(bitsPerPixel));
         }
     }
 
     private static void Indexed(int index, int[] palette, Span<byte> target)
     {
         if (index >= palette.Length)
-            throw new InvalidOperationException("O BMP referencia uma cor fora da paleta.");
+            throw new InvalidOperationException(Loc.Splash.PaletteIndexError);
         var color = palette[index];
         target[0] = (byte)(color >> 16);
         target[1] = (byte)(color >> 8);
@@ -281,10 +281,10 @@ public static class SplashBmp
     private static ushort ReadU16(byte[] bytes, int offset)
         => offset + 2 <= bytes.Length
             ? BinaryPrimitives.ReadUInt16LittleEndian(bytes.AsSpan(offset))
-            : throw new InvalidOperationException("O BMP está truncado.");
+            : throw new InvalidOperationException(Loc.Splash.TruncatedError);
 
     private static uint ReadU32(byte[] bytes, int offset)
         => offset + 4 <= bytes.Length
             ? BinaryPrimitives.ReadUInt32LittleEndian(bytes.AsSpan(offset))
-            : throw new InvalidOperationException("O BMP está truncado.");
+            : throw new InvalidOperationException(Loc.Splash.TruncatedError);
 }

@@ -152,7 +152,7 @@
                            FontSize="22"
                            FontWeight="SemiBold"
                            Foreground="{DynamicResource ThemeTextTitle}"/>
-                <TextBlock Text="Obter arquivos .dat Live para uso no Classic — skills, armas, armaduras e itens"
+                <TextBlock Text="{DynamicResource LiveData.SubtitleLabel}"
                            FontSize="13"
                            Foreground="{DynamicResource ThemeTextTitle}"/>
             </StackPanel>
@@ -194,7 +194,7 @@
                                     Height="40"
                                     Spacing="14"
                                     VerticalAlignment="Center">
-                            <TextBlock Text="CONFIGURAÇÕES"
+                            <TextBlock Text="{DynamicResource LiveData.SettingsTitle}"
                                        FontSize="11"
                                        FontWeight="Bold"
                                        Foreground="{DynamicResource ThemeTextLabel}"
@@ -209,27 +209,27 @@
                             <!-- Tipo de processamento e Preset na mesma linha; o tipo fica sempre à esquerda -->
                             <Grid ColumnDefinitions="*,14,*">
                                 <StackPanel Grid.Column="0" Spacing="6">
-                                    <TextBlock Text="Tipo de processamento"
+                                    <TextBlock Text="{DynamicResource LiveData.ProcessTypeLabel}"
                                                FontSize="12"
                                                Foreground="{DynamicResource ThemeTextLabel}"
                                                FontWeight="Medium"/>
                                     <ComboBox x:Name="TypeProcess"
                                               SelectionChanged="TypeProcess_OnDropDownClosed"
                                               SelectedIndex="0">
-                                        <ComboBoxItem HorizontalAlignment="Stretch">Skills</ComboBoxItem>
-                                        <ComboBoxItem HorizontalAlignment="Stretch">Weapons</ComboBoxItem>
-                                        <ComboBoxItem HorizontalAlignment="Stretch">Armor</ComboBoxItem>
-                                        <ComboBoxItem HorizontalAlignment="Stretch">Items</ComboBoxItem>
+                                        <ComboBoxItem HorizontalAlignment="Stretch" Tag="Skills">Skills</ComboBoxItem>
+                                        <ComboBoxItem HorizontalAlignment="Stretch" Tag="Weapons">Weapons</ComboBoxItem>
+                                        <ComboBoxItem HorizontalAlignment="Stretch" Tag="Armor">Armor</ComboBoxItem>
+                                        <ComboBoxItem HorizontalAlignment="Stretch" Tag="Items">Items</ComboBoxItem>
                                     </ComboBox>
                                 </StackPanel>
 
                                 <StackPanel x:Name="PresetPanel" Grid.Column="2" Spacing="6" IsVisible="False">
-                                    <TextBlock Text="Preset"
+                                    <TextBlock Text="{DynamicResource LiveData.PresetLabel}"
                                                FontSize="12"
                                                Foreground="{DynamicResource ThemeTextLabel}"
                                                FontWeight="Medium"/>
                                     <ComboBox x:Name="PresetComboBox"
-                                              PlaceholderText="Selecione um preset..."
+                                              PlaceholderText="{DynamicResource LiveData.PresetWatermark}"
                                               SelectionChanged="PresetComboBox_OnSelectionChanged"/>
                                 </StackPanel>
                             </Grid>
@@ -237,7 +237,7 @@
                             <!-- IDs e, em Armor, o próximo ID do Item Set na mesma linha -->
                             <Grid ColumnDefinitions="*,Auto">
                                 <StackPanel Grid.Column="0" Spacing="6">
-                                    <TextBlock Text="IDs dos itens (separados por ; ou intervalo com ...)"
+                                    <TextBlock Text="{DynamicResource LiveData.IdsLabel}"
                                                FontSize="12"
                                                Foreground="{DynamicResource ThemeTextLabel}"
                                                FontWeight="Medium"/>
@@ -248,12 +248,12 @@
                                              VerticalContentAlignment="Center"
                                              FontFamily="Consolas,Courier New,monospace"
                                              FontSize="12"
-                                             Watermark="Ex: 100;101;102 ou 100...150"/>
+                                             Watermark="{DynamicResource LiveData.IdsWatermark}"/>
                                 </StackPanel>
 
                                 <StackPanel x:Name="SetItemIdPanel" Grid.Column="1" Width="260" Margin="14,0,0,0"
                                             Spacing="6" IsVisible="False">
-                                    <TextBlock Text="Próximo ID do Item Set"
+                                    <TextBlock Text="{DynamicResource LiveData.SetItemNextIdLabel}"
                                                FontSize="12"
                                                Foreground="{DynamicResource ThemeTextLabel}"
                                                FontWeight="Medium"/>
@@ -264,8 +264,8 @@
                                              VerticalContentAlignment="Center"
                                              FontFamily="Consolas,Courier New,monospace"
                                              FontSize="12"
-                                             ToolTip.Tip="Os IDs serão atribuídos sequencialmente a partir deste"
-                                             Watermark="Ex: 30 (sequencial)"/>
+                                             ToolTip.Tip="{DynamicResource LiveData.SetItemNextIdTip}"
+                                             Watermark="{DynamicResource LiveData.SetItemNextIdWatermark}"/>
                                 </StackPanel>
                             </Grid>
 
@@ -274,12 +274,12 @@
                                 <CheckBox x:Name="ConvertSPlusCheckBox"
                                           IsVisible="False"
                                           Foreground="{DynamicResource ThemeTextBody}"
-                                          Content="Converter S+ em S?"
+                                          Content="{DynamicResource LiveData.ConvertSPlusLabel}"
                                           IsChecked="True"/>
                                 <CheckBox x:Name="EnableEnchantGlowCheckBox"
                                           IsVisible="False"
                                           Foreground="{DynamicResource ThemeTextBody}"
-                                          Content="Habilitar brilho no enchant?"
+                                          Content="{DynamicResource LiveData.EnchantGlowLabel}"
                                           IsChecked="True"/>
                             </StackPanel>
 
@@ -305,7 +305,7 @@
                             Theme="{StaticResource SecondaryButton}">
                         <StackPanel Orientation="Horizontal" Spacing="9">
                             <PathIcon Foreground="White" Data="M8 5v14l11-7z" Width="14" Height="14" VerticalAlignment="Center"/>
-                            <TextBlock Text="Gerar Dados"
+                            <TextBlock Text="{DynamicResource LiveData.GenerateButton}"
                                        FontSize="13"
                                        FontWeight="SemiBold"
                                        VerticalAlignment="Center"/>
@@ -318,7 +318,7 @@
                             Theme="{StaticResource GhostButton}">
                         <StackPanel Orientation="Horizontal" Spacing="9">
                             <PathIcon Foreground="{DynamicResource ThemeTextButton}" Data="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z" Width="14" Height="14" VerticalAlignment="Center"/>
-                            <TextBlock Text="Resetar"
+                            <TextBlock Text="{DynamicResource LiveData.ResetButton}"
                                        FontSize="13"
                                        FontWeight="SemiBold"
                                        VerticalAlignment="Center"/>
@@ -344,7 +344,7 @@
 
                         <Grid Grid.Row="0" ColumnDefinitions="Auto,18,*,Auto,Auto" Margin="20,0,16,0">
                             <TextBlock Grid.Column="0"
-                                       Text="RESULTADO"
+                                       Text="{DynamicResource LiveData.ResultTitle}"
                                        FontSize="11"
                                        FontWeight="Bold"
                                        Foreground="{DynamicResource ThemeTextLabel}"
@@ -354,13 +354,13 @@
                             <!-- Abas: Set Item GRP e XML só existem em alguns tipos -->
                             <StackPanel Grid.Column="2" Orientation="Horizontal">
                                 <Button x:Name="GrpTab" Classes="active" Theme="{StaticResource TabButton}"
-                                        Content="Dados GRP" Click="ResultTab_OnClick"/>
+                                        Content="{DynamicResource LiveData.GrpTabButton}" Click="ResultTab_OnClick"/>
                                 <Button x:Name="NameTab" Theme="{StaticResource TabButton}"
-                                        Content="Nomes" Click="ResultTab_OnClick"/>
+                                        Content="{DynamicResource LiveData.NamesTabButton}" Click="ResultTab_OnClick"/>
                                 <Button x:Name="SetItemGrpTab" Theme="{StaticResource TabButton}" IsVisible="False"
-                                        Content="Set Item GRP" Click="ResultTab_OnClick"/>
+                                        Content="{DynamicResource LiveData.SetItemGrpTabButton}" Click="ResultTab_OnClick"/>
                                 <Button x:Name="XmlTab" Theme="{StaticResource TabButton}" IsVisible="False"
-                                        Content="Dados XML" Click="ResultTab_OnClick"/>
+                                        Content="{DynamicResource LiveData.XmlTabButton}" Click="ResultTab_OnClick"/>
                             </StackPanel>
 
                             <Border Grid.Column="3"
@@ -375,7 +375,7 @@
                                     Margin="0,0,8,0">
                                 <StackPanel Orientation="Horizontal" Spacing="4">
                                     <PathIcon Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Width="10" Height="10" Foreground="{DynamicResource ThemeSuccess}" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Copiado!"
+                                    <TextBlock Text="{DynamicResource Common.CopiedStatus}"
                                                FontSize="10"
                                                Foreground="{DynamicResource ThemeSuccess}"
                                                VerticalAlignment="Center"/>
@@ -387,11 +387,11 @@
                                     Height="30"
                                     Padding="12,0"
                                     VerticalAlignment="Center"
-                                    ToolTip.Tip="Copia o conteúdo da aba aberta"
+                                    ToolTip.Tip="{DynamicResource LiveData.CopyTip}"
                                     Theme="{StaticResource GhostButton}">
                                 <StackPanel Orientation="Horizontal" Spacing="6">
                                     <PathIcon Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" Foreground="{DynamicResource ThemeTextLabel}" Width="12" Height="12" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Copiar"
+                                    <TextBlock Text="{DynamicResource Common.Copy}"
                                                FontSize="12"
                                                FontWeight="Medium"
                                                VerticalAlignment="Center"/>
@@ -416,7 +416,7 @@
                                      FontFamily="Consolas,Courier New,monospace"
                                      FontSize="12"
                                      IsReadOnly="True"
-                                     Watermark="Dados GRP aparecerão aqui..."/>
+                                     Watermark="{DynamicResource LiveData.GrpWatermark}"/>
                             <TextBox x:Name="NameData"
                                      IsVisible="False"
                                      Classes="Code"
@@ -431,7 +431,7 @@
                                      FontFamily="Consolas,Courier New,monospace"
                                      FontSize="12"
                                      IsReadOnly="True"
-                                     Watermark="Nomes aparecerão aqui..."/>
+                                     Watermark="{DynamicResource LiveData.NamesWatermark}"/>
                             <TextBox x:Name="SetItemGrpData"
                                      IsVisible="False"
                                      Classes="Code"
@@ -446,7 +446,7 @@
                                      FontFamily="Consolas,Courier New,monospace"
                                      FontSize="12"
                                      IsReadOnly="True"
-                                     Watermark="Set Item GRP aparecerá aqui..."/>
+                                     Watermark="{DynamicResource LiveData.SetItemGrpWatermark}"/>
                             <TextBox x:Name="XmlData"
                                      IsVisible="False"
                                      Classes="Code"
@@ -461,7 +461,7 @@
                                      FontFamily="Consolas,Courier New,monospace"
                                      FontSize="12"
                                      IsReadOnly="True"
-                                     Watermark="Dados XML aparecerão aqui..."/>
+                                     Watermark="{DynamicResource LiveData.XmlWatermark}"/>
                         </Panel>
 
                     </Grid>

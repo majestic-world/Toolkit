@@ -12,6 +12,8 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
+using L2Toolkit.Localization;
+using L2Toolkit.Models;
 using L2Toolkit.Settings;
 using L2Toolkit.Utilities;
 
@@ -86,10 +88,10 @@ public partial class PrimeShopGenerator : UserControl
 
     private void ConfigureComboBoxes()
     {
-        CategoryComboBox.ItemsSource = Categories.Select(c => $"{c.Key} - {c.Value}").ToArray();
+        CategoryComboBox.ItemsSource = Categories.Select(c => new Option(c.Key, $"{c.Key} - {c.Value}")).ToArray();
         CategoryComboBox.SelectedIndex = 0;
 
-        TypeComboBox.ItemsSource = FileNames.Keys.ToArray();
+        TypeComboBox.ItemsSource = FileNames.Keys.Select(k => new Option(k, k)).ToArray();
         TypeComboBox.SelectedIndex = 0;
     }
 
@@ -112,46 +114,42 @@ public partial class PrimeShopGenerator : UserControl
         }
         catch (Exception ex)
         {
-            SendNotify($"Erro ao gerar itens: {ex.Message}");
+            SendNotify(Loc.PrimeShop.GenerateError(ex.Message));
         }
     }
 
     private void CheckFiles()
     {
         if (!File.Exists(ItemNameFile))
-            SendNotify($"Atenção: Arquivo '{ItemNameFile}' não encontrado! Os nomes dos itens não serão exibidos corretamente.");
+            SendNotify(Loc.PrimeShop.ItemNamesFileMissingError(ItemNameFile));
 
-        string? selectedType = TypeComboBox.SelectedItem as string;
+        var selectedType = (TypeComboBox.SelectedItem as Option)?.Id;
         if (selectedType != null && FileNames.ContainsKey(selectedType) && !File.Exists(GetAssetFile(selectedType)))
-            SendNotify($"Atenção: Arquivo '{GetAssetFile(selectedType)}' não encontrado! Os ícones podem não ser exibidos corretamente.");
+            SendNotify(Loc.PrimeShop.IconsFileMissingError(GetAssetFile(selectedType)));
     }
 
     private InputData ValidateInputs()
     {
-        var categoryItem = CategoryComboBox.SelectedItem as ComboBoxItem;
-        var categoryRaw = categoryItem?.Content?.ToString() ?? CategoryComboBox.SelectedItem as string;
-        var category = categoryRaw?.Split('-')[0].Trim() ?? string.Empty;
-
-        var typeItem = TypeComboBox.SelectedItem as ComboBoxItem;
-        var type = typeItem?.Content?.ToString() ?? TypeComboBox.SelectedItem as string ?? string.Empty;
+        var category = (CategoryComboBox.SelectedItem as Option)?.Id ?? string.Empty;
+        var type = (TypeComboBox.SelectedItem as Option)?.Id ?? string.Empty;
         var idsRaw = IdsTextBox.Text?.Trim() ?? string.Empty;
         var priceStr = PriceTextBox.Text?.Trim() ?? string.Empty;
 
         if (string.IsNullOrWhiteSpace(idsRaw) || string.IsNullOrWhiteSpace(priceStr) || string.IsNullOrEmpty(category) || string.IsNullOrEmpty(type))
         {
-            SendNotify("Preencha os campos de ID e Preço.");
+            SendNotify(Loc.PrimeShop.IdAndPriceRequiredError);
             return new InputData(string.Empty, string.Empty, 0, 0, []);
         }
 
         if (!int.TryParse(priceStr, out int price))
         {
-            SendNotify("O preço deve ser um número.");
+            SendNotify(Loc.PrimeShop.PriceNotNumberError);
             return new InputData(string.Empty, string.Empty, 0, 0, []);
         }
 
         if (!int.TryParse(QuantidadeTextBox.Text?.Trim(), out var quantity) || quantity < 1)
         {
-            SendNotify("Quantidade inválida. Usando valor padrão 1.");
+            SendNotify(Loc.PrimeShop.QuantityInvalidError);
             quantity = 1;
             QuantidadeTextBox.Text = "1";
         }
@@ -162,7 +160,7 @@ public partial class PrimeShopGenerator : UserControl
 
         if (ids.Count == 0)
         {
-            SendNotify("Insira ao menos um ID válido.");
+            SendNotify(Loc.PrimeShop.ValidIdRequiredError);
             return new InputData(string.Empty, string.Empty, 0, 0, []);
         }
 
@@ -227,7 +225,8 @@ public partial class PrimeShopGenerator : UserControl
         {
             if (!File.Exists(ItemNameFile))
             {
-                SendNotify($"Arquivo '{ItemNameFile}' não encontrado!");
+                SendNotify(Loc.PrimeShop.FileNotFoundError(ItemNameFile));
+                // "ID … sem nome" vai para o .dat e o XML de saída (outer_name, name): nunca pelo catálogo.
                 var defaultName = $"ID {objectId} sem nome";
                 ItemNameCache.TryAdd(objectId, defaultName);
                 return defaultName;
@@ -254,7 +253,7 @@ public partial class PrimeShopGenerator : UserControl
         }
         catch (Exception ex)
         {
-            SendNotify($"Erro ao buscar nome do item: {ex.Message}");
+            SendNotify(Loc.PrimeShop.ItemNameError(ex.Message));
             var errorName = $"ID {objectId} sem nome";
             ItemNameCache.TryAdd(objectId, errorName);
             return errorName;
@@ -268,7 +267,7 @@ public partial class PrimeShopGenerator : UserControl
             if (!FileNames.ContainsKey(type) || !File.Exists(GetAssetFile(type)))
             {
                 if (FileNames.ContainsKey(type))
-                    SendNotify($"Arquivo '{GetAssetFile(type)}' não encontrado!");
+                    SendNotify(Loc.PrimeShop.FileNotFoundError(GetAssetFile(type)));
                 return new IconInfo("", "None");
             }
 
@@ -310,7 +309,7 @@ public partial class PrimeShopGenerator : UserControl
         }
         catch (Exception ex)
         {
-            SendNotify($"Erro ao buscar ícone: {ex.Message}");
+            SendNotify(Loc.PrimeShop.IconError(ex.Message));
             return new IconInfo("", "None");
         }
     }

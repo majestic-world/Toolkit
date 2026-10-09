@@ -9,6 +9,7 @@ using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using L2Toolkit.Data;
+using L2Toolkit.Localization;
 
 namespace L2Toolkit.Views
 {
@@ -43,12 +44,12 @@ namespace L2Toolkit.Views
             var topLevel = TopLevel.GetTopLevel(this);
             var files = await topLevel!.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
             {
-                Title = "Select file to modify descriptions",
+                Title = Loc.DescriptionFix.SelectPicker,
                 AllowMultiple = false,
                 FileTypeFilter = new[]
                 {
-                    new FilePickerFileType("Text files") { Patterns = new[] { "*.txt" } },
-                    new FilePickerFileType("All files") { Patterns = new[] { "*" } }
+                    new FilePickerFileType(Loc.DescriptionFix.TextFilesFilter) { Patterns = new[] { "*.txt" } },
+                    new FilePickerFileType(Loc.Common.AllFilesFilter) { Patterns = new[] { "*" } }
                 }
             });
 
@@ -65,13 +66,13 @@ namespace L2Toolkit.Views
             {
                 if (string.IsNullOrEmpty(selectedFile))
                 {
-                    ShowNotification("Selecione um arquivo para processar.");
+                    ShowNotification(Loc.DescriptionFix.NoFileError);
                     return;
                 }
 
                 if (!File.Exists(selectedFile))
                 {
-                    ShowNotification("O arquivo selecionado não existe mais.");
+                    ShowNotification(Loc.DescriptionFix.FileMissingError);
                     return;
                 }
 
@@ -113,26 +114,26 @@ namespace L2Toolkit.Views
                     var topLevel = TopLevel.GetTopLevel(this);
                     var file = await topLevel!.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
                     {
-                        Title = "Save modified file",
+                        Title = Loc.DescriptionFix.SavePicker,
                         DefaultExtension = ".txt",
                         SuggestedFileName = Path.GetFileNameWithoutExtension(selectedFile) + "_modified",
-                        FileTypeChoices = new[] { new FilePickerFileType("TXT File") { Patterns = new[] { "*.txt" } } }
+                        FileTypeChoices = new[] { new FilePickerFileType(Loc.DescriptionFix.TextFilesFilter) { Patterns = new[] { "*.txt" } } }
                     });
 
                     if (file != null)
                     {
                         File.WriteAllLines(file.Path.LocalPath, output, encoding);
-                        ShowSuccess($"{replacedCount} descrições substituídas. Arquivo salvo com sucesso.");
+                        ShowSuccess(Loc.DescriptionFix.ReplacedStatus(replacedCount));
                     }
                 }
                 else
                 {
-                    ShowNotification("Nenhuma descrição foi substituída. Verifique se os IDs correspondem.");
+                    ShowNotification(Loc.DescriptionFix.NoneReplacedError);
                 }
             }
             catch (Exception ex)
             {
-                ShowNotification("Erro: " + ex.Message);
+                ShowNotification(Loc.DescriptionFix.ErrorStatus(ex.Message));
             }
         }
 

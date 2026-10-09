@@ -155,9 +155,9 @@
 
            <!-- Header -->
            <StackPanel Spacing="4">
-               <TextBlock Text="Efeito de Encantamento"
+               <TextBlock Text="{DynamicResource EnchantEffect.Title}"
                           FontSize="28" FontWeight="Light" Foreground="{DynamicResource ThemeTextTitle}"/>
-               <TextBlock Text="Editor visual de cores de brilho para armas e armaduras"
+               <TextBlock Text="{DynamicResource EnchantEffect.SubtitleLabel}"
                           FontSize="14" Foreground="{DynamicResource ThemeTextSubtitle}"/>
            </StackPanel>
 
@@ -167,13 +167,13 @@
                    <Button x:Name="WeaponModeBtn" Grid.Column="0"
                            Theme="{StaticResource ModeButtonActive}"
                            Click="WeaponMode_Click" Height="30" Padding="16,0">
-                       <TextBlock Text="Arma" VerticalAlignment="Center"
+                       <TextBlock Text="{DynamicResource EnchantEffect.WeaponModeButton}" VerticalAlignment="Center"
                                   FontSize="13" FontWeight="SemiBold"/>
                    </Button>
                    <Button x:Name="ArmorModeBtn" Grid.Column="2"
                            Theme="{StaticResource ModeButtonInactive}"
                            Click="ArmorMode_Click" Height="30" Padding="16,0">
-                       <TextBlock Text="Armadura" VerticalAlignment="Center"
+                       <TextBlock Text="{DynamicResource EnchantEffect.ArmorModeButton}" VerticalAlignment="Center"
                                   FontSize="13" FontWeight="SemiBold"/>
                    </Button>
                </Grid>
@@ -184,7 +184,7 @@
 
                <!-- File loader -->
                <StackPanel Spacing="8">
-                   <TextBlock Text="ARQUIVO" Foreground="{DynamicResource ThemeTextHint}" FontSize="10"
+                   <TextBlock Text="{DynamicResource EnchantEffect.FileTitle}" Foreground="{DynamicResource ThemeTextHint}" FontSize="10"
                               FontWeight="Bold" LetterSpacing="1"/>
                    <Grid ColumnDefinitions="*,12,Auto">
                        <Border Grid.Column="0" Background="{DynamicResource ThemeSurfaceCard}" CornerRadius="4"
@@ -195,7 +195,7 @@
                                     Background="Transparent" BorderThickness="0"
                                     Foreground="{DynamicResource ThemeTextBody}" Padding="10,6" FontSize="13"
                                     VerticalAlignment="Center"
-                                    Watermark="Clique para selecionar WeaponEnchantEffectData.dat..."/>
+                                    Watermark="{DynamicResource EnchantEffect.WeaponFileWatermark}"/>
                        </Border>
                        <Button Grid.Column="2" Click="LoadFile_Click"
                                Theme="{StaticResource SaveButton}" Height="34" Padding="16,0">
@@ -203,7 +203,7 @@
                                <PathIcon Width="14" Height="14" VerticalAlignment="Center"
                                          Foreground="{DynamicResource ThemeTextIcon}"
                                          Data="M6.5 20Q5.1 20 4.05 18.975 3 17.95 3 16.5V8.5Q3 7.05 4.05 6.025 5.1 5 6.5 5H10.5Q10.775 5 10.975 5.2 11.175 5.4 11.175 5.675 11.175 5.95 10.975 6.15 10.775 6.35 10.5 6.35H6.5Q5.65 6.35 5.025 6.975 4.4 7.6 4.4 8.5V16.5Q4.4 17.4 5.025 18.025 5.65 18.65 6.5 18.65H17.5Q18.35 18.65 18.975 18.025 19.6 17.4 19.6 16.5V12.5Q19.6 12.225 19.8 12.025 20 11.825 20.275 11.825 20.55 11.825 20.75 12.025 20.95 12.225 20.95 12.5V16.5Q20.95 17.95 19.9 18.975 18.85 20 17.5 20ZM20.25 6.6 13.85 13Q13.65 13.2 13.375 13.2 13.1 13.2 12.9 13 12.7 12.8 12.7 12.525 12.7 12.25 12.9 12.05L19.3 5.65H16.5Q16.225 5.65 16.025 5.45 15.825 5.25 15.825 4.975 15.825 4.7 16.025 4.5 16.225 4.3 16.5 4.3H20.975Q21.25 4.3 21.45 4.5 21.65 4.7 21.65 4.975V9.45Q21.65 9.725 21.45 9.925 21.25 10.125 20.975 10.125 20.7 10.125 20.5 9.925 20.3 9.725 20.3 9.45V6.6Z"/>
-                               <TextBlock Text="Abrir" VerticalAlignment="Center" FontSize="13"/>
+                               <TextBlock Text="{DynamicResource EnchantEffect.OpenButton}" VerticalAlignment="Center" FontSize="13"/>
                            </StackPanel>
                        </Button>
                    </Grid>
@@ -212,13 +212,13 @@
                <!-- Entry selector (hidden until file loaded) -->
                <Grid x:Name="SelectorPanel" IsVisible="False" ColumnDefinitions="*,16,*">
                    <StackPanel Grid.Column="0" Spacing="6">
-                       <TextBlock Text="TIPO" Foreground="{DynamicResource ThemeTextHint}" FontSize="10"
+                       <TextBlock Text="{DynamicResource EnchantEffect.TypeTitle}" Foreground="{DynamicResource ThemeTextHint}" FontSize="10"
                                   FontWeight="Bold" LetterSpacing="1"/>
                        <ComboBox x:Name="TypeCombo" HorizontalAlignment="Stretch"
                                  SelectionChanged="OnEntrySelectionChanged"/>
                    </StackPanel>
                    <StackPanel Grid.Column="2" Spacing="6">
-                       <TextBlock Text="GRAU" Foreground="{DynamicResource ThemeTextHint}" FontSize="10"
+                       <TextBlock Text="{DynamicResource EnchantEffect.GradeTitle}" Foreground="{DynamicResource ThemeTextHint}" FontSize="10"
                                   FontWeight="Bold" LetterSpacing="1"/>
                        <ComboBox x:Name="GradeCombo" HorizontalAlignment="Stretch"
                                  SelectionChanged="OnEntrySelectionChanged"/>
@@ -230,7 +230,7 @@
 
                    <!-- Gradient preview bar -->
                    <StackPanel Spacing="6">
-                       <TextBlock Text="PRÉVIA — RADIANCE" Foreground="{DynamicResource ThemeTextHint}" FontSize="10"
+                       <TextBlock Text="{DynamicResource EnchantEffect.RadiancePreviewTitle}" Foreground="{DynamicResource ThemeTextHint}" FontSize="10"
                                   FontWeight="Bold" LetterSpacing="1"/>
                        <Border Height="40" CornerRadius="6" ClipToBounds="True">
                            <Grid x:Name="PreviewGrid"/>
@@ -241,7 +241,7 @@
                    <!-- Generator panel -->
                    <Border Background="{DynamicResource ThemeSurfaceCard}" CornerRadius="8" Padding="16">
                        <StackPanel Spacing="14">
-                           <TextBlock Text="GERENCIAR GRADIENTE"
+                           <TextBlock Text="{DynamicResource EnchantEffect.GradientTitle}"
                                       Foreground="{DynamicResource ThemeTextHint}" FontSize="10"
                                       FontWeight="Bold" LetterSpacing="1"/>
 
@@ -261,7 +261,7 @@
                                        <PathIcon Width="13" Height="13" VerticalAlignment="Center"
                                                  Foreground="{DynamicResource ThemeAccent}"
                                                  Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
-                                       <TextBlock Text="Aplicar a todos os graus" VerticalAlignment="Center" FontSize="13"/>
+                                       <TextBlock Text="{DynamicResource EnchantEffect.ApplyAllButton}" VerticalAlignment="Center" FontSize="13"/>
                                    </StackPanel>
                                </Button>
 
@@ -273,7 +273,7 @@
                                        <PathIcon Width="12" Height="12" VerticalAlignment="Center"
                                                  Foreground="{DynamicResource ThemeTextButton}"
                                                  Data="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-                                       <TextBlock Text="Fechar Arquivo" VerticalAlignment="Center" FontSize="13"/>
+                                       <TextBlock Text="{DynamicResource EnchantEffect.CloseFileButton}" VerticalAlignment="Center" FontSize="13"/>
                                    </StackPanel>
                                </Button>
 
@@ -285,7 +285,7 @@
                                        <PathIcon Width="14" Height="14" VerticalAlignment="Center"
                                                  Foreground="{DynamicResource ThemeTextIcon}"
                                                  Data="M12 16L6 10h4V4h4v6h4l-6 6z M4 18h16v2H4z"/>
-                                       <TextBlock Text="Salvar Arquivo" VerticalAlignment="Center"
+                                       <TextBlock Text="{DynamicResource EnchantEffect.SaveFileButton}" VerticalAlignment="Center"
                                                   FontSize="13" FontWeight="SemiBold"/>
                                    </StackPanel>
                                </Button>
@@ -303,7 +303,7 @@
 
                <!-- Armor file loader -->
                <StackPanel Spacing="8">
-                   <TextBlock Text="ARQUIVO" Foreground="{DynamicResource ThemeTextHint}" FontSize="10"
+                   <TextBlock Text="{DynamicResource EnchantEffect.FileTitle}" Foreground="{DynamicResource ThemeTextHint}" FontSize="10"
                               FontWeight="Bold" LetterSpacing="1"/>
                    <Grid ColumnDefinitions="*,12,Auto">
                        <Border Grid.Column="0" Background="{DynamicResource ThemeSurfaceCard}" CornerRadius="4"
@@ -314,7 +314,7 @@
                                     Background="Transparent" BorderThickness="0"
                                     Foreground="{DynamicResource ThemeTextBody}" Padding="10,6" FontSize="13"
                                     VerticalAlignment="Center"
-                                    Watermark="Clique para selecionar FullArmorEnchantEffectData.dat..."/>
+                                    Watermark="{DynamicResource EnchantEffect.ArmorFileWatermark}"/>
                        </Border>
                        <Button Grid.Column="2" Click="ArmorLoadFile_Click"
                                Theme="{StaticResource SaveButton}" Height="34" Padding="16,0">
@@ -322,7 +322,7 @@
                                <PathIcon Width="14" Height="14" VerticalAlignment="Center"
                                          Foreground="{DynamicResource ThemeTextIcon}"
                                          Data="M6.5 20Q5.1 20 4.05 18.975 3 17.95 3 16.5V8.5Q3 7.05 4.05 6.025 5.1 5 6.5 5H10.5Q10.775 5 10.975 5.2 11.175 5.4 11.175 5.675 11.175 5.95 10.975 6.15 10.775 6.35 10.5 6.35H6.5Q5.65 6.35 5.025 6.975 4.4 7.6 4.4 8.5V16.5Q4.4 17.4 5.025 18.025 5.65 18.65 6.5 18.65H17.5Q18.35 18.65 18.975 18.025 19.6 17.4 19.6 16.5V12.5Q19.6 12.225 19.8 12.025 20 11.825 20.275 11.825 20.55 11.825 20.75 12.025 20.95 12.225 20.95 12.5V16.5Q20.95 17.95 19.9 18.975 18.85 20 17.5 20ZM20.25 6.6 13.85 13Q13.65 13.2 13.375 13.2 13.1 13.2 12.9 13 12.7 12.8 12.7 12.525 12.7 12.25 12.9 12.05L19.3 5.65H16.5Q16.225 5.65 16.025 5.45 15.825 5.25 15.825 4.975 15.825 4.7 16.025 4.5 16.225 4.3 16.5 4.3H20.975Q21.25 4.3 21.45 4.5 21.65 4.7 21.65 4.975V9.45Q21.65 9.725 21.45 9.925 21.25 10.125 20.975 10.125 20.7 10.125 20.5 9.925 20.3 9.725 20.3 9.45V6.6Z"/>
-                               <TextBlock Text="Abrir" VerticalAlignment="Center" FontSize="13"/>
+                               <TextBlock Text="{DynamicResource EnchantEffect.OpenButton}" VerticalAlignment="Center" FontSize="13"/>
                            </StackPanel>
                        </Button>
                    </Grid>
@@ -333,7 +333,7 @@
 
                    <!-- Preview bar -->
                    <StackPanel Spacing="6">
-                       <TextBlock Text="PRÉVIA — MIN COLOR" Foreground="{DynamicResource ThemeTextHint}" FontSize="10"
+                       <TextBlock Text="{DynamicResource EnchantEffect.MinColorPreviewTitle}" Foreground="{DynamicResource ThemeTextHint}" FontSize="10"
                                   FontWeight="Bold" LetterSpacing="1"/>
                        <Border Height="40" CornerRadius="6" ClipToBounds="True">
                            <Grid x:Name="ArmorPreviewGrid"/>
@@ -344,7 +344,7 @@
                    <!-- Action bar -->
                    <Border Background="{DynamicResource ThemeSurfaceCard}" CornerRadius="8" Padding="16">
                        <StackPanel Spacing="14">
-                           <TextBlock Text="AÇÕES"
+                           <TextBlock Text="{DynamicResource EnchantEffect.ActionsTitle}"
                                       Foreground="{DynamicResource ThemeTextHint}" FontSize="10"
                                       FontWeight="Bold" LetterSpacing="1"/>
                            <Grid ColumnDefinitions="*,Auto,10,Auto">
@@ -355,7 +355,7 @@
                                        <PathIcon Width="12" Height="12" VerticalAlignment="Center"
                                                  Foreground="{DynamicResource ThemeTextButton}"
                                                  Data="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-                                       <TextBlock Text="Fechar Arquivo" VerticalAlignment="Center" FontSize="13"/>
+                                       <TextBlock Text="{DynamicResource EnchantEffect.CloseFileButton}" VerticalAlignment="Center" FontSize="13"/>
                                    </StackPanel>
                                </Button>
                                <Button x:Name="ArmorSaveButton" Grid.Column="3"
@@ -365,7 +365,7 @@
                                        <PathIcon Width="14" Height="14" VerticalAlignment="Center"
                                                  Foreground="{DynamicResource ThemeTextIcon}"
                                                  Data="M12 16L6 10h4V4h4v6h4l-6 6z M4 18h16v2H4z"/>
-                                       <TextBlock Text="Salvar Arquivo" VerticalAlignment="Center"
+                                       <TextBlock Text="{DynamicResource EnchantEffect.SaveFileButton}" VerticalAlignment="Center"
                                                   FontSize="13" FontWeight="SemiBold"/>
                                    </StackPanel>
                                </Button>
@@ -385,11 +385,11 @@
            <!-- Seção de linhas de arma (visível quando entrada carregada) -->
            <Grid x:Name="WeaponRowsSection" IsVisible="False" RowDefinitions="Auto,*">
                <Grid Grid.Row="0" ColumnDefinitions="52,8,*,12,*,12,60" Margin="0,0,0,4">
-                   <TextBlock Grid.Column="2" Text="RADIANCE"
+                   <TextBlock Grid.Column="2" Text="{DynamicResource EnchantEffect.RadianceTitle}"
                               Foreground="{DynamicResource ThemeTextHint}" FontSize="10" FontWeight="Bold" LetterSpacing="1"/>
-                   <TextBlock Grid.Column="4" Text="RING"
+                   <TextBlock Grid.Column="4" Text="{DynamicResource EnchantEffect.RingTitle}"
                               Foreground="{DynamicResource ThemeTextHint}" FontSize="10" FontWeight="Bold" LetterSpacing="1"/>
-                   <TextBlock Grid.Column="6" Text="PART."
+                   <TextBlock Grid.Column="6" Text="{DynamicResource EnchantEffect.ParticleTitle}"
                               Foreground="{DynamicResource ThemeTextHint}" FontSize="10" FontWeight="Bold" LetterSpacing="1"
                               TextAlignment="Right"/>
                </Grid>
@@ -401,11 +401,11 @@
            <!-- Seção de linhas de armadura (visível quando arquivo carregado) -->
            <Grid x:Name="ArmorRowsSection" IsVisible="False" RowDefinitions="Auto,*">
                <Grid Grid.Row="0" ColumnDefinitions="60,8,*,12,*" Margin="0,0,0,4">
-                   <TextBlock Grid.Column="0" Text="GRAU MIN."
+                   <TextBlock Grid.Column="0" Text="{DynamicResource EnchantEffect.MinEnchantTitle}"
                               Foreground="{DynamicResource ThemeTextHint}" FontSize="10" FontWeight="Bold" LetterSpacing="1"/>
-                   <TextBlock Grid.Column="2" Text="MIN COLOR"
+                   <TextBlock Grid.Column="2" Text="{DynamicResource EnchantEffect.MinColorTitle}"
                               Foreground="{DynamicResource ThemeTextHint}" FontSize="10" FontWeight="Bold" LetterSpacing="1"/>
-                   <TextBlock Grid.Column="4" Text="MÁX COLOR"
+                   <TextBlock Grid.Column="4" Text="{DynamicResource EnchantEffect.MaxColorTitle}"
                               Foreground="{DynamicResource ThemeTextHint}" FontSize="10" FontWeight="Bold" LetterSpacing="1"/>
                </Grid>
                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">

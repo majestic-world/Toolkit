@@ -8,6 +8,7 @@ using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using System.Xml.Linq;
 using Avalonia.Threading;
+using L2Toolkit.Localization;
 using L2Toolkit.Settings;
 
 namespace L2Toolkit.Views
@@ -38,12 +39,12 @@ namespace L2Toolkit.Views
 
             var files = await topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
             {
-                Title = "Selecione o arquivo",
+                Title = Loc.Common.SelectFilePicker,
                 AllowMultiple = false,
                 FileTypeFilter = new[]
                 {
-                    new FilePickerFileType("Arquivos XML") { Patterns = new[] { "*.xml" } },
-                    new FilePickerFileType("Todos os arquivos") { Patterns = new[] { "*" } }
+                    new FilePickerFileType(Loc.Common.XmlFilesFilter) { Patterns = new[] { "*.xml" } },
+                    new FilePickerFileType(Loc.Common.AllFilesFilter) { Patterns = new[] { "*" } }
                 }
             });
 
@@ -59,7 +60,7 @@ namespace L2Toolkit.Views
         {
             _errorTimer.Stop();
             NotificacaoBorder.IsVisible = true;
-            StatusNotificacao.Text = !string.IsNullOrWhiteSpace(message) ? message : "Ocorreu um erro inesperado.";
+            StatusNotificacao.Text = !string.IsNullOrWhiteSpace(message) ? message : Loc.Common.UnexpectedError;
             _errorTimer.Start();
         }
 
@@ -105,12 +106,12 @@ namespace L2Toolkit.Views
                 var documentPath = RewardContent.Text;
                 if (string.IsNullOrEmpty(documentPath))
                 {
-                    throw new Exception("Preencha o caminho do arquivo");
+                    throw new Exception(Loc.Missions.NoPathError);
                 }
 
                 if (!File.Exists(documentPath))
                 {
-                    throw new Exception("O arquivo informado não foi encontrado");
+                    throw new Exception(Loc.Missions.FileNotFoundError);
                 }
 
                 var xmlRoot = XDocument.Load(documentPath);
@@ -127,12 +128,12 @@ namespace L2Toolkit.Views
 
                     if (string.IsNullOrEmpty(category))
                     {
-                        throw new Exception("O campo `category` não esta presente");
+                        throw new Exception(Loc.Missions.NoCategoryError);
                     }
 
                     if (id == null || name == null || resetTime == null || description == null)
                     {
-                        throw new Exception("Verifique os dados do arquivo");
+                        throw new Exception(Loc.Missions.InvalidDataError);
                     }
 
                     var listReward = new List<string>();

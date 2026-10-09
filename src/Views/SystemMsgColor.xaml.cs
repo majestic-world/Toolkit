@@ -15,6 +15,7 @@ using Avalonia.Threading;
 using L2Toolkit.ClientDat;
 using MsBox.Avalonia;
 using Avalonia.Controls.Documents;
+using L2Toolkit.Localization;
 using L2Toolkit.Utilities;
 
 namespace L2Toolkit.Views;
@@ -63,6 +64,8 @@ public partial class SystemMsgColor : UserControl
     // ─── Init ─────────────────────────────────────────────────────────────────
 
     private const string LastPathKey = "systemmsg_last_path";
+    // Cor RRGGBB inicial do picker de novo preset e fallback de preset sem cor.
+    private const string DefaultPresetHex = "799BB0";
 
     public SystemMsgColor()
     {
@@ -104,7 +107,7 @@ public partial class SystemMsgColor : UserControl
         var topLevel = TopLevel.GetTopLevel(this);
         var files = await topLevel!.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
-            Title          = "Selecionar SystemMsg.dat",
+            Title          = Loc.SystemMsgColor.FilePicker,
             AllowMultiple  = false,
             SuggestedStartLocation = !string.IsNullOrEmpty(_loadedFilePath)
                 ? await topLevel.StorageProvider.TryGetFolderFromPathAsync(
@@ -112,8 +115,8 @@ public partial class SystemMsgColor : UserControl
                 : null,
             FileTypeFilter =
             [
-                new FilePickerFileType("Lineage 2 DAT") { Patterns = ["*.dat"] },
-                new FilePickerFileType("All")            { Patterns = ["*.*"]  }
+                new FilePickerFileType(Loc.SystemMsgColor.DatFilter) { Patterns = ["*.dat"] },
+                new FilePickerFileType(Loc.Common.AllFilesFilter)     { Patterns = ["*.*"]  }
             ]
         });
         if (files.Count == 0) return;
@@ -158,7 +161,7 @@ public partial class SystemMsgColor : UserControl
         }
         catch (Exception ex)
         {
-            await MessageBoxManager.GetMessageBoxStandard("Erro", ex.Message).ShowWindowAsync();
+            await MessageBoxManager.GetMessageBoxStandard(Loc.Common.Error, ex.Message).ShowWindowAsync();
         }
     }
 
@@ -186,11 +189,11 @@ public partial class SystemMsgColor : UserControl
             var binary    = await Task.Run(() => L2DatFile.SerializeSystemMsg(msgs));
             var encrypted = await Task.Run(() => DatCrypto.EncryptFile(binary));
             await File.WriteAllBytesAsync(_loadedFilePath, encrypted);
-            ShowSuccessToast("Arquivo salvo com sucesso. Backup criado em .dat.bak");
+            ShowSuccessToast(Loc.SystemMsgColor.SavedStatus);
         }
         catch (Exception ex)
         {
-            await MessageBoxManager.GetMessageBoxStandard("Erro ao salvar", ex.Message).ShowWindowAsync();
+            await MessageBoxManager.GetMessageBoxStandard(Loc.SystemMsgColor.SaveError, ex.Message).ShowWindowAsync();
         }
         finally
         {
@@ -212,6 +215,7 @@ public partial class SystemMsgColor : UserControl
 
         MsgRowsPanel.Children.Clear();
         OverflowLabel.IsVisible = false;
+        LiveText.Clear(StatsLabel);
         StatsLabel.Text = "";
 
         ColorsModal.IsVisible      = false;
@@ -227,7 +231,7 @@ public partial class SystemMsgColor : UserControl
         SaveBtn.IsEnabled    = false;
         SaveIcon.IsVisible   = false;
         SaveSpinner.IsVisible = true;
-        SaveLabel.Text       = "Salvando...";
+        LiveText.Set(SaveLabel, () => Loc.SystemMsgColor.SavingStatus);
 
         _spinAngle = 0;
         var rotation = (RotateTransform)SpinnerArc.RenderTransform!;
@@ -247,7 +251,7 @@ public partial class SystemMsgColor : UserControl
         SaveBtn.IsEnabled     = true;
         SaveSpinner.IsVisible = false;
         SaveIcon.IsVisible    = true;
-        SaveLabel.Text        = "Salvar Arquivo";
+        LiveText.Set(SaveLabel, () => Loc.SystemMsgColor.SaveFileButton);
     }
 
     // ─── Search filter ────────────────────────────────────────────────────────
@@ -256,7 +260,7 @@ public partial class SystemMsgColor : UserControl
     {
         var count = _selectedIds.Count;
         ClearSelectionBtn.IsVisible  = count > 0;
-        ClearSelectionLabel.Text     = $"Remover seleção ({count})";
+        LiveText.Set(ClearSelectionLabel, () => Loc.SystemMsgColor.ClearSelectionButton(count));
     }
 
     private void ClearSelection_Click(object? sender, RoutedEventArgs e)
@@ -293,14 +297,16 @@ public partial class SystemMsgColor : UserControl
         BuildMsgRows(limited);
 
         var unique = _entries.Select(e => e.ColorRgb + e.ColorAlpha).Distinct().Count();
+        var shown         = limited.Count;
+        var messageCount  = _entries.Count;
         if (!string.IsNullOrEmpty(q))
-            StatsLabel.Text = $"{limited.Count} de {total} resultado(s) · {_entries.Count} total";
+            LiveText.Set(StatsLabel, () => Loc.SystemMsgColor.SearchResultsStatus(total, shown, messageCount));
         else
-            StatsLabel.Text = $"{_entries.Count} mensagens · {unique} cores únicas";
+            LiveText.Set(StatsLabel, () => Loc.SystemMsgColor.StatsStatus(messageCount, unique));
 
         OverflowLabel.IsVisible = total > MaxRows;
         if (total > MaxRows)
-            OverflowLabel.Text = $"Mostrando {MaxRows} de {total}. Use a busca para encontrar mensagens específicas.";
+            LiveText.Set(OverflowLabel, () => Loc.SystemMsgColor.OverflowStatus(MaxRows, total));
 
         UpdateSelectionUI();
     }
@@ -568,7 +574,7 @@ public partial class SystemMsgColor : UserControl
         SavePresets();
         RefreshPresetsUI();
         PresetNameBox.Text = "";
-        ShowSuccessToast($"Preset \"{name}\" salvo.");
+        ShowSuccessToast(Loc.SystemMsgColor.PresetSavedStatus(name));
     }
 
     private void RefreshPresetsUI()
@@ -576,7 +582,7 @@ public partial class SystemMsgColor : UserControl
         PresetWrapPanel.Children.Clear();
         foreach (var (name, hex8) in _presets)
         {
-            var rgb  = hex8.Length >= 6 ? hex8[..6] : "799BB0";
+            var rgb  = hex8.Length >= 6 ? hex8[..6] : DefaultPresetHex;
             PresetWrapPanel.Children.Add(BuildPresetItem(name, rgb, hex8));
         }
     }
@@ -593,7 +599,9 @@ public partial class SystemMsgColor : UserControl
                                : new SolidColorBrush(Colors.Black),
             Cursor       = new Cursor(StandardCursorType.Hand)
         };
-        ToolTip.SetTip(swatch, $"#{hex8} — clique para aplicar");
+        var tip = new TextBlock();
+        LiveText.Set(tip, () => Loc.SystemMsgColor.PresetApplyTip(hex8));
+        ToolTip.SetTip(swatch, tip);
         swatch.PointerPressed += (_, _) => ApplyPreset(hex8);
 
         var nameLbl = new TextBlock
@@ -620,8 +628,8 @@ public partial class SystemMsgColor : UserControl
             {
                 Width      = 9,
                 Height     = 9,
-                [!TextElement.ForegroundProperty] = AppTheme.Brush("ThemeTextHint"),
-                Data       = Geometry.Parse("M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z")
+                [!TextElement.ForegroundProperty] = AppTheme.Brush("ThemeTextHint"), // loc-ok
+                Data       = Geometry.Parse("M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z") // loc-ok
             }
         };
         delBtn.Click += (_, _) =>
@@ -655,7 +663,7 @@ public partial class SystemMsgColor : UserControl
         var l2Exe = Path.Combine(Path.GetDirectoryName(_loadedFilePath)!, "l2.exe");
         if (!File.Exists(l2Exe))
         {
-            MessageBoxManager.GetMessageBoxStandard("Erro", $"l2.exe não encontrado em:\n{l2Exe}").ShowWindowAsync();
+            MessageBoxManager.GetMessageBoxStandard(Loc.Common.Error, Loc.SystemMsgColor.L2ExeNotFoundError(l2Exe)).ShowWindowAsync();
             return;
         }
 
@@ -675,7 +683,8 @@ public partial class SystemMsgColor : UserControl
             .OrderBy(c => c)
             .ToList();
 
-        ModalSubtitle.Text = $"{unique.Count} cor(es) única(s) no arquivo";
+        var uniqueCount = unique.Count;
+        LiveText.Set(ModalSubtitle, () => Loc.SystemMsgColor.UniqueColorsStatus(uniqueCount));
         ModalColorsPanel.Children.Clear();
 
         foreach (var hex in unique)
@@ -720,7 +729,7 @@ public partial class SystemMsgColor : UserControl
             Child        = inner
         };
 
-        ToolTip.SetTip(card, $"Clique para usar como cor do novo preset");
+        card[!ToolTip.TipProperty] = AppLanguage.Bind(LocKey.SystemMsgColor.UseForPresetTip);
 
         card.PointerPressed += (_, ev) =>
         {
@@ -748,7 +757,7 @@ public partial class SystemMsgColor : UserControl
 
     private void ApplyPreset(string hex8)
     {
-        var hex6 = (hex8.Length >= 6 ? hex8[..6] : "799BB0").ToUpper();
+        var hex6 = (hex8.Length >= 6 ? hex8[..6] : DefaultPresetHex).ToUpper();
 
         if (_selectedIds.Count > 0)
         {
@@ -757,7 +766,7 @@ public partial class SystemMsgColor : UserControl
                 entry.ColorRgb = hex6;
             _selectedIds.Clear();
             ApplyFilter();
-            ShowSuccessToast($"Cor aplicada em {count} mensagem(ns).");
+            ShowSuccessToast(Loc.SystemMsgColor.ColorAppliedStatus(count));
         }
         else if (_activeHexBox != null && !_activeHexBox.IsReadOnly)
         {
@@ -770,8 +779,8 @@ public partial class SystemMsgColor : UserControl
     private void BuildPresetNewPicker()
     {
         var (panel, swatch, hex, editBtn) = MakeColorPicker();
-        hex.Text = "799BB0";
-        SetSwatchColor(swatch, "799BB0");
+        hex.Text = DefaultPresetHex;
+        SetSwatchColor(swatch, DefaultPresetHex);
 
         bool editing = false;
         hex.TextChanged       += (_, _) => { if (TryParseHex(hex.Text?.Trim() ?? "", out _)) SetSwatchColor(swatch, hex.Text!.Trim()); };
@@ -786,7 +795,7 @@ public partial class SystemMsgColor : UserControl
                 editBtn.Content = MakePencilIcon();
                 var raw = (hex.Text?.Trim().TrimStart('#') ?? "").ToUpper();
                 if (TryParseHex(raw, out _)) { if (hex.Text != raw) hex.Text = raw; }
-                else { hex.Text = "799BB0"; SetSwatchColor(swatch, "799BB0"); }
+                else { hex.Text = DefaultPresetHex; SetSwatchColor(swatch, DefaultPresetHex); }
             }
             else
             {

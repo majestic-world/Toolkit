@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using L2Toolkit.Localization;
 
 namespace L2Toolkit.Views
 {
@@ -46,7 +47,7 @@ namespace L2Toolkit.Views
 
                 if (!idMatch.Success || !meshMatch.Success || !basePosMatch.Success || rangeDeltaMatches.Count != 4)
                 {
-                    return "Erro: Dados incompletos ou inválidos.";
+                    return Loc.DoorGenerate.IncompleteDataError;
                 }
 
                 string doorId = idMatch.Groups[1].Value;
@@ -95,7 +96,7 @@ namespace L2Toolkit.Views
             }
             catch (Exception ex)
             {
-                return $"Erro durante a conversão: {ex.Message}";
+                return Loc.DoorGenerate.ConversionError(ex.Message);
             }
         }
     }

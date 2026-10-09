@@ -87,9 +87,9 @@
             <!-- Header -->
             <Grid ColumnDefinitions="*,Auto">
                 <StackPanel Grid.Column="0" Spacing="1">
-                    <TextBlock Text="Cores de Mensagens do Sistema"
+                    <TextBlock Text="{DynamicResource SystemMsgColor.Title}"
                                FontSize="22" FontWeight="Light" Foreground="{DynamicResource ThemeTextTitle}"/>
-                    <TextBlock Text="Editor de text-color individual por mensagem"
+                    <TextBlock Text="{DynamicResource SystemMsgColor.SubtitleLabel}"
                                FontSize="13" Foreground="{DynamicResource ThemeTextSubtitle}"/>
                 </StackPanel>
             </Grid>
@@ -105,14 +105,14 @@
                              IsHitTestVisible="False"
                              VerticalAlignment="Stretch"
                              VerticalContentAlignment="Center"
-                             Watermark="Clique para selecionar o arquivo SystemMsg.dat..."/>
+                             Watermark="{DynamicResource SystemMsgColor.FileWatermark}"/>
                 </Border>
                 <Button Grid.Column="2" Click="OpenFile_Click"
                         Theme="{StaticResource SaveButton}" Height="30" Padding="14,0">
                     <StackPanel Orientation="Horizontal" Spacing="7" VerticalAlignment="Center">
                         <PathIcon Width="13" Height="13" VerticalAlignment="Center" Foreground="{DynamicResource ThemeTextIcon}"
                                   Data="M20 6h-8l-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2z"/>
-                        <TextBlock Text="Abrir" VerticalAlignment="Center" FontSize="13"/>
+                        <TextBlock Text="{DynamicResource SystemMsgColor.OpenButton}" VerticalAlignment="Center" FontSize="13"/>
                     </StackPanel>
                 </Button>
             </Grid>
@@ -127,10 +127,10 @@
                                   Data="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
                         <TextBlock Foreground="{DynamicResource ThemeWarning}" FontSize="13" FontWeight="SemiBold"
                                    VerticalAlignment="Center"
-                                   Text="Faça um backup antes de editar"/>
+                                   Text="{DynamicResource SystemMsgColor.BackupWarningTitle}"/>
                     </StackPanel>
                     <TextBlock Foreground="{DynamicResource ThemeWarning}" FontSize="12" TextWrapping="Wrap"
-                               Text="Edições incorretas podem corromper o arquivo do cliente. Ao salvar, um backup automático é gerado na mesma pasta com a extensão .dat.bak — mas recomendamos manter uma cópia manual em local seguro."/>
+                               Text="{DynamicResource SystemMsgColor.BackupWarningHint}"/>
                 </StackPanel>
             </Border>
 
@@ -155,7 +155,7 @@
                         <StackPanel Orientation="Horizontal" Spacing="6">
                             <PathIcon Width="11" Height="11" VerticalAlignment="Center"
                                       Data="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-                            <TextBlock Text="Fechar Arquivo" FontSize="12" VerticalAlignment="Center"/>
+                            <TextBlock Text="{DynamicResource SystemMsgColor.CloseFileButton}" FontSize="12" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
                     <Button x:Name="SaveBtn" Grid.Column="5" Click="SaveFile_Click"
@@ -175,7 +175,7 @@
                                     </Ellipse.RenderTransform>
                                 </Ellipse>
                             </Grid>
-                            <TextBlock x:Name="SaveLabel" Text="Salvar Arquivo" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="SaveLabel" Text="{DynamicResource SystemMsgColor.SaveFileButton}" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
                 </Grid>
@@ -183,18 +183,18 @@
                 <!-- Presets -->
                 <Border Background="{DynamicResource ThemeSurfaceCard}" CornerRadius="8" Padding="12,10">
                     <StackPanel Spacing="8">
-                        <TextBlock Text="PRESETS" Foreground="{DynamicResource ThemeTextHint}" FontSize="10"
+                        <TextBlock Text="{DynamicResource SystemMsgColor.PresetsTitle}" Foreground="{DynamicResource ThemeTextHint}" FontSize="10"
                                    FontWeight="Bold" LetterSpacing="1"/>
                         <WrapPanel x:Name="PresetWrapPanel"/>
                         <Border Height="1" Background="{DynamicResource ThemeSurfaceRaised}"/>
                         <Grid ColumnDefinitions="Auto,10,150,10,Auto,10,Auto,8,Auto,8,Auto">
-                            <TextBlock Grid.Column="0" Text="NOME" Foreground="{DynamicResource ThemeTextHint}" FontSize="10"
+                            <TextBlock Grid.Column="0" Text="{DynamicResource SystemMsgColor.PresetNameLabel}" Foreground="{DynamicResource ThemeTextHint}" FontSize="10"
                                        FontWeight="Bold" LetterSpacing="1" VerticalAlignment="Center"/>
                             <TextBox Grid.Column="2" x:Name="PresetNameBox"
                                      Background="{DynamicResource ThemeSurfaceInput}" Foreground="{DynamicResource ThemeTextBody}" BorderBrush="{DynamicResource ThemeBorder}"
                                      BorderThickness="1" CornerRadius="4" Padding="8,0" Height="26"
                                      FontSize="12" VerticalContentAlignment="Center"
-                                     Watermark="Nome do preset..."/>
+                                     Watermark="{DynamicResource SystemMsgColor.PresetNameWatermark}"/>
                             <StackPanel Grid.Column="4" x:Name="PresetAddPickerHost"
                                         Orientation="Horizontal" VerticalAlignment="Center"/>
                             <Button Grid.Column="6" Click="AddPreset_Click"
@@ -202,7 +202,7 @@
                                 <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
                                     <PathIcon Width="11" Height="11" VerticalAlignment="Center" Foreground="{DynamicResource ThemeTextIcon}"
                                               Data="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/>
-                                    <TextBlock Text="Salvar Preset" FontSize="12" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{DynamicResource SystemMsgColor.SavePresetButton}" FontSize="12" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
                             <Button Grid.Column="8" Click="OpenColorsModal_Click"
@@ -210,7 +210,7 @@
                                 <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
                                     <PathIcon Width="11" Height="11" VerticalAlignment="Center" Foreground="{DynamicResource ThemeTextIcon}"
                                               Data="M12 3 L21 7 L21 17 L12 21 L3 17 L3 7 Z M12 3 L12 21 M3 7 L21 7 M3 17 L21 17"/>
-                                    <TextBlock Text="Cores que já existem" FontSize="12" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{DynamicResource SystemMsgColor.ExistingColorsButton}" FontSize="12" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
                             <Button Grid.Column="10" Click="StartL2_Click"
@@ -218,7 +218,7 @@
                                 <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
                                     <PathIcon Width="11" Height="11" VerticalAlignment="Center"
                                               Data="M8 5v14l11-7z" Foreground="{DynamicResource ThemeTextIcon}"/>
-                                    <TextBlock Text="Start L2" FontSize="12" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{DynamicResource SystemMsgColor.StartL2Button}" FontSize="12" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
                         </Grid>
@@ -233,7 +233,7 @@
                                  Background="Transparent" BorderThickness="0"
                                  Foreground="{DynamicResource ThemeTextBody}" Padding="12,0" FontSize="13"
                                  VerticalContentAlignment="Center"
-                                 Watermark="Buscar por ID ou texto da mensagem..."
+                                 Watermark="{DynamicResource SystemMsgColor.SearchWatermark}"
                                  TextChanged="SearchBox_TextChanged"
                                  KeyDown="SearchBox_KeyDown"/>
                     </Border>
@@ -242,20 +242,20 @@
                         <StackPanel Orientation="Horizontal" Spacing="7" VerticalAlignment="Center">
                             <PathIcon Width="13" Height="13" VerticalAlignment="Center" Foreground="{DynamicResource ThemeTextIcon}"
                                       Data="F0 M10 3 L15 5 L17 10 L15 15 L10 17 L5 15 L3 10 L5 5 Z M10 6 L12.83 7.17 L13.83 10 L12.83 12.83 L10 13.83 L7.17 12.83 L6.17 10 L7.17 7.17 Z M13.5 15.5 L15.5 13.5 L19.5 17.5 L17.5 19.5 Z"/>
-                            <TextBlock Text="Pesquisar" FontSize="13" VerticalAlignment="Center"/>
+                            <TextBlock Text="{DynamicResource SystemMsgColor.SearchButton}" FontSize="13" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
                 </Grid>
 
                 <!-- Column headers -->
                 <Grid ColumnDefinitions="52,8,22,6,76,6,26,12,*" Margin="12,0,0,0">
-                    <TextBlock Grid.Column="0" Text="ID"
+                    <TextBlock Grid.Column="0" Text="{DynamicResource SystemMsgColor.IdColumnTitle}"
                                Foreground="{DynamicResource ThemeTextHint}" FontSize="10" FontWeight="Bold" LetterSpacing="1"/>
-                    <TextBlock Grid.Column="2" Text="COR"
+                    <TextBlock Grid.Column="2" Text="{DynamicResource SystemMsgColor.ColorColumnTitle}"
                                Foreground="{DynamicResource ThemeTextHint}" FontSize="10" FontWeight="Bold" LetterSpacing="1"/>
-                    <TextBlock Grid.Column="4" Text="HEX"
+                    <TextBlock Grid.Column="4" Text="{DynamicResource SystemMsgColor.HexColumnTitle}"
                                Foreground="{DynamicResource ThemeTextHint}" FontSize="10" FontWeight="Bold" LetterSpacing="1"/>
-                    <TextBlock Grid.Column="8" Text="MENSAGEM"
+                    <TextBlock Grid.Column="8" Text="{DynamicResource SystemMsgColor.MessageColumnTitle}"
                                Foreground="{DynamicResource ThemeTextHint}" FontSize="10" FontWeight="Bold" LetterSpacing="1"/>
                 </Grid>
 
@@ -309,7 +309,7 @@
                     <!-- Modal header -->
                     <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
                         <StackPanel Grid.Column="0" Spacing="2">
-                            <TextBlock Text="Cores no Arquivo" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextTitle}"/>
+                            <TextBlock Text="{DynamicResource SystemMsgColor.ColorsModalTitle}" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextTitle}"/>
                             <TextBlock x:Name="ModalSubtitle" FontSize="12" Foreground="{DynamicResource ThemeTextHint}"/>
                         </StackPanel>
                         <Button Grid.Column="1" Click="CloseColorsModal_Click"

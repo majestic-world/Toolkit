@@ -1,0 +1,145 @@
+# Literais que podem ficar em AXAML/C# sem catálogo (L2LOC007/L2LOC008): iguais nos dois idiomas.
+# Um por linha, comparado com o texto inteiro do literal (sem espaços nas pontas). Linhas com # são comentário.
+# Só entra aqui: nome de produto ou ferramenta, termo de domínio do glossário (spec), formato ou versão,
+# número ou tamanho, endônimo de idioma e valor que vem dos dados do jogo. Rótulo, título, aba e cabeçalho
+# de coluna vão para o catálogo, mesmo quando o texto é igual nos dois idiomas.
+# Cada área tem um bloco, em ordem alfabética: adicione as linhas logo abaixo do comentário da área,
+# no grupo do motivo (ou num grupo novo com o motivo em #).
+
+# ── App ──
+# Nome do produto.
+L2 Toolkit
+L2 Toolkit (Fafurion) By Mk
+
+# ── Brush ──
+
+# ── BrushGenerator ──
+# Tamanhos da imagem (número + unidade).
+512 px
+1024 px
+2048 px
+2500 px
+4096 px
+5000 px
+# Formato de arquivo.
+PNG
+
+# ── BrushVariants ──
+
+# ── Common ──
+
+# ── CreateMultisell ──
+
+# ── DescriptionFix ──
+
+# ── DoorGenerate ──
+
+# ── EnchantEffect ──
+# Tipo do efeito lido do .dat (termo de domínio + valor hex do arquivo).
+Augmented (00000040)
+Normal (00000000)
+
+# ── Format ──
+
+# ── Geodata ──
+# Formatos de arquivo de geodata.
+CONV_DAT (_conv.dat)
+L2G (.l2g)
+L2J (.l2j)
+
+# ── LiveData ──
+# Nome da ferramenta (glossário: Live Data).
+Live Data
+# Nomes de tipo do domínio (spec D9).
+Armor
+Items
+Skills
+Weapons
+
+# ── LogParse ──
+
+# ── Main ──
+# Versão do app (formato "v" + número).
+v{version}
+
+# ── Missions ──
+
+# ── Nav ──
+
+# ── PawnData ──
+# Animações do PawnData: número da animação + nome interno do jogo.
+1 — Walk
+2 — Run
+8 — AtkWait
+9 — AtkWait
+20 — Attack 01
+21 — Attack 02
+22 — Attack 03
+28 — Special Attack 01
+29 — Special Attack 02
+30 — Special Attack 03
+31 — Special Attack 04
+32 — Special Attack 05
+33 — Special Attack 06
+34 — Special Attack 07
+35 — Special Attack 08
+36 — Special Attack 09
+37 — Special Attack 10
+60 — Death / Exit
+62 — DeathWait
+92 — Social Actions
+
+# ── PrimeShop ──
+# Nome da ferramenta (glossário: Prime Shop).
+Prime Shop Generator
+# Categorias do Prime Shop (valores dos dados, spec D9).
+Agathions
+Consumables
+Equipment
+Reward Coin
+VIP
+# Nomes de arquivo.
+ProductName_Classic-eu.dat
+prime_shop.xml
+
+# ── SearchIcon ──
+# Nome de tipo do domínio (spec D9).
+Weapon
+
+# ── Settings ──
+# Endônimos do seletor de idioma.
+English
+Português (Brasil)
+
+# ── SkinBuilder ──
+# Nome da ferramenta (glossário: Skin Builder).
+Skin Builder
+
+# ── SpawnManager ──
+
+# ── Splash ──
+
+# ── SplashCompose ──
+# Formato de arquivo.
+PNG
+
+# ── SplashLibrary ──
+
+# ── SplashScreen ──
+# Nome da ferramenta (glossário: Splash Screen).
+Splash Screen
+# Versões de envelope do arquivo.
+Lineage2Ver111
+Lineage2Ver121
+# Formato de arquivo.
+PNG
+
+# ── SystemMsgColor ──
+
+# ── Tables ──
+
+# ── Update ──
+
+# ── UpgradeNormal ──
+# Nome da ferramenta (glossário: Upgrade Normal System).
+Upgrade Normal System

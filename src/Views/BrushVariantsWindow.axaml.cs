@@ -12,6 +12,7 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.Styling;
+using L2Toolkit.Localization;
 using L2Toolkit.Processing.Brush;
 using L2Toolkit.Processing.Splash;
 using L2Toolkit.Settings;
@@ -69,7 +70,7 @@ public partial class BrushVariantsWindow : Window
     {
         if (!int.TryParse(CountBox.Text?.Trim(), out var count) || count is < 1 or > MaxCount)
         {
-            StatusText.Text = $"Informe uma quantidade entre 1 e {MaxCount}.";
+            LiveText.Set(StatusText, () => Loc.BrushVariants.InvalidCountError(MaxCount));
             return;
         }
         AppDatabase.GetInstance().UpdateValue(CountKey, count.ToString());
@@ -82,7 +83,7 @@ public partial class BrushVariantsWindow : Window
         var version = ++_version;
         _busy = true;
         UpdateControls();
-        StatusText.Text = $"Gerando {count} variações…";
+        LiveText.Set(StatusText, () => Loc.BrushVariants.GeneratingStatus(count));
         try
         {
             var images = new RgbaImage[settings.Length];
@@ -94,11 +95,11 @@ public partial class BrushVariantsWindow : Window
             _shown = settings;
             for (var i = 0; i < settings.Length; i++)
                 AddTile(settings[i], images[i]);
-            StatusText.Text = $"{count} variações · clique para levar ao editor";
+            LiveText.Set(StatusText, () => Loc.BrushVariants.ReadyStatus(count));
         }
         catch (Exception ex)
         {
-            if (version == _version) StatusText.Text = ex.Message;
+            if (version == _version) LiveText.Set(StatusText, () => ex.Message);
         }
         finally
         {
@@ -130,14 +131,15 @@ public partial class BrushVariantsWindow : Window
             Width = ThumbnailSize,
             Height = ThumbnailSize,
         });
-        content.Children.Add(new TextBlock
+        var label = new TextBlock
         {
-            Text = $"Semente {seed}",
             FontSize = 12,
             FontWeight = FontWeight.SemiBold,
             HorizontalAlignment = HorizontalAlignment.Center,
             [!TextElement.ForegroundProperty] = AppTheme.Brush("ThemeTextBody"),
-        });
+        };
+        LiveText.Set(label, () => Loc.BrushVariants.SeedLabel(seed));
+        content.Children.Add(label);
 
         var tile = new Button
         {
@@ -160,7 +162,7 @@ public partial class BrushVariantsWindow : Window
         var saved = AppDatabase.GetInstance().GetValue(LastFolderKey);
         var folders = await StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
         {
-            Title = "Pasta para as variações",
+            Title = Loc.BrushVariants.FolderPicker,
             AllowMultiple = false,
             SuggestedStartLocation = Directory.Exists(saved) ? await StorageProvider.TryGetFolderFromPathAsync(saved) : null,
         });
@@ -175,16 +177,17 @@ public partial class BrushVariantsWindow : Window
         {
             for (var i = 0; i < shown.Length; i++)
             {
-                StatusText.Text = $"Exportando {i + 1}/{shown.Length} em {size} × {size} px…";
+                var (index, total) = (i + 1, shown.Length);
+                LiveText.Set(StatusText, () => Loc.BrushVariants.ExportingStatus(index, total, size));
                 var settings = shown[i];
                 await Task.Run(() => BrushGenerator.ExportPng(settings, size, Path.Combine(folder, $"l2brush_{settings.Seed}.png")));
             }
             AppDatabase.GetInstance().UpdateValue(LastFolderKey, folder);
-            StatusText.Text = $"{shown.Length} brushes exportados em {folder}.";
+            LiveText.Set(StatusText, () => Loc.BrushVariants.ExportedStatus(shown.Length, folder));
         }
         catch (Exception ex)
         {
-            StatusText.Text = ex.Message;
+            LiveText.Set(StatusText, () => ex.Message);
         }
         finally
         {

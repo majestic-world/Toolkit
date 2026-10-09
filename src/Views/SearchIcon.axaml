@@ -96,11 +96,11 @@
 
             <!-- ── Page Header ──────────────────────────────────────── -->
             <StackPanel Margin="32,28,32,24" Spacing="3">
-                <TextBlock Text="Pesquisar Ícone"
+                <TextBlock Text="{DynamicResource SearchIcon.Title}"
                            FontSize="22"
                            FontWeight="SemiBold"
                            Foreground="{DynamicResource ThemeTextTitle}"/>
-                <TextBlock Text="Pesquisa do ícone do item pelo Id"
+                <TextBlock Text="{DynamicResource SearchIcon.SubtitleLabel}"
                            FontSize="13"
                            Foreground="{DynamicResource ThemeTextTitle}"/>
             </StackPanel>
@@ -117,11 +117,11 @@
                     IsVisible="False">
                 <StackPanel Orientation="Horizontal" Spacing="10">
                     <PathIcon Data="M12 2L1 21h22L12 2zm1 16h-2v-2h2v2zm0-4h-2V9h2v5z" Width="14" Height="14" Foreground="{DynamicResource ThemeCaution}" VerticalAlignment="Center"/>
-                    <TextBlock Text="Pasta de assets não configurada."
+                    <TextBlock Text="{DynamicResource SearchIcon.AssetsMissingStatus}"
                                Foreground="{DynamicResource ThemeCaution}"
                                FontSize="13"
                                VerticalAlignment="Center"/>
-                    <TextBlock Text="Clique aqui para configurar."
+                    <TextBlock Text="{DynamicResource SearchIcon.AssetsConfigureHint}"
                                Foreground="{DynamicResource ThemeCaution}"
                                FontSize="13"
                                FontWeight="SemiBold"
@@ -166,7 +166,7 @@
                                     Height="52"
                                     Spacing="14"
                                     VerticalAlignment="Center">
-                            <TextBlock Text="PESQUISA"
+                            <TextBlock Text="{DynamicResource SearchIcon.SearchTitle}"
                                        FontSize="11"
                                        FontWeight="Bold"
                                        Foreground="{DynamicResource ThemeTextLabel}"
@@ -179,7 +179,7 @@
                         <StackPanel Margin="20,16,20,20" Spacing="14">
 
                             <StackPanel Spacing="6">
-                                <TextBlock Text="ID do item"
+                                <TextBlock Text="{DynamicResource SearchIcon.ItemIdLabel}"
                                            FontSize="12"
                                            Foreground="{DynamicResource ThemeTextLabel}"
                                            FontWeight="Medium"/>
@@ -190,19 +190,19 @@
                                          VerticalContentAlignment="Center"
                                          FontFamily="Consolas,Courier New,monospace"
                                          FontSize="12"
-                                         Watermark="Ex: 49"/>
+                                         Watermark="{DynamicResource SearchIcon.ItemIdWatermark}"/>
                             </StackPanel>
 
                             <StackPanel Spacing="6">
-                                <TextBlock Text="Tipo do item"
+                                <TextBlock Text="{DynamicResource SearchIcon.ItemTypeLabel}"
                                            FontSize="12"
                                            Foreground="{DynamicResource ThemeTextLabel}"
                                            FontWeight="Medium"/>
                                 <ComboBox x:Name="ItemType" SelectedIndex="0">
-                                    <ComboBoxItem HorizontalAlignment="Stretch" Content="Weapon"/>
-                                    <ComboBoxItem HorizontalAlignment="Stretch" Content="Armor"/>
-                                    <ComboBoxItem HorizontalAlignment="Stretch" Content="Items"/>
-                                    <ComboBoxItem HorizontalAlignment="Stretch" Content="Skills"/>
+                                    <ComboBoxItem HorizontalAlignment="Stretch" Tag="Weapon" Content="Weapon"/>
+                                    <ComboBoxItem HorizontalAlignment="Stretch" Tag="Armor" Content="Armor"/>
+                                    <ComboBoxItem HorizontalAlignment="Stretch" Tag="Items" Content="Items"/>
+                                    <ComboBoxItem HorizontalAlignment="Stretch" Tag="Skills" Content="Skills"/>
                                 </ComboBox>
                             </StackPanel>
 
@@ -226,7 +226,7 @@
                         Theme="{StaticResource SecondaryButton}">
                     <StackPanel Orientation="Horizontal" Spacing="9">
                         <PathIcon Foreground="White" Data="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" Width="14" Height="14" VerticalAlignment="Center"/>
-                        <TextBlock Text="Pesquisar"
+                        <TextBlock Text="{DynamicResource SearchIcon.SearchButton}"
                                    FontSize="13"
                                    FontWeight="SemiBold"
                                    VerticalAlignment="Center"/>
@@ -254,7 +254,7 @@
                               Height="52">
                             <TextBlock Grid.Column="2"
                                        x:Name="StatusBox"
-                                       Text="RESULTADO"
+                                       Text="{DynamicResource SearchIcon.ResultTitle}"
                                        FontSize="11"
                                        FontWeight="Bold"
                                        Foreground="{DynamicResource ThemeTextLabel}"
@@ -272,7 +272,7 @@
                                     VerticalAlignment="Center">
                                 <StackPanel Orientation="Horizontal" Spacing="5">
                                     <PathIcon Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Width="10" Height="10" Foreground="{DynamicResource ThemeSuccess}" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Copiado!"
+                                    <TextBlock Text="{DynamicResource Common.CopiedStatus}"
                                                FontSize="11"
                                                FontWeight="Medium"
                                                Foreground="{DynamicResource ThemeSuccess}"
@@ -287,7 +287,7 @@
 
                             <!-- Nome -->
                             <StackPanel Spacing="6">
-                                <TextBlock Text="Nome"
+                                <TextBlock Text="{DynamicResource SearchIcon.NameLabel}"
                                            FontSize="12"
                                            Foreground="{DynamicResource ThemeTextLabel}"
                                            FontWeight="Medium"/>
@@ -315,7 +315,7 @@
 
                             <!-- Icon -->
                             <StackPanel Spacing="6">
-                                <TextBlock Text="Icon"
+                                <TextBlock Text="{DynamicResource SearchIcon.IconLabel}"
                                            FontSize="12"
                                            Foreground="{DynamicResource ThemeTextLabel}"
                                            FontWeight="Medium"/>
@@ -343,7 +343,7 @@
 
                             <!-- Icon Panel -->
                             <StackPanel Spacing="6">
-                                <TextBlock Text="Icon Panel"
+                                <TextBlock Text="{DynamicResource SearchIcon.IconPanelLabel}"
                                            FontSize="12"
                                            Foreground="{DynamicResource ThemeTextLabel}"
                                            FontWeight="Medium"/>
