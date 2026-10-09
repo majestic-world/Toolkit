@@ -14,10 +14,133 @@
   </resheader>
 
   <!-- ═══ Brush ═══ -->
+  <data name="Brush.GrayscaleError" xml:space="preserve">
+    <value>Falha ao converter o brush para tons de cinza.</value>
+  </data>
+  <data name="Brush.PngError" xml:space="preserve">
+    <value>Falha ao gerar o PNG.</value>
+  </data>
+  <data name="Brush.SizeRangeError" xml:space="preserve">
+    <value>O tamanho precisa ficar entre 64 e {max} px.</value>
+  </data>
 
   <!-- ═══ BrushGenerator ═══ -->
+  <data name="BrushGenerator.ClawsLabel" xml:space="preserve">
+    <value>Garras</value>
+  </data>
+  <data name="BrushGenerator.CracksLabel" xml:space="preserve">
+    <value>Rachaduras</value>
+  </data>
+  <data name="BrushGenerator.DebrisLabel" xml:space="preserve">
+    <value>Estilhaços</value>
+  </data>
+  <data name="BrushGenerator.ExportButton" xml:space="preserve">
+    <value>Exportar PNG…</value>
+  </data>
+  <data name="BrushGenerator.ExportPicker" xml:space="preserve">
+    <value>Exportar brush</value>
+  </data>
+  <data name="BrushGenerator.ExportedStatus" xml:space="preserve">
+    <value>{fileName} exportado ({size} × {size} px).</value>
+  </data>
+  <data name="BrushGenerator.GeneratingStatus" xml:space="preserve">
+    <value>Gerando {size} × {size} px…</value>
+  </data>
+  <data name="BrushGenerator.InfoStatus" xml:space="preserve">
+    <value>Semente {seed}  ·  exporta em {size} × {size} px  ·  prévia em {previewSize} px</value>
+  </data>
+  <data name="BrushGenerator.OutputSectionLabel" xml:space="preserve">
+    <value>SAÍDA</value>
+  </data>
+  <data name="BrushGenerator.SeedSectionLabel" xml:space="preserve">
+    <value>SEMENTE</value>
+  </data>
+  <data name="BrushGenerator.SeedTip" xml:space="preserve">
+    <value>A mesma semente gera sempre o mesmo brush</value>
+  </data>
+  <data name="BrushGenerator.ShapeSectionLabel" xml:space="preserve">
+    <value>FORMA</value>
+  </data>
+  <data name="BrushGenerator.ShuffleButton" xml:space="preserve">
+    <value>Gerar outro</value>
+  </data>
+  <data name="BrushGenerator.SizeLabel" xml:space="preserve">
+    <value>Tamanho</value>
+  </data>
+  <data name="BrushGenerator.SoftnessLabel" xml:space="preserve">
+    <value>Borda suave</value>
+  </data>
+  <data name="BrushGenerator.SpikesLabel" xml:space="preserve">
+    <value>Pontas</value>
+  </data>
+  <data name="BrushGenerator.Subtitle" xml:space="preserve">
+    <value>Brushes de borda rasgada no estilo das splash do L2 — PNG preto em fundo branco para o Photoshop</value>
+  </data>
+  <data name="BrushGenerator.SymmetryLabel" xml:space="preserve">
+    <value>Simetria</value>
+  </data>
+  <data name="BrushGenerator.SymmetryTip" xml:space="preserve">
+    <value>Retângulo arredondado com pontas regulares, espelhado na vertical</value>
+  </data>
+  <data name="BrushGenerator.Title" xml:space="preserve">
+    <value>Gerador de Brush</value>
+  </data>
+  <data name="BrushGenerator.UnexpectedError" xml:space="preserve">
+    <value>Ocorreu um erro inesperado.</value>
+  </data>
+  <data name="BrushGenerator.VariantsButton" xml:space="preserve">
+    <value>Gerar vários…</value>
+  </data>
+  <data name="BrushGenerator.VariantsTip" xml:space="preserve">
+    <value>Abre uma janela com várias variações para escolher</value>
+  </data>
 
   <!-- ═══ BrushVariants ═══ -->
+  <data name="BrushVariants.CountLabel" xml:space="preserve">
+    <value>Quantidade</value>
+  </data>
+  <data name="BrushVariants.CountTip" xml:space="preserve">
+    <value>De 1 a 200</value>
+  </data>
+  <data name="BrushVariants.ExportAllButton" xml:space="preserve">
+    <value>Exportar todos…</value>
+  </data>
+  <data name="BrushVariants.ExportedStatus.One" xml:space="preserve">
+    <value>{count} brush exportado em {folder}.</value>
+  </data>
+  <data name="BrushVariants.ExportedStatus.Other" xml:space="preserve">
+    <value>{count} brushes exportados em {folder}.</value>
+  </data>
+  <data name="BrushVariants.ExportingStatus" xml:space="preserve">
+    <value>Exportando {index}/{total} em {size} × {size} px…</value>
+  </data>
+  <data name="BrushVariants.FolderPicker" xml:space="preserve">
+    <value>Pasta para as variações</value>
+  </data>
+  <data name="BrushVariants.GenerateButton" xml:space="preserve">
+    <value>Gerar</value>
+  </data>
+  <data name="BrushVariants.GeneratingStatus.One" xml:space="preserve">
+    <value>Gerando {count} variação…</value>
+  </data>
+  <data name="BrushVariants.GeneratingStatus.Other" xml:space="preserve">
+    <value>Gerando {count} variações…</value>
+  </data>
+  <data name="BrushVariants.InvalidCountError" xml:space="preserve">
+    <value>Informe uma quantidade entre 1 e {max}.</value>
+  </data>
+  <data name="BrushVariants.ReadyStatus.One" xml:space="preserve">
+    <value>{count} variação · clique para levar ao editor</value>
+  </data>
+  <data name="BrushVariants.ReadyStatus.Other" xml:space="preserve">
+    <value>{count} variações · clique para levar ao editor</value>
+  </data>
+  <data name="BrushVariants.SeedLabel" xml:space="preserve">
+    <value>Semente {seed}</value>
+  </data>
+  <data name="BrushVariants.Title" xml:space="preserve">
+    <value>Variações — Gerador de Brush</value>
+  </data>
 
   <!-- ═══ Common ═══ -->
   <data name="Common.AllFilesFilter" xml:space="preserve">
