@@ -74,8 +74,7 @@ public partial class SkinBuilder : UserControl
     private void TypeProcess_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
         if (PresetPanel == null) return;
-        var typeItem = TypeProcess.SelectedItem as ComboBoxItem;
-        var type = typeItem?.Content?.ToString() ?? TypeProcess.SelectedItem as string;
+        var type = (TypeProcess.SelectedItem as ComboBoxItem)?.Tag as string;
         if (!string.IsNullOrEmpty(type))
             UpdatePresets(type);
     }
@@ -568,8 +567,7 @@ public partial class SkinBuilder : UserControl
     {
         try
         {
-            var typeItem = TypeProcess.SelectedItem as ComboBoxItem;
-            string? type = typeItem?.Content?.ToString() ?? TypeProcess.SelectedItem as string;
+            var type = (TypeProcess.SelectedItem as ComboBoxItem)?.Tag as string;
             var ids = ProcessClientId.Text;
 
             if (string.IsNullOrEmpty(type) || string.IsNullOrEmpty(ids))

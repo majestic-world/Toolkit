@@ -12,6 +12,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
+using L2Toolkit.Models;
 using L2Toolkit.Settings;
 using L2Toolkit.Utilities;
 
@@ -86,10 +87,10 @@ public partial class PrimeShopGenerator : UserControl
 
     private void ConfigureComboBoxes()
     {
-        CategoryComboBox.ItemsSource = Categories.Select(c => $"{c.Key} - {c.Value}").ToArray();
+        CategoryComboBox.ItemsSource = Categories.Select(c => new Option(c.Key, $"{c.Key} - {c.Value}")).ToArray();
         CategoryComboBox.SelectedIndex = 0;
 
-        TypeComboBox.ItemsSource = FileNames.Keys.ToArray();
+        TypeComboBox.ItemsSource = FileNames.Keys.Select(k => new Option(k, k)).ToArray();
         TypeComboBox.SelectedIndex = 0;
     }
 
@@ -121,19 +122,15 @@ public partial class PrimeShopGenerator : UserControl
         if (!File.Exists(ItemNameFile))
             SendNotify($"Atenção: Arquivo '{ItemNameFile}' não encontrado! Os nomes dos itens não serão exibidos corretamente.");
 
-        string? selectedType = TypeComboBox.SelectedItem as string;
+        var selectedType = (TypeComboBox.SelectedItem as Option)?.Id;
         if (selectedType != null && FileNames.ContainsKey(selectedType) && !File.Exists(GetAssetFile(selectedType)))
             SendNotify($"Atenção: Arquivo '{GetAssetFile(selectedType)}' não encontrado! Os ícones podem não ser exibidos corretamente.");
     }
 
     private InputData ValidateInputs()
     {
-        var categoryItem = CategoryComboBox.SelectedItem as ComboBoxItem;
-        var categoryRaw = categoryItem?.Content?.ToString() ?? CategoryComboBox.SelectedItem as string;
-        var category = categoryRaw?.Split('-')[0].Trim() ?? string.Empty;
-
-        var typeItem = TypeComboBox.SelectedItem as ComboBoxItem;
-        var type = typeItem?.Content?.ToString() ?? TypeComboBox.SelectedItem as string ?? string.Empty;
+        var category = (CategoryComboBox.SelectedItem as Option)?.Id ?? string.Empty;
+        var type = (TypeComboBox.SelectedItem as Option)?.Id ?? string.Empty;
         var idsRaw = IdsTextBox.Text?.Trim() ?? string.Empty;
         var priceStr = PriceTextBox.Text?.Trim() ?? string.Empty;
 
