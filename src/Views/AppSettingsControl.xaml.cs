@@ -11,6 +11,7 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using L2Toolkit.Settings;
+using L2Toolkit.Localization;
 using L2Toolkit.ClientDat;
 using L2Toolkit.Utilities;
 using Avalonia.Controls.Documents;
@@ -52,6 +53,7 @@ public partial class AppSettingsControl : UserControl
     {
         InitializeComponent();
         ThemeComboBox.SelectedIndex = AppTheme.Saved == ThemeVariant.Light ? 1 : 0;
+        LanguageComboBox.SelectedIndex = AppLanguage.Current == UiLanguage.En ? 1 : 0;
 
         var db = AppDatabase.GetInstance();
 
@@ -117,22 +119,26 @@ public partial class AppSettingsControl : UserControl
     private async Task CheckUpdatesAsync()
     {
         CheckUpdatesBtn.IsEnabled = false;
-        ShowUpdateStatus("Verificando…", "ThemeTextHint");
+        ShowUpdateStatus(() => Loc.Settings.UpdateCheckingStatus, "ThemeTextHint");
         var check = await AppUpdater.CheckAsync();
         CheckUpdatesBtn.IsEnabled = true;
         switch (check.Status)
         {
             case UpdateStatus.UpToDate:
-                ShowUpdateStatus($"Você já está na versão mais recente ({AppUpdater.CurrentVersion.ToString(3)}).", "ThemeStatusOk");
+                var current = AppUpdater.CurrentVersion.ToString(3);
+                ShowUpdateStatus(() => Loc.Settings.UpToDateStatus(current), "ThemeStatusOk");
                 break;
             case UpdateStatus.Throttled:
-                ShowUpdateStatus($"Aguarde {Math.Ceiling(check.Wait.TotalSeconds)} s para verificar de novo.", "ThemeTextHint");
+                var seconds = Math.Ceiling(check.Wait.TotalSeconds);
+                ShowUpdateStatus(() => Loc.Settings.UpdateThrottledStatus(seconds), "ThemeTextHint");
                 break;
             case UpdateStatus.Failed:
-                ShowUpdateStatus("Não foi possível verificar: " + check.Error, "ThemeStatusError");
+                var error = check.Error;
+                ShowUpdateStatus(() => Loc.Settings.UpdateFailedStatus(error), "ThemeStatusError");
                 break;
             case UpdateStatus.Available:
-                ShowUpdateStatus($"Versão {check.Release!.Tag} disponível.", "ThemeStatusOk");
+                var tag = check.Release!.Tag;
+                ShowUpdateStatus(() => Loc.Settings.UpdateAvailableStatus(tag), "ThemeStatusOk");
                 if (TopLevel.GetTopLevel(this) is MainWindow main)
                     main.PromptUpdate(check.Release);
                 break;
@@ -141,11 +147,18 @@ public partial class AppSettingsControl : UserControl
         }
     }
 
-    private void ShowUpdateStatus(string text, string brushKey)
+    private void ShowUpdateStatus(Func<string> text, string brushKey)
     {
-        UpdateStatusText.Text = text;
+        LiveText.Set(UpdateStatusText, text);
         UpdateStatusText[!TextBlock.ForegroundProperty] = AppTheme.Brush(brushKey);
         UpdateStatusText.IsVisible = true;
+    }
+
+    private void ShowBuildStatus(Func<string> text, string brushKey)
+    {
+        LiveText.Set(BuildStatusText, text);
+        BuildStatusText[!TextElement.ForegroundProperty] = AppTheme.Brush(brushKey);
+        BuildStatusText.IsVisible = true;
     }
 
     private void ThemeComboBox_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
@@ -155,13 +168,20 @@ public partial class AppSettingsControl : UserControl
             AppTheme.Set(variant);
     }
 
+    private void LanguageComboBox_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        var language = (LanguageComboBox.SelectedItem as ComboBoxItem)?.Tag as string == "en" ? UiLanguage.En : UiLanguage.PtBr;
+        if (language != AppLanguage.Current)
+            AppLanguage.Set(language);
+    }
+
     private async Task SelectBuildSourceAsync()
     {
         var topLevel = TopLevel.GetTopLevel(this);
         if (topLevel == null) return;
         var folders = await topLevel.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
         {
-            Title = "Selecionar pasta de origem (.txt)"
+            Title = Loc.Settings.BuildSourcePicker
         });
         if (folders.Count == 0) return;
         var path = folders[0].Path.LocalPath;
@@ -175,7 +195,7 @@ public partial class AppSettingsControl : UserControl
         if (topLevel == null) return;
         var folders = await topLevel.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
         {
-            Title = "Selecionar pasta de saída (.l2dat)"
+            Title = Loc.Settings.BuildOutputPicker
         });
         if (folders.Count == 0) return;
         var path = folders[0].Path.LocalPath;
@@ -188,9 +208,7 @@ public partial class AppSettingsControl : UserControl
         var sourceDir = BuildSourceBox.Text?.Trim();
         if (string.IsNullOrEmpty(sourceDir) || !Directory.Exists(sourceDir))
         {
-            BuildStatusText.Text = "Selecione uma pasta de origem válida.";
-            BuildStatusText[!TextElement.ForegroundProperty] = AppTheme.Brush("ThemeStatusError");
-            BuildStatusText.IsVisible = true;
+            ShowBuildStatus(() => Loc.Settings.BuildSourceInvalidStatus, "ThemeStatusError");
             return;
         }
 
@@ -215,11 +233,9 @@ public partial class AppSettingsControl : UserControl
 
         if (txtFiles.Length == 0)
         {
-            BuildStatusText.Text = onlyRequired
-                ? "Nenhum dos arquivos necessários foi encontrado na pasta de origem."
-                : "Nenhum arquivo .txt encontrado na pasta de origem.";
-            BuildStatusText[!TextElement.ForegroundProperty] = AppTheme.Brush("ThemeStatusError");
-            BuildStatusText.IsVisible = true;
+            ShowBuildStatus(onlyRequired
+                ? () => Loc.Settings.BuildNoRequiredFilesStatus
+                : () => Loc.Settings.BuildNoFilesStatus, "ThemeStatusError");
             return;
         }
 
@@ -229,9 +245,7 @@ public partial class AppSettingsControl : UserControl
         BuildProgressLabel.Text = $"0 / {txtFiles.Length}";
         BuildCurrentFile.Text = string.Empty;
         BuildProgressPanel.IsVisible = true;
-        BuildStatusText.Text = "Compilando...";
-        BuildStatusText[!TextElement.ForegroundProperty] = AppTheme.Brush("ThemeWarningAccent");
-        BuildStatusText.IsVisible = true;
+        ShowBuildStatus(() => Loc.Settings.BuildRunningStatus, "ThemeWarningAccent");
 
         int quality = BuildQualityBox.SelectedIndex switch
         {
@@ -254,7 +268,7 @@ public partial class AppSettingsControl : UserControl
                 var inputPath = txtFiles[i];
                 var fileName  = Path.GetFileNameWithoutExtension(inputPath);
 
-                BuildCurrentFile.Text  = fileName + ".txt";
+                BuildCurrentFile.Text  = fileName + ".txt"; // loc-ok
                 BuildProgressLabel.Text = $"{i + 1} / {txtFiles.Length}";
 
                 try
@@ -269,7 +283,7 @@ public partial class AppSettingsControl : UserControl
                         var (_, content) = L2Pack.Unpack(outputPath);
                         var restored = System.Text.Encoding.UTF8.GetBytes(content);
                         if (!original.AsSpan().SequenceEqual(restored))
-                            throw new InvalidDataException($"Round-trip falhou para {fileName}");
+                            throw new InvalidDataException(Loc.Settings.RoundTripError(fileName));
                     });
 
                     totalOriginal += new FileInfo(inputPath).Length;
@@ -290,21 +304,22 @@ public partial class AppSettingsControl : UserControl
             var savings = totalOriginal > 0 ? 1.0 - (double)totalPacked / totalOriginal : 0;
             if (failed == 0)
             {
-                BuildStatusText.Text = $"Build concluído: {success} arquivo(s) — {FormatSize(totalOriginal)} → {FormatSize(totalPacked)} → {savings:P1}";
-                BuildStatusText[!TextElement.ForegroundProperty] = AppTheme.Brush("ThemeStatusOk");
+                var original = FormatSize(totalOriginal);
+                var packed = FormatSize(totalPacked);
+                ShowBuildStatus(() => Loc.Settings.BuildDoneStatus(success, original, packed, savings), "ThemeStatusOk");
             }
             else
             {
-                BuildStatusText.Text = $"{success} ok, {failed} erro(s) — {string.Join(" | ", errors)}";
-                BuildStatusText[!TextElement.ForegroundProperty] = AppTheme.Brush("ThemeStatusError");
+                var joined = string.Join(" | ", errors);
+                ShowBuildStatus(() => Loc.Settings.BuildFailedStatus(failed, success, joined), "ThemeStatusError");
             }
 
             BuildCurrentFile.Text = string.Empty;
         }
         catch (Exception ex)
         {
-            BuildStatusText.Text = $"Erro: {ex.Message}";
-            BuildStatusText[!TextElement.ForegroundProperty] = AppTheme.Brush("ThemeStatusError");
+            var message = ex.Message;
+            ShowBuildStatus(() => Loc.Settings.BuildErrorStatus(message), "ThemeStatusError");
         }
         finally
         {

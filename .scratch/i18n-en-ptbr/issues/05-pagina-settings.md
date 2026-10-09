@@ -31,3 +31,9 @@ Spec: `../spec.md`, decisões D3–D8 e D11, [Glossário de tradução].
 - Com um build L2DAT concluído e o status visível, trocar o idioma atualiza o status para o idioma novo, com os mesmos números.
 - "Verificar atualizações" mostra o resultado no idioma ativo.
 - A página não corta texto nos dois idiomas, inclusive nos chips.
+
+## Comments
+
+- Feito em `i18n/05-settings`: 51 chaves novas `Settings.*` (pt-BR literal verbatim, en novo), plurais `Settings.BuildDoneStatus`/`BuildFailedStatus` `.One`/`.Other`, qualidade `Mínima`/`Média`/`Alta`/`Máxima`, chips via `Nav.PrimeShop`/`Nav.SearchIcon`/`Nav.CreateMultisell`, "Selecionar" via `Common.Browse`. `Build` e `L2DAT BUILD` em `NonTranslatable.txt`. `BuildStatusText`/`UpdateStatusText` só via `LiveText.Set` (helpers `ShowBuildStatus`/`ShowUpdateStatus`). Tema segue por `SelectedIndex`; linha de idioma do ticket 02 intacta. `.l2dat` e round-trip não usam `Loc` (só a mensagem da exceção).
+- Verificação: `dotnet build L2Toolkit.sln` 0 erros. AppSettingsControl: L2LOC007 43 → 0, L2LOC008 11 → 0.
+- Adiado (GUI): troca de idioma com status de build/atualização visível e corte de texto nos dois idiomas.

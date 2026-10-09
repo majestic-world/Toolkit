@@ -87,10 +87,10 @@
 
         <!-- ── Cabeçalho ─────────────────────────────────────── -->
         <StackPanel Grid.Row="0" Spacing="3" Margin="0,0,0,14">
-            <TextBlock Text="Gerador de Brush"
+            <TextBlock Text="{DynamicResource BrushGenerator.Title}"
                        FontSize="22" FontWeight="SemiBold"
                        Foreground="{DynamicResource ThemeTextTitle}"/>
-            <TextBlock Text="Brushes de borda rasgada no estilo das splash do L2 — PNG preto em fundo branco para o Photoshop"
+            <TextBlock Text="{DynamicResource BrushGenerator.Subtitle}"
                        FontSize="13"
                        Foreground="{DynamicResource ThemeTextTitle}"/>
         </StackPanel>
@@ -138,70 +138,70 @@
                     <ScrollViewer VerticalScrollBarVisibility="Auto">
                         <StackPanel Margin="16,14" Spacing="10">
 
-                            <TextBlock Text="SEMENTE" Classes="Section"/>
+                            <TextBlock Text="{DynamicResource BrushGenerator.SeedSectionLabel}" Classes="Section"/>
                             <Grid ColumnDefinitions="*,8,Auto">
                                 <TextBox x:Name="SeedBox" Classes="FormField" Height="32" Padding="10,0"
                                          VerticalContentAlignment="Center"
                                          FontFamily="Consolas,Courier New,monospace"
-                                         ToolTip.Tip="A mesma semente gera sempre o mesmo brush"/>
+                                         ToolTip.Tip="{DynamicResource BrushGenerator.SeedTip}"/>
                                 <Button x:Name="ShuffleButton" Grid.Column="2" Theme="{StaticResource GhostButton}"
                                         Height="32" Padding="12,0" Click="Shuffle_Click">
-                                    <TextBlock Text="Gerar outro" FontSize="12" FontWeight="Medium"/>
+                                    <TextBlock Text="{DynamicResource BrushGenerator.ShuffleButton}" FontSize="12" FontWeight="Medium"/>
                                 </Button>
                             </Grid>
 
                             <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
-                            <TextBlock Text="FORMA" Classes="Section"/>
+                            <TextBlock Text="{DynamicResource BrushGenerator.ShapeSectionLabel}" Classes="Section"/>
 
                             <StackPanel>
                                 <Grid ColumnDefinitions="*,Auto">
-                                    <TextBlock Text="Pontas" Classes="Field"/>
+                                    <TextBlock Text="{DynamicResource BrushGenerator.SpikesLabel}" Classes="Field"/>
                                     <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #SpikesSlider.Value, StringFormat={}{0:0}}"/>
                                 </Grid>
                                 <Slider x:Name="SpikesSlider" Value="50"/>
                             </StackPanel>
                             <StackPanel>
                                 <Grid ColumnDefinitions="*,Auto">
-                                    <TextBlock Text="Rachaduras" Classes="Field"/>
+                                    <TextBlock Text="{DynamicResource BrushGenerator.CracksLabel}" Classes="Field"/>
                                     <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #CracksSlider.Value, StringFormat={}{0:0}}"/>
                                 </Grid>
                                 <Slider x:Name="CracksSlider" Value="10"/>
                             </StackPanel>
                             <StackPanel>
                                 <Grid ColumnDefinitions="*,Auto">
-                                    <TextBlock Text="Garras" Classes="Field"/>
+                                    <TextBlock Text="{DynamicResource BrushGenerator.ClawsLabel}" Classes="Field"/>
                                     <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #ClawsSlider.Value, StringFormat={}{0:0}}"/>
                                 </Grid>
                                 <Slider x:Name="ClawsSlider" Value="0"/>
                             </StackPanel>
                             <StackPanel>
                                 <Grid ColumnDefinitions="*,Auto">
-                                    <TextBlock Text="Estilhaços" Classes="Field"/>
+                                    <TextBlock Text="{DynamicResource BrushGenerator.DebrisLabel}" Classes="Field"/>
                                     <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #DebrisSlider.Value, StringFormat={}{0:0}}"/>
                                 </Grid>
                                 <Slider x:Name="DebrisSlider" Value="10"/>
                             </StackPanel>
                             <StackPanel>
                                 <Grid ColumnDefinitions="*,Auto">
-                                    <TextBlock Text="Borda suave" Classes="Field"/>
+                                    <TextBlock Text="{DynamicResource BrushGenerator.SoftnessLabel}" Classes="Field"/>
                                     <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #SoftnessSlider.Value, StringFormat={}{0:0}}"/>
                                 </Grid>
                                 <Slider x:Name="SoftnessSlider" Value="0"/>
                             </StackPanel>
                             <StackPanel>
                                 <Grid ColumnDefinitions="*,Auto">
-                                    <TextBlock Text="Simetria" Classes="Field"
-                                               ToolTip.Tip="Retângulo arredondado com pontas regulares, espelhado na vertical"/>
+                                    <TextBlock Text="{DynamicResource BrushGenerator.SymmetryLabel}" Classes="Field"
+                                               ToolTip.Tip="{DynamicResource BrushGenerator.SymmetryTip}"/>
                                     <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #SymmetrySlider.Value, StringFormat={}{0:0}}"/>
                                 </Grid>
                                 <Slider x:Name="SymmetrySlider" Value="30"/>
                             </StackPanel>
 
                             <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
-                            <TextBlock Text="SAÍDA" Classes="Section"/>
+                            <TextBlock Text="{DynamicResource BrushGenerator.OutputSectionLabel}" Classes="Section"/>
 
                             <StackPanel Spacing="5">
-                                <TextBlock Text="Tamanho" Classes="Field"/>
+                                <TextBlock Text="{DynamicResource BrushGenerator.SizeLabel}" Classes="Field"/>
                                 <ComboBox x:Name="SizeCombo" HorizontalAlignment="Stretch">
                                     <ComboBoxItem Content="512 px"/>
                                     <ComboBoxItem Content="1024 px"/>
@@ -223,15 +223,15 @@
                                    VerticalAlignment="Center" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
                         <Button x:Name="VariantsButton" Grid.Column="1" Theme="{StaticResource GhostButton}"
                                 Height="34" Padding="14,0" Click="Variants_Click"
-                                ToolTip.Tip="Abre uma janela com várias variações para escolher">
-                            <TextBlock Text="Gerar vários…" FontSize="12" FontWeight="Medium"/>
+                                ToolTip.Tip="{DynamicResource BrushGenerator.VariantsTip}">
+                            <TextBlock Text="{DynamicResource BrushGenerator.VariantsButton}" FontSize="12" FontWeight="Medium"/>
                         </Button>
                         <Button x:Name="ExportButton" Grid.Column="3" Theme="{StaticResource SecondaryButton}"
                                 Height="34" Padding="20,0" Click="Export_Click">
                             <StackPanel Orientation="Horizontal" Spacing="8">
                                 <PathIcon Data="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"
                                           Foreground="White" Width="13" Height="13" VerticalAlignment="Center"/>
-                                <TextBlock Text="Exportar PNG…" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                <TextBlock Text="{DynamicResource BrushGenerator.ExportButton}" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
                     </Grid>

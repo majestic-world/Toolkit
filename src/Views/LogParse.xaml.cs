@@ -11,6 +11,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
+using L2Toolkit.Localization;
 using L2Toolkit.Settings;
 
 namespace L2Toolkit.Views;
@@ -43,7 +44,7 @@ public partial class LogParse : UserControl
     {
         _errorTimer.Stop();
         NotificacaoBorder.IsVisible = true;
-        StatusNotificacao.Text = !string.IsNullOrWhiteSpace(message) ? message : "Ocorreu um erro inesperado.";
+        StatusNotificacao.Text = !string.IsNullOrWhiteSpace(message) ? message : Loc.Common.UnexpectedError;
         _errorTimer.Start();
     }
 
@@ -56,7 +57,7 @@ public partial class LogParse : UserControl
             AllowMultiple = false,
             FileTypeFilter = new[]
             {
-                new FilePickerFileType("Log files") { Patterns = new[] { "*.log" } }
+                new FilePickerFileType(Loc.LogParse.LogFilesFilter) { Patterns = new[] { "*.log" } }
             }
         });
         if (files.Count == 0) return;
@@ -140,34 +141,34 @@ public partial class LogParse : UserControl
             var outputDir = OutputDir.Text;
 
             if (string.IsNullOrEmpty(name))
-                throw new Exception("Insira a key de pesquisa");
+                throw new Exception(Loc.LogParse.NoKeyError);
 
             if (string.IsNullOrEmpty(outputDir))
-                throw new Exception("Preencha a pasta de saída");
+                throw new Exception(Loc.LogParse.NoOutputError);
 
             if (string.IsNullOrEmpty(fileLog))
-                throw new Exception("Selecione o arquivo de log");
+                throw new Exception(Loc.LogParse.NoLogFileError);
 
             var encoding = Encoding.GetEncoding(1252);
             var fileName = $"Log-{name}";
 
             _logQueue.Clear();
-            AddLog("Iniciando o processo...");
-            ButtonGenerateText.Text = "Processando...";
+            AddLog(Loc.LogParse.StartLog);
+            LiveText.Set(ButtonGenerateText, () => Loc.LogParse.ProcessingButton);
 
             var matchedLines = await Task.Run(() =>
                 ProcessLog(fileLog, name, optionalEvent, encoding));
 
             if (matchedLines.Count == 0)
             {
-                AddLog($"Total de logs: {_totalLogs:N0}");
-                AddLog($"Nenhum log encontrado para a key {name}");
+                AddLog(Loc.LogParse.TotalLog(_totalLogs));
+                AddLog(Loc.LogParse.NoMatchLog(name));
                 _totalLogs = 0;
                 return;
             }
 
-            AddLog($"Logs encontrados: {matchedLines.Count:N0}");
-            AddLog($"Total de logs: {_totalLogs:N0}");
+            AddLog(Loc.LogParse.FoundLog(matchedLines.Count));
+            AddLog(Loc.LogParse.TotalLog(_totalLogs));
 
             _totalLogs = 0;
 
@@ -180,7 +181,7 @@ public partial class LogParse : UserControl
             var saveFileDir = Path.Combine(outputDir, fileName);
 
             await File.WriteAllLinesAsync(saveFileDir, matchedLines, encoding);
-            AddLog($"Pronto, o arquivo {fileName} foi criado com sucesso");
+            AddLog(Loc.LogParse.CreatedLog(fileName));
 
             if (File.Exists(saveFileDir))
             {
@@ -197,7 +198,7 @@ public partial class LogParse : UserControl
         }
         finally
         {
-            ButtonGenerateText.Text = "Gerar Dados";
+            LiveText.Set(ButtonGenerateText, () => Loc.LogParse.GenerateButton);
         }
     }
 }

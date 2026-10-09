@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using L2Toolkit.Localization;
 
 namespace L2Toolkit.Processing.Geodata;
 
@@ -19,7 +20,7 @@ public abstract class GeodataWriter
             GeodataFormat.L2J => new L2JWriter(region),
             GeodataFormat.ConvDat => new ConvDatWriter(region),
             GeodataFormat.L2G => new L2GWriter(region),
-            _ => throw new ArgumentException($"Unsupported output format: {format}")
+            _ => throw new ArgumentException(Loc.Geodata.UnsupportedOutputError(format))
         };
     }
 

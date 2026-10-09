@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Text.RegularExpressions;
+using L2Toolkit.Localization;
 
 namespace L2Toolkit.Processing.Geodata;
 
@@ -31,7 +32,7 @@ public abstract class GeodataParser
             GeodataFormat.L2M => new L2MParser(filePath),
             GeodataFormat.RP => new RPParser(filePath),
             GeodataFormat.PathTxt => new PathTxtParser(filePath),
-            _ => throw new ArgumentException($"Unsupported format: {format}")
+            _ => throw new ArgumentException(Loc.Geodata.UnsupportedFormatError(format))
         };
     }
 

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using L2Toolkit.Localization;
 
 namespace L2Toolkit.Processing.Geodata;
 
@@ -36,12 +37,12 @@ public class GeodataProcessor
 
         if (files.Count == 0)
         {
-            log("Nenhum arquivo geodata encontrado na pasta de entrada.");
+            log(Loc.Geodata.NoFilesLog);
             return results;
         }
 
         Directory.CreateDirectory(outputDir);
-        log($"Encontrados {files.Count} arquivo(s) geodata.");
+        log(Loc.Geodata.FoundLog(files.Count));
 
         int completed = 0;
 
@@ -54,8 +55,8 @@ public class GeodataProcessor
 
             if (sourceFormat == null)
             {
-                log($"[SKIP] {fileName} - formato não reconhecido");
-                results.Add(new FileResult(fileName, false, false, true, "Formato não reconhecido"));
+                log(Loc.Geodata.SkipUnknownLog(fileName));
+                results.Add(new FileResult(fileName, false, false, true, Loc.Geodata.UnknownFormatError));
                 completed++;
                 progress(completed, files.Count);
                 continue;
@@ -67,12 +68,12 @@ public class GeodataProcessor
                 try
                 {
                     await Task.Run(() => File.Copy(filePath, destPath, true), ct);
-                    log($"[COPY] {fileName} - já está no formato {targetFormat}");
+                    log(Loc.Geodata.CopyLog(fileName, targetFormat));
                     results.Add(new FileResult(fileName, false, true, false));
                 }
                 catch (Exception ex)
                 {
-                    log($"[ERRO] {fileName} - falha ao copiar: {ex.Message}");
+                    log(Loc.Geodata.CopyFailedLog(fileName, ex.Message));
                     results.Add(new FileResult(fileName, false, false, true, ex.Message));
                 }
             }
@@ -82,15 +83,15 @@ public class GeodataProcessor
                 {
                     await Task.Run(() =>
                     {
-                        log($"[READ] {fileName} ({sourceFormat})...");
+                        log(Loc.Geodata.ReadLog(fileName, sourceFormat));
 
                         var parser = GeodataParser.Create(sourceFormat.Value, filePath);
                         parser.Decrypt();
 
                         if (!parser.IsValid())
                         {
-                            log($"[SKIP] {fileName} - arquivo inválido ou coordenadas fora do intervalo");
-                            results.Add(new FileResult(fileName, false, false, true, "Arquivo inválido"));
+                            log(Loc.Geodata.InvalidFileLog(fileName));
+                            results.Add(new FileResult(fileName, false, false, true, Loc.Geodata.InvalidFileError));
                             return;
                         }
 
@@ -99,12 +100,12 @@ public class GeodataProcessor
                         var outputFileName = GeoConstants.GetOutputFileName(xy[0], xy[1], targetFormat);
                         var outputPath = Path.Combine(outputDir, outputFileName);
 
-                        log($"[CONV] {fileName} -> {outputFileName} ({targetFormat})...");
+                        log(Loc.Geodata.ConvLog(fileName, outputFileName, targetFormat));
 
                         var writer = GeodataWriter.Create(region, targetFormat);
                         writer.WriteTo(outputPath);
 
-                        log($"[OK]   {outputFileName} salvo com sucesso");
+                        log(Loc.Geodata.SavedLog(outputFileName));
                         results.Add(new FileResult(fileName, true, false, false));
                     }, ct);
                 }
@@ -114,7 +115,7 @@ public class GeodataProcessor
                 }
                 catch (Exception ex)
                 {
-                    log($"[ERRO] {fileName} - {ex.Message}");
+                    log(Loc.Geodata.ErrorLog(fileName, ex.Message));
                     results.Add(new FileResult(fileName, false, false, true, ex.Message));
                 }
             }
