@@ -68,10 +68,87 @@
   <!-- ═══ LogParse ═══ -->
 
   <!-- ═══ Main ═══ -->
+  <data name="Main.SettingsTip" xml:space="preserve">
+    <value>Configurações</value>
+  </data>
+  <data name="Main.ToolsSection" xml:space="preserve">
+    <value>FERRAMENTAS</value>
+  </data>
+  <data name="Main.UtilitiesSection" xml:space="preserve">
+    <value>UTILITÁRIOS</value>
+  </data>
 
   <!-- ═══ Missions ═══ -->
 
   <!-- ═══ Nav ═══ -->
+  <data name="Nav.BrushGenerator" xml:space="preserve">
+    <value>Gerador de Brush</value>
+    <comment>Nome da ferramenta na sidebar; reutilizado nos chips de Configurações.</comment>
+  </data>
+  <data name="Nav.CreateMultisell" xml:space="preserve">
+    <value>Criar MultiSell</value>
+    <comment>Nome da ferramenta na sidebar; reutilizado nos chips de Configurações.</comment>
+  </data>
+  <data name="Nav.DescriptionFix" xml:space="preserve">
+    <value>Corrigir Descrição</value>
+    <comment>Nome da ferramenta na sidebar; reutilizado nos chips de Configurações.</comment>
+  </data>
+  <data name="Nav.DoorGenerate" xml:space="preserve">
+    <value>Gerar Portas</value>
+    <comment>Nome da ferramenta na sidebar; reutilizado nos chips de Configurações.</comment>
+  </data>
+  <data name="Nav.EnchantEffect" xml:space="preserve">
+    <value>Enchant Effect</value>
+    <comment>Nome da ferramenta na sidebar; reutilizado nos chips de Configurações.</comment>
+  </data>
+  <data name="Nav.GeodataConverter" xml:space="preserve">
+    <value>Converter Geodata</value>
+    <comment>Nome da ferramenta na sidebar; reutilizado nos chips de Configurações.</comment>
+  </data>
+  <data name="Nav.LiveData" xml:space="preserve">
+    <value>Modo Live Data (166)</value>
+    <comment>Nome da ferramenta na sidebar; reutilizado nos chips de Configurações.</comment>
+  </data>
+  <data name="Nav.LogParse" xml:space="preserve">
+    <value>Gerenciar Logs</value>
+    <comment>Nome da ferramenta na sidebar; reutilizado nos chips de Configurações.</comment>
+  </data>
+  <data name="Nav.Missions" xml:space="preserve">
+    <value>Missões Diárias</value>
+    <comment>Nome da ferramenta na sidebar; reutilizado nos chips de Configurações.</comment>
+  </data>
+  <data name="Nav.PawnData" xml:space="preserve">
+    <value>Animações (PawnData)</value>
+    <comment>Nome da ferramenta na sidebar; reutilizado nos chips de Configurações.</comment>
+  </data>
+  <data name="Nav.PrimeShop" xml:space="preserve">
+    <value>Prime Shop</value>
+    <comment>Nome da ferramenta na sidebar; reutilizado nos chips de Configurações.</comment>
+  </data>
+  <data name="Nav.SearchIcon" xml:space="preserve">
+    <value>Pesquisar Ícone</value>
+    <comment>Nome da ferramenta na sidebar; reutilizado nos chips de Configurações.</comment>
+  </data>
+  <data name="Nav.SkinBuilder" xml:space="preserve">
+    <value>Skin Builder</value>
+    <comment>Nome da ferramenta na sidebar; reutilizado nos chips de Configurações.</comment>
+  </data>
+  <data name="Nav.SpawnManager" xml:space="preserve">
+    <value>NPC Spawn XML</value>
+    <comment>Nome da ferramenta na sidebar; reutilizado nos chips de Configurações.</comment>
+  </data>
+  <data name="Nav.SplashScreen" xml:space="preserve">
+    <value>Splash Screen</value>
+    <comment>Nome da ferramenta na sidebar; reutilizado nos chips de Configurações.</comment>
+  </data>
+  <data name="Nav.SystemMsgColor" xml:space="preserve">
+    <value>System Msg Color</value>
+    <comment>Nome da ferramenta na sidebar; reutilizado nos chips de Configurações.</comment>
+  </data>
+  <data name="Nav.UpgradeNormalSystem" xml:space="preserve">
+    <value>Upgrade Normal System</value>
+    <comment>Nome da ferramenta na sidebar; reutilizado nos chips de Configurações.</comment>
+  </data>
 
   <!-- ═══ PawnData ═══ -->
 
@@ -98,6 +175,80 @@
   <!-- ═══ Tables ═══ -->
 
   <!-- ═══ Update ═══ -->
+  <data name="Update.AvailableTitle" xml:space="preserve">
+    <value>Nova versão disponível</value>
+  </data>
+  <data name="Update.ChecksumError" xml:space="preserve">
+    <value>O instalador baixado não confere com o SHA-256 da release.</value>
+  </data>
+  <data name="Update.ConfirmButton" xml:space="preserve">
+    <value>Atualizar agora</value>
+  </data>
+  <data name="Update.ConnectingStatus" xml:space="preserve">
+    <value>Conectando…</value>
+  </data>
+  <data name="Update.DismissButton" xml:space="preserve">
+    <value>Agora não</value>
+  </data>
+  <data name="Update.DownloadHint" xml:space="preserve">
+    <value>Baixando o instalador. Ao terminar, o app fecha, a atualização é instalada e o app abre de novo.</value>
+  </data>
+  <data name="Update.DownloadLabel" xml:space="preserve">
+    <value>Download</value>
+    <comment>Rótulo do tamanho do instalador.</comment>
+  </data>
+  <data name="Update.DownloadTitle" xml:space="preserve">
+    <value>Atualizando para a versão {tag}</value>
+    <comment>tag: tag da release, ex.: v3.9.</comment>
+  </data>
+  <data name="Update.FailedError" xml:space="preserve">
+    <value>Falha ao atualizar: {message}</value>
+    <comment>message: mensagem da exceção.</comment>
+  </data>
+  <data name="Update.IncompleteDownloadError" xml:space="preserve">
+    <value>Download incompleto: {done} de {total} bytes.</value>
+  </data>
+  <data name="Update.InstallHint" xml:space="preserve">
+    <value>Ao atualizar, o app baixa o instalador, fecha durante a instalação e abre de novo ao terminar.</value>
+  </data>
+  <data name="Update.NoInstallerError" xml:space="preserve">
+    <value>A release {tag} não tem instalador (.exe).</value>
+  </data>
+  <data name="Update.NoNotesStatus" xml:space="preserve">
+    <value>Sem notas para esta versão.</value>
+  </data>
+  <data name="Update.NotesSection" xml:space="preserve">
+    <value>NOVIDADES</value>
+  </data>
+  <data name="Update.OpeningInstallerStatus" xml:space="preserve">
+    <value>Abrindo o instalador…</value>
+  </data>
+  <data name="Update.ProgressStatus" xml:space="preserve">
+    <value>{done:0.0} de {total:0.0} MB</value>
+    <comment>done/total em MB.</comment>
+  </data>
+  <data name="Update.PublishedLabel" xml:space="preserve">
+    <value>Publicada em</value>
+  </data>
+  <data name="Update.ReleaseLabel" xml:space="preserve">
+    <value>Release</value>
+  </data>
+  <data name="Update.ReleasePageButton" xml:space="preserve">
+    <value>Ver no GitHub</value>
+  </data>
+  <data name="Update.ReleasePageTip" xml:space="preserve">
+    <value>Abrir a release no navegador</value>
+  </data>
+  <data name="Update.SizeValue" xml:space="preserve">
+    <value>{size:0.0} MB</value>
+    <comment>size: tamanho do instalador em MB.</comment>
+  </data>
+  <data name="Update.TagFormatError" xml:space="preserve">
+    <value>Tag da release fora do formato de versão: "{tag}".</value>
+  </data>
+  <data name="Update.VersionLabel" xml:space="preserve">
+    <value>Versão</value>
+  </data>
 
   <!-- ═══ UpgradeNormal ═══ -->
 
