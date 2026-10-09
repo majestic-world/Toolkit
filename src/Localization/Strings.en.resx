@@ -175,6 +175,87 @@
   <!-- ═══ DoorGenerate ═══ -->
 
   <!-- ═══ EnchantEffect ═══ -->
+  <data name="EnchantEffect.ActionsTitle" xml:space="preserve">
+    <value>ACTIONS</value>
+  </data>
+  <data name="EnchantEffect.ApplyAllButton" xml:space="preserve">
+    <value>Apply to all grades</value>
+  </data>
+  <data name="EnchantEffect.ArmorFilePicker" xml:space="preserve">
+    <value>Select FullArmorEnchantEffectData.dat</value>
+  </data>
+  <data name="EnchantEffect.ArmorFileWatermark" xml:space="preserve">
+    <value>Click to select FullArmorEnchantEffectData.dat…</value>
+  </data>
+  <data name="EnchantEffect.ArmorModeButton" xml:space="preserve">
+    <value>Armor</value>
+  </data>
+  <data name="EnchantEffect.CloseFileButton" xml:space="preserve">
+    <value>Close file</value>
+  </data>
+  <data name="EnchantEffect.ColorsAppliedStatus.One" xml:space="preserve">
+    <value>Colors applied to {count} grade of type {type}.</value>
+  </data>
+  <data name="EnchantEffect.ColorsAppliedStatus.Other" xml:space="preserve">
+    <value>Colors applied to {count} grades of type {type}.</value>
+  </data>
+  <data name="EnchantEffect.DatFilter" xml:space="preserve">
+    <value>DAT files</value>
+  </data>
+  <data name="EnchantEffect.FileNotFoundError" xml:space="preserve">
+    <value>File not found.</value>
+  </data>
+  <data name="EnchantEffect.FileTitle" xml:space="preserve">
+    <value>FILE</value>
+  </data>
+  <data name="EnchantEffect.GradeTitle" xml:space="preserve">
+    <value>GRADE</value>
+  </data>
+  <data name="EnchantEffect.GradientTitle" xml:space="preserve">
+    <value>MANAGE GRADIENT</value>
+  </data>
+  <data name="EnchantEffect.MaxColorTitle" xml:space="preserve">
+    <value>MAX COLOR</value>
+  </data>
+  <data name="EnchantEffect.MinColorPreviewTitle" xml:space="preserve">
+    <value>PREVIEW — MIN COLOR</value>
+  </data>
+  <data name="EnchantEffect.MinEnchantTitle" xml:space="preserve">
+    <value>MIN ENCHANT</value>
+  </data>
+  <data name="EnchantEffect.OpenButton" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="EnchantEffect.RadiancePreviewTitle" xml:space="preserve">
+    <value>PREVIEW — RADIANCE</value>
+  </data>
+  <data name="EnchantEffect.SaveError" xml:space="preserve">
+    <value>Couldn't save: {message}</value>
+  </data>
+  <data name="EnchantEffect.SaveFileButton" xml:space="preserve">
+    <value>Save file</value>
+  </data>
+  <data name="EnchantEffect.SavedStatus" xml:space="preserve">
+    <value>File saved. Backup: .dat.bak</value>
+  </data>
+  <data name="EnchantEffect.Subtitle" xml:space="preserve">
+    <value>Visual glow color editor for weapons and armor</value>
+  </data>
+  <data name="EnchantEffect.Title" xml:space="preserve">
+    <value>Enchant Effect</value>
+  </data>
+  <data name="EnchantEffect.TypeTitle" xml:space="preserve">
+    <value>TYPE</value>
+  </data>
+  <data name="EnchantEffect.WeaponFilePicker" xml:space="preserve">
+    <value>Select WeaponEnchantEffectData.dat</value>
+  </data>
+  <data name="EnchantEffect.WeaponFileWatermark" xml:space="preserve">
+    <value>Click to select WeaponEnchantEffectData.dat…</value>
+  </data>
+  <data name="EnchantEffect.WeaponModeButton" xml:space="preserve">
+    <value>Weapon</value>
+  </data>
 
   <!-- ═══ Format ═══ -->
   <data name="Format.DateTime" xml:space="preserve">
@@ -430,6 +511,111 @@
   <!-- ═══ SplashScreen ═══ -->
 
   <!-- ═══ SystemMsgColor ═══ -->
+  <data name="SystemMsgColor.BackupWarningHint" xml:space="preserve">
+    <value>Incorrect edits can corrupt the client file. Saving creates an automatic backup with the .dat.bak extension in the same folder, but we recommend keeping a manual copy somewhere safe.</value>
+  </data>
+  <data name="SystemMsgColor.BackupWarningTitle" xml:space="preserve">
+    <value>Back up before editing</value>
+  </data>
+  <data name="SystemMsgColor.ClearSelectionButton" xml:space="preserve">
+    <value>Clear selection ({count})</value>
+  </data>
+  <data name="SystemMsgColor.CloseFileButton" xml:space="preserve">
+    <value>Close file</value>
+  </data>
+  <data name="SystemMsgColor.ColorAppliedStatus.One" xml:space="preserve">
+    <value>Color applied to {count} message.</value>
+  </data>
+  <data name="SystemMsgColor.ColorAppliedStatus.Other" xml:space="preserve">
+    <value>Color applied to {count} messages.</value>
+  </data>
+  <data name="SystemMsgColor.ColorColumnTitle" xml:space="preserve">
+    <value>COLOR</value>
+  </data>
+  <data name="SystemMsgColor.ColorsModalTitle" xml:space="preserve">
+    <value>Colors in file</value>
+  </data>
+  <data name="SystemMsgColor.DatFilter" xml:space="preserve">
+    <value>Lineage 2 DAT files</value>
+  </data>
+  <data name="SystemMsgColor.ExistingColorsButton" xml:space="preserve">
+    <value>Existing colors…</value>
+  </data>
+  <data name="SystemMsgColor.FilePicker" xml:space="preserve">
+    <value>Select SystemMsg.dat</value>
+  </data>
+  <data name="SystemMsgColor.FileWatermark" xml:space="preserve">
+    <value>Click to select the SystemMsg.dat file…</value>
+  </data>
+  <data name="SystemMsgColor.L2ExeNotFoundError" xml:space="preserve">
+    <value>l2.exe not found in:&#10;{path}</value>
+  </data>
+  <data name="SystemMsgColor.MessageColumnTitle" xml:space="preserve">
+    <value>MESSAGE</value>
+  </data>
+  <data name="SystemMsgColor.OpenButton" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="SystemMsgColor.OverflowStatus" xml:space="preserve">
+    <value>Showing {shown} of {total}. Use search to find specific messages.</value>
+  </data>
+  <data name="SystemMsgColor.PresetApplyTip" xml:space="preserve">
+    <value>#{hex} — click to apply</value>
+  </data>
+  <data name="SystemMsgColor.PresetNameLabel" xml:space="preserve">
+    <value>NAME</value>
+  </data>
+  <data name="SystemMsgColor.PresetNameWatermark" xml:space="preserve">
+    <value>Preset name</value>
+  </data>
+  <data name="SystemMsgColor.PresetSavedStatus" xml:space="preserve">
+    <value>Preset "{name}" saved.</value>
+  </data>
+  <data name="SystemMsgColor.SaveError" xml:space="preserve">
+    <value>Couldn't save</value>
+  </data>
+  <data name="SystemMsgColor.SaveFileButton" xml:space="preserve">
+    <value>Save file</value>
+  </data>
+  <data name="SystemMsgColor.SavePresetButton" xml:space="preserve">
+    <value>Save preset</value>
+  </data>
+  <data name="SystemMsgColor.SavedStatus" xml:space="preserve">
+    <value>File saved. Backup created as .dat.bak.</value>
+  </data>
+  <data name="SystemMsgColor.SavingStatus" xml:space="preserve">
+    <value>Saving…</value>
+  </data>
+  <data name="SystemMsgColor.SearchButton" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="SystemMsgColor.SearchResultsStatus.One" xml:space="preserve">
+    <value>{shown} of {count} result · {total} total</value>
+  </data>
+  <data name="SystemMsgColor.SearchResultsStatus.Other" xml:space="preserve">
+    <value>{shown} of {count} results · {total} total</value>
+  </data>
+  <data name="SystemMsgColor.SearchWatermark" xml:space="preserve">
+    <value>Search by ID or message text</value>
+  </data>
+  <data name="SystemMsgColor.StatsStatus" xml:space="preserve">
+    <value>{messageCount} messages · {colorCount} unique colors</value>
+  </data>
+  <data name="SystemMsgColor.Subtitle" xml:space="preserve">
+    <value>Per-message text-color editor</value>
+  </data>
+  <data name="SystemMsgColor.Title" xml:space="preserve">
+    <value>System message colors</value>
+  </data>
+  <data name="SystemMsgColor.UniqueColorsStatus.One" xml:space="preserve">
+    <value>{count} unique color in file</value>
+  </data>
+  <data name="SystemMsgColor.UniqueColorsStatus.Other" xml:space="preserve">
+    <value>{count} unique colors in file</value>
+  </data>
+  <data name="SystemMsgColor.UseForPresetTip" xml:space="preserve">
+    <value>Click to use as the new preset color</value>
+  </data>
 
   <!-- ═══ Tables ═══ -->
 
