@@ -9,6 +9,13 @@ L2 Toolkit (Fafurion) By Mk
 # ── Brush ──
 
 # ── BrushGenerator ──
+512 px
+1024 px
+2048 px
+2500 px
+4096 px
+5000 px
+PNG
 
 # ── BrushVariants ──
 

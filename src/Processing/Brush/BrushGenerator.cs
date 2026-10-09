@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using L2Toolkit.Localization;
 using L2Toolkit.Processing.Splash;
 using SkiaSharp;
 
@@ -34,8 +35,8 @@ public static class BrushGenerator
     public static void ExportPng(BrushSettings settings, int size, string path)
     {
         using var bitmap = RenderSquare(settings, size);
-        using var gray = bitmap.Copy(SKColorType.Gray8) ?? throw new InvalidOperationException("Falha ao converter o brush para tons de cinza.");
-        using var data = gray.Encode(SKEncodedImageFormat.Png, 100) ?? throw new InvalidOperationException("Falha ao gerar o PNG.");
+        using var gray = bitmap.Copy(SKColorType.Gray8) ?? throw new InvalidOperationException(Loc.Brush.GrayscaleError);
+        using var data = gray.Encode(SKEncodedImageFormat.Png, 100) ?? throw new InvalidOperationException(Loc.Brush.PngError);
         using var stream = File.Create(path);
         data.SaveTo(stream);
     }
@@ -122,7 +123,7 @@ public static class BrushGenerator
     private static SKBitmap RenderSquare(BrushSettings settings, int size)
     {
         if (size is < 64 or > MaxSize)
-            throw new ArgumentOutOfRangeException(nameof(size), size, $"O tamanho precisa ficar entre 64 e {MaxSize} px.");
+            throw new ArgumentOutOfRangeException(nameof(size), size, Loc.Brush.SizeRangeError(MaxSize));
         return Render(settings, size, size, new Placement(size / 2.0, size / 2.0, size / 2.0, size / 2.0));
     }
 
