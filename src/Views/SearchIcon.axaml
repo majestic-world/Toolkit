@@ -199,10 +199,10 @@
                                            Foreground="{DynamicResource ThemeTextLabel}"
                                            FontWeight="Medium"/>
                                 <ComboBox x:Name="ItemType" SelectedIndex="0">
-                                    <ComboBoxItem HorizontalAlignment="Stretch" Content="Weapon"/>
-                                    <ComboBoxItem HorizontalAlignment="Stretch" Content="Armor"/>
-                                    <ComboBoxItem HorizontalAlignment="Stretch" Content="Items"/>
-                                    <ComboBoxItem HorizontalAlignment="Stretch" Content="Skills"/>
+                                    <ComboBoxItem HorizontalAlignment="Stretch" Tag="Weapon" Content="Weapon"/>
+                                    <ComboBoxItem HorizontalAlignment="Stretch" Tag="Armor" Content="Armor"/>
+                                    <ComboBoxItem HorizontalAlignment="Stretch" Tag="Items" Content="Items"/>
+                                    <ComboBoxItem HorizontalAlignment="Stretch" Tag="Skills" Content="Skills"/>
                                 </ComboBox>
                             </StackPanel>
 

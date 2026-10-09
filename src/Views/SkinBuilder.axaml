@@ -211,8 +211,8 @@
                                 <ComboBox x:Name="TypeProcess"
                                           SelectedIndex="0"
                                           SelectionChanged="TypeProcess_OnSelectionChanged">
-                                    <ComboBoxItem HorizontalAlignment="Stretch">Weapons</ComboBoxItem>
-                                    <ComboBoxItem HorizontalAlignment="Stretch">Armor</ComboBoxItem>
+                                    <ComboBoxItem HorizontalAlignment="Stretch" Tag="Weapons">Weapons</ComboBoxItem>
+                                    <ComboBoxItem HorizontalAlignment="Stretch" Tag="Armor">Armor</ComboBoxItem>
                                 </ComboBox>
                             </StackPanel>
 

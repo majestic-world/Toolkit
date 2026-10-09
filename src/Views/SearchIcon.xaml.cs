@@ -130,9 +130,7 @@ namespace L2Toolkit.Views
                     return;
                 }
 
-                var type = ItemType.SelectedItem is ComboBoxItem selectedItem
-                    ? selectedItem.Content?.ToString()
-                    : null;
+                var type = (ItemType.SelectedItem as ComboBoxItem)?.Tag as string;
 
                 switch (type)
                 {

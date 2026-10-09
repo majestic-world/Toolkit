@@ -216,10 +216,10 @@
                                     <ComboBox x:Name="TypeProcess"
                                               SelectionChanged="TypeProcess_OnDropDownClosed"
                                               SelectedIndex="0">
-                                        <ComboBoxItem HorizontalAlignment="Stretch">Skills</ComboBoxItem>
-                                        <ComboBoxItem HorizontalAlignment="Stretch">Weapons</ComboBoxItem>
-                                        <ComboBoxItem HorizontalAlignment="Stretch">Armor</ComboBoxItem>
-                                        <ComboBoxItem HorizontalAlignment="Stretch">Items</ComboBoxItem>
+                                        <ComboBoxItem HorizontalAlignment="Stretch" Tag="Skills">Skills</ComboBoxItem>
+                                        <ComboBoxItem HorizontalAlignment="Stretch" Tag="Weapons">Weapons</ComboBoxItem>
+                                        <ComboBoxItem HorizontalAlignment="Stretch" Tag="Armor">Armor</ComboBoxItem>
+                                        <ComboBoxItem HorizontalAlignment="Stretch" Tag="Items">Items</ComboBoxItem>
                                     </ComboBox>
                                 </StackPanel>
 
