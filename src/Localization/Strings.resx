@@ -583,6 +583,99 @@
     <value>Aguardando...</value>
   </data>
 
+  <!-- ═══ L2DatBuild ═══ -->
+  <data name="L2DatBuild.BuildButton" xml:space="preserve">
+    <value>Build</value>
+  </data>
+  <data name="L2DatBuild.CompressionLabel" xml:space="preserve">
+    <value>Nível de compressão</value>
+  </data>
+  <data name="L2DatBuild.DefaultButton" xml:space="preserve">
+    <value>Padrão</value>
+  </data>
+  <data name="L2DatBuild.DoneStatus.One" xml:space="preserve">
+    <value>Build concluído: {count} arquivo — {original} → {packed} → {savings:P1}</value>
+  </data>
+  <data name="L2DatBuild.DoneStatus.Other" xml:space="preserve">
+    <value>Build concluído: {count} arquivos — {original} → {packed} → {savings:P1}</value>
+  </data>
+  <data name="L2DatBuild.ErrorStatus" xml:space="preserve">
+    <value>Erro: {message}</value>
+  </data>
+  <data name="L2DatBuild.FailedStatus.One" xml:space="preserve">
+    <value>{ok} ok, {count} erro. Veja a lista de arquivos.</value>
+  </data>
+  <data name="L2DatBuild.FailedStatus.Other" xml:space="preserve">
+    <value>{ok} ok, {count} erros. Veja a lista de arquivos.</value>
+  </data>
+  <data name="L2DatBuild.FileSizesLabel" xml:space="preserve">
+    <value>{original} → {packed}</value>
+    <comment>Tamanho do .txt e do .l2dat gerado, já formatados (KB/MB).</comment>
+  </data>
+  <data name="L2DatBuild.FilesEmptyHint" xml:space="preserve">
+    <value>Os arquivos compilados aparecem aqui, um por linha, com o tamanho antes e depois ou o erro.</value>
+  </data>
+  <data name="L2DatBuild.FilesTitle" xml:space="preserve">
+    <value>ARQUIVOS</value>
+  </data>
+  <data name="L2DatBuild.NoFilesStatus" xml:space="preserve">
+    <value>Nenhum arquivo .txt encontrado na pasta de origem.</value>
+  </data>
+  <data name="L2DatBuild.NoFolderWatermark" xml:space="preserve">
+    <value>Nenhuma pasta selecionada...</value>
+  </data>
+  <data name="L2DatBuild.NoRequiredFilesStatus" xml:space="preserve">
+    <value>Nenhum dos arquivos necessários foi encontrado na pasta de origem.</value>
+  </data>
+  <data name="L2DatBuild.OnlyRequiredLabel" xml:space="preserve">
+    <value>Apenas os necessários (empacota somente as tabelas usadas pelo sistema, ignora o resto)</value>
+  </data>
+  <data name="L2DatBuild.OutputLabel" xml:space="preserve">
+    <value>Pasta de saída (.l2dat)</value>
+  </data>
+  <data name="L2DatBuild.OutputPicker" xml:space="preserve">
+    <value>Selecionar pasta de saída (.l2dat)</value>
+  </data>
+  <data name="L2DatBuild.OutputWatermark" xml:space="preserve">
+    <value>Padrão: exePath/tables</value>
+  </data>
+  <data name="L2DatBuild.QualityHighItem" xml:space="preserve">
+    <value>Alta</value>
+  </data>
+  <data name="L2DatBuild.QualityMaximumItem" xml:space="preserve">
+    <value>Máxima</value>
+  </data>
+  <data name="L2DatBuild.QualityMediumItem" xml:space="preserve">
+    <value>Média</value>
+  </data>
+  <data name="L2DatBuild.QualityMinimumItem" xml:space="preserve">
+    <value>Mínima</value>
+  </data>
+  <data name="L2DatBuild.RoundTripError" xml:space="preserve">
+    <value>Round-trip falhou para {fileName}</value>
+  </data>
+  <data name="L2DatBuild.RunningStatus" xml:space="preserve">
+    <value>Compilando...</value>
+  </data>
+  <data name="L2DatBuild.SourceClearTip" xml:space="preserve">
+    <value>Limpar pasta de origem</value>
+  </data>
+  <data name="L2DatBuild.SourceHint" xml:space="preserve">
+    <value>Compila arquivos .txt da pasta de origem em .l2dat na pasta de saída. Somente arquivos na raiz da pasta são processados.</value>
+  </data>
+  <data name="L2DatBuild.SourceInvalidStatus" xml:space="preserve">
+    <value>Selecione uma pasta de origem válida.</value>
+  </data>
+  <data name="L2DatBuild.SourceLabel" xml:space="preserve">
+    <value>Pasta de origem (.txt)</value>
+  </data>
+  <data name="L2DatBuild.SourcePicker" xml:space="preserve">
+    <value>Selecionar pasta de origem (.txt)</value>
+  </data>
+  <data name="L2DatBuild.Title" xml:space="preserve">
+    <value>L2DAT Build</value>
+  </data>
+
   <!-- ═══ LiveData ═══ -->
   <data name="LiveData.ConvertSPlusLabel" xml:space="preserve">
     <value>Converter S+ em S?</value>
@@ -1059,68 +1152,17 @@
   <data name="Settings.AssetsTitle" xml:space="preserve">
     <value>PASTA DE ASSETS</value>
   </data>
-  <data name="Settings.BuildButton" xml:space="preserve">
-    <value>Build</value>
-  </data>
-  <data name="Settings.BuildDoneStatus.One" xml:space="preserve">
-    <value>Build concluído: {count} arquivo — {original} → {packed} → {savings:P1}</value>
-  </data>
-  <data name="Settings.BuildDoneStatus.Other" xml:space="preserve">
-    <value>Build concluído: {count} arquivos — {original} → {packed} → {savings:P1}</value>
-  </data>
-  <data name="Settings.BuildErrorStatus" xml:space="preserve">
-    <value>Erro: {message}</value>
-  </data>
-  <data name="Settings.BuildFailedStatus.One" xml:space="preserve">
-    <value>{ok} ok, {count} erro — {errors}</value>
-  </data>
-  <data name="Settings.BuildFailedStatus.Other" xml:space="preserve">
-    <value>{ok} ok, {count} erros — {errors}</value>
-  </data>
   <data name="Settings.BuildHint" xml:space="preserve">
     <value>Compila arquivos .txt da pasta de origem em .l2dat na pasta de saída. Somente arquivos na raiz da pasta são processados.</value>
   </data>
-  <data name="Settings.BuildNoFilesStatus" xml:space="preserve">
-    <value>Nenhum arquivo .txt encontrado na pasta de origem.</value>
-  </data>
-  <data name="Settings.BuildNoRequiredFilesStatus" xml:space="preserve">
-    <value>Nenhum dos arquivos necessários foi encontrado na pasta de origem.</value>
-  </data>
-  <data name="Settings.BuildOnlyRequiredLabel" xml:space="preserve">
-    <value>Apenas os necessários (empacota somente as tabelas usadas pelo sistema, ignora o resto)</value>
-  </data>
-  <data name="Settings.BuildOutputLabel" xml:space="preserve">
-    <value>Pasta de saída (.l2dat)</value>
-  </data>
-  <data name="Settings.BuildOutputPicker" xml:space="preserve">
-    <value>Selecionar pasta de saída (.l2dat)</value>
-  </data>
-  <data name="Settings.BuildOutputWatermark" xml:space="preserve">
-    <value>Padrão: exePath/tables</value>
-  </data>
-  <data name="Settings.BuildRunningStatus" xml:space="preserve">
-    <value>Compilando...</value>
-  </data>
-  <data name="Settings.BuildSourceClearTip" xml:space="preserve">
-    <value>Limpar pasta de origem</value>
-  </data>
-  <data name="Settings.BuildSourceInvalidStatus" xml:space="preserve">
-    <value>Selecione uma pasta de origem válida.</value>
-  </data>
-  <data name="Settings.BuildSourceLabel" xml:space="preserve">
-    <value>Pasta de origem (.txt)</value>
-  </data>
-  <data name="Settings.BuildSourcePicker" xml:space="preserve">
-    <value>Selecionar pasta de origem (.txt)</value>
+  <data name="Settings.BuildOpenButton" xml:space="preserve">
+    <value>Abrir L2DAT Build…</value>
   </data>
   <data name="Settings.BuildTitle" xml:space="preserve">
     <value>L2DAT BUILD</value>
   </data>
   <data name="Settings.ClearButton" xml:space="preserve">
     <value>Limpar</value>
-  </data>
-  <data name="Settings.CompressionLabel" xml:space="preserve">
-    <value>Nível de compressão</value>
   </data>
   <data name="Settings.ConfigFileHint" xml:space="preserve">
     <value>As configurações do aplicativo são salvas em um arquivo local no AppData. Localização do arquivo:</value>
@@ -1134,29 +1176,11 @@
   <data name="Settings.ConfigFolderTip" xml:space="preserve">
     <value>Abrir pasta de configuração</value>
   </data>
-  <data name="Settings.DefaultButton" xml:space="preserve">
-    <value>Padrão</value>
-  </data>
   <data name="Settings.LanguageLabel" xml:space="preserve">
     <value>Idioma</value>
   </data>
   <data name="Settings.NoFolderWatermark" xml:space="preserve">
     <value>Nenhuma pasta selecionada...</value>
-  </data>
-  <data name="Settings.QualityHighItem" xml:space="preserve">
-    <value>Alta</value>
-  </data>
-  <data name="Settings.QualityMaximumItem" xml:space="preserve">
-    <value>Máxima</value>
-  </data>
-  <data name="Settings.QualityMediumItem" xml:space="preserve">
-    <value>Média</value>
-  </data>
-  <data name="Settings.QualityMinimumItem" xml:space="preserve">
-    <value>Mínima</value>
-  </data>
-  <data name="Settings.RoundTripError" xml:space="preserve">
-    <value>Round-trip falhou para {fileName}</value>
   </data>
   <data name="Settings.SubtitleLabel" xml:space="preserve">
     <value>Configure os caminhos e preferências do aplicativo</value>

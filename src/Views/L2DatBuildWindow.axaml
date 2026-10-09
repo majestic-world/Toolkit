@@ -1,0 +1,180 @@
+<Window x:Class="L2Toolkit.Views.L2DatBuildWindow"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="{DynamicResource L2DatBuild.Title}"
+        Width="880" Height="660" MinWidth="640" MinHeight="480"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource ThemeSurfacePage}">
+
+    <Window.Resources>
+        <ControlTheme x:Key="GhostButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextButton}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderStrong}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border x:Name="PART_Border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="4"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Content="{TemplateBinding Content}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+            <Style Selector="^:pointerover /template/ Border#PART_Border">
+                <Setter Property="Background" Value="{DynamicResource ThemeSurfaceHover}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderHoverStrong}"/>
+            </Style>
+            <Style Selector="^:pressed /template/ Border#PART_Border">
+                <Setter Property="Background" Value="{DynamicResource ThemeSurfacePressed}"/>
+            </Style>
+            <Style Selector="^:disabled">
+                <Setter Property="Opacity" Value="0.45"/>
+            </Style>
+        </ControlTheme>
+    </Window.Resources>
+
+    <Window.Styles>
+        <Style Selector="TextBox.FormField">
+            <Setter Property="Background" Value="{DynamicResource ThemeSurfaceInput}"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextBody}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorder}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+        <Style Selector="TextBox.FormField /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="{DynamicResource ThemeSurfaceInput}"/>
+            <Setter Property="CornerRadius" Value="4"/>
+        </Style>
+        <Style Selector="TextBlock.Label">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextLabel}"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style Selector="TextBlock.SectionTitle">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="LetterSpacing" Value="1.5"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextLabel}"/>
+        </Style>
+    </Window.Styles>
+
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,*" Margin="20,18,20,18">
+
+        <TextBlock Grid.Row="0" Text="{DynamicResource L2DatBuild.SourceHint}" FontSize="12" TextWrapping="Wrap"
+                   Foreground="{DynamicResource ThemeTextHint}" Margin="0,0,0,14"/>
+
+        <!-- Pastas e opções: rótulo à esquerda, campo e ações na mesma linha -->
+        <Grid Grid.Row="1" ColumnDefinitions="Auto,12,*,8,Auto,8,Auto" RowDefinitions="Auto,10,Auto,10,Auto,10,Auto">
+            <TextBlock Grid.Row="0" Text="{DynamicResource L2DatBuild.SourceLabel}" Classes="Label"/>
+            <TextBox x:Name="SourceBox" Grid.Row="0" Grid.Column="2" Classes="FormField"
+                     IsReadOnly="True" Focusable="False" IsHitTestVisible="False"
+                     Height="36" Padding="10,0" VerticalContentAlignment="Center"
+                     FontFamily="Consolas,Courier New,monospace"
+                     Watermark="{DynamicResource L2DatBuild.NoFolderWatermark}"/>
+            <Button x:Name="SelectSourceButton" Grid.Row="0" Grid.Column="4" Height="36" Padding="14,0"
+                    Theme="{StaticResource GhostButton}" Click="SelectSource_Click">
+                <StackPanel Orientation="Horizontal" Spacing="7">
+                    <PathIcon Data="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" Foreground="{DynamicResource ThemeTextLabel}" Width="13" Height="13" VerticalAlignment="Center"/>
+                    <TextBlock Text="{DynamicResource Common.Browse}" FontSize="12" FontWeight="Medium" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+            <Button x:Name="ClearSourceButton" Grid.Row="0" Grid.Column="6" Height="36" Padding="12,0"
+                    HorizontalAlignment="Stretch"
+                    Theme="{StaticResource GhostButton}" Click="ClearSource_Click"
+                    ToolTip.Tip="{DynamicResource L2DatBuild.SourceClearTip}">
+                <PathIcon Data="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" Width="12" Height="12" Foreground="{DynamicResource ThemeTextLabel}"/>
+            </Button>
+
+            <TextBlock Grid.Row="2" Text="{DynamicResource L2DatBuild.OutputLabel}" Classes="Label"/>
+            <TextBox x:Name="OutputBox" Grid.Row="2" Grid.Column="2" Classes="FormField"
+                     IsReadOnly="True" Focusable="False" IsHitTestVisible="False"
+                     Height="36" Padding="10,0" VerticalContentAlignment="Center"
+                     FontFamily="Consolas,Courier New,monospace"
+                     Watermark="{DynamicResource L2DatBuild.OutputWatermark}"/>
+            <Button x:Name="SelectOutputButton" Grid.Row="2" Grid.Column="4" Height="36" Padding="14,0"
+                    Theme="{StaticResource GhostButton}" Click="SelectOutput_Click">
+                <StackPanel Orientation="Horizontal" Spacing="7">
+                    <PathIcon Data="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" Foreground="{DynamicResource ThemeTextLabel}" Width="13" Height="13" VerticalAlignment="Center"/>
+                    <TextBlock Text="{DynamicResource Common.Browse}" FontSize="12" FontWeight="Medium" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+            <Button x:Name="ResetOutputButton" Grid.Row="2" Grid.Column="6" Height="36" Padding="12,0"
+                    Theme="{StaticResource GhostButton}" Click="ResetOutput_Click">
+                <StackPanel Orientation="Horizontal" Spacing="7">
+                    <PathIcon Data="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z" Foreground="{DynamicResource ThemeTextLabel}" Width="13" Height="13" VerticalAlignment="Center"/>
+                    <TextBlock Text="{DynamicResource L2DatBuild.DefaultButton}" FontSize="12" FontWeight="Medium" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+
+            <TextBlock Grid.Row="4" Text="{DynamicResource L2DatBuild.CompressionLabel}" Classes="Label"/>
+            <ComboBox x:Name="QualityCombo" Grid.Row="4" Grid.Column="2" Width="200" Height="36"
+                      HorizontalAlignment="Left">
+                <ComboBoxItem Content="{DynamicResource L2DatBuild.QualityMinimumItem}"/>
+                <ComboBoxItem Content="{DynamicResource L2DatBuild.QualityMediumItem}"/>
+                <ComboBoxItem Content="{DynamicResource L2DatBuild.QualityHighItem}"/>
+                <ComboBoxItem Content="{DynamicResource L2DatBuild.QualityMaximumItem}"/>
+            </ComboBox>
+
+            <CheckBox x:Name="OnlyRequiredCheck" Grid.Row="6" Grid.Column="2" Grid.ColumnSpan="5"
+                      VerticalAlignment="Center" Foreground="{DynamicResource ThemeTextButton}">
+                <TextBlock FontSize="12" TextWrapping="Wrap" Text="{DynamicResource L2DatBuild.OnlyRequiredLabel}"/>
+            </CheckBox>
+        </Grid>
+
+        <!-- Ação principal centralizada entre linhas, como "Converter para XML" nas páginas -->
+        <Grid Grid.Row="2" ColumnDefinitions="*,Auto,*" Margin="0,22,0,0">
+            <Border Grid.Column="0" Height="1" Background="{DynamicResource ThemeBorder}" VerticalAlignment="Center"/>
+            <Button x:Name="BuildButton" Grid.Column="1" Height="40" Padding="32,0" Margin="20,0" MinWidth="160"
+                    Theme="{StaticResource SecondaryButton}" Click="Build_Click">
+                <StackPanel Orientation="Horizontal" Spacing="9">
+                    <PathIcon Data="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" Width="14" Height="14" Foreground="White" VerticalAlignment="Center"/>
+                    <TextBlock Text="{DynamicResource L2DatBuild.BuildButton}" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+            <Border Grid.Column="2" Height="1" Background="{DynamicResource ThemeBorder}" VerticalAlignment="Center"/>
+        </Grid>
+
+        <!-- Progresso (só durante e depois do build) -->
+        <StackPanel x:Name="ProgressPanel" Grid.Row="3" Margin="0,18,0,0" Spacing="5" IsVisible="False">
+            <Grid ColumnDefinitions="*,10,Auto">
+                <ProgressBar x:Name="BuildProgress" Minimum="0" Maximum="100" Value="0" Height="6"
+                             VerticalAlignment="Center"
+                             Foreground="{DynamicResource ThemeSuccessAccent}"
+                             Background="{DynamicResource ThemeSurfaceInput}"/>
+                <TextBlock x:Name="ProgressCountText" Grid.Column="2" FontSize="11" VerticalAlignment="Center"
+                           Foreground="{DynamicResource ThemeTextHint}"/>
+            </Grid>
+            <TextBlock x:Name="CurrentFileText" FontSize="11" FontFamily="Consolas,Courier New,monospace"
+                       Foreground="{DynamicResource ThemeTextHint}" TextTrimming="CharacterEllipsis"/>
+        </StackPanel>
+
+        <TextBlock x:Name="StatusText" Grid.Row="4" Margin="0,10,0,0" FontSize="12" TextWrapping="Wrap"
+                   TextAlignment="Center" IsVisible="False"/>
+
+        <!-- Resultado por arquivo -->
+        <Border Grid.Row="5" Margin="0,16,0,0" CornerRadius="8" BorderThickness="1"
+                Background="{DynamicResource ThemeSurfaceCard}" BorderBrush="{DynamicResource ThemeBorder}">
+            <Grid RowDefinitions="Auto,Auto,*">
+                <TextBlock Grid.Row="0" Text="{DynamicResource L2DatBuild.FilesTitle}" Classes="SectionTitle" Margin="16,12,16,10"/>
+                <Border Grid.Row="1" Height="1" Background="{DynamicResource ThemeBorder}"/>
+                <TextBlock x:Name="FilesEmptyText" Grid.Row="2" Text="{DynamicResource L2DatBuild.FilesEmptyHint}"
+                           FontSize="12" TextWrapping="Wrap" Margin="16,14"
+                           Foreground="{DynamicResource ThemeTextHint}"/>
+                <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel x:Name="FilesPanel" Margin="16,8,16,10" Spacing="2"/>
+                </ScrollViewer>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

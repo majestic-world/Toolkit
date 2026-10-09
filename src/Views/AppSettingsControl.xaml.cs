@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -12,7 +11,6 @@ using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using L2Toolkit.Settings;
 using L2Toolkit.Localization;
-using L2Toolkit.ClientDat;
 using L2Toolkit.Utilities;
 using Avalonia.Controls.Documents;
 
@@ -33,21 +31,7 @@ public partial class AppSettingsControl : UserControl
         "Skillgrp_Classic.txt"
     ];
 
-    private const string BuildSourceDirKey = "build_source_dir";
-    private const string BuildOutputDirKey = "build_output_dir";
-
-    // Tabelas que o sistema efetivamente carrega em runtime (ver TableManager/Tables).
-    private static readonly string[] RequiredTableNames =
-    [
-        "Armorgrp",
-        "EtcItemgrp",
-        "ItemName-eu",
-        "ItemStatData",
-        "SetItemGrp-eu",
-        "Skillgrp",
-        "SkillName-eu",
-        "Weapongrp"
-    ];
+    private L2DatBuildWindow? _buildWindow;
 
     public AppSettingsControl()
     {
@@ -68,15 +52,7 @@ public partial class AppSettingsControl : UserControl
 
         RefreshFileStatus();
 
-        // Build panel: pre-fill from DB
-        var savedSource = db.GetValue(BuildSourceDirKey);
-        if (!string.IsNullOrEmpty(savedSource))
-            BuildSourceBox.Text = savedSource;
-
-        var savedOutput = db.GetValue(BuildOutputDirKey);
-        BuildOutputBox.Text = !string.IsNullOrEmpty(savedOutput)
-            ? savedOutput
-            : TableManager.TablesFolder;
+        OpenBuildBtn.Click += (_, _) => OpenBuildWindow();
 
         SelectAssetsBtn.Click += async (_, _) => await SelectAssetsFolderAsync();
         ClearAssetsBtn.Click += (_, _) =>
@@ -97,21 +73,6 @@ public partial class AppSettingsControl : UserControl
             if (Directory.Exists(appFolder))
                 OpenFolder(appFolder);
         };
-
-        BuildSelectSourceBtn.Click += async (_, _) => await SelectBuildSourceAsync();
-        BuildClearSourceBtn.Click += (_, _) =>
-        {
-            BuildSourceBox.Text = string.Empty;
-            AppDatabase.GetInstance().UpdateValue(BuildSourceDirKey, string.Empty);
-        };
-        BuildSelectOutputBtn.Click += async (_, _) => await SelectBuildOutputAsync();
-        BuildResetOutputBtn.Click += (_, _) =>
-        {
-            BuildOutputBox.Text = TableManager.TablesFolder;
-            AppDatabase.GetInstance().UpdateValue(BuildOutputDirKey, string.Empty);
-        };
-
-        BuildBtn.Click += async (_, _) => await BuildTablesAsync();
 
         AppVersionText.Text = AppUpdater.CurrentVersion.ToString(3);
         CheckUpdatesBtn.Click += async (_, _) => await CheckUpdatesAsync();
@@ -169,164 +130,25 @@ public partial class AppSettingsControl : UserControl
             AppLanguage.Set(language);
     }
 
-    private async Task SelectBuildSourceAsync()
+    /// <summary>
+    /// L2DAT Build numa janela própria, como as janelas da Splash e do Gerador de Brush:
+    /// sem dono (não fica por cima da página), uma só instância e fecha junto com o app.
+    /// </summary>
+    private void OpenBuildWindow()
     {
-        var topLevel = TopLevel.GetTopLevel(this);
-        if (topLevel == null) return;
-        var folders = await topLevel.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
+        if (_buildWindow != null)
         {
-            Title = Loc.Settings.BuildSourcePicker
-        });
-        if (folders.Count == 0) return;
-        var path = folders[0].Path.LocalPath;
-        BuildSourceBox.Text = path;
-        AppDatabase.GetInstance().UpdateValue(BuildSourceDirKey, path);
-    }
-
-    private async Task SelectBuildOutputAsync()
-    {
-        var topLevel = TopLevel.GetTopLevel(this);
-        if (topLevel == null) return;
-        var folders = await topLevel.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
-        {
-            Title = Loc.Settings.BuildOutputPicker
-        });
-        if (folders.Count == 0) return;
-        var path = folders[0].Path.LocalPath;
-        BuildOutputBox.Text = path;
-        AppDatabase.GetInstance().UpdateValue(BuildOutputDirKey, path);
-    }
-
-    private async Task BuildTablesAsync()
-    {
-        var sourceDir = BuildSourceBox.Text?.Trim();
-        if (string.IsNullOrEmpty(sourceDir) || !Directory.Exists(sourceDir))
-        {
-            ShowStatus(BuildStatusText, () => Loc.Settings.BuildSourceInvalidStatus, "ThemeStatusError");
+            _buildWindow.Activate();
             return;
         }
 
-        var outputDir = string.IsNullOrEmpty(BuildOutputBox.Text?.Trim())
-            ? TableManager.TablesFolder
-            : BuildOutputBox.Text.Trim();
-
-        Directory.CreateDirectory(outputDir);
-
-        // Only root-level .txt files — no subdirectories
-        var txtFiles = Directory.GetFiles(sourceDir, "*.txt", SearchOption.TopDirectoryOnly)
-            .OrderBy(f => f)
-            .ToArray();
-
-        var onlyRequired = BuildOnlyRequiredCheckBox.IsChecked == true;
-        if (onlyRequired)
-        {
-            txtFiles = txtFiles
-                .Where(f => RequiredTableNames.Contains(Path.GetFileNameWithoutExtension(f), StringComparer.OrdinalIgnoreCase))
-                .ToArray();
-        }
-
-        if (txtFiles.Length == 0)
-        {
-            ShowStatus(BuildStatusText, onlyRequired
-                ? () => Loc.Settings.BuildNoRequiredFilesStatus
-                : () => Loc.Settings.BuildNoFilesStatus, "ThemeStatusError");
-            return;
-        }
-
-        BuildBtn.IsEnabled = false;
-        BuildProgressBar.Value = 0;
-        BuildProgressBar.Maximum = txtFiles.Length;
-        BuildProgressLabel.Text = $"0 / {txtFiles.Length}";
-        BuildCurrentFile.Text = string.Empty;
-        BuildProgressPanel.IsVisible = true;
-        ShowStatus(BuildStatusText, () => Loc.Settings.BuildRunningStatus, "ThemeWarningAccent");
-
-        int quality = BuildQualityBox.SelectedIndex switch
-        {
-            0 => 1,
-            1 => 5,
-            2 => 8,
-            _ => 11
-        };
-
-        int success = 0;
-        int failed = 0;
-        long totalOriginal = 0;
-        long totalPacked = 0;
-        var errors = new List<string>();
-
-        try
-        {
-            for (int i = 0; i < txtFiles.Length; i++)
-            {
-                var inputPath = txtFiles[i];
-                var fileName  = Path.GetFileNameWithoutExtension(inputPath);
-
-                BuildCurrentFile.Text  = Path.GetFileName(inputPath);
-                BuildProgressLabel.Text = $"{i + 1} / {txtFiles.Length}";
-
-                try
-                {
-                    var outputPath = Path.Combine(outputDir, fileName + ".l2dat");
-                    await Task.Run(() =>
-                    {
-                        L2Pack.Pack(inputPath, outputPath, quality);
-
-                        // Round-trip verification
-                        var original = File.ReadAllBytes(inputPath);
-                        var (_, content) = L2Pack.Unpack(outputPath);
-                        var restored = System.Text.Encoding.UTF8.GetBytes(content);
-                        if (!original.AsSpan().SequenceEqual(restored))
-                            throw new InvalidDataException(Loc.Settings.RoundTripError(fileName));
-                    });
-
-                    totalOriginal += new FileInfo(inputPath).Length;
-                    totalPacked   += new FileInfo(outputPath).Length;
-                    success++;
-                }
-                catch (Exception ex)
-                {
-                    failed++;
-                    errors.Add($"{fileName}: {ex.Message}");
-                }
-
-                BuildProgressBar.Value = i + 1;
-            }
-
-            TableManager.InvalidateCache();
-
-            var savings = totalOriginal > 0 ? 1.0 - (double)totalPacked / totalOriginal : 0;
-            if (failed == 0)
-            {
-                var original = FormatSize(totalOriginal);
-                var packed = FormatSize(totalPacked);
-                ShowStatus(BuildStatusText, () => Loc.Settings.BuildDoneStatus(success, original, packed, savings), "ThemeStatusOk");
-            }
-            else
-            {
-                var joined = string.Join(" | ", errors);
-                ShowStatus(BuildStatusText, () => Loc.Settings.BuildFailedStatus(failed, success, joined), "ThemeStatusError");
-            }
-
-            BuildCurrentFile.Text = string.Empty;
-        }
-        catch (Exception ex)
-        {
-            var message = ex.Message;
-            ShowStatus(BuildStatusText, () => Loc.Settings.BuildErrorStatus(message), "ThemeStatusError");
-        }
-        finally
-        {
-            BuildBtn.IsEnabled = true;
-        }
+        var window = new L2DatBuildWindow();
+        window.Closed += (_, _) => _buildWindow = null;
+        if (TopLevel.GetTopLevel(this) is Window main)
+            main.Closed += (_, _) => window.Close();
+        _buildWindow = window;
+        window.Show();
     }
-
-    private static string FormatSize(long bytes) => bytes switch
-    {
-        >= 1024L * 1024 * 1024 => $"{bytes / (1024.0 * 1024 * 1024):N2} GB",
-        >= 1024L * 1024        => $"{bytes / (1024.0 * 1024):N2} MB",
-        _                      => $"{bytes / 1024.0:N1} KB"
-    };
 
     private async Task SelectAssetsFolderAsync()
     {

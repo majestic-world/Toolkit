@@ -169,7 +169,7 @@ For every file marked `isSafePackage="true"` in the structure XML, the serialize
 3. Check the structure XML for `isSafePackage`; append the SafePackage footer when required.
 4. Wire page load through decrypt → parse → UI mapping, and save through UI mapping → serialize → encrypt → write.
 
-`Views/AppSettingsControl.xaml.cs` also owns the L2DAT Converter, which packs text to `.l2dat` and verifies the round trip byte for byte.
+`Views/L2DatBuildWindow` owns the L2DAT Build: Configurações → L2DAT BUILD → "Abrir L2DAT Build…" opens it. It packs the source folder's root `.txt` files to `.l2dat` (all of them, or only the tables the app loads), verifies the round trip byte for byte, and lists each file with its sizes or its error. Source and output folders, compression level and the "only required" filter persist as `build_source_dir`, `build_output_dir`, `build_quality` and `build_only_required`.
 
 ## Splash screens
 
@@ -188,7 +188,7 @@ For every file marked `isSafePackage="true"` in the structure XML, the serialize
 
 ## Gallery windows
 
-`SplashLibraryWindow`, `SplashComposeWindow` and `BrushVariantsWindow` are the app's secondary windows and follow one pattern: independent (no owner, so they do not sit on top of the page), single instance per page (clicking the page button again activates it), closed when the main window closes, and results sent back to the page through an event. Gallery tiles use the shared `TileButton` theme in `App.axaml`; the `current` class marks the item on the page's stage.
+`SplashLibraryWindow`, `SplashComposeWindow`, `BrushVariantsWindow` and `L2DatBuildWindow` are the app's secondary windows and follow one pattern: independent (no owner, so they do not sit on top of the page), single instance per page (clicking the page button again activates it), and closed when the main window closes. The gallery windows send results back to the page through an event. Gallery tiles use the shared `TileButton` theme in `App.axaml`; the `current` class marks the item on the page's stage.
 
 ## Brush generator
 

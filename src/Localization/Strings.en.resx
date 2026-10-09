@@ -570,6 +570,98 @@
     <value>Waiting…</value>
   </data>
 
+  <!-- ═══ L2DatBuild ═══ -->
+  <data name="L2DatBuild.BuildButton" xml:space="preserve">
+    <value>Build</value>
+  </data>
+  <data name="L2DatBuild.CompressionLabel" xml:space="preserve">
+    <value>Compression level</value>
+  </data>
+  <data name="L2DatBuild.DefaultButton" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="L2DatBuild.DoneStatus.One" xml:space="preserve">
+    <value>Build finished: {count} file — {original} → {packed} → {savings:P1}</value>
+  </data>
+  <data name="L2DatBuild.DoneStatus.Other" xml:space="preserve">
+    <value>Build finished: {count} files — {original} → {packed} → {savings:P1}</value>
+  </data>
+  <data name="L2DatBuild.ErrorStatus" xml:space="preserve">
+    <value>Error: {message}</value>
+  </data>
+  <data name="L2DatBuild.FailedStatus.One" xml:space="preserve">
+    <value>{ok} ok, {count} error. See the file list.</value>
+  </data>
+  <data name="L2DatBuild.FailedStatus.Other" xml:space="preserve">
+    <value>{ok} ok, {count} errors. See the file list.</value>
+  </data>
+  <data name="L2DatBuild.FileSizesLabel" xml:space="preserve">
+    <value>{original} → {packed}</value>
+  </data>
+  <data name="L2DatBuild.FilesEmptyHint" xml:space="preserve">
+    <value>Compiled files show up here, one per line, with the size before and after or the error.</value>
+  </data>
+  <data name="L2DatBuild.FilesTitle" xml:space="preserve">
+    <value>FILES</value>
+  </data>
+  <data name="L2DatBuild.NoFilesStatus" xml:space="preserve">
+    <value>No .txt files found in the source folder.</value>
+  </data>
+  <data name="L2DatBuild.NoFolderWatermark" xml:space="preserve">
+    <value>No folder selected…</value>
+  </data>
+  <data name="L2DatBuild.NoRequiredFilesStatus" xml:space="preserve">
+    <value>None of the required files were found in the source folder.</value>
+  </data>
+  <data name="L2DatBuild.OnlyRequiredLabel" xml:space="preserve">
+    <value>Only required (packs just the tables the system uses, skips the rest)</value>
+  </data>
+  <data name="L2DatBuild.OutputLabel" xml:space="preserve">
+    <value>Output folder (.l2dat)</value>
+  </data>
+  <data name="L2DatBuild.OutputPicker" xml:space="preserve">
+    <value>Select output folder (.l2dat)</value>
+  </data>
+  <data name="L2DatBuild.OutputWatermark" xml:space="preserve">
+    <value>Default: exePath/tables</value>
+  </data>
+  <data name="L2DatBuild.QualityHighItem" xml:space="preserve">
+    <value>High</value>
+  </data>
+  <data name="L2DatBuild.QualityMaximumItem" xml:space="preserve">
+    <value>Maximum</value>
+  </data>
+  <data name="L2DatBuild.QualityMediumItem" xml:space="preserve">
+    <value>Medium</value>
+  </data>
+  <data name="L2DatBuild.QualityMinimumItem" xml:space="preserve">
+    <value>Minimum</value>
+  </data>
+  <data name="L2DatBuild.RoundTripError" xml:space="preserve">
+    <value>Round-trip failed for {fileName}</value>
+  </data>
+  <data name="L2DatBuild.RunningStatus" xml:space="preserve">
+    <value>Compiling…</value>
+  </data>
+  <data name="L2DatBuild.SourceClearTip" xml:space="preserve">
+    <value>Clear source folder</value>
+  </data>
+  <data name="L2DatBuild.SourceHint" xml:space="preserve">
+    <value>Compiles .txt files from the source folder into .l2dat in the output folder. Only files at the folder root are processed.</value>
+  </data>
+  <data name="L2DatBuild.SourceInvalidStatus" xml:space="preserve">
+    <value>Select a valid source folder.</value>
+  </data>
+  <data name="L2DatBuild.SourceLabel" xml:space="preserve">
+    <value>Source folder (.txt)</value>
+  </data>
+  <data name="L2DatBuild.SourcePicker" xml:space="preserve">
+    <value>Select source folder (.txt)</value>
+  </data>
+  <data name="L2DatBuild.Title" xml:space="preserve">
+    <value>L2DAT Build</value>
+  </data>
+
   <!-- ═══ LiveData ═══ -->
   <data name="LiveData.ConvertSPlusLabel" xml:space="preserve">
     <value>Convert S+ to S?</value>
@@ -1027,68 +1119,17 @@
   <data name="Settings.AssetsTitle" xml:space="preserve">
     <value>ASSETS FOLDER</value>
   </data>
-  <data name="Settings.BuildButton" xml:space="preserve">
-    <value>Build</value>
-  </data>
-  <data name="Settings.BuildDoneStatus.One" xml:space="preserve">
-    <value>Build finished: {count} file — {original} → {packed} → {savings:P1}</value>
-  </data>
-  <data name="Settings.BuildDoneStatus.Other" xml:space="preserve">
-    <value>Build finished: {count} files — {original} → {packed} → {savings:P1}</value>
-  </data>
-  <data name="Settings.BuildErrorStatus" xml:space="preserve">
-    <value>Error: {message}</value>
-  </data>
-  <data name="Settings.BuildFailedStatus.One" xml:space="preserve">
-    <value>{ok} ok, {count} error — {errors}</value>
-  </data>
-  <data name="Settings.BuildFailedStatus.Other" xml:space="preserve">
-    <value>{ok} ok, {count} errors — {errors}</value>
-  </data>
   <data name="Settings.BuildHint" xml:space="preserve">
     <value>Compiles .txt files from the source folder into .l2dat in the output folder. Only files at the folder root are processed.</value>
   </data>
-  <data name="Settings.BuildNoFilesStatus" xml:space="preserve">
-    <value>No .txt files found in the source folder.</value>
-  </data>
-  <data name="Settings.BuildNoRequiredFilesStatus" xml:space="preserve">
-    <value>None of the required files were found in the source folder.</value>
-  </data>
-  <data name="Settings.BuildOnlyRequiredLabel" xml:space="preserve">
-    <value>Only required (packs just the tables the system uses, skips the rest)</value>
-  </data>
-  <data name="Settings.BuildOutputLabel" xml:space="preserve">
-    <value>Output folder (.l2dat)</value>
-  </data>
-  <data name="Settings.BuildOutputPicker" xml:space="preserve">
-    <value>Select output folder (.l2dat)</value>
-  </data>
-  <data name="Settings.BuildOutputWatermark" xml:space="preserve">
-    <value>Default: exePath/tables</value>
-  </data>
-  <data name="Settings.BuildRunningStatus" xml:space="preserve">
-    <value>Compiling…</value>
-  </data>
-  <data name="Settings.BuildSourceClearTip" xml:space="preserve">
-    <value>Clear source folder</value>
-  </data>
-  <data name="Settings.BuildSourceInvalidStatus" xml:space="preserve">
-    <value>Select a valid source folder.</value>
-  </data>
-  <data name="Settings.BuildSourceLabel" xml:space="preserve">
-    <value>Source folder (.txt)</value>
-  </data>
-  <data name="Settings.BuildSourcePicker" xml:space="preserve">
-    <value>Select source folder (.txt)</value>
+  <data name="Settings.BuildOpenButton" xml:space="preserve">
+    <value>Open L2DAT Build…</value>
   </data>
   <data name="Settings.BuildTitle" xml:space="preserve">
     <value>L2DAT BUILD</value>
   </data>
   <data name="Settings.ClearButton" xml:space="preserve">
     <value>Clear</value>
-  </data>
-  <data name="Settings.CompressionLabel" xml:space="preserve">
-    <value>Compression level</value>
   </data>
   <data name="Settings.ConfigFileHint" xml:space="preserve">
     <value>App settings are saved to a local file in AppData. File location:</value>
@@ -1102,29 +1143,11 @@
   <data name="Settings.ConfigFolderTip" xml:space="preserve">
     <value>Open the settings folder</value>
   </data>
-  <data name="Settings.DefaultButton" xml:space="preserve">
-    <value>Default</value>
-  </data>
   <data name="Settings.LanguageLabel" xml:space="preserve">
     <value>Language</value>
   </data>
   <data name="Settings.NoFolderWatermark" xml:space="preserve">
     <value>No folder selected…</value>
-  </data>
-  <data name="Settings.QualityHighItem" xml:space="preserve">
-    <value>High</value>
-  </data>
-  <data name="Settings.QualityMaximumItem" xml:space="preserve">
-    <value>Maximum</value>
-  </data>
-  <data name="Settings.QualityMediumItem" xml:space="preserve">
-    <value>Medium</value>
-  </data>
-  <data name="Settings.QualityMinimumItem" xml:space="preserve">
-    <value>Minimum</value>
-  </data>
-  <data name="Settings.RoundTripError" xml:space="preserve">
-    <value>Round-trip failed for {fileName}</value>
   </data>
   <data name="Settings.SubtitleLabel" xml:space="preserve">
     <value>Configure the app's paths and preferences</value>
