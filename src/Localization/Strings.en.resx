@@ -158,9 +158,6 @@
   <data name="Common.Copy" xml:space="preserve">
     <value>Copy</value>
   </data>
-  <data name="Common.Done" xml:space="preserve">
-    <value>Done</value>
-  </data>
   <data name="Common.Error" xml:space="preserve">
     <value>Error</value>
   </data>
@@ -213,6 +210,9 @@
   </data>
   <data name="CreateMultisell.InputTitle" xml:space="preserve">
     <value>INPUT</value>
+  </data>
+  <data name="CreateMultisell.LogsTabButton" xml:space="preserve">
+    <value>Logs</value>
   </data>
   <data name="CreateMultisell.LogsWatermark" xml:space="preserve">
     <value>Processing logs will appear here…</value>
@@ -379,14 +379,26 @@
   <data name="EnchantEffect.MinColorPreviewTitle" xml:space="preserve">
     <value>PREVIEW — MIN COLOR</value>
   </data>
+  <data name="EnchantEffect.MinColorTitle" xml:space="preserve">
+    <value>MIN COLOR</value>
+  </data>
   <data name="EnchantEffect.MinEnchantTitle" xml:space="preserve">
     <value>MIN ENCHANT</value>
   </data>
   <data name="EnchantEffect.OpenButton" xml:space="preserve">
     <value>Open</value>
   </data>
+  <data name="EnchantEffect.ParticleTitle" xml:space="preserve">
+    <value>PART.</value>
+  </data>
   <data name="EnchantEffect.RadiancePreviewTitle" xml:space="preserve">
     <value>PREVIEW — RADIANCE</value>
+  </data>
+  <data name="EnchantEffect.RadianceTitle" xml:space="preserve">
+    <value>RADIANCE</value>
+  </data>
+  <data name="EnchantEffect.RingTitle" xml:space="preserve">
+    <value>RING</value>
   </data>
   <data name="EnchantEffect.SaveError" xml:space="preserve">
     <value>Couldn't save: {message}</value>
@@ -595,6 +607,9 @@
   <data name="LiveData.NamesWatermark" xml:space="preserve">
     <value>Names will appear here…</value>
   </data>
+  <data name="LiveData.PresetLabel" xml:space="preserve">
+    <value>Preset</value>
+  </data>
   <data name="LiveData.PresetWatermark" xml:space="preserve">
     <value>Select a preset…</value>
   </data>
@@ -606,6 +621,9 @@
   </data>
   <data name="LiveData.ResultTitle" xml:space="preserve">
     <value>RESULT</value>
+  </data>
+  <data name="LiveData.SetItemGrpTabButton" xml:space="preserve">
+    <value>Set Item GRP</value>
   </data>
   <data name="LiveData.SetItemGrpWatermark" xml:space="preserve">
     <value>Set Item GRP will appear here…</value>
@@ -884,6 +902,9 @@
   <data name="PrimeShop.ItemNamesFileMissingError" xml:space="preserve">
     <value>Warning: file '{path}' not found! Item names will not be shown correctly.</value>
   </data>
+  <data name="PrimeShop.LogsTabButton" xml:space="preserve">
+    <value>Logs</value>
+  </data>
   <data name="PrimeShop.LogsWatermark" xml:space="preserve">
     <value>Generated IDs and names will appear here…</value>
   </data>
@@ -933,6 +954,12 @@
   </data>
   <data name="SearchIcon.FileNotFoundError" xml:space="preserve">
     <value>File not found: {path}</value>
+  </data>
+  <data name="SearchIcon.IconLabel" xml:space="preserve">
+    <value>Icon</value>
+  </data>
+  <data name="SearchIcon.IconPanelLabel" xml:space="preserve">
+    <value>Icon Panel</value>
   </data>
   <data name="SearchIcon.ItemIdLabel" xml:space="preserve">
     <value>Item ID</value>
@@ -1000,6 +1027,9 @@
   <data name="Settings.AssetsTitle" xml:space="preserve">
     <value>ASSETS FOLDER</value>
   </data>
+  <data name="Settings.BuildButton" xml:space="preserve">
+    <value>Build</value>
+  </data>
   <data name="Settings.BuildDoneStatus.One" xml:space="preserve">
     <value>Build finished: {count} file — {original} → {packed} → {savings:P1}</value>
   </data>
@@ -1050,6 +1080,9 @@
   </data>
   <data name="Settings.BuildSourcePicker" xml:space="preserve">
     <value>Select source folder (.txt)</value>
+  </data>
+  <data name="Settings.BuildTitle" xml:space="preserve">
+    <value>L2DAT BUILD</value>
   </data>
   <data name="Settings.ClearButton" xml:space="preserve">
     <value>Clear</value>
@@ -1170,6 +1203,9 @@
   <data name="SkinBuilder.ItemStatusLoadingLog" xml:space="preserve">
     <value>Loading item stats</value>
   </data>
+  <data name="SkinBuilder.LogsTabButton" xml:space="preserve">
+    <value>Logs</value>
+  </data>
   <data name="SkinBuilder.LogsWatermark" xml:space="preserve">
     <value>Processing logs will appear here…</value>
   </data>
@@ -1193,6 +1229,9 @@
   </data>
   <data name="SkinBuilder.NothingFoundLog" xml:space="preserve">
     <value>Nothing was found</value>
+  </data>
+  <data name="SkinBuilder.PresetLabel" xml:space="preserve">
+    <value>Preset</value>
   </data>
   <data name="SkinBuilder.PresetWatermark" xml:space="preserve">
     <value>Select a preset…</value>
@@ -1218,6 +1257,9 @@
   <data name="SkinBuilder.SettingsTitle" xml:space="preserve">
     <value>SETTINGS</value>
   </data>
+  <data name="SkinBuilder.SkinsTabButton" xml:space="preserve">
+    <value>Skins</value>
+  </data>
   <data name="SkinBuilder.SkinsWatermark" xml:space="preserve">
     <value>Skin IDs will appear here…</value>
   </data>
@@ -1226,6 +1268,9 @@
   </data>
   <data name="SkinBuilder.StatusLoadingLog" xml:space="preserve">
     <value>Loading equipment stats…</value>
+  </data>
+  <data name="SkinBuilder.StatusTabButton" xml:space="preserve">
+    <value>Stats</value>
   </data>
   <data name="SkinBuilder.StatusWatermark" xml:space="preserve">
     <value>Status data will appear here…</value>
@@ -1360,6 +1405,9 @@
   </data>
   <data name="SplashCompose.BlurLabel" xml:space="preserve">
     <value>Blur</value>
+  </data>
+  <data name="SplashCompose.BrushSectionTitle" xml:space="preserve">
+    <value>BRUSH</value>
   </data>
   <data name="SplashCompose.ChooseArtButton" xml:space="preserve">
     <value>Choose image…</value>
@@ -1772,6 +1820,12 @@
   <data name="SystemMsgColor.FileWatermark" xml:space="preserve">
     <value>Click to select the SystemMsg.dat file…</value>
   </data>
+  <data name="SystemMsgColor.HexColumnTitle" xml:space="preserve">
+    <value>HEX</value>
+  </data>
+  <data name="SystemMsgColor.IdColumnTitle" xml:space="preserve">
+    <value>ID</value>
+  </data>
   <data name="SystemMsgColor.L2ExeNotFoundError" xml:space="preserve">
     <value>l2.exe not found in:&#10;{path}</value>
   </data>
@@ -1795,6 +1849,9 @@
   </data>
   <data name="SystemMsgColor.PresetSavedStatus" xml:space="preserve">
     <value>Preset "{name}" saved.</value>
+  </data>
+  <data name="SystemMsgColor.PresetsTitle" xml:space="preserve">
+    <value>PRESETS</value>
   </data>
   <data name="SystemMsgColor.SaveError" xml:space="preserve">
     <value>Couldn't save</value>
@@ -1822,6 +1879,9 @@
   </data>
   <data name="SystemMsgColor.SearchWatermark" xml:space="preserve">
     <value>Search by ID or message text</value>
+  </data>
+  <data name="SystemMsgColor.StartL2Button" xml:space="preserve">
+    <value>Start L2</value>
   </data>
   <data name="SystemMsgColor.StatsStatus" xml:space="preserve">
     <value>{messageCount} messages · {colorCount} unique colors</value>

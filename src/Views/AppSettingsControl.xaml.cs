@@ -268,7 +268,7 @@ public partial class AppSettingsControl : UserControl
                 var inputPath = txtFiles[i];
                 var fileName  = Path.GetFileNameWithoutExtension(inputPath);
 
-                BuildCurrentFile.Text  = fileName + ".txt"; // loc-ok
+                BuildCurrentFile.Text  = Path.GetFileName(inputPath);
                 BuildProgressLabel.Text = $"{i + 1} / {txtFiles.Length}";
 
                 try

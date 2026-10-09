@@ -303,7 +303,7 @@
                                 <Button x:Name="XmlTab" Classes="active" Theme="{StaticResource TabButton}"
                                         Content="{DynamicResource CreateMultisell.XmlTabButton}" Click="ResultTab_OnClick"/>
                                 <Button x:Name="LogTab" Theme="{StaticResource TabButton}"
-                                        Content="Logs" Click="ResultTab_OnClick"/>
+                                        Content="{DynamicResource CreateMultisell.LogsTabButton}" Click="ResultTab_OnClick"/>
                             </StackPanel>
 
                             <Border Grid.Column="3"

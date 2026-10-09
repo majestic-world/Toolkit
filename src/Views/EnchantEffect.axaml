@@ -385,11 +385,11 @@
            <!-- Seção de linhas de arma (visível quando entrada carregada) -->
            <Grid x:Name="WeaponRowsSection" IsVisible="False" RowDefinitions="Auto,*">
                <Grid Grid.Row="0" ColumnDefinitions="52,8,*,12,*,12,60" Margin="0,0,0,4">
-                   <TextBlock Grid.Column="2" Text="RADIANCE"
+                   <TextBlock Grid.Column="2" Text="{DynamicResource EnchantEffect.RadianceTitle}"
                               Foreground="{DynamicResource ThemeTextHint}" FontSize="10" FontWeight="Bold" LetterSpacing="1"/>
-                   <TextBlock Grid.Column="4" Text="RING"
+                   <TextBlock Grid.Column="4" Text="{DynamicResource EnchantEffect.RingTitle}"
                               Foreground="{DynamicResource ThemeTextHint}" FontSize="10" FontWeight="Bold" LetterSpacing="1"/>
-                   <TextBlock Grid.Column="6" Text="PART."
+                   <TextBlock Grid.Column="6" Text="{DynamicResource EnchantEffect.ParticleTitle}"
                               Foreground="{DynamicResource ThemeTextHint}" FontSize="10" FontWeight="Bold" LetterSpacing="1"
                               TextAlignment="Right"/>
                </Grid>
@@ -403,7 +403,7 @@
                <Grid Grid.Row="0" ColumnDefinitions="60,8,*,12,*" Margin="0,0,0,4">
                    <TextBlock Grid.Column="0" Text="{DynamicResource EnchantEffect.MinEnchantTitle}"
                               Foreground="{DynamicResource ThemeTextHint}" FontSize="10" FontWeight="Bold" LetterSpacing="1"/>
-                   <TextBlock Grid.Column="2" Text="MIN COLOR"
+                   <TextBlock Grid.Column="2" Text="{DynamicResource EnchantEffect.MinColorTitle}"
                               Foreground="{DynamicResource ThemeTextHint}" FontSize="10" FontWeight="Bold" LetterSpacing="1"/>
                    <TextBlock Grid.Column="4" Text="{DynamicResource EnchantEffect.MaxColorTitle}"
                               Foreground="{DynamicResource ThemeTextHint}" FontSize="10" FontWeight="Bold" LetterSpacing="1"/>

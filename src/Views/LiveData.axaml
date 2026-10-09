@@ -224,7 +224,7 @@
                                 </StackPanel>
 
                                 <StackPanel x:Name="PresetPanel" Grid.Column="2" Spacing="6" IsVisible="False">
-                                    <TextBlock Text="Preset"
+                                    <TextBlock Text="{DynamicResource LiveData.PresetLabel}"
                                                FontSize="12"
                                                Foreground="{DynamicResource ThemeTextLabel}"
                                                FontWeight="Medium"/>
@@ -358,7 +358,7 @@
                                 <Button x:Name="NameTab" Theme="{StaticResource TabButton}"
                                         Content="{DynamicResource LiveData.NamesTabButton}" Click="ResultTab_OnClick"/>
                                 <Button x:Name="SetItemGrpTab" Theme="{StaticResource TabButton}" IsVisible="False"
-                                        Content="Set Item GRP" Click="ResultTab_OnClick"/>
+                                        Content="{DynamicResource LiveData.SetItemGrpTabButton}" Click="ResultTab_OnClick"/>
                                 <Button x:Name="XmlTab" Theme="{StaticResource TabButton}" IsVisible="False"
                                         Content="{DynamicResource LiveData.XmlTabButton}" Click="ResultTab_OnClick"/>
                             </StackPanel>

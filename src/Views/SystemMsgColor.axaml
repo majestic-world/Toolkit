@@ -183,7 +183,7 @@
                 <!-- Presets -->
                 <Border Background="{DynamicResource ThemeSurfaceCard}" CornerRadius="8" Padding="12,10">
                     <StackPanel Spacing="8">
-                        <TextBlock Text="PRESETS" Foreground="{DynamicResource ThemeTextHint}" FontSize="10"
+                        <TextBlock Text="{DynamicResource SystemMsgColor.PresetsTitle}" Foreground="{DynamicResource ThemeTextHint}" FontSize="10"
                                    FontWeight="Bold" LetterSpacing="1"/>
                         <WrapPanel x:Name="PresetWrapPanel"/>
                         <Border Height="1" Background="{DynamicResource ThemeSurfaceRaised}"/>
@@ -218,7 +218,7 @@
                                 <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
                                     <PathIcon Width="11" Height="11" VerticalAlignment="Center"
                                               Data="M8 5v14l11-7z" Foreground="{DynamicResource ThemeTextIcon}"/>
-                                    <TextBlock Text="Start L2" FontSize="12" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{DynamicResource SystemMsgColor.StartL2Button}" FontSize="12" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
                         </Grid>
@@ -249,11 +249,11 @@
 
                 <!-- Column headers -->
                 <Grid ColumnDefinitions="52,8,22,6,76,6,26,12,*" Margin="12,0,0,0">
-                    <TextBlock Grid.Column="0" Text="ID"
+                    <TextBlock Grid.Column="0" Text="{DynamicResource SystemMsgColor.IdColumnTitle}"
                                Foreground="{DynamicResource ThemeTextHint}" FontSize="10" FontWeight="Bold" LetterSpacing="1"/>
                     <TextBlock Grid.Column="2" Text="{DynamicResource SystemMsgColor.ColorColumnTitle}"
                                Foreground="{DynamicResource ThemeTextHint}" FontSize="10" FontWeight="Bold" LetterSpacing="1"/>
-                    <TextBlock Grid.Column="4" Text="HEX"
+                    <TextBlock Grid.Column="4" Text="{DynamicResource SystemMsgColor.HexColumnTitle}"
                                Foreground="{DynamicResource ThemeTextHint}" FontSize="10" FontWeight="Bold" LetterSpacing="1"/>
                     <TextBlock Grid.Column="8" Text="{DynamicResource SystemMsgColor.MessageColumnTitle}"
                                Foreground="{DynamicResource ThemeTextHint}" FontSize="10" FontWeight="Bold" LetterSpacing="1"/>

@@ -117,7 +117,7 @@
                     <TextBlock x:Name="ArtText" Classes="Hint"/>
 
                     <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
-                    <TextBlock Text="BRUSH" Classes="Section"/>
+                    <TextBlock Text="{DynamicResource SplashCompose.BrushSectionTitle}" Classes="Section"/>
                     <Grid ColumnDefinitions="*,8,Auto">
                         <TextBox x:Name="SeedBox" Classes="FormField" Height="32" Padding="10,0"
                                  VerticalContentAlignment="Center"
