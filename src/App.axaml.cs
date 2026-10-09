@@ -15,7 +15,7 @@ namespace L2Toolkit
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             AvaloniaXamlLoader.Load(this);
             AppTheme.ApplySaved();
-            AppLanguage.Apply(UiLanguage.PtBr);
+            AppLanguage.ApplySaved();
         }
 
         public override void OnFrameworkInitializationCompleted()

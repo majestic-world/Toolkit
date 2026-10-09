@@ -6,10 +6,11 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Threading;
+using L2Toolkit.Settings;
 
 namespace L2Toolkit.Localization;
 
-/// <summary>UI languages. Tags: "pt-BR" (default) and "en".</summary>
+/// <summary>UI languages. Tags: "pt-BR" (default) and "en"; the choice persists as <c>app_language</c>.</summary>
 public enum UiLanguage { PtBr, En }
 
 /// <summary>
@@ -26,6 +27,24 @@ public static class AppLanguage
 
     /// <summary>Raised on the UI thread after a language is applied.</summary>
     public static event Action? Changed;
+
+    private const string SettingKey = "app_language";
+    private const string PtBrValue = "pt-BR";
+    private const string EnValue = "en";
+
+    /// <summary>Saved language: <c>en</c> → En; <c>pt-BR</c>, absent or anything else → PtBr. Never writes.</summary>
+    public static UiLanguage Saved => Parse(AppDatabase.GetInstance().GetValue(SettingKey, PtBrValue));
+
+    internal static UiLanguage Parse(string? value) => value == EnValue ? UiLanguage.En : UiLanguage.PtBr;
+
+    public static void ApplySaved() => Apply(Saved);
+
+    /// <summary>Applies <paramref name="language"/> and persists it. UI thread only.</summary>
+    public static void Set(UiLanguage language)
+    {
+        Apply(language);
+        AppDatabase.GetInstance().UpdateValue(SettingKey, language == UiLanguage.En ? EnValue : PtBrValue);
+    }
 
     /// <summary>
     /// Makes <paramref name="language"/> active: replaces the language slot of
