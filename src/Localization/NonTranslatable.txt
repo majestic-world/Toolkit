@@ -21,6 +21,12 @@ L2 Toolkit (Fafurion) By Mk
 # ── DoorGenerate ──
 
 # ── EnchantEffect ──
+Augmented (00000040)
+MIN COLOR
+Normal (00000000)
+PART.
+RADIANCE
+RING
 
 # ── Format ──
 
@@ -57,6 +63,10 @@ L2 Toolkit (Fafurion) By Mk
 # ── SplashScreen ──
 
 # ── SystemMsgColor ──
+HEX
+ID
+PRESETS
+Start L2
 
 # ── Tables ──
 
