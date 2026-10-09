@@ -80,11 +80,11 @@
 
             <!-- Page Header -->
             <StackPanel Margin="32,10,32,16" Spacing="3">
-                <TextBlock Text="Converter Geodata"
+                <TextBlock Text="{DynamicResource Geodata.Title}"
                            FontSize="22"
                            FontWeight="SemiBold"
                            Foreground="{DynamicResource ThemeTextTitle}"/>
-                <TextBlock Text="Converta arquivos de geodata entre formatos L2J, CONV_DAT e L2G"
+                <TextBlock Text="{DynamicResource Geodata.SubtitleLabel}"
                            FontSize="13"
                            Foreground="{DynamicResource ThemeTextTitle}"/>
             </StackPanel>
@@ -125,7 +125,7 @@
                                     Height="52"
                                     Spacing="14"
                                     VerticalAlignment="Center">
-                            <TextBlock Text="CONFIGURAÇÕES"
+                            <TextBlock Text="{DynamicResource Geodata.SettingsTitle}"
                                        FontSize="11"
                                        FontWeight="Bold"
                                        Foreground="{DynamicResource ThemeTextLabel}"
@@ -139,7 +139,7 @@
 
                             <!-- Input folder -->
                             <StackPanel Spacing="6">
-                                <TextBlock Text="Pasta de entrada (arquivos geodata)"
+                                <TextBlock Text="{DynamicResource Geodata.InputDirLabel}"
                                            FontSize="12"
                                            Foreground="{DynamicResource ThemeTextLabel}"
                                            FontWeight="Medium"/>
@@ -153,7 +153,7 @@
                                              Padding="12,0"
                                              FontFamily="Consolas,Courier New,monospace"
                                              FontSize="12"
-                                             Watermark="Selecione a pasta com os arquivos geodata..."/>
+                                             Watermark="{DynamicResource Geodata.InputDirWatermark}"/>
                                     <Button x:Name="SelectInputButton"
                                             Grid.Column="2"
                                             Height="38"
@@ -161,7 +161,7 @@
                                             Theme="{StaticResource GhostButton}">
                                         <StackPanel Orientation="Horizontal" Spacing="8">
                                             <PathIcon Data="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" Foreground="{DynamicResource ThemeTextLabel}" Width="14" Height="14" VerticalAlignment="Center"/>
-                                            <TextBlock Text="Selecionar"
+                                            <TextBlock Text="{DynamicResource Common.Browse}"
                                                        FontSize="13"
                                                        FontWeight="Medium"
                                                        VerticalAlignment="Center"/>
@@ -172,7 +172,7 @@
 
                             <!-- Output folder -->
                             <StackPanel Spacing="6">
-                                <TextBlock Text="Pasta de saída"
+                                <TextBlock Text="{DynamicResource Geodata.OutputDirLabel}"
                                            FontSize="12"
                                            Foreground="{DynamicResource ThemeTextLabel}"
                                            FontWeight="Medium"/>
@@ -186,7 +186,7 @@
                                              Padding="12,0"
                                              FontFamily="Consolas,Courier New,monospace"
                                              FontSize="12"
-                                             Watermark="Selecione a pasta de saída..."/>
+                                             Watermark="{DynamicResource Geodata.OutputDirWatermark}"/>
                                     <Button x:Name="SelectOutputButton"
                                             Grid.Column="2"
                                             Height="38"
@@ -194,7 +194,7 @@
                                             Theme="{StaticResource GhostButton}">
                                         <StackPanel Orientation="Horizontal" Spacing="8">
                                             <PathIcon Data="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" Foreground="{DynamicResource ThemeTextLabel}" Width="14" Height="14" VerticalAlignment="Center"/>
-                                            <TextBlock Text="Selecionar"
+                                            <TextBlock Text="{DynamicResource Common.Browse}"
                                                        FontSize="13"
                                                        FontWeight="Medium"
                                                        VerticalAlignment="Center"/>
@@ -205,7 +205,7 @@
 
                             <!-- Output format -->
                             <StackPanel Spacing="6">
-                                <TextBlock Text="Formato de saída"
+                                <TextBlock Text="{DynamicResource Geodata.FormatLabel}"
                                            FontSize="12"
                                            Foreground="{DynamicResource ThemeTextLabel}"
                                            FontWeight="Medium"/>
@@ -213,7 +213,7 @@
                                           Height="38"
                                           HorizontalAlignment="Stretch"
                                           SelectedIndex="0">
-                                    <ComboBoxItem Content="Selecione um formato de saída" IsEnabled="False"/>
+                                    <ComboBoxItem Content="{DynamicResource Geodata.FormatPlaceholderLabel}" IsEnabled="False"/>
                                     <ComboBoxItem Content="L2J (.l2j)"/>
                                     <ComboBoxItem Content="CONV_DAT (_conv.dat)"/>
                                     <ComboBoxItem Content="L2G (.l2g)"/>
@@ -240,7 +240,7 @@
                     <StackPanel Orientation="Horizontal" Spacing="9">
                         <PathIcon Foreground="White" Data="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z" Width="14" Height="14" VerticalAlignment="Center"/>
                         <TextBlock x:Name="ConvertButtonText"
-                                   Text="Iniciar Conversão"
+                                   Text="{DynamicResource Geodata.StartButton}"
                                    FontSize="13"
                                    FontWeight="SemiBold"
                                    VerticalAlignment="Center"/>
@@ -268,7 +268,7 @@
                                     Height="52"
                                     Spacing="14"
                                     VerticalAlignment="Center">
-                            <TextBlock Text="PROGRESSO"
+                            <TextBlock Text="{DynamicResource Geodata.ProgressTitle}"
                                        FontSize="11"
                                        FontWeight="Bold"
                                        Foreground="{DynamicResource ThemeTextLabel}"
@@ -283,7 +283,7 @@
                             <Grid ColumnDefinitions="*,Auto">
                                 <TextBlock x:Name="ProgressStatus"
                                            Grid.Column="0"
-                                           Text="Aguardando..."
+                                           Text="{DynamicResource Geodata.WaitingStatus}"
                                            FontSize="12"
                                            Foreground="{DynamicResource ThemeTextLabel}"/>
                                 <TextBlock x:Name="ProgressPercent"
@@ -322,7 +322,7 @@
                                  FontFamily="Consolas,Courier New,monospace"
                                  FontSize="12"
                                  IsReadOnly="True"
-                                 Watermark="Logs de processamento aparecerão aqui..."/>
+                                 Watermark="{DynamicResource Geodata.LogWatermark}"/>
 
                     </StackPanel>
                 </Grid>

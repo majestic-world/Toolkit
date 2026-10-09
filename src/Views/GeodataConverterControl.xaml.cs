@@ -6,6 +6,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
+using L2Toolkit.Localization;
 using L2Toolkit.Settings;
 using L2Toolkit.Processing.Geodata;
 
@@ -77,7 +78,7 @@ public partial class GeodataConverterControl : UserControl
         {
             int percent = total > 0 ? (int)(current * 100.0 / total) : 0;
             ProgressPercent.Text = $"{percent}%";
-            ProgressStatus.Text = $"{current} de {total} arquivo(s)";
+            LiveText.Set(ProgressStatus, () => Loc.Geodata.ProgressStatus(total, current));
 
             if (ProgressBar.Parent is Border parent && parent.Bounds.Width > 0)
             {
@@ -99,19 +100,19 @@ public partial class GeodataConverterControl : UserControl
 
         if (string.IsNullOrEmpty(inputDir))
         {
-            ShowNotification("Selecione a pasta de entrada com os arquivos geodata.");
+            ShowNotification(Loc.Geodata.NoInputError);
             return;
         }
 
         if (string.IsNullOrEmpty(outputDir))
         {
-            ShowNotification("Selecione a pasta de saída.");
+            ShowNotification(Loc.Geodata.NoOutputError);
             return;
         }
 
         if (FormatComboBox.SelectedIndex <= 0)
         {
-            ShowNotification("Selecione um formato de saída.");
+            ShowNotification(Loc.Geodata.NoFormatError);
             return;
         }
 
@@ -122,14 +123,14 @@ public partial class GeodataConverterControl : UserControl
         _logList.Clear();
         LogContent.Text = "";
 
-        ConvertButtonText.Text = "Cancelar";
+        LiveText.Set(ConvertButtonText, () => Loc.Common.Cancel);
         UpdateProgress(0, 0);
 
         try
         {
-            AddLog($"Iniciando conversão para {targetFormat}...");
-            AddLog($"Entrada: {inputDir}");
-            AddLog($"Saída: {outputDir}");
+            AddLog(Loc.Geodata.StartLog(targetFormat));
+            AddLog(Loc.Geodata.InputLog(inputDir));
+            AddLog(Loc.Geodata.OutputLog(outputDir));
 
             var results = await GeodataProcessor.ConvertAsync(
                 inputDir, outputDir, targetFormat,
@@ -144,15 +145,16 @@ public partial class GeodataConverterControl : UserControl
             }
 
             AddLog("─────────────────────────────────");
-            AddLog($"Concluído: {converted} convertido(s), {copied} copiado(s), {failed} erro(s)");
+            AddLog(Loc.Geodata.DoneLog(
+                Loc.Geodata.Converted(converted), Loc.Geodata.CopiedFile(copied), Loc.Geodata.Failed(failed)));
         }
         catch (OperationCanceledException)
         {
-            AddLog("Conversão cancelada pelo usuário.");
+            AddLog(Loc.Geodata.CancelledLog);
         }
         catch (Exception ex)
         {
-            AddLog($"Erro fatal: {ex.Message}");
+            AddLog(Loc.Geodata.FatalErrorLog(ex.Message));
             ShowNotification(ex.Message);
         }
         finally
@@ -160,7 +162,7 @@ public partial class GeodataConverterControl : UserControl
             _isProcessing = false;
             _cts?.Dispose();
             _cts = null;
-            ConvertButtonText.Text = "Iniciar Conversão";
+            LiveText.Set(ConvertButtonText, () => Loc.Geodata.StartButton);
 
             GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
             GC.WaitForPendingFinalizers();

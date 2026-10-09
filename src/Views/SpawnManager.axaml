@@ -81,11 +81,11 @@
 
             <!-- ── Page Header ──────────────────────────────────────── -->
             <StackPanel Grid.Row="0" Margin="32,24,32,16" Spacing="3">
-                <TextBlock Text="Gerenciador de Spawn"
+                <TextBlock Text="{DynamicResource SpawnManager.Title}"
                            FontSize="22"
                            FontWeight="SemiBold"
                            Foreground="{DynamicResource ThemeTextTitle}"/>
-                <TextBlock Text="Substitui IDs de NPC nos dados originais de spawn"
+                <TextBlock Text="{DynamicResource SpawnManager.SubtitleLabel}"
                            FontSize="13"
                            Foreground="{DynamicResource ThemeTextTitle}"/>
             </StackPanel>
@@ -128,7 +128,7 @@
                                     Height="40"
                                     Spacing="14"
                                     VerticalAlignment="Center">
-                            <TextBlock Text="IDs DOS NPCS"
+                            <TextBlock Text="{DynamicResource SpawnManager.NpcIdsTitle}"
                                        FontSize="11"
                                        FontWeight="Bold"
                                        Foreground="{DynamicResource ThemeTextLabel}"
@@ -143,7 +143,7 @@
                                  Margin="20,12,20,16"
                                  Height="34"
                                  VerticalContentAlignment="Center"
-                                 Watermark="ex: 20001;20002;20003"/>
+                                 Watermark="{DynamicResource SpawnManager.NpcIdsWatermark}"/>
 
                     </StackPanel>
                 </Grid>
@@ -167,7 +167,7 @@
                                     Height="40"
                                     Spacing="14"
                                     VerticalAlignment="Center">
-                            <TextBlock Text="DADOS ORIGINAIS DE SPAWN"
+                            <TextBlock Text="{DynamicResource SpawnManager.SpawnDataTitle}"
                                        FontSize="11"
                                        FontWeight="Bold"
                                        Foreground="{DynamicResource ThemeTextLabel}"
@@ -191,7 +191,7 @@
                                  SelectionBrush="{DynamicResource ThemeSelection}"
                                  FontFamily="Consolas,Courier New,monospace"
                                  FontSize="12"
-                                 Watermark="Cole os dados originais de spawn aqui..."/>
+                                 Watermark="{DynamicResource SpawnManager.SpawnDataWatermark}"/>
 
                     </Grid>
                 </Grid>
@@ -211,7 +211,7 @@
                         Theme="{StaticResource SecondaryButton}">
                     <StackPanel Orientation="Horizontal" Spacing="9">
                         <PathIcon Foreground="White" Data="M8 5v14l11-7z" Width="14" Height="14" VerticalAlignment="Center"/>
-                        <TextBlock Text="Criar Spawns"
+                        <TextBlock Text="{DynamicResource SpawnManager.CreateButton}"
                                    FontSize="13"
                                    FontWeight="SemiBold"
                                    VerticalAlignment="Center"/>
@@ -241,7 +241,7 @@
                               Height="40">
 
                             <TextBlock Grid.Column="0"
-                                       Text="RESULTADO"
+                                       Text="{DynamicResource SpawnManager.ResultTitle}"
                                        FontSize="11"
                                        FontWeight="Bold"
                                        Foreground="{DynamicResource ThemeTextLabel}"
@@ -261,7 +261,7 @@
                                     Margin="0,0,8,0">
                                 <StackPanel Orientation="Horizontal" Spacing="4">
                                     <PathIcon Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Width="10" Height="10" Foreground="{DynamicResource ThemeSuccess}" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Copiado!"
+                                    <TextBlock Text="{DynamicResource Common.CopiedStatus}"
                                                FontSize="10"
                                                Foreground="{DynamicResource ThemeSuccess}"
                                                VerticalAlignment="Center"/>
@@ -277,7 +277,7 @@
                                     Theme="{StaticResource GhostButton}">
                                 <StackPanel Orientation="Horizontal" Spacing="6">
                                     <PathIcon Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" Foreground="{DynamicResource ThemeTextLabel}" Width="12" Height="12" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Copiar"
+                                    <TextBlock Text="{DynamicResource Common.Copy}"
                                                FontSize="12"
                                                FontWeight="Medium"
                                                VerticalAlignment="Center"/>
@@ -303,7 +303,7 @@
                                  FontFamily="Consolas,Courier New,monospace"
                                  FontSize="12"
                                  IsReadOnly="True"
-                                 Watermark="O resultado aparecerá aqui..."/>
+                                 Watermark="{DynamicResource SpawnManager.ResultWatermark}"/>
 
                     </Grid>
                 </Grid>

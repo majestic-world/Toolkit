@@ -82,11 +82,11 @@
 
             <!-- ── Page Header ──────────────────────────────────────── -->
             <StackPanel Margin="32,20,32,20" Spacing="3">
-                <TextBlock Text="Gerenciar Logs"
+                <TextBlock Text="{DynamicResource LogParse.Title}"
                            FontSize="22"
                            FontWeight="SemiBold"
                            Foreground="{DynamicResource ThemeTextTitle}"/>
-                <TextBlock Text="Separador de logs — ideal para melhor análise de dados"
+                <TextBlock Text="{DynamicResource LogParse.SubtitleLabel}"
                            FontSize="13"
                            Foreground="{DynamicResource ThemeTextTitle}"/>
             </StackPanel>
@@ -127,7 +127,7 @@
                                     Height="52"
                                     Spacing="14"
                                     VerticalAlignment="Center">
-                            <TextBlock Text="CONFIGURAÇÕES"
+                            <TextBlock Text="{DynamicResource LogParse.SettingsTitle}"
                                        FontSize="11"
                                        FontWeight="Bold"
                                        Foreground="{DynamicResource ThemeTextLabel}"
@@ -141,7 +141,7 @@
 
                             <!-- Arquivo de log -->
                             <StackPanel Spacing="6">
-                                <TextBlock Text="Arquivo de log"
+                                <TextBlock Text="{DynamicResource LogParse.LogFileLabel}"
                                            FontSize="12"
                                            Foreground="{DynamicResource ThemeTextLabel}"
                                            FontWeight="Medium"/>
@@ -155,7 +155,7 @@
                                              Padding="12,0"
                                              FontFamily="Consolas,Courier New,monospace"
                                              FontSize="12"
-                                             Watermark="Selecione o arquivo .log..."/>
+                                             Watermark="{DynamicResource LogParse.LogFileWatermark}"/>
                                     <Button x:Name="SelecionarLogButton"
                                             Grid.Column="2"
                                             Height="38"
@@ -163,7 +163,7 @@
                                             Theme="{StaticResource GhostButton}">
                                         <StackPanel Orientation="Horizontal" Spacing="8">
                                             <PathIcon Data="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" Foreground="{DynamicResource ThemeTextLabel}" Width="14" Height="14" VerticalAlignment="Center"/>
-                                            <TextBlock Text="Selecionar"
+                                            <TextBlock Text="{DynamicResource Common.Browse}"
                                                        FontSize="13"
                                                        FontWeight="Medium"
                                                        VerticalAlignment="Center"/>
@@ -174,7 +174,7 @@
 
                             <!-- Pasta de saída -->
                             <StackPanel Spacing="6">
-                                <TextBlock Text="Pasta de saída"
+                                <TextBlock Text="{DynamicResource LogParse.OutputDirLabel}"
                                            FontSize="12"
                                            Foreground="{DynamicResource ThemeTextLabel}"
                                            FontWeight="Medium"/>
@@ -188,7 +188,7 @@
                                              Padding="12,0"
                                              FontFamily="Consolas,Courier New,monospace"
                                              FontSize="12"
-                                             Watermark="Selecione a pasta de saída..."/>
+                                             Watermark="{DynamicResource LogParse.OutputDirWatermark}"/>
                                     <Button x:Name="SelecionarOutputButton"
                                             Grid.Column="2"
                                             Height="38"
@@ -196,7 +196,7 @@
                                             Theme="{StaticResource GhostButton}">
                                         <StackPanel Orientation="Horizontal" Spacing="8">
                                             <PathIcon Data="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" Foreground="{DynamicResource ThemeTextLabel}" Width="14" Height="14" VerticalAlignment="Center"/>
-                                            <TextBlock Text="Selecionar"
+                                            <TextBlock Text="{DynamicResource Common.Browse}"
                                                        FontSize="13"
                                                        FontWeight="Medium"
                                                        VerticalAlignment="Center"/>
@@ -207,7 +207,7 @@
 
                             <!-- Key de pesquisa -->
                             <StackPanel Spacing="6">
-                                <TextBlock Text="Key de pesquisa (nome do player ou termo)"
+                                <TextBlock Text="{DynamicResource LogParse.SearchKeyLabel}"
                                            FontSize="12"
                                            Foreground="{DynamicResource ThemeTextLabel}"
                                            FontWeight="Medium"/>
@@ -218,12 +218,12 @@
                                          VerticalContentAlignment="Center"
                                          FontFamily="Consolas,Courier New,monospace"
                                          FontSize="12"
-                                         Watermark="Ex: PlayerName"/>
+                                         Watermark="{DynamicResource LogParse.SearchKeyWatermark}"/>
                             </StackPanel>
 
                             <!-- Evento (opcional) -->
                             <StackPanel Spacing="6">
-                                <TextBlock Text="Evento — opcional (filtra por tipo de evento)"
+                                <TextBlock Text="{DynamicResource LogParse.EventLabel}"
                                            FontSize="12"
                                            Foreground="{DynamicResource ThemeTextLabel}"
                                            FontWeight="Medium"/>
@@ -234,7 +234,7 @@
                                          VerticalContentAlignment="Center"
                                          FontFamily="Consolas,Courier New,monospace"
                                          FontSize="12"
-                                         Watermark="Ex: TRADE, ENCHANT, DROP..."/>
+                                         Watermark="{DynamicResource LogParse.EventWatermark}"/>
                             </StackPanel>
 
                         </StackPanel>
@@ -258,7 +258,7 @@
                     <StackPanel Orientation="Horizontal" Spacing="9">
                         <PathIcon Foreground="White" Data="M8 5v14l11-7z" Width="14" Height="14" VerticalAlignment="Center"/>
                         <TextBlock x:Name="ButtonGenerateText"
-                                   Text="Gerar Dados"
+                                   Text="{DynamicResource LogParse.GenerateButton}"
                                    FontSize="13"
                                    FontWeight="SemiBold"
                                    VerticalAlignment="Center"/>
@@ -286,7 +286,7 @@
                                     Height="52"
                                     Spacing="14"
                                     VerticalAlignment="Center">
-                            <TextBlock Text="LOGS DE PROCESSAMENTO"
+                            <TextBlock Text="{DynamicResource LogParse.LogsTitle}"
                                        FontSize="11"
                                        FontWeight="Bold"
                                        Foreground="{DynamicResource ThemeTextLabel}"
@@ -310,7 +310,7 @@
                                  FontFamily="Consolas,Courier New,monospace"
                                  FontSize="12"
                                  IsReadOnly="True"
-                                 Watermark="Logs de processamento aparecerão aqui..."/>
+                                 Watermark="{DynamicResource LogParse.LogWatermark}"/>
 
                     </StackPanel>
                 </Grid>

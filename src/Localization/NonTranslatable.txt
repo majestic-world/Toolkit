@@ -38,6 +38,9 @@ RING
 # ── Format ──
 
 # ── Geodata ──
+CONV_DAT (_conv.dat)
+L2G (.l2g)
+L2J (.l2j)
 
 # ── LiveData ──
 
@@ -50,6 +53,26 @@ RING
 # ── Nav ──
 
 # ── PawnData ──
+1 — Walk
+2 — Run
+8 — AtkWait
+9 — AtkWait
+20 — Attack 01
+21 — Attack 02
+22 — Attack 03
+28 — Special Attack 01
+29 — Special Attack 02
+30 — Special Attack 03
+31 — Special Attack 04
+32 — Special Attack 05
+33 — Special Attack 06
+34 — Special Attack 07
+35 — Special Attack 08
+36 — Special Attack 09
+37 — Special Attack 10
+60 — Death / Exit
+62 — DeathWait
+92 — Social Actions
 
 # ── PrimeShop ──
 
@@ -84,3 +107,4 @@ Start L2
 # ── Update ──
 
 # ── UpgradeNormal ──
+Upgrade Normal System
