@@ -53,7 +53,8 @@ public partial class AppSettingsControl : UserControl
     {
         InitializeComponent();
         ThemeComboBox.SelectedIndex = AppTheme.Saved == ThemeVariant.Light ? 1 : 0;
-        LanguageComboBox.SelectedIndex = AppLanguage.Current == UiLanguage.En ? 1 : 0;
+        var currentTag = AppLanguage.Tag(AppLanguage.Current);
+        LanguageComboBox.SelectedItem = LanguageComboBox.Items.OfType<ComboBoxItem>().First(item => item.Tag as string == currentTag);
 
         var db = AppDatabase.GetInstance();
 
@@ -119,26 +120,26 @@ public partial class AppSettingsControl : UserControl
     private async Task CheckUpdatesAsync()
     {
         CheckUpdatesBtn.IsEnabled = false;
-        ShowUpdateStatus(() => Loc.Settings.UpdateCheckingStatus, "ThemeTextHint");
+        ShowStatus(UpdateStatusText, () => Loc.Settings.UpdateCheckingStatus, "ThemeTextHint");
         var check = await AppUpdater.CheckAsync();
         CheckUpdatesBtn.IsEnabled = true;
         switch (check.Status)
         {
             case UpdateStatus.UpToDate:
                 var current = AppUpdater.CurrentVersion.ToString(3);
-                ShowUpdateStatus(() => Loc.Settings.UpToDateStatus(current), "ThemeStatusOk");
+                ShowStatus(UpdateStatusText, () => Loc.Settings.UpToDateStatus(current), "ThemeStatusOk");
                 break;
             case UpdateStatus.Throttled:
                 var seconds = Math.Ceiling(check.Wait.TotalSeconds);
-                ShowUpdateStatus(() => Loc.Settings.UpdateThrottledStatus(seconds), "ThemeTextHint");
+                ShowStatus(UpdateStatusText, () => Loc.Settings.UpdateThrottledStatus(seconds), "ThemeTextHint");
                 break;
             case UpdateStatus.Failed:
                 var error = check.Error;
-                ShowUpdateStatus(() => Loc.Settings.UpdateFailedStatus(error), "ThemeStatusError");
+                ShowStatus(UpdateStatusText, () => Loc.Settings.UpdateFailedStatus(error), "ThemeStatusError");
                 break;
             case UpdateStatus.Available:
                 var tag = check.Release!.Tag;
-                ShowUpdateStatus(() => Loc.Settings.UpdateAvailableStatus(tag), "ThemeStatusOk");
+                ShowStatus(UpdateStatusText, () => Loc.Settings.UpdateAvailableStatus(tag), "ThemeStatusOk");
                 if (TopLevel.GetTopLevel(this) is MainWindow main)
                     main.PromptUpdate(check.Release);
                 break;
@@ -147,18 +148,11 @@ public partial class AppSettingsControl : UserControl
         }
     }
 
-    private void ShowUpdateStatus(Func<string> text, string brushKey)
+    private static void ShowStatus(TextBlock target, Func<string> text, string brushKey)
     {
-        LiveText.Set(UpdateStatusText, text);
-        UpdateStatusText[!TextBlock.ForegroundProperty] = AppTheme.Brush(brushKey);
-        UpdateStatusText.IsVisible = true;
-    }
-
-    private void ShowBuildStatus(Func<string> text, string brushKey)
-    {
-        LiveText.Set(BuildStatusText, text);
-        BuildStatusText[!TextElement.ForegroundProperty] = AppTheme.Brush(brushKey);
-        BuildStatusText.IsVisible = true;
+        LiveText.Set(target, text);
+        target[!TextBlock.ForegroundProperty] = AppTheme.Brush(brushKey);
+        target.IsVisible = true;
     }
 
     private void ThemeComboBox_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
@@ -170,7 +164,7 @@ public partial class AppSettingsControl : UserControl
 
     private void LanguageComboBox_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
-        var language = (LanguageComboBox.SelectedItem as ComboBoxItem)?.Tag as string == "en" ? UiLanguage.En : UiLanguage.PtBr;
+        var language = AppLanguage.Parse((LanguageComboBox.SelectedItem as ComboBoxItem)?.Tag as string);
         if (language != AppLanguage.Current)
             AppLanguage.Set(language);
     }
@@ -208,7 +202,7 @@ public partial class AppSettingsControl : UserControl
         var sourceDir = BuildSourceBox.Text?.Trim();
         if (string.IsNullOrEmpty(sourceDir) || !Directory.Exists(sourceDir))
         {
-            ShowBuildStatus(() => Loc.Settings.BuildSourceInvalidStatus, "ThemeStatusError");
+            ShowStatus(BuildStatusText, () => Loc.Settings.BuildSourceInvalidStatus, "ThemeStatusError");
             return;
         }
 
@@ -233,7 +227,7 @@ public partial class AppSettingsControl : UserControl
 
         if (txtFiles.Length == 0)
         {
-            ShowBuildStatus(onlyRequired
+            ShowStatus(BuildStatusText, onlyRequired
                 ? () => Loc.Settings.BuildNoRequiredFilesStatus
                 : () => Loc.Settings.BuildNoFilesStatus, "ThemeStatusError");
             return;
@@ -245,7 +239,7 @@ public partial class AppSettingsControl : UserControl
         BuildProgressLabel.Text = $"0 / {txtFiles.Length}";
         BuildCurrentFile.Text = string.Empty;
         BuildProgressPanel.IsVisible = true;
-        ShowBuildStatus(() => Loc.Settings.BuildRunningStatus, "ThemeWarningAccent");
+        ShowStatus(BuildStatusText, () => Loc.Settings.BuildRunningStatus, "ThemeWarningAccent");
 
         int quality = BuildQualityBox.SelectedIndex switch
         {
@@ -306,12 +300,12 @@ public partial class AppSettingsControl : UserControl
             {
                 var original = FormatSize(totalOriginal);
                 var packed = FormatSize(totalPacked);
-                ShowBuildStatus(() => Loc.Settings.BuildDoneStatus(success, original, packed, savings), "ThemeStatusOk");
+                ShowStatus(BuildStatusText, () => Loc.Settings.BuildDoneStatus(success, original, packed, savings), "ThemeStatusOk");
             }
             else
             {
                 var joined = string.Join(" | ", errors);
-                ShowBuildStatus(() => Loc.Settings.BuildFailedStatus(failed, success, joined), "ThemeStatusError");
+                ShowStatus(BuildStatusText, () => Loc.Settings.BuildFailedStatus(failed, success, joined), "ThemeStatusError");
             }
 
             BuildCurrentFile.Text = string.Empty;
@@ -319,7 +313,7 @@ public partial class AppSettingsControl : UserControl
         catch (Exception ex)
         {
             var message = ex.Message;
-            ShowBuildStatus(() => Loc.Settings.BuildErrorStatus(message), "ThemeStatusError");
+            ShowStatus(BuildStatusText, () => Loc.Settings.BuildErrorStatus(message), "ThemeStatusError");
         }
         finally
         {

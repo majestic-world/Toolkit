@@ -96,8 +96,8 @@ namespace L2Toolkit.Views
             if (dictionary.ContainsKey(id))
             {
                 dictionary.TryGetValue(id, out var iconModel);
-                IconOutput.Text = iconModel?.Icon ?? Loc.SearchIcon.NotFoundStatus;
-                IconPanelOutput.Text = iconModel?.IconPanel ?? Loc.SearchIcon.NotFoundStatus;
+                LiveText.Set(IconOutput, TextBox.TextProperty, () => iconModel?.Icon ?? Loc.SearchIcon.NotFoundStatus);
+                LiveText.Set(IconPanelOutput, TextBox.TextProperty, () => iconModel?.IconPanel ?? Loc.SearchIcon.NotFoundStatus);
 
                 if (file != FileSkills)
                 {

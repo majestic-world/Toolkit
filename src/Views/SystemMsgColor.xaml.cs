@@ -231,7 +231,7 @@ public partial class SystemMsgColor : UserControl
         SaveBtn.IsEnabled    = false;
         SaveIcon.IsVisible   = false;
         SaveSpinner.IsVisible = true;
-        SaveLabel[!TextBlock.TextProperty] = AppLanguage.Bind(LocKey.SystemMsgColor.SavingStatus);
+        LiveText.Set(SaveLabel, () => Loc.SystemMsgColor.SavingStatus);
 
         _spinAngle = 0;
         var rotation = (RotateTransform)SpinnerArc.RenderTransform!;
@@ -251,7 +251,7 @@ public partial class SystemMsgColor : UserControl
         SaveBtn.IsEnabled     = true;
         SaveSpinner.IsVisible = false;
         SaveIcon.IsVisible    = true;
-        SaveLabel[!TextBlock.TextProperty] = AppLanguage.Bind(LocKey.SystemMsgColor.SaveFileButton);
+        LiveText.Set(SaveLabel, () => Loc.SystemMsgColor.SaveFileButton);
     }
 
     // ─── Search filter ────────────────────────────────────────────────────────

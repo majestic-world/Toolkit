@@ -109,7 +109,7 @@
                            FontSize="22"
                            FontWeight="SemiBold"
                            Foreground="{DynamicResource ThemeTextTitle}"/>
-                <TextBlock Text="{DynamicResource Settings.Subtitle}"
+                <TextBlock Text="{DynamicResource Settings.SubtitleLabel}"
                            FontSize="13"
                            Foreground="{DynamicResource ThemeTextTitle}"/>
             </StackPanel>

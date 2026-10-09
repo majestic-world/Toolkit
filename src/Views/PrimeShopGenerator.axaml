@@ -163,11 +163,11 @@
                     IsVisible="False">
                 <StackPanel Orientation="Horizontal" Spacing="10">
                     <PathIcon Data="M12 2L1 21h22L12 2zm1 16h-2v-2h2v2zm0-4h-2V9h2v5z" Width="14" Height="14" Foreground="{DynamicResource ThemeCaution}" VerticalAlignment="Center"/>
-                    <TextBlock Text="{DynamicResource PrimeShop.AssetsMissingLabel}"
+                    <TextBlock Text="{DynamicResource PrimeShop.AssetsMissingStatus}"
                                Foreground="{DynamicResource ThemeCaution}"
                                FontSize="13"
                                VerticalAlignment="Center"/>
-                    <TextBlock Text="{DynamicResource PrimeShop.AssetsConfigureButton}"
+                    <TextBlock Text="{DynamicResource PrimeShop.AssetsConfigureHint}"
                                Foreground="{DynamicResource ThemeCaution}"
                                FontSize="13"
                                FontWeight="SemiBold"

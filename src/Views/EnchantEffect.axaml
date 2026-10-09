@@ -157,7 +157,7 @@
            <StackPanel Spacing="4">
                <TextBlock Text="{DynamicResource EnchantEffect.Title}"
                           FontSize="28" FontWeight="Light" Foreground="{DynamicResource ThemeTextTitle}"/>
-               <TextBlock Text="{DynamicResource EnchantEffect.Subtitle}"
+               <TextBlock Text="{DynamicResource EnchantEffect.SubtitleLabel}"
                           FontSize="14" Foreground="{DynamicResource ThemeTextSubtitle}"/>
            </StackPanel>
 

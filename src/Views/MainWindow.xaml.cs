@@ -90,7 +90,7 @@ namespace L2Toolkit.Views
             UpdateVersions.Text = $"{AppUpdater.CurrentVersion.ToString(3)}  →  {release.Tag}";
             UpdateReleaseName.Text = string.IsNullOrWhiteSpace(release.Name) ? release.Tag : release.Name;
             UpdatePublished.Text = release.PublishedAt?.ToLocalTime().ToString(Loc.Format.DateTime) ?? "—";
-            UpdateSize.Text = Loc.Update.SizeValue(release.InstallerSize / 1048576.0);
+            UpdateSize.Text = Loc.Update.SizeLabel(release.InstallerSize / 1048576.0);
             UpdateNotes.Text = string.IsNullOrWhiteSpace(release.Notes) ? Loc.Update.NoNotesStatus : release.Notes.Trim();
             UpdatePromptPanel.IsVisible = true;
             UpdateDownloadPanel.IsVisible = false;

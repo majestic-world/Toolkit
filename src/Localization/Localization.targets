@@ -476,7 +476,7 @@ public class L2LocalizationTask : Microsoft.Build.Utilities.Task
             if (_structural.Contains(entry) || _structural.Contains(other)) continue;
             var extra = pluralParameters.Skip(1).ToList();
             loc.Add(pluralBase, Doc(entry.Value + " | " + other.Value) + "public static string " + Leaf(pluralBase) + "(int count" + string.Concat(extra.Select(n => ", object? @" + n)) + ") => "
-                + Api + ".Plural(" + index[entry.Key] + ", " + index[other.Key] + ", count" + string.Concat(extra.Select(n => ", @" + n)) + ");");
+                + Api + ".Plural(" + index[entry.Key] + ", " + index[other.Key] + ", count, count" + string.Concat(extra.Select(n => ", @" + n)) + ");");
         }
 
         var sb = new StringBuilder();
@@ -718,22 +718,20 @@ public class L2LocalizationTask : Microsoft.Build.Utilities.Task
             foreach (var literal in scan.Literals)
                 if (literal.Start >= match.Index && literal.Start < end) reported.Add(literal.Start);
         }
-        foreach (Match match in AssignTrigger.Matches(code)) ReportLiterals(path, source, lines, scan, reported, match.Index, match.Index + match.Length, false);
-        foreach (Match match in CallTrigger.Matches(code)) ReportLiterals(path, source, lines, scan, reported, match.Index, match.Index + match.Length, true);
+        foreach (Match match in AssignTrigger.Matches(code)) ReportLiterals(path, source, lines, scan, reported, match.Index + match.Length, false);
+        foreach (Match match in CallTrigger.Matches(code)) ReportLiterals(path, source, lines, scan, reported, match.Index + match.Length, true);
     }
 
-    void ReportLiterals(string path, string source, LineMap lines, CSharpScan scan, HashSet<int> reported, int triggerStart, int start, bool call)
+    void ReportLiterals(string path, string source, LineMap lines, CSharpScan scan, HashSet<int> reported, int start, bool call)
     {
         int end = SpanEnd(scan.Masked, start, call);
-        int triggerLine, triggerColumn;
-        lines.Locate(triggerStart, out triggerLine, out triggerColumn);
         foreach (var literal in scan.Literals)
         {
             if (literal.Start < start || literal.Start >= end || reported.Contains(literal.Start)) continue;
             if (!IsTranslatableLiteral(literal.Raw, literal.Visible)) continue;
             int line, column;
             lines.Locate(literal.Start, out line, out column);
-            if (lines.EndsWithLocOk(source, line) || lines.EndsWithLocOk(source, triggerLine)) continue;
+            if (lines.EndsWithLocOk(source, line)) continue;
             reported.Add(literal.Start);
             Report("L2LOC008", true, path, line, column,
                 "Literal \"" + Preview(literal.Raw) + "\" em C# sem catálogo: use Loc.Área.Chave, NonTranslatable.txt ou // loc-ok.");

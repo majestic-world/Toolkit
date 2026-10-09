@@ -227,7 +227,7 @@
                             <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
                                 <Border Width="4" Height="4" CornerRadius="2"
                                         Background="{DynamicResource ThemeAccent}" VerticalAlignment="Center"/>
-                                <TextBlock Text="{DynamicResource DescriptionFix.InfoEmbeddedLabel}"
+                                <TextBlock Text="{DynamicResource DescriptionFix.InfoEmbeddedHint}"
                                            FontSize="13"
                                            Foreground="{DynamicResource ThemeTextButton}"
                                            TextWrapping="Wrap"/>
@@ -236,7 +236,7 @@
                             <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
                                 <Border Width="4" Height="4" CornerRadius="2"
                                         Background="{DynamicResource ThemeAccent}" VerticalAlignment="Center"/>
-                                <TextBlock Text="{DynamicResource DescriptionFix.InfoSelectLabel}"
+                                <TextBlock Text="{DynamicResource DescriptionFix.InfoSelectHint}"
                                            FontSize="13"
                                            Foreground="{DynamicResource ThemeTextButton}"
                                            TextWrapping="Wrap"/>
@@ -245,7 +245,7 @@
                             <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
                                 <Border Width="4" Height="4" CornerRadius="2"
                                         Background="{DynamicResource ThemeAccent}" VerticalAlignment="Center"/>
-                                <TextBlock Text="{DynamicResource DescriptionFix.InfoOnlyDescriptionLabel}"
+                                <TextBlock Text="{DynamicResource DescriptionFix.InfoOnlyDescriptionHint}"
                                            FontSize="13"
                                            Foreground="{DynamicResource ThemeTextButton}"
                                            TextWrapping="Wrap"/>
@@ -254,7 +254,7 @@
                             <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
                                 <Border Width="4" Height="4" CornerRadius="2"
                                         Background="{DynamicResource ThemeAccent}" VerticalAlignment="Center"/>
-                                <TextBlock Text="{DynamicResource DescriptionFix.InfoSaveLabel}"
+                                <TextBlock Text="{DynamicResource DescriptionFix.InfoSaveHint}"
                                            FontSize="13"
                                            Foreground="{DynamicResource ThemeTextButton}"
                                            TextWrapping="Wrap"/>

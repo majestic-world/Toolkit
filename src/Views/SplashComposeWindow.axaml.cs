@@ -74,7 +74,7 @@ public partial class SplashComposeWindow : Window
         {
             if (e.Key == Key.Enter) ApplySeedText();
         };
-        LiveText.Set(ArtText, () => Loc.SplashCompose.NoArtLabel);
+        LiveText.Set(ArtText, () => Loc.SplashCompose.NoArtStatus);
         ShowColor(StrokeColorSwatch, StrokeColorText, _strokeColor);
         ShowColor(ShadowColorSwatch, ShadowColorText, _shadowColor);
         SetSeed(Random.Shared.Next(1, 1_000_000));
@@ -217,13 +217,13 @@ public partial class SplashComposeWindow : Window
             var previous = PreviewImage.Source as IDisposable;
             PreviewImage.Source = RgbaBitmap.ToBitmap(result);
             previous?.Dispose();
-            var hasShadow = shadow != null;
-            SetStatus(() =>
+            var (seed, width, height, hasShadow) = (settings.Seed, art.Width, art.Height, shadow != null);
+            SetStatus(() => (strokeWidth > 0, hasShadow) switch
             {
-                var status = $"Brush {settings.Seed} · {art.Width} × {art.Height} px";
-                if (strokeWidth > 0) status += " · " + Loc.SplashCompose.StrokeStatus(strokeWidth);
-                if (hasShadow) status += " · " + Loc.SplashCompose.ShadowStatus;
-                return status;
+                (true, true) => Loc.SplashCompose.PreviewStrokeShadowStatus(seed, width, height, strokeWidth),
+                (true, false) => Loc.SplashCompose.PreviewStrokeStatus(seed, width, height, strokeWidth),
+                (false, true) => Loc.SplashCompose.PreviewShadowStatus(seed, width, height),
+                (false, false) => Loc.SplashCompose.PreviewStatus(seed, width, height),
             });
             UpdateControls();
         }

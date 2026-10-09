@@ -146,7 +146,7 @@ public partial class GeodataConverterControl : UserControl
 
             AddLog("─────────────────────────────────");
             AddLog(Loc.Geodata.DoneLog(
-                Loc.Geodata.Converted(converted), Loc.Geodata.CopiedFile(copied), Loc.Geodata.Failed(failed)));
+                Loc.Geodata.ConvertedStatus(converted), Loc.Geodata.CopiedStatus(copied), Loc.Geodata.FailedStatus(failed)));
         }
         catch (OperationCanceledException)
         {
