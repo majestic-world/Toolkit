@@ -14,10 +14,133 @@
   </resheader>
 
   <!-- ═══ Brush ═══ -->
+  <data name="Brush.GrayscaleError" xml:space="preserve">
+    <value>Failed to convert the brush to grayscale.</value>
+  </data>
+  <data name="Brush.PngError" xml:space="preserve">
+    <value>Failed to generate the PNG.</value>
+  </data>
+  <data name="Brush.SizeRangeError" xml:space="preserve">
+    <value>The size must be between 64 and {max} px.</value>
+  </data>
 
   <!-- ═══ BrushGenerator ═══ -->
+  <data name="BrushGenerator.ClawsLabel" xml:space="preserve">
+    <value>Claws</value>
+  </data>
+  <data name="BrushGenerator.CracksLabel" xml:space="preserve">
+    <value>Cracks</value>
+  </data>
+  <data name="BrushGenerator.DebrisLabel" xml:space="preserve">
+    <value>Shards</value>
+  </data>
+  <data name="BrushGenerator.ExportButton" xml:space="preserve">
+    <value>Export PNG…</value>
+  </data>
+  <data name="BrushGenerator.ExportPicker" xml:space="preserve">
+    <value>Export brush</value>
+  </data>
+  <data name="BrushGenerator.ExportedStatus" xml:space="preserve">
+    <value>{fileName} exported ({size} × {size} px).</value>
+  </data>
+  <data name="BrushGenerator.GeneratingStatus" xml:space="preserve">
+    <value>Generating {size} × {size} px…</value>
+  </data>
+  <data name="BrushGenerator.InfoStatus" xml:space="preserve">
+    <value>Seed {seed}  ·  exports at {size} × {size} px  ·  preview at {previewSize} px</value>
+  </data>
+  <data name="BrushGenerator.OutputSectionLabel" xml:space="preserve">
+    <value>OUTPUT</value>
+  </data>
+  <data name="BrushGenerator.SeedSectionLabel" xml:space="preserve">
+    <value>SEED</value>
+  </data>
+  <data name="BrushGenerator.SeedTip" xml:space="preserve">
+    <value>The same seed always produces the same brush</value>
+  </data>
+  <data name="BrushGenerator.ShapeSectionLabel" xml:space="preserve">
+    <value>SHAPE</value>
+  </data>
+  <data name="BrushGenerator.ShuffleButton" xml:space="preserve">
+    <value>Generate another</value>
+  </data>
+  <data name="BrushGenerator.SizeLabel" xml:space="preserve">
+    <value>Size</value>
+  </data>
+  <data name="BrushGenerator.SoftnessLabel" xml:space="preserve">
+    <value>Soft edge</value>
+  </data>
+  <data name="BrushGenerator.SpikesLabel" xml:space="preserve">
+    <value>Spikes</value>
+  </data>
+  <data name="BrushGenerator.Subtitle" xml:space="preserve">
+    <value>Torn-edge brushes in the style of the L2 splash screens — black PNG on a white background for Photoshop</value>
+  </data>
+  <data name="BrushGenerator.SymmetryLabel" xml:space="preserve">
+    <value>Symmetry</value>
+  </data>
+  <data name="BrushGenerator.SymmetryTip" xml:space="preserve">
+    <value>Rounded rectangle with regular spikes, mirrored vertically</value>
+  </data>
+  <data name="BrushGenerator.Title" xml:space="preserve">
+    <value>Brush Generator</value>
+  </data>
+  <data name="BrushGenerator.UnexpectedError" xml:space="preserve">
+    <value>An unexpected error occurred.</value>
+  </data>
+  <data name="BrushGenerator.VariantsButton" xml:space="preserve">
+    <value>Generate several…</value>
+  </data>
+  <data name="BrushGenerator.VariantsTip" xml:space="preserve">
+    <value>Opens a window with several variations to choose from</value>
+  </data>
 
   <!-- ═══ BrushVariants ═══ -->
+  <data name="BrushVariants.CountLabel" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
+  <data name="BrushVariants.CountTip" xml:space="preserve">
+    <value>From 1 to 200</value>
+  </data>
+  <data name="BrushVariants.ExportAllButton" xml:space="preserve">
+    <value>Export all…</value>
+  </data>
+  <data name="BrushVariants.ExportedStatus.One" xml:space="preserve">
+    <value>{count} brush exported to {folder}.</value>
+  </data>
+  <data name="BrushVariants.ExportedStatus.Other" xml:space="preserve">
+    <value>{count} brushes exported to {folder}.</value>
+  </data>
+  <data name="BrushVariants.ExportingStatus" xml:space="preserve">
+    <value>Exporting {index}/{total} at {size} × {size} px…</value>
+  </data>
+  <data name="BrushVariants.FolderPicker" xml:space="preserve">
+    <value>Folder for the variations</value>
+  </data>
+  <data name="BrushVariants.GenerateButton" xml:space="preserve">
+    <value>Generate</value>
+  </data>
+  <data name="BrushVariants.GeneratingStatus.One" xml:space="preserve">
+    <value>Generating {count} variation…</value>
+  </data>
+  <data name="BrushVariants.GeneratingStatus.Other" xml:space="preserve">
+    <value>Generating {count} variations…</value>
+  </data>
+  <data name="BrushVariants.InvalidCountError" xml:space="preserve">
+    <value>Enter a quantity between 1 and {max}.</value>
+  </data>
+  <data name="BrushVariants.ReadyStatus.One" xml:space="preserve">
+    <value>{count} variation · click to send it to the editor</value>
+  </data>
+  <data name="BrushVariants.ReadyStatus.Other" xml:space="preserve">
+    <value>{count} variations · click one to send it to the editor</value>
+  </data>
+  <data name="BrushVariants.SeedLabel" xml:space="preserve">
+    <value>Seed {seed}</value>
+  </data>
+  <data name="BrushVariants.Title" xml:space="preserve">
+    <value>Variations — Brush Generator</value>
+  </data>
 
   <!-- ═══ Common ═══ -->
   <data name="Common.AllFilesFilter" xml:space="preserve">
@@ -121,6 +244,87 @@
   <!-- ═══ DoorGenerate ═══ -->
 
   <!-- ═══ EnchantEffect ═══ -->
+  <data name="EnchantEffect.ActionsTitle" xml:space="preserve">
+    <value>ACTIONS</value>
+  </data>
+  <data name="EnchantEffect.ApplyAllButton" xml:space="preserve">
+    <value>Apply to all grades</value>
+  </data>
+  <data name="EnchantEffect.ArmorFilePicker" xml:space="preserve">
+    <value>Select FullArmorEnchantEffectData.dat</value>
+  </data>
+  <data name="EnchantEffect.ArmorFileWatermark" xml:space="preserve">
+    <value>Click to select FullArmorEnchantEffectData.dat…</value>
+  </data>
+  <data name="EnchantEffect.ArmorModeButton" xml:space="preserve">
+    <value>Armor</value>
+  </data>
+  <data name="EnchantEffect.CloseFileButton" xml:space="preserve">
+    <value>Close file</value>
+  </data>
+  <data name="EnchantEffect.ColorsAppliedStatus.One" xml:space="preserve">
+    <value>Colors applied to {count} grade of type {type}.</value>
+  </data>
+  <data name="EnchantEffect.ColorsAppliedStatus.Other" xml:space="preserve">
+    <value>Colors applied to {count} grades of type {type}.</value>
+  </data>
+  <data name="EnchantEffect.DatFilter" xml:space="preserve">
+    <value>DAT files</value>
+  </data>
+  <data name="EnchantEffect.FileNotFoundError" xml:space="preserve">
+    <value>File not found.</value>
+  </data>
+  <data name="EnchantEffect.FileTitle" xml:space="preserve">
+    <value>FILE</value>
+  </data>
+  <data name="EnchantEffect.GradeTitle" xml:space="preserve">
+    <value>GRADE</value>
+  </data>
+  <data name="EnchantEffect.GradientTitle" xml:space="preserve">
+    <value>MANAGE GRADIENT</value>
+  </data>
+  <data name="EnchantEffect.MaxColorTitle" xml:space="preserve">
+    <value>MAX COLOR</value>
+  </data>
+  <data name="EnchantEffect.MinColorPreviewTitle" xml:space="preserve">
+    <value>PREVIEW — MIN COLOR</value>
+  </data>
+  <data name="EnchantEffect.MinEnchantTitle" xml:space="preserve">
+    <value>MIN ENCHANT</value>
+  </data>
+  <data name="EnchantEffect.OpenButton" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="EnchantEffect.RadiancePreviewTitle" xml:space="preserve">
+    <value>PREVIEW — RADIANCE</value>
+  </data>
+  <data name="EnchantEffect.SaveError" xml:space="preserve">
+    <value>Couldn't save: {message}</value>
+  </data>
+  <data name="EnchantEffect.SaveFileButton" xml:space="preserve">
+    <value>Save file</value>
+  </data>
+  <data name="EnchantEffect.SavedStatus" xml:space="preserve">
+    <value>File saved. Backup: .dat.bak</value>
+  </data>
+  <data name="EnchantEffect.Subtitle" xml:space="preserve">
+    <value>Visual glow color editor for weapons and armor</value>
+  </data>
+  <data name="EnchantEffect.Title" xml:space="preserve">
+    <value>Enchant Effect</value>
+  </data>
+  <data name="EnchantEffect.TypeTitle" xml:space="preserve">
+    <value>TYPE</value>
+  </data>
+  <data name="EnchantEffect.WeaponFilePicker" xml:space="preserve">
+    <value>Select WeaponEnchantEffectData.dat</value>
+  </data>
+  <data name="EnchantEffect.WeaponFileWatermark" xml:space="preserve">
+    <value>Click to select WeaponEnchantEffectData.dat…</value>
+  </data>
+  <data name="EnchantEffect.WeaponModeButton" xml:space="preserve">
+    <value>Weapon</value>
+  </data>
 
   <!-- ═══ Format ═══ -->
   <data name="Format.DateTime" xml:space="preserve">
@@ -209,10 +413,70 @@
   <!-- ═══ LogParse ═══ -->
 
   <!-- ═══ Main ═══ -->
+  <data name="Main.SettingsTip" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Main.ToolsSection" xml:space="preserve">
+    <value>TOOLS</value>
+  </data>
+  <data name="Main.UtilitiesSection" xml:space="preserve">
+    <value>UTILITIES</value>
+  </data>
 
   <!-- ═══ Missions ═══ -->
 
   <!-- ═══ Nav ═══ -->
+  <data name="Nav.BrushGenerator" xml:space="preserve">
+    <value>Brush Generator</value>
+  </data>
+  <data name="Nav.CreateMultisell" xml:space="preserve">
+    <value>Create MultiSell</value>
+  </data>
+  <data name="Nav.DescriptionFix" xml:space="preserve">
+    <value>Description Fix</value>
+  </data>
+  <data name="Nav.DoorGenerate" xml:space="preserve">
+    <value>Door Generator</value>
+  </data>
+  <data name="Nav.EnchantEffect" xml:space="preserve">
+    <value>Enchant Effect</value>
+  </data>
+  <data name="Nav.GeodataConverter" xml:space="preserve">
+    <value>Geodata Converter</value>
+  </data>
+  <data name="Nav.LiveData" xml:space="preserve">
+    <value>Live Data Mode (166)</value>
+  </data>
+  <data name="Nav.LogParse" xml:space="preserve">
+    <value>Log Manager</value>
+  </data>
+  <data name="Nav.Missions" xml:space="preserve">
+    <value>Daily Missions</value>
+  </data>
+  <data name="Nav.PawnData" xml:space="preserve">
+    <value>Animations (PawnData)</value>
+  </data>
+  <data name="Nav.PrimeShop" xml:space="preserve">
+    <value>Prime Shop</value>
+  </data>
+  <data name="Nav.SearchIcon" xml:space="preserve">
+    <value>Icon Search</value>
+  </data>
+  <data name="Nav.SkinBuilder" xml:space="preserve">
+    <value>Skin Builder</value>
+  </data>
+  <data name="Nav.SpawnManager" xml:space="preserve">
+    <value>NPC Spawn XML</value>
+  </data>
+  <data name="Nav.SplashScreen" xml:space="preserve">
+    <value>Splash Screen</value>
+  </data>
+  <data name="Nav.SystemMsgColor" xml:space="preserve">
+    <value>System Msg Color</value>
+  </data>
+  <data name="Nav.UpgradeNormalSystem" xml:space="preserve">
+    <value>Upgrade Normal System</value>
+  </data>
 
   <!-- ═══ PawnData ═══ -->
 
@@ -358,6 +622,162 @@
   </data>
 
   <!-- ═══ Settings ═══ -->
+  <data name="Settings.AppFolderButton" xml:space="preserve">
+    <value>App folder</value>
+  </data>
+  <data name="Settings.AppFolderTip" xml:space="preserve">
+    <value>Open the app folder</value>
+  </data>
+  <data name="Settings.ApplicationTitle" xml:space="preserve">
+    <value>APPLICATION</value>
+  </data>
+  <data name="Settings.AssetsHint" xml:space="preserve">
+    <value>Some modules need Lineage 2 client data files (e.g. ItemName, Armorgrp, Weapongrp). Select the folder where these files are.</value>
+  </data>
+  <data name="Settings.AssetsModulesLabel" xml:space="preserve">
+    <value>Modules that use this folder:</value>
+  </data>
+  <data name="Settings.AssetsPathTip" xml:space="preserve">
+    <value>Assets folder location</value>
+  </data>
+  <data name="Settings.AssetsRequiredFilesLabel" xml:space="preserve">
+    <value>Required files in the folder:</value>
+  </data>
+  <data name="Settings.AssetsTitle" xml:space="preserve">
+    <value>ASSETS FOLDER</value>
+  </data>
+  <data name="Settings.BuildDoneStatus.One" xml:space="preserve">
+    <value>Build finished: {count} file — {original} → {packed} → {savings:P1}</value>
+  </data>
+  <data name="Settings.BuildDoneStatus.Other" xml:space="preserve">
+    <value>Build finished: {count} files — {original} → {packed} → {savings:P1}</value>
+  </data>
+  <data name="Settings.BuildErrorStatus" xml:space="preserve">
+    <value>Error: {message}</value>
+  </data>
+  <data name="Settings.BuildFailedStatus.One" xml:space="preserve">
+    <value>{ok} ok, {count} error — {errors}</value>
+  </data>
+  <data name="Settings.BuildFailedStatus.Other" xml:space="preserve">
+    <value>{ok} ok, {count} errors — {errors}</value>
+  </data>
+  <data name="Settings.BuildHint" xml:space="preserve">
+    <value>Compiles .txt files from the source folder into .l2dat in the output folder. Only files at the folder root are processed.</value>
+  </data>
+  <data name="Settings.BuildNoFilesStatus" xml:space="preserve">
+    <value>No .txt files found in the source folder.</value>
+  </data>
+  <data name="Settings.BuildNoRequiredFilesStatus" xml:space="preserve">
+    <value>None of the required files were found in the source folder.</value>
+  </data>
+  <data name="Settings.BuildOnlyRequiredLabel" xml:space="preserve">
+    <value>Only required (packs just the tables the system uses, skips the rest)</value>
+  </data>
+  <data name="Settings.BuildOutputLabel" xml:space="preserve">
+    <value>Output folder (.l2dat)</value>
+  </data>
+  <data name="Settings.BuildOutputPicker" xml:space="preserve">
+    <value>Select output folder (.l2dat)</value>
+  </data>
+  <data name="Settings.BuildOutputWatermark" xml:space="preserve">
+    <value>Default: exePath/tables</value>
+  </data>
+  <data name="Settings.BuildRunningStatus" xml:space="preserve">
+    <value>Compiling...</value>
+  </data>
+  <data name="Settings.BuildSourceClearTip" xml:space="preserve">
+    <value>Clear source folder</value>
+  </data>
+  <data name="Settings.BuildSourceInvalidStatus" xml:space="preserve">
+    <value>Select a valid source folder.</value>
+  </data>
+  <data name="Settings.BuildSourceLabel" xml:space="preserve">
+    <value>Source folder (.txt)</value>
+  </data>
+  <data name="Settings.BuildSourcePicker" xml:space="preserve">
+    <value>Select source folder (.txt)</value>
+  </data>
+  <data name="Settings.ClearButton" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="Settings.CompressionLabel" xml:space="preserve">
+    <value>Compression level</value>
+  </data>
+  <data name="Settings.ConfigFileHint" xml:space="preserve">
+    <value>App settings are saved to a local file in AppData. File location:</value>
+  </data>
+  <data name="Settings.ConfigFileTitle" xml:space="preserve">
+    <value>SETTINGS FILE</value>
+  </data>
+  <data name="Settings.ConfigFolderButton" xml:space="preserve">
+    <value>Settings folder</value>
+  </data>
+  <data name="Settings.ConfigFolderTip" xml:space="preserve">
+    <value>Open the settings folder</value>
+  </data>
+  <data name="Settings.DefaultButton" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="Settings.LanguageLabel" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Settings.NoFolderWatermark" xml:space="preserve">
+    <value>No folder selected...</value>
+  </data>
+  <data name="Settings.QualityHighItem" xml:space="preserve">
+    <value>High</value>
+  </data>
+  <data name="Settings.QualityMaximumItem" xml:space="preserve">
+    <value>Maximum</value>
+  </data>
+  <data name="Settings.QualityMediumItem" xml:space="preserve">
+    <value>Medium</value>
+  </data>
+  <data name="Settings.QualityMinimumItem" xml:space="preserve">
+    <value>Minimum</value>
+  </data>
+  <data name="Settings.RoundTripError" xml:space="preserve">
+    <value>Round-trip failed for {fileName}</value>
+  </data>
+  <data name="Settings.Subtitle" xml:space="preserve">
+    <value>Configure the app's paths and preferences</value>
+  </data>
+  <data name="Settings.ThemeDarkItem" xml:space="preserve">
+    <value>Dark (default)</value>
+  </data>
+  <data name="Settings.ThemeLabel" xml:space="preserve">
+    <value>Theme</value>
+  </data>
+  <data name="Settings.ThemeLightItem" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="Settings.Title" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Settings.UpToDateStatus" xml:space="preserve">
+    <value>You're on the latest version ({version}).</value>
+  </data>
+  <data name="Settings.UpdateAvailableStatus" xml:space="preserve">
+    <value>Version {version} available.</value>
+  </data>
+  <data name="Settings.UpdateCheckButton" xml:space="preserve">
+    <value>Check for updates</value>
+  </data>
+  <data name="Settings.UpdateCheckTip" xml:space="preserve">
+    <value>Looks for a new version on GitHub and asks before downloading</value>
+  </data>
+  <data name="Settings.UpdateCheckingStatus" xml:space="preserve">
+    <value>Checking…</value>
+  </data>
+  <data name="Settings.UpdateFailedStatus" xml:space="preserve">
+    <value>Couldn't check: {error}</value>
+  </data>
+  <data name="Settings.UpdateThrottledStatus" xml:space="preserve">
+    <value>Wait {seconds} s before checking again.</value>
+  </data>
+  <data name="Settings.VersionLabel" xml:space="preserve">
+    <value>Version</value>
+  </data>
 
   <!-- ═══ SkinBuilder ═══ -->
   <data name="SkinBuilder.ArmorsCheckingLog" xml:space="preserve">
@@ -489,6 +909,111 @@
   <!-- ═══ SplashScreen ═══ -->
 
   <!-- ═══ SystemMsgColor ═══ -->
+  <data name="SystemMsgColor.BackupWarningHint" xml:space="preserve">
+    <value>Incorrect edits can corrupt the client file. Saving creates an automatic backup with the .dat.bak extension in the same folder, but we recommend keeping a manual copy somewhere safe.</value>
+  </data>
+  <data name="SystemMsgColor.BackupWarningTitle" xml:space="preserve">
+    <value>Back up before editing</value>
+  </data>
+  <data name="SystemMsgColor.ClearSelectionButton" xml:space="preserve">
+    <value>Clear selection ({count})</value>
+  </data>
+  <data name="SystemMsgColor.CloseFileButton" xml:space="preserve">
+    <value>Close file</value>
+  </data>
+  <data name="SystemMsgColor.ColorAppliedStatus.One" xml:space="preserve">
+    <value>Color applied to {count} message.</value>
+  </data>
+  <data name="SystemMsgColor.ColorAppliedStatus.Other" xml:space="preserve">
+    <value>Color applied to {count} messages.</value>
+  </data>
+  <data name="SystemMsgColor.ColorColumnTitle" xml:space="preserve">
+    <value>COLOR</value>
+  </data>
+  <data name="SystemMsgColor.ColorsModalTitle" xml:space="preserve">
+    <value>Colors in file</value>
+  </data>
+  <data name="SystemMsgColor.DatFilter" xml:space="preserve">
+    <value>Lineage 2 DAT files</value>
+  </data>
+  <data name="SystemMsgColor.ExistingColorsButton" xml:space="preserve">
+    <value>Existing colors…</value>
+  </data>
+  <data name="SystemMsgColor.FilePicker" xml:space="preserve">
+    <value>Select SystemMsg.dat</value>
+  </data>
+  <data name="SystemMsgColor.FileWatermark" xml:space="preserve">
+    <value>Click to select the SystemMsg.dat file…</value>
+  </data>
+  <data name="SystemMsgColor.L2ExeNotFoundError" xml:space="preserve">
+    <value>l2.exe not found in:&#10;{path}</value>
+  </data>
+  <data name="SystemMsgColor.MessageColumnTitle" xml:space="preserve">
+    <value>MESSAGE</value>
+  </data>
+  <data name="SystemMsgColor.OpenButton" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="SystemMsgColor.OverflowStatus" xml:space="preserve">
+    <value>Showing {shown} of {total}. Use search to find specific messages.</value>
+  </data>
+  <data name="SystemMsgColor.PresetApplyTip" xml:space="preserve">
+    <value>#{hex} — click to apply</value>
+  </data>
+  <data name="SystemMsgColor.PresetNameLabel" xml:space="preserve">
+    <value>NAME</value>
+  </data>
+  <data name="SystemMsgColor.PresetNameWatermark" xml:space="preserve">
+    <value>Preset name</value>
+  </data>
+  <data name="SystemMsgColor.PresetSavedStatus" xml:space="preserve">
+    <value>Preset "{name}" saved.</value>
+  </data>
+  <data name="SystemMsgColor.SaveError" xml:space="preserve">
+    <value>Couldn't save</value>
+  </data>
+  <data name="SystemMsgColor.SaveFileButton" xml:space="preserve">
+    <value>Save file</value>
+  </data>
+  <data name="SystemMsgColor.SavePresetButton" xml:space="preserve">
+    <value>Save preset</value>
+  </data>
+  <data name="SystemMsgColor.SavedStatus" xml:space="preserve">
+    <value>File saved. Backup created as .dat.bak.</value>
+  </data>
+  <data name="SystemMsgColor.SavingStatus" xml:space="preserve">
+    <value>Saving…</value>
+  </data>
+  <data name="SystemMsgColor.SearchButton" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="SystemMsgColor.SearchResultsStatus.One" xml:space="preserve">
+    <value>{shown} of {count} result · {total} total</value>
+  </data>
+  <data name="SystemMsgColor.SearchResultsStatus.Other" xml:space="preserve">
+    <value>{shown} of {count} results · {total} total</value>
+  </data>
+  <data name="SystemMsgColor.SearchWatermark" xml:space="preserve">
+    <value>Search by ID or message text</value>
+  </data>
+  <data name="SystemMsgColor.StatsStatus" xml:space="preserve">
+    <value>{messageCount} messages · {colorCount} unique colors</value>
+  </data>
+  <data name="SystemMsgColor.Subtitle" xml:space="preserve">
+    <value>Per-message text-color editor</value>
+  </data>
+  <data name="SystemMsgColor.Title" xml:space="preserve">
+    <value>System message colors</value>
+  </data>
+  <data name="SystemMsgColor.UniqueColorsStatus.One" xml:space="preserve">
+    <value>{count} unique color in file</value>
+  </data>
+  <data name="SystemMsgColor.UniqueColorsStatus.Other" xml:space="preserve">
+    <value>{count} unique colors in file</value>
+  </data>
+  <data name="SystemMsgColor.UseForPresetTip" xml:space="preserve">
+    <value>Click to use as the new preset color</value>
+  </data>
 
   <!-- ═══ Tables ═══ -->
   <data name="Tables.InvalidIdsError" xml:space="preserve">
@@ -501,6 +1026,75 @@
   </data>
 
   <!-- ═══ Update ═══ -->
+  <data name="Update.AvailableTitle" xml:space="preserve">
+    <value>New version available</value>
+  </data>
+  <data name="Update.ChecksumError" xml:space="preserve">
+    <value>The downloaded installer doesn't match the release's SHA-256.</value>
+  </data>
+  <data name="Update.ConfirmButton" xml:space="preserve">
+    <value>Update now</value>
+  </data>
+  <data name="Update.ConnectingStatus" xml:space="preserve">
+    <value>Connecting…</value>
+  </data>
+  <data name="Update.DismissButton" xml:space="preserve">
+    <value>Not now</value>
+  </data>
+  <data name="Update.DownloadHint" xml:space="preserve">
+    <value>Downloading the installer. When it finishes, the app closes, the update is installed, and the app opens again.</value>
+  </data>
+  <data name="Update.DownloadLabel" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="Update.DownloadTitle" xml:space="preserve">
+    <value>Updating to version {tag}</value>
+  </data>
+  <data name="Update.FailedError" xml:space="preserve">
+    <value>Update failed: {message}</value>
+  </data>
+  <data name="Update.IncompleteDownloadError" xml:space="preserve">
+    <value>Incomplete download: {done} of {total} bytes.</value>
+  </data>
+  <data name="Update.InstallHint" xml:space="preserve">
+    <value>When you update, the app downloads the installer, closes during the installation, and opens again when it finishes.</value>
+  </data>
+  <data name="Update.NoInstallerError" xml:space="preserve">
+    <value>Release {tag} has no installer (.exe).</value>
+  </data>
+  <data name="Update.NoNotesStatus" xml:space="preserve">
+    <value>No notes for this release.</value>
+  </data>
+  <data name="Update.NotesSection" xml:space="preserve">
+    <value>WHAT'S NEW</value>
+  </data>
+  <data name="Update.OpeningInstallerStatus" xml:space="preserve">
+    <value>Opening the installer…</value>
+  </data>
+  <data name="Update.ProgressStatus" xml:space="preserve">
+    <value>{done:0.0} of {total:0.0} MB</value>
+  </data>
+  <data name="Update.PublishedLabel" xml:space="preserve">
+    <value>Published</value>
+  </data>
+  <data name="Update.ReleaseLabel" xml:space="preserve">
+    <value>Release</value>
+  </data>
+  <data name="Update.ReleasePageButton" xml:space="preserve">
+    <value>View on GitHub</value>
+  </data>
+  <data name="Update.ReleasePageTip" xml:space="preserve">
+    <value>Open the release in the browser</value>
+  </data>
+  <data name="Update.SizeValue" xml:space="preserve">
+    <value>{size:0.0} MB</value>
+  </data>
+  <data name="Update.TagFormatError" xml:space="preserve">
+    <value>Release tag isn't in a version format: "{tag}".</value>
+  </data>
+  <data name="Update.VersionLabel" xml:space="preserve">
+    <value>Version</value>
+  </data>
 
   <!-- ═══ UpgradeNormal ═══ -->
 
