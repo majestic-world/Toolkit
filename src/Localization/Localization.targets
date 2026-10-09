@@ -476,7 +476,7 @@ public class L2LocalizationTask : Microsoft.Build.Utilities.Task
             if (_structural.Contains(entry) || _structural.Contains(other)) continue;
             var extra = pluralParameters.Skip(1).ToList();
             loc.Add(pluralBase, Doc(entry.Value + " | " + other.Value) + "public static string " + Leaf(pluralBase) + "(int count" + string.Concat(extra.Select(n => ", object? @" + n)) + ") => "
-                + Api + ".Plural(" + index[entry.Key] + ", " + index[other.Key] + ", count" + string.Concat(extra.Select(n => ", @" + n)) + ");");
+                + Api + ".Plural(" + index[entry.Key] + ", " + index[other.Key] + ", count, count" + string.Concat(extra.Select(n => ", @" + n)) + ");");
         }
 
         var sb = new StringBuilder();

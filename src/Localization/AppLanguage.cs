@@ -20,22 +20,37 @@ public enum UiLanguage { PtBr, En }
 /// </summary>
 public static class AppLanguage
 {
-    private static string[] _values = LocCatalog.PtBr;
+    private static Snapshot _state = new(UiLanguage.PtBr, LocCatalog.PtBr);
     private static IResourceProvider? _resources;
 
-    public static UiLanguage Current { get; private set; } = UiLanguage.PtBr;
+    /// <summary>Active language and its texts, published together so readers on any thread see a matching pair.</summary>
+    private sealed class Snapshot(UiLanguage language, string[] values)
+    {
+        public readonly UiLanguage Language = language;
+        public readonly string[] Values = values;
+    }
+
+    public static UiLanguage Current => Volatile.Read(ref _state).Language;
 
     /// <summary>Raised on the UI thread after a language is applied.</summary>
     public static event Action? Changed;
 
     private const string SettingKey = "app_language";
-    private const string PtBrValue = "pt-BR";
-    private const string EnValue = "en";
+    private const string PtBrTag = "pt-BR";
+    private const string EnTag = "en";
 
     /// <summary>Saved language: <c>en</c> → En; <c>pt-BR</c>, absent or anything else → PtBr. Never writes.</summary>
-    public static UiLanguage Saved => Parse(AppDatabase.GetInstance().GetValue(SettingKey, PtBrValue));
+    public static UiLanguage Saved => Parse(AppDatabase.GetInstance().GetValue(SettingKey, PtBrTag));
 
-    internal static UiLanguage Parse(string? value) => value == EnValue ? UiLanguage.En : UiLanguage.PtBr;
+    /// <summary>Language for a tag (<c>en</c>, <c>pt-BR</c>); unknown or absent → PtBr.</summary>
+    public static UiLanguage Parse(string? tag) => tag == EnTag ? UiLanguage.En : UiLanguage.PtBr;
+
+    /// <summary>Tag of <paramref name="language"/>, as persisted and used by the language selector.</summary>
+    public static string Tag(UiLanguage language) => language switch
+    {
+        UiLanguage.En => EnTag,
+        _ => PtBrTag,
+    };
 
     public static void ApplySaved() => Apply(Saved);
 
@@ -43,7 +58,7 @@ public static class AppLanguage
     public static void Set(UiLanguage language)
     {
         Apply(language);
-        AppDatabase.GetInstance().UpdateValue(SettingKey, language == UiLanguage.En ? EnValue : PtBrValue);
+        AppDatabase.GetInstance().UpdateValue(SettingKey, Tag(language));
     }
 
     /// <summary>
@@ -67,8 +82,7 @@ public static class AppLanguage
             merged[slot] = dictionary;
         _resources = dictionary;
 
-        Volatile.Write(ref _values, values);
-        Current = language;
+        Volatile.Write(ref _state, new Snapshot(language, values));
         Changed?.Invoke();
     }
 
@@ -78,19 +92,19 @@ public static class AppLanguage
     /// </summary>
     public static IBinding Bind(string key) => new DynamicResourceExtension(key);
 
-    internal static string Text(int index) => Volatile.Read(ref _values)[index];
+    internal static string Text(int index) => Volatile.Read(ref _state).Values[index];
 
     internal static string Format(int index, params object?[] args) =>
-        string.Format(CultureInfo.InvariantCulture, Volatile.Read(ref _values)[index], args);
+        string.Format(CultureInfo.InvariantCulture, Volatile.Read(ref _state).Values[index], args);
 
-    /// <summary>Formats the One or Other variant; <paramref name="count"/> is placeholder 0, then <paramref name="args"/>.</summary>
+    /// <summary>
+    /// Formats the One or Other variant chosen by <paramref name="count"/> under the active language's rule.
+    /// <paramref name="args"/> holds every placeholder value, <paramref name="count"/> first (placeholder 0).
+    /// </summary>
     internal static string Plural(int one, int other, int count, params object?[] args)
     {
-        var values = Volatile.Read(ref _values);
-        var all = new object?[args.Length + 1];
-        all[0] = count;
-        args.CopyTo(all, 1);
-        return string.Format(CultureInfo.InvariantCulture, values[IsOne(Current, count) ? one : other], all);
+        var state = Volatile.Read(ref _state);
+        return string.Format(CultureInfo.InvariantCulture, state.Values[IsOne(state.Language, count) ? one : other], args);
     }
 
     private static string[] Values(UiLanguage language) => language switch
