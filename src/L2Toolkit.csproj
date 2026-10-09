@@ -53,4 +53,14 @@
     <EmbeddedResource Include="Tables\*.l2dat" />
     <EmbeddedResource Include="Data\Presets.dat" />
   </ItemGroup>
+
+  <!-- Localização: catálogos ResX compilados em C# por Localization.targets (sem ResourceManager nem satélites).
+       O primeiro L2LocCatalog é o base (pt-BR): define as chaves e a ordem dos parâmetros. -->
+  <ItemGroup>
+    <EmbeddedResource Remove="Localization\Strings*.resx" />
+    <L2LocCatalog Include="Localization\Strings.resx" Language="pt-BR" />
+    <L2LocCatalog Include="Localization\Strings.en.resx" Language="en" />
+  </ItemGroup>
+
+  <Import Project="Localization\Localization.targets" />
 </Project>

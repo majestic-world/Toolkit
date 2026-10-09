@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Catálogo de textos da UI: pt-BR (idioma padrão, catálogo base: define as chaves e a ordem dos parâmetros).
+  Gerado em C# por Localization.targets (Loc, LocKey); valide com dotnet build (L2LOC001–009).
+  Cada área tem um bloco próprio, em ordem alfabética: adicione as chaves logo abaixo do comentário da área,
+  ordenadas por nome, com a mesma posição nos dois catálogos. Overrides do Fluent (String*) ficam no fim.
+-->
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+
+  <!-- ═══ Brush ═══ -->
+
+  <!-- ═══ BrushGenerator ═══ -->
+
+  <!-- ═══ BrushVariants ═══ -->
+
+  <!-- ═══ Common ═══ -->
+  <data name="Common.AllFilesFilter" xml:space="preserve">
+    <value>Todos os arquivos</value>
+    <comment>Nome do filtro *.* nos diálogos de arquivo (FilePickerFileType).</comment>
+  </data>
+  <data name="Common.Browse" xml:space="preserve">
+    <value>Selecionar</value>
+    <comment>Botão que abre o seletor de arquivo ou pasta.</comment>
+  </data>
+  <data name="Common.Cancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="Common.Close" xml:space="preserve">
+    <value>Fechar</value>
+  </data>
+  <data name="Common.Copy" xml:space="preserve">
+    <value>Copiar</value>
+  </data>
+  <data name="Common.Done" xml:space="preserve">
+    <value>Pronto</value>
+  </data>
+  <data name="Common.Error" xml:space="preserve">
+    <value>Erro</value>
+  </data>
+  <data name="Common.Save" xml:space="preserve">
+    <value>Salvar</value>
+  </data>
+
+  <!-- ═══ CreateMultisell ═══ -->
+
+  <!-- ═══ DescriptionFix ═══ -->
+
+  <!-- ═══ DoorGenerate ═══ -->
+
+  <!-- ═══ EnchantEffect ═══ -->
+
+  <!-- ═══ Format ═══ -->
+  <data name="Format.DateTime" xml:space="preserve">
+    <value>dd/MM/yyyy HH:mm</value>
+    <comment>Formato .NET de data e hora (ex.: publicação no modal de update). Não é texto exibido literalmente.</comment>
+  </data>
+
+  <!-- ═══ Geodata ═══ -->
+
+  <!-- ═══ LiveData ═══ -->
+
+  <!-- ═══ LogParse ═══ -->
+
+  <!-- ═══ Main ═══ -->
+
+  <!-- ═══ Missions ═══ -->
+
+  <!-- ═══ Nav ═══ -->
+
+  <!-- ═══ PawnData ═══ -->
+
+  <!-- ═══ PrimeShop ═══ -->
+
+  <!-- ═══ SearchIcon ═══ -->
+
+  <!-- ═══ Settings ═══ -->
+
+  <!-- ═══ SkinBuilder ═══ -->
+
+  <!-- ═══ SpawnManager ═══ -->
+
+  <!-- ═══ Splash ═══ -->
+
+  <!-- ═══ SplashCompose ═══ -->
+
+  <!-- ═══ SplashLibrary ═══ -->
+
+  <!-- ═══ SplashScreen ═══ -->
+
+  <!-- ═══ SystemMsgColor ═══ -->
+
+  <!-- ═══ Tables ═══ -->
+
+  <!-- ═══ Update ═══ -->
+
+  <!-- ═══ UpgradeNormal ═══ -->
+
+  <!-- ═══ Overrides do Fluent (String*: só no ResourceDictionary, sem Loc) ═══ -->
+  <data name="StringTextFlyoutCopyText" xml:space="preserve">
+    <value>Copiar</value>
+  </data>
+  <data name="StringTextFlyoutCutText" xml:space="preserve">
+    <value>Recortar</value>
+  </data>
+  <data name="StringTextFlyoutPasteText" xml:space="preserve">
+    <value>Colar</value>
+  </data>
+</root>
