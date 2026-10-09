@@ -145,7 +145,7 @@
                            FontSize="22"
                            FontWeight="SemiBold"
                            Foreground="{DynamicResource ThemeTextTitle}"/>
-                <TextBlock Text="Configure e gere produtos para a Prime Shop"
+                <TextBlock Text="{DynamicResource PrimeShop.SubtitleLabel}"
                            FontSize="13"
                            Foreground="{DynamicResource ThemeTextTitle}"/>
             </StackPanel>
@@ -163,11 +163,11 @@
                     IsVisible="False">
                 <StackPanel Orientation="Horizontal" Spacing="10">
                     <PathIcon Data="M12 2L1 21h22L12 2zm1 16h-2v-2h2v2zm0-4h-2V9h2v5z" Width="14" Height="14" Foreground="{DynamicResource ThemeCaution}" VerticalAlignment="Center"/>
-                    <TextBlock Text="Pasta de assets não configurada."
+                    <TextBlock Text="{DynamicResource PrimeShop.AssetsMissingLabel}"
                                Foreground="{DynamicResource ThemeCaution}"
                                FontSize="13"
                                VerticalAlignment="Center"/>
-                    <TextBlock Text="Clique aqui para configurar."
+                    <TextBlock Text="{DynamicResource PrimeShop.AssetsConfigureButton}"
                                Foreground="{DynamicResource ThemeCaution}"
                                FontSize="13"
                                FontWeight="SemiBold"
@@ -213,7 +213,7 @@
                                     Height="40"
                                     Spacing="14"
                                     VerticalAlignment="Center">
-                            <TextBlock Text="CONFIGURAÇÃO"
+                            <TextBlock Text="{DynamicResource PrimeShop.SettingsTitle}"
                                        FontSize="11"
                                        FontWeight="Bold"
                                        Foreground="{DynamicResource ThemeTextLabel}"
@@ -227,7 +227,7 @@
 
                             <!-- IDs -->
                             <StackPanel Spacing="6">
-                                    <TextBlock Text="IDs dos itens"
+                                    <TextBlock Text="{DynamicResource PrimeShop.IdsLabel}"
                                                FontSize="12"
                                                FontWeight="Medium"
                                                Foreground="{DynamicResource ThemeTextLabel}"/>
@@ -236,13 +236,13 @@
                                          Height="34"
                                          Padding="10,0"
                                          VerticalContentAlignment="Center"
-                                         Watermark="ex: 57;35;36;37 (separados por ponto e vírgula)"/>
+                                         Watermark="{DynamicResource PrimeShop.IdsWatermark}"/>
                             </StackPanel>
 
                             <!-- Categoria, Tipo, Preço e Quantidade na mesma linha -->
                             <Grid ColumnDefinitions="*,14,*,14,*,14,*">
                                 <StackPanel Grid.Column="0" Spacing="6">
-                                    <TextBlock Text="Categoria"
+                                    <TextBlock Text="{DynamicResource PrimeShop.CategoryLabel}"
                                                FontSize="12"
                                                FontWeight="Medium"
                                                Foreground="{DynamicResource ThemeTextLabel}"/>
@@ -252,7 +252,7 @@
                                               ItemContainerTheme="{StaticResource ComboBoxItemTheme}"/>
                                 </StackPanel>
                                 <StackPanel Grid.Column="2" Spacing="6">
-                                    <TextBlock Text="Tipo"
+                                    <TextBlock Text="{DynamicResource PrimeShop.TypeLabel}"
                                                FontSize="12"
                                                FontWeight="Medium"
                                                Foreground="{DynamicResource ThemeTextLabel}"/>
@@ -262,7 +262,7 @@
                                               ItemContainerTheme="{StaticResource ComboBoxItemTheme}"/>
                                 </StackPanel>
                                 <StackPanel Grid.Column="4" Spacing="6">
-                                    <TextBlock Text="Preço"
+                                    <TextBlock Text="{DynamicResource PrimeShop.PriceLabel}"
                                                FontSize="12"
                                                FontWeight="Medium"
                                                Foreground="{DynamicResource ThemeTextLabel}"/>
@@ -271,10 +271,10 @@
                                              Height="34"
                                              Padding="10,0"
                                              VerticalContentAlignment="Center"
-                                             Watermark="ex: 1000"/>
+                                             Watermark="{DynamicResource PrimeShop.PriceWatermark}"/>
                                 </StackPanel>
                                 <StackPanel Grid.Column="6" Spacing="6">
-                                    <TextBlock Text="Quantidade"
+                                    <TextBlock Text="{DynamicResource PrimeShop.QuantityLabel}"
                                                FontSize="12"
                                                FontWeight="Medium"
                                                Foreground="{DynamicResource ThemeTextLabel}"/>
@@ -306,7 +306,7 @@
                         Theme="{StaticResource SecondaryButton}">
                     <StackPanel Orientation="Horizontal" Spacing="9">
                         <PathIcon Foreground="White" Data="M8 5v14l11-7z" Width="14" Height="14" VerticalAlignment="Center"/>
-                        <TextBlock Text="Gerar"
+                        <TextBlock Text="{DynamicResource PrimeShop.GenerateButton}"
                                    FontSize="13"
                                    FontWeight="SemiBold"
                                    VerticalAlignment="Center"/>
@@ -331,7 +331,7 @@
 
                         <Grid Grid.Row="0" ColumnDefinitions="Auto,18,*,Auto,Auto" Margin="20,0,16,0">
                             <TextBlock Grid.Column="0"
-                                       Text="RESULTADO"
+                                       Text="{DynamicResource PrimeShop.ResultTitle}"
                                        FontSize="11"
                                        FontWeight="Bold"
                                        Foreground="{DynamicResource ThemeTextLabel}"
@@ -342,7 +342,7 @@
                             <StackPanel Grid.Column="2" Orientation="Horizontal">
                                 <Button x:Name="ClientTab" Classes="active" Theme="{StaticResource TabButton}" Click="ResultTab_OnClick">
                                     <StackPanel Orientation="Horizontal" Spacing="8">
-                                        <TextBlock Text="Client" VerticalAlignment="Center"/>
+                                        <TextBlock Text="{DynamicResource PrimeShop.ClientTabButton}" VerticalAlignment="Center"/>
                                         <TextBlock Text="ProductName_Classic-eu.dat"
                                                    FontSize="10"
                                                    FontWeight="Normal"
@@ -353,7 +353,7 @@
                                 </Button>
                                 <Button x:Name="ServerTab" Theme="{StaticResource TabButton}" Click="ResultTab_OnClick">
                                     <StackPanel Orientation="Horizontal" Spacing="8">
-                                        <TextBlock Text="Servidor" VerticalAlignment="Center"/>
+                                        <TextBlock Text="{DynamicResource PrimeShop.ServerTabButton}" VerticalAlignment="Center"/>
                                         <TextBlock Text="prime_shop.xml"
                                                    FontSize="10"
                                                    FontWeight="Normal"
@@ -381,7 +381,7 @@
                                     Margin="0,0,8,0">
                                 <StackPanel Orientation="Horizontal" Spacing="4">
                                     <PathIcon Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Width="10" Height="10" Foreground="{DynamicResource ThemeSuccess}" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Copiado!"
+                                    <TextBlock Text="{DynamicResource Common.CopiedStatus}"
                                                FontSize="10"
                                                Foreground="{DynamicResource ThemeSuccess}"
                                                VerticalAlignment="Center"/>
@@ -393,11 +393,11 @@
                                     Height="30"
                                     Padding="12,0"
                                     VerticalAlignment="Center"
-                                    ToolTip.Tip="Copia o conteúdo da aba aberta"
+                                    ToolTip.Tip="{DynamicResource PrimeShop.CopyTip}"
                                     Theme="{StaticResource GhostButton}">
                                 <StackPanel Orientation="Horizontal" Spacing="6">
                                     <PathIcon Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" Foreground="{DynamicResource ThemeTextLabel}" Width="12" Height="12" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Copiar"
+                                    <TextBlock Text="{DynamicResource Common.Copy}"
                                                FontSize="12"
                                                FontWeight="Medium"
                                                VerticalAlignment="Center"/>
@@ -422,7 +422,7 @@
                                      FontFamily="Consolas,Courier New,monospace"
                                      FontSize="11"
                                      IsReadOnly="True"
-                                     Watermark="Saída do cliente aparecerá aqui..."/>
+                                     Watermark="{DynamicResource PrimeShop.ClientWatermark}"/>
                             <TextBox x:Name="ServerTextBox"
                                      IsVisible="False"
                                      Classes="Code"
@@ -437,7 +437,7 @@
                                      FontFamily="Consolas,Courier New,monospace"
                                      FontSize="11"
                                      IsReadOnly="True"
-                                     Watermark="Saída do servidor aparecerá aqui..."/>
+                                     Watermark="{DynamicResource PrimeShop.ServerWatermark}"/>
                             <TextBox x:Name="ItemsGeneratedTextBox"
                                      IsVisible="False"
                                      Classes="Code"
@@ -452,7 +452,7 @@
                                      FontFamily="Consolas,Courier New,monospace"
                                      FontSize="12"
                                      IsReadOnly="True"
-                                     Watermark="IDs e nomes gerados aparecerão aqui..."/>
+                                     Watermark="{DynamicResource PrimeShop.LogsWatermark}"/>
                         </Panel>
 
                     </Grid>

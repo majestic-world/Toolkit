@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.IO;
 using System.Reflection;
 using L2Toolkit.ClientDat;
+using L2Toolkit.Localization;
 
 namespace L2Toolkit.Utilities;
 
@@ -56,7 +57,7 @@ public static class TableManager
                 var assembly     = Assembly.GetExecutingAssembly();
                 var resourceName = $"L2Toolkit.Tables.{name}.l2dat";
                 using var stream = assembly.GetManifestResourceStream(resourceName)
-                    ?? throw new FileNotFoundException($"Tabela não encontrada: {name}");
+                    ?? throw new FileNotFoundException(Loc.Tables.NotFoundError(name));
                 using var ms = new MemoryStream();
                 stream.CopyTo(ms);
                 bytes = ms.ToArray();

@@ -11,6 +11,7 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
+using L2Toolkit.Localization;
 using L2Toolkit.Parsing;
 using L2Toolkit.Utilities;
 using Avalonia.Controls.Documents;
@@ -48,7 +49,7 @@ public partial class CreateMultisell : UserControl
         var parts = text.Split(';');
         if (parts.Length != 2 || !long.TryParse(parts[0].Trim(), out _) || !long.TryParse(parts[1].Trim(), out _))
         {
-            ShowNotification("Formato inválido. Use id;quantidade — ex: 57;500");
+            ShowNotification(Loc.CreateMultisell.IngredientFormatError);
             return;
         }
 
@@ -113,7 +114,7 @@ public partial class CreateMultisell : UserControl
     {
         _errorTimer.Stop();
         NotificacaoBorder.IsVisible = true;
-        StatusNotificacao.Text = !string.IsNullOrWhiteSpace(message) ? message : "Ocorreu um erro inesperado.";
+        StatusNotificacao.Text = !string.IsNullOrWhiteSpace(message) ? message : Loc.Common.UnexpectedError;
         _errorTimer.Start();
     }
 
@@ -146,20 +147,20 @@ public partial class CreateMultisell : UserControl
 
             if (string.IsNullOrWhiteSpace(productionId))
             {
-                ShowNotification("Digite os IDs de produção.");
+                ShowNotification(Loc.CreateMultisell.ProductionIdsRequiredError);
                 return;
             }
 
             if (_ingredients.Count == 0)
             {
-                ShowNotification("Adicione pelo menos um ingrediente.");
+                ShowNotification(Loc.CreateMultisell.IngredientsRequiredError);
                 return;
             }
 
             if (_listNames.IsEmpty)
             {
                 await LoadNames();
-                _log.AddLog($"Nomes de itens carregados, total de {_listNames.Count:N0}");
+                _log.AddLog(Loc.CreateMultisell.NamesLoadedLog(_listNames.Count));
             }
 
             var listId = Parser.ParseId(productionId);
@@ -207,7 +208,7 @@ public partial class CreateMultisell : UserControl
         }
         catch (Exception ex)
         {
-            _log.AddLog($"Erro: {ex.Message}");
+            _log.AddLog(Loc.CreateMultisell.ErrorLog(ex.Message));
         }
     }
 

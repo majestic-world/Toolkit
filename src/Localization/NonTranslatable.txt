@@ -22,6 +22,7 @@ PNG
 # ── Common ──
 
 # ── CreateMultisell ──
+Logs
 
 # ── DescriptionFix ──
 
@@ -43,6 +44,13 @@ L2G (.l2g)
 L2J (.l2j)
 
 # ── LiveData ──
+Armor
+Items
+Live Data
+Preset
+Set Item GRP
+Skills
+Weapons
 
 # ── LogParse ──
 
@@ -75,8 +83,19 @@ L2J (.l2j)
 92 — Social Actions
 
 # ── PrimeShop ──
+Agathions
+Consumables
+Equipment
+Prime Shop Generator
+ProductName_Classic-eu.dat
+Reward Coin
+VIP
+prime_shop.xml
 
 # ── SearchIcon ──
+Icon
+Icon Panel
+Weapon
 
 # ── Settings ──
 Build
@@ -85,6 +104,9 @@ L2DAT BUILD
 Português (Brasil)
 
 # ── SkinBuilder ──
+Skin Builder
+Skins
+Status
 
 # ── SpawnManager ──
 

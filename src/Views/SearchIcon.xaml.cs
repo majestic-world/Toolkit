@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
+using L2Toolkit.Localization;
 using L2Toolkit.Models;
 using L2Toolkit.Utilities;
 
@@ -34,7 +35,7 @@ namespace L2Toolkit.Views
         {
             _errorTimer.Stop();
             NotificacaoBorder.IsVisible = true;
-            StatusNotificacao.Text = !string.IsNullOrWhiteSpace(message) ? message : "Ocorreu um erro inesperado.";
+            StatusNotificacao.Text = !string.IsNullOrWhiteSpace(message) ? message : Loc.Common.UnexpectedError;
             _errorTimer.Start();
         }
 
@@ -76,9 +77,9 @@ namespace L2Toolkit.Views
             if (dictionary.Count == 0)
             {
                 if (!File.Exists(file))
-                    throw new FileNotFoundException("Arquivo não encontrado: " + file);
+                    throw new FileNotFoundException(Loc.SearchIcon.FileNotFoundError(file));
 
-                StatusBox.Text = "CARREGANDO...";
+                LiveText.Set(StatusBox, () => Loc.SearchIcon.LoadingStatus);
 
                 var lines = File.ReadLines(file);
                 Parallel.ForEach(lines, line =>
@@ -90,13 +91,13 @@ namespace L2Toolkit.Views
                 });
             }
 
-            StatusBox.Text = "RESULTADO";
+            LiveText.Set(StatusBox, () => Loc.SearchIcon.ResultTitle);
 
             if (dictionary.ContainsKey(id))
             {
                 dictionary.TryGetValue(id, out var iconModel);
-                IconOutput.Text = iconModel?.Icon ?? "Não encontrado";
-                IconPanelOutput.Text = iconModel?.IconPanel ?? "Não encontrado";
+                IconOutput.Text = iconModel?.Icon ?? Loc.SearchIcon.NotFoundStatus;
+                IconPanelOutput.Text = iconModel?.IconPanel ?? Loc.SearchIcon.NotFoundStatus;
 
                 if (file != FileSkills)
                 {
@@ -115,7 +116,7 @@ namespace L2Toolkit.Views
             }
             else
             {
-                ShowNotification("O item não foi encontrado!");
+                ShowNotification(Loc.SearchIcon.ItemNotFoundError);
             }
         }
 
@@ -126,7 +127,7 @@ namespace L2Toolkit.Views
                 var id = ItemId.Text;
                 if (string.IsNullOrWhiteSpace(id))
                 {
-                    ShowNotification("Insira o ID do item.");
+                    ShowNotification(Loc.SearchIcon.ItemIdRequiredError);
                     return;
                 }
 
