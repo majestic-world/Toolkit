@@ -11,6 +11,7 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using L2Toolkit.Settings;
+using L2Toolkit.Localization;
 using L2Toolkit.ClientDat;
 using L2Toolkit.Utilities;
 using Avalonia.Controls.Documents;
@@ -52,6 +53,7 @@ public partial class AppSettingsControl : UserControl
     {
         InitializeComponent();
         ThemeComboBox.SelectedIndex = AppTheme.Saved == ThemeVariant.Light ? 1 : 0;
+        LanguageComboBox.SelectedIndex = AppLanguage.Current == UiLanguage.En ? 1 : 0;
 
         var db = AppDatabase.GetInstance();
 
@@ -153,6 +155,13 @@ public partial class AppSettingsControl : UserControl
         var variant = ThemeComboBox.SelectedIndex == 1 ? ThemeVariant.Light : ThemeVariant.Dark;
         if (variant != Application.Current!.RequestedThemeVariant)
             AppTheme.Set(variant);
+    }
+
+    private void LanguageComboBox_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        var language = (LanguageComboBox.SelectedItem as ComboBoxItem)?.Tag as string == "en" ? UiLanguage.En : UiLanguage.PtBr;
+        if (language != AppLanguage.Current)
+            AppLanguage.Set(language);
     }
 
     private async Task SelectBuildSourceAsync()
