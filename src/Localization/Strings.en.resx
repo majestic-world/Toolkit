@@ -65,10 +65,70 @@
   <!-- ═══ LogParse ═══ -->
 
   <!-- ═══ Main ═══ -->
+  <data name="Main.SettingsTip" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Main.ToolsSection" xml:space="preserve">
+    <value>TOOLS</value>
+  </data>
+  <data name="Main.UtilitiesSection" xml:space="preserve">
+    <value>UTILITIES</value>
+  </data>
 
   <!-- ═══ Missions ═══ -->
 
   <!-- ═══ Nav ═══ -->
+  <data name="Nav.BrushGenerator" xml:space="preserve">
+    <value>Brush Generator</value>
+  </data>
+  <data name="Nav.CreateMultisell" xml:space="preserve">
+    <value>Create MultiSell</value>
+  </data>
+  <data name="Nav.DescriptionFix" xml:space="preserve">
+    <value>Description Fix</value>
+  </data>
+  <data name="Nav.DoorGenerate" xml:space="preserve">
+    <value>Door Generator</value>
+  </data>
+  <data name="Nav.EnchantEffect" xml:space="preserve">
+    <value>Enchant Effect</value>
+  </data>
+  <data name="Nav.GeodataConverter" xml:space="preserve">
+    <value>Geodata Converter</value>
+  </data>
+  <data name="Nav.LiveData" xml:space="preserve">
+    <value>Live Data Mode (166)</value>
+  </data>
+  <data name="Nav.LogParse" xml:space="preserve">
+    <value>Log Manager</value>
+  </data>
+  <data name="Nav.Missions" xml:space="preserve">
+    <value>Daily Missions</value>
+  </data>
+  <data name="Nav.PawnData" xml:space="preserve">
+    <value>Animations (PawnData)</value>
+  </data>
+  <data name="Nav.PrimeShop" xml:space="preserve">
+    <value>Prime Shop</value>
+  </data>
+  <data name="Nav.SearchIcon" xml:space="preserve">
+    <value>Icon Search</value>
+  </data>
+  <data name="Nav.SkinBuilder" xml:space="preserve">
+    <value>Skin Builder</value>
+  </data>
+  <data name="Nav.SpawnManager" xml:space="preserve">
+    <value>NPC Spawn XML</value>
+  </data>
+  <data name="Nav.SplashScreen" xml:space="preserve">
+    <value>Splash Screen</value>
+  </data>
+  <data name="Nav.SystemMsgColor" xml:space="preserve">
+    <value>System Msg Color</value>
+  </data>
+  <data name="Nav.UpgradeNormalSystem" xml:space="preserve">
+    <value>Upgrade Normal System</value>
+  </data>
 
   <!-- ═══ PawnData ═══ -->
 
@@ -98,6 +158,75 @@
   <!-- ═══ Tables ═══ -->
 
   <!-- ═══ Update ═══ -->
+  <data name="Update.AvailableTitle" xml:space="preserve">
+    <value>New version available</value>
+  </data>
+  <data name="Update.ChecksumError" xml:space="preserve">
+    <value>The downloaded installer doesn't match the release's SHA-256.</value>
+  </data>
+  <data name="Update.ConfirmButton" xml:space="preserve">
+    <value>Update now</value>
+  </data>
+  <data name="Update.ConnectingStatus" xml:space="preserve">
+    <value>Connecting…</value>
+  </data>
+  <data name="Update.DismissButton" xml:space="preserve">
+    <value>Not now</value>
+  </data>
+  <data name="Update.DownloadHint" xml:space="preserve">
+    <value>Downloading the installer. When it finishes, the app closes, the update is installed, and the app opens again.</value>
+  </data>
+  <data name="Update.DownloadLabel" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="Update.DownloadTitle" xml:space="preserve">
+    <value>Updating to version {tag}</value>
+  </data>
+  <data name="Update.FailedError" xml:space="preserve">
+    <value>Update failed: {message}</value>
+  </data>
+  <data name="Update.IncompleteDownloadError" xml:space="preserve">
+    <value>Incomplete download: {done} of {total} bytes.</value>
+  </data>
+  <data name="Update.InstallHint" xml:space="preserve">
+    <value>When you update, the app downloads the installer, closes during the installation, and opens again when it finishes.</value>
+  </data>
+  <data name="Update.NoInstallerError" xml:space="preserve">
+    <value>Release {tag} has no installer (.exe).</value>
+  </data>
+  <data name="Update.NoNotesStatus" xml:space="preserve">
+    <value>No notes for this release.</value>
+  </data>
+  <data name="Update.NotesSection" xml:space="preserve">
+    <value>WHAT'S NEW</value>
+  </data>
+  <data name="Update.OpeningInstallerStatus" xml:space="preserve">
+    <value>Opening the installer…</value>
+  </data>
+  <data name="Update.ProgressStatus" xml:space="preserve">
+    <value>{done:0.0} of {total:0.0} MB</value>
+  </data>
+  <data name="Update.PublishedLabel" xml:space="preserve">
+    <value>Published</value>
+  </data>
+  <data name="Update.ReleaseLabel" xml:space="preserve">
+    <value>Release</value>
+  </data>
+  <data name="Update.ReleasePageButton" xml:space="preserve">
+    <value>View on GitHub</value>
+  </data>
+  <data name="Update.ReleasePageTip" xml:space="preserve">
+    <value>Open the release in the browser</value>
+  </data>
+  <data name="Update.SizeValue" xml:space="preserve">
+    <value>{size:0.0} MB</value>
+  </data>
+  <data name="Update.TagFormatError" xml:space="preserve">
+    <value>Release tag isn't in a version format: "{tag}".</value>
+  </data>
+  <data name="Update.VersionLabel" xml:space="preserve">
+    <value>Version</value>
+  </data>
 
   <!-- ═══ UpgradeNormal ═══ -->
 
