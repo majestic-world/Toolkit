@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using L2Toolkit.Localization;
 
 namespace L2Toolkit.Utilities;
 
@@ -105,10 +106,10 @@ public static class AppUpdater
             }
 
             if (done != release.InstallerSize)
-                throw new InvalidDataException($"Download incompleto: {done} de {release.InstallerSize} bytes.");
+                throw new InvalidDataException(Loc.Update.IncompleteDownloadError(done, release.InstallerSize));
             var actual = Convert.ToHexStringLower(hash.GetHashAndReset());
             if (release.Sha256 != null && !string.Equals(actual, release.Sha256, StringComparison.OrdinalIgnoreCase))
-                throw new InvalidDataException("O instalador baixado não confere com o SHA-256 da release.");
+                throw new InvalidDataException(Loc.Update.ChecksumError);
         }
 
         File.Move(partial, path, overwrite: true);
@@ -143,7 +144,7 @@ public static class AppUpdater
             var root = json.RootElement;
 
             var tag = root.GetProperty("tag_name").GetString() ?? "";
-            var version = ParseVersion(tag) ?? throw new InvalidDataException($"Tag da release fora do formato de versão: \"{tag}\".");
+            var version = ParseVersion(tag) ?? throw new InvalidDataException(Loc.Update.TagFormatError(tag));
             if (version <= CurrentVersion) return new UpdateCheck(UpdateStatus.UpToDate);
 
             foreach (var asset in root.GetProperty("assets").EnumerateArray())
@@ -165,7 +166,7 @@ public static class AppUpdater
                     sha256);
                 return new UpdateCheck(UpdateStatus.Available, release);
             }
-            throw new InvalidDataException($"A release {tag} não tem instalador (.exe).");
+            throw new InvalidDataException(Loc.Update.NoInstallerError(tag));
         }
         catch (Exception ex)
         {

@@ -14,10 +14,133 @@
   </resheader>
 
   <!-- ═══ Brush ═══ -->
+  <data name="Brush.GrayscaleError" xml:space="preserve">
+    <value>Failed to convert the brush to grayscale.</value>
+  </data>
+  <data name="Brush.PngError" xml:space="preserve">
+    <value>Failed to generate the PNG.</value>
+  </data>
+  <data name="Brush.SizeRangeError" xml:space="preserve">
+    <value>The size must be between 64 and {max} px.</value>
+  </data>
 
   <!-- ═══ BrushGenerator ═══ -->
+  <data name="BrushGenerator.ClawsLabel" xml:space="preserve">
+    <value>Claws</value>
+  </data>
+  <data name="BrushGenerator.CracksLabel" xml:space="preserve">
+    <value>Cracks</value>
+  </data>
+  <data name="BrushGenerator.DebrisLabel" xml:space="preserve">
+    <value>Shards</value>
+  </data>
+  <data name="BrushGenerator.ExportButton" xml:space="preserve">
+    <value>Export PNG…</value>
+  </data>
+  <data name="BrushGenerator.ExportPicker" xml:space="preserve">
+    <value>Export brush</value>
+  </data>
+  <data name="BrushGenerator.ExportedStatus" xml:space="preserve">
+    <value>{fileName} exported ({size} × {size} px).</value>
+  </data>
+  <data name="BrushGenerator.GeneratingStatus" xml:space="preserve">
+    <value>Generating {size} × {size} px…</value>
+  </data>
+  <data name="BrushGenerator.InfoStatus" xml:space="preserve">
+    <value>Seed {seed}  ·  exports at {size} × {size} px  ·  preview at {previewSize} px</value>
+  </data>
+  <data name="BrushGenerator.OutputSectionLabel" xml:space="preserve">
+    <value>OUTPUT</value>
+  </data>
+  <data name="BrushGenerator.SeedSectionLabel" xml:space="preserve">
+    <value>SEED</value>
+  </data>
+  <data name="BrushGenerator.SeedTip" xml:space="preserve">
+    <value>The same seed always produces the same brush</value>
+  </data>
+  <data name="BrushGenerator.ShapeSectionLabel" xml:space="preserve">
+    <value>SHAPE</value>
+  </data>
+  <data name="BrushGenerator.ShuffleButton" xml:space="preserve">
+    <value>Generate another</value>
+  </data>
+  <data name="BrushGenerator.SizeLabel" xml:space="preserve">
+    <value>Size</value>
+  </data>
+  <data name="BrushGenerator.SoftnessLabel" xml:space="preserve">
+    <value>Soft edge</value>
+  </data>
+  <data name="BrushGenerator.SpikesLabel" xml:space="preserve">
+    <value>Spikes</value>
+  </data>
+  <data name="BrushGenerator.Subtitle" xml:space="preserve">
+    <value>Torn-edge brushes in the style of the L2 splash screens — black PNG on a white background for Photoshop</value>
+  </data>
+  <data name="BrushGenerator.SymmetryLabel" xml:space="preserve">
+    <value>Symmetry</value>
+  </data>
+  <data name="BrushGenerator.SymmetryTip" xml:space="preserve">
+    <value>Rounded rectangle with regular spikes, mirrored vertically</value>
+  </data>
+  <data name="BrushGenerator.Title" xml:space="preserve">
+    <value>Brush Generator</value>
+  </data>
+  <data name="BrushGenerator.UnexpectedError" xml:space="preserve">
+    <value>An unexpected error occurred.</value>
+  </data>
+  <data name="BrushGenerator.VariantsButton" xml:space="preserve">
+    <value>Generate several…</value>
+  </data>
+  <data name="BrushGenerator.VariantsTip" xml:space="preserve">
+    <value>Opens a window with several variations to choose from</value>
+  </data>
 
   <!-- ═══ BrushVariants ═══ -->
+  <data name="BrushVariants.CountLabel" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
+  <data name="BrushVariants.CountTip" xml:space="preserve">
+    <value>From 1 to 200</value>
+  </data>
+  <data name="BrushVariants.ExportAllButton" xml:space="preserve">
+    <value>Export all…</value>
+  </data>
+  <data name="BrushVariants.ExportedStatus.One" xml:space="preserve">
+    <value>{count} brush exported to {folder}.</value>
+  </data>
+  <data name="BrushVariants.ExportedStatus.Other" xml:space="preserve">
+    <value>{count} brushes exported to {folder}.</value>
+  </data>
+  <data name="BrushVariants.ExportingStatus" xml:space="preserve">
+    <value>Exporting {index}/{total} at {size} × {size} px…</value>
+  </data>
+  <data name="BrushVariants.FolderPicker" xml:space="preserve">
+    <value>Folder for the variations</value>
+  </data>
+  <data name="BrushVariants.GenerateButton" xml:space="preserve">
+    <value>Generate</value>
+  </data>
+  <data name="BrushVariants.GeneratingStatus.One" xml:space="preserve">
+    <value>Generating {count} variation…</value>
+  </data>
+  <data name="BrushVariants.GeneratingStatus.Other" xml:space="preserve">
+    <value>Generating {count} variations…</value>
+  </data>
+  <data name="BrushVariants.InvalidCountError" xml:space="preserve">
+    <value>Enter a quantity between 1 and {max}.</value>
+  </data>
+  <data name="BrushVariants.ReadyStatus.One" xml:space="preserve">
+    <value>{count} variation · click to send it to the editor</value>
+  </data>
+  <data name="BrushVariants.ReadyStatus.Other" xml:space="preserve">
+    <value>{count} variations · click one to send it to the editor</value>
+  </data>
+  <data name="BrushVariants.SeedLabel" xml:space="preserve">
+    <value>Seed {seed}</value>
+  </data>
+  <data name="BrushVariants.Title" xml:space="preserve">
+    <value>Variations — Brush Generator</value>
+  </data>
 
   <!-- ═══ Common ═══ -->
   <data name="Common.AllFilesFilter" xml:space="preserve">
@@ -146,10 +269,70 @@
   <!-- ═══ LogParse ═══ -->
 
   <!-- ═══ Main ═══ -->
+  <data name="Main.SettingsTip" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Main.ToolsSection" xml:space="preserve">
+    <value>TOOLS</value>
+  </data>
+  <data name="Main.UtilitiesSection" xml:space="preserve">
+    <value>UTILITIES</value>
+  </data>
 
   <!-- ═══ Missions ═══ -->
 
   <!-- ═══ Nav ═══ -->
+  <data name="Nav.BrushGenerator" xml:space="preserve">
+    <value>Brush Generator</value>
+  </data>
+  <data name="Nav.CreateMultisell" xml:space="preserve">
+    <value>Create MultiSell</value>
+  </data>
+  <data name="Nav.DescriptionFix" xml:space="preserve">
+    <value>Description Fix</value>
+  </data>
+  <data name="Nav.DoorGenerate" xml:space="preserve">
+    <value>Door Generator</value>
+  </data>
+  <data name="Nav.EnchantEffect" xml:space="preserve">
+    <value>Enchant Effect</value>
+  </data>
+  <data name="Nav.GeodataConverter" xml:space="preserve">
+    <value>Geodata Converter</value>
+  </data>
+  <data name="Nav.LiveData" xml:space="preserve">
+    <value>Live Data Mode (166)</value>
+  </data>
+  <data name="Nav.LogParse" xml:space="preserve">
+    <value>Log Manager</value>
+  </data>
+  <data name="Nav.Missions" xml:space="preserve">
+    <value>Daily Missions</value>
+  </data>
+  <data name="Nav.PawnData" xml:space="preserve">
+    <value>Animations (PawnData)</value>
+  </data>
+  <data name="Nav.PrimeShop" xml:space="preserve">
+    <value>Prime Shop</value>
+  </data>
+  <data name="Nav.SearchIcon" xml:space="preserve">
+    <value>Icon Search</value>
+  </data>
+  <data name="Nav.SkinBuilder" xml:space="preserve">
+    <value>Skin Builder</value>
+  </data>
+  <data name="Nav.SpawnManager" xml:space="preserve">
+    <value>NPC Spawn XML</value>
+  </data>
+  <data name="Nav.SplashScreen" xml:space="preserve">
+    <value>Splash Screen</value>
+  </data>
+  <data name="Nav.SystemMsgColor" xml:space="preserve">
+    <value>System Msg Color</value>
+  </data>
+  <data name="Nav.UpgradeNormalSystem" xml:space="preserve">
+    <value>Upgrade Normal System</value>
+  </data>
 
   <!-- ═══ PawnData ═══ -->
 
@@ -158,6 +341,9 @@
   <!-- ═══ SearchIcon ═══ -->
 
   <!-- ═══ Settings ═══ -->
+  <data name="Settings.LanguageLabel" xml:space="preserve">
+    <value>Language</value>
+  </data>
 
   <!-- ═══ SkinBuilder ═══ -->
 
@@ -281,6 +467,75 @@
   <!-- ═══ Tables ═══ -->
 
   <!-- ═══ Update ═══ -->
+  <data name="Update.AvailableTitle" xml:space="preserve">
+    <value>New version available</value>
+  </data>
+  <data name="Update.ChecksumError" xml:space="preserve">
+    <value>The downloaded installer doesn't match the release's SHA-256.</value>
+  </data>
+  <data name="Update.ConfirmButton" xml:space="preserve">
+    <value>Update now</value>
+  </data>
+  <data name="Update.ConnectingStatus" xml:space="preserve">
+    <value>Connecting…</value>
+  </data>
+  <data name="Update.DismissButton" xml:space="preserve">
+    <value>Not now</value>
+  </data>
+  <data name="Update.DownloadHint" xml:space="preserve">
+    <value>Downloading the installer. When it finishes, the app closes, the update is installed, and the app opens again.</value>
+  </data>
+  <data name="Update.DownloadLabel" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="Update.DownloadTitle" xml:space="preserve">
+    <value>Updating to version {tag}</value>
+  </data>
+  <data name="Update.FailedError" xml:space="preserve">
+    <value>Update failed: {message}</value>
+  </data>
+  <data name="Update.IncompleteDownloadError" xml:space="preserve">
+    <value>Incomplete download: {done} of {total} bytes.</value>
+  </data>
+  <data name="Update.InstallHint" xml:space="preserve">
+    <value>When you update, the app downloads the installer, closes during the installation, and opens again when it finishes.</value>
+  </data>
+  <data name="Update.NoInstallerError" xml:space="preserve">
+    <value>Release {tag} has no installer (.exe).</value>
+  </data>
+  <data name="Update.NoNotesStatus" xml:space="preserve">
+    <value>No notes for this release.</value>
+  </data>
+  <data name="Update.NotesSection" xml:space="preserve">
+    <value>WHAT'S NEW</value>
+  </data>
+  <data name="Update.OpeningInstallerStatus" xml:space="preserve">
+    <value>Opening the installer…</value>
+  </data>
+  <data name="Update.ProgressStatus" xml:space="preserve">
+    <value>{done:0.0} of {total:0.0} MB</value>
+  </data>
+  <data name="Update.PublishedLabel" xml:space="preserve">
+    <value>Published</value>
+  </data>
+  <data name="Update.ReleaseLabel" xml:space="preserve">
+    <value>Release</value>
+  </data>
+  <data name="Update.ReleasePageButton" xml:space="preserve">
+    <value>View on GitHub</value>
+  </data>
+  <data name="Update.ReleasePageTip" xml:space="preserve">
+    <value>Open the release in the browser</value>
+  </data>
+  <data name="Update.SizeValue" xml:space="preserve">
+    <value>{size:0.0} MB</value>
+  </data>
+  <data name="Update.TagFormatError" xml:space="preserve">
+    <value>Release tag isn't in a version format: "{tag}".</value>
+  </data>
+  <data name="Update.VersionLabel" xml:space="preserve">
+    <value>Version</value>
+  </data>
 
   <!-- ═══ UpgradeNormal ═══ -->
 
