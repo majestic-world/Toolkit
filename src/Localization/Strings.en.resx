@@ -44,12 +44,108 @@
   <data name="Common.Save" xml:space="preserve">
     <value>Save</value>
   </data>
+  <data name="Common.CopiedStatus" xml:space="preserve">
+    <value>Copied!</value>
+  </data>
+  <data name="Common.SelectFilePicker" xml:space="preserve">
+    <value>Select a file</value>
+  </data>
+  <data name="Common.UnexpectedError" xml:space="preserve">
+    <value>An unexpected error occurred.</value>
+  </data>
+  <data name="Common.XmlFilesFilter" xml:space="preserve">
+    <value>XML files</value>
+  </data>
 
   <!-- ═══ CreateMultisell ═══ -->
 
   <!-- ═══ DescriptionFix ═══ -->
+  <data name="DescriptionFix.EmptyFileWatermark" xml:space="preserve">
+    <value>No file selected…</value>
+  </data>
+  <data name="DescriptionFix.ErrorStatus" xml:space="preserve">
+    <value>Error: {message}</value>
+  </data>
+  <data name="DescriptionFix.FileMissingError" xml:space="preserve">
+    <value>The selected file no longer exists.</value>
+  </data>
+  <data name="DescriptionFix.InfoEmbeddedLabel" xml:space="preserve">
+    <value>The H5 descriptions are embedded in the executable — no external file is needed.</value>
+  </data>
+  <data name="DescriptionFix.InfoOnlyDescriptionLabel" xml:space="preserve">
+    <value>Only the "description" field is modified; everything else is preserved.</value>
+  </data>
+  <data name="DescriptionFix.InfoSaveLabel" xml:space="preserve">
+    <value>After processing, the modified file is saved to a new location.</value>
+  </data>
+  <data name="DescriptionFix.InfoSelectLabel" xml:space="preserve">
+    <value>Select a Classic items file and click Process to replace the descriptions.</value>
+  </data>
+  <data name="DescriptionFix.InfoTitle" xml:space="preserve">
+    <value>INFORMATION</value>
+  </data>
+  <data name="DescriptionFix.InputFileTitle" xml:space="preserve">
+    <value>INPUT FILE</value>
+  </data>
+  <data name="DescriptionFix.NoFileError" xml:space="preserve">
+    <value>Select a file to process.</value>
+  </data>
+  <data name="DescriptionFix.NoneReplacedError" xml:space="preserve">
+    <value>No description was replaced. Check that the IDs match.</value>
+  </data>
+  <data name="DescriptionFix.ProcessButton" xml:space="preserve">
+    <value>Process file</value>
+  </data>
+  <data name="DescriptionFix.ReplacedStatus.One" xml:space="preserve">
+    <value>{count} description replaced. File saved successfully.</value>
+  </data>
+  <data name="DescriptionFix.ReplacedStatus.Other" xml:space="preserve">
+    <value>{count} descriptions replaced. File saved successfully.</value>
+  </data>
+  <data name="DescriptionFix.SavePicker" xml:space="preserve">
+    <value>Save modified file</value>
+  </data>
+  <data name="DescriptionFix.SelectPicker" xml:space="preserve">
+    <value>Select a file to modify descriptions</value>
+  </data>
+  <data name="DescriptionFix.SubtitleLabel" xml:space="preserve">
+    <value>For items with (Not Used) in the description</value>
+  </data>
+  <data name="DescriptionFix.TextFilesFilter" xml:space="preserve">
+    <value>Text files</value>
+  </data>
+  <data name="DescriptionFix.Title" xml:space="preserve">
+    <value>Fix descriptions</value>
+  </data>
 
   <!-- ═══ DoorGenerate ═══ -->
+  <data name="DoorGenerate.ConversionError" xml:space="preserve">
+    <value>Error during conversion: {message}</value>
+  </data>
+  <data name="DoorGenerate.ConvertButton" xml:space="preserve">
+    <value>Convert to XML</value>
+  </data>
+  <data name="DoorGenerate.IncompleteDataError" xml:space="preserve">
+    <value>Error: incomplete or invalid data.</value>
+  </data>
+  <data name="DoorGenerate.InputTitle" xml:space="preserve">
+    <value>INPUT DATA</value>
+  </data>
+  <data name="DoorGenerate.InputWatermark" xml:space="preserve">
+    <value>Paste the UnrealEd content here…</value>
+  </data>
+  <data name="DoorGenerate.OutputTitle" xml:space="preserve">
+    <value>GENERATED XML</value>
+  </data>
+  <data name="DoorGenerate.OutputWatermark" xml:space="preserve">
+    <value>The generated XML will appear here…</value>
+  </data>
+  <data name="DoorGenerate.SubtitleLabel" xml:space="preserve">
+    <value>Converts UnrealEd data to Lineage II XML</value>
+  </data>
+  <data name="DoorGenerate.Title" xml:space="preserve">
+    <value>Door generator</value>
+  </data>
 
   <!-- ═══ EnchantEffect ═══ -->
 
@@ -59,18 +155,282 @@
   </data>
 
   <!-- ═══ Geodata ═══ -->
+  <data name="Geodata.CancelledLog" xml:space="preserve">
+    <value>Conversion cancelled by the user.</value>
+  </data>
+  <data name="Geodata.ConvLog" xml:space="preserve">
+    <value>[CONV] {fileName} -&gt; {outputFileName} ({format})…</value>
+  </data>
+  <data name="Geodata.Converted.One" xml:space="preserve">
+    <value>{count} converted</value>
+  </data>
+  <data name="Geodata.Converted.Other" xml:space="preserve">
+    <value>{count} converted</value>
+  </data>
+  <data name="Geodata.CopiedFile.One" xml:space="preserve">
+    <value>{count} copied</value>
+  </data>
+  <data name="Geodata.CopiedFile.Other" xml:space="preserve">
+    <value>{count} copied</value>
+  </data>
+  <data name="Geodata.CopyFailedLog" xml:space="preserve">
+    <value>[ERROR] {fileName} - copy failed: {message}</value>
+  </data>
+  <data name="Geodata.CopyLog" xml:space="preserve">
+    <value>[COPY] {fileName} - already in {format} format</value>
+  </data>
+  <data name="Geodata.DoneLog" xml:space="preserve">
+    <value>Done: {converted}, {copied}, {failed}</value>
+  </data>
+  <data name="Geodata.ErrorLog" xml:space="preserve">
+    <value>[ERROR] {fileName} - {message}</value>
+  </data>
+  <data name="Geodata.Failed.One" xml:space="preserve">
+    <value>{count} error</value>
+  </data>
+  <data name="Geodata.Failed.Other" xml:space="preserve">
+    <value>{count} errors</value>
+  </data>
+  <data name="Geodata.FatalErrorLog" xml:space="preserve">
+    <value>Fatal error: {message}</value>
+  </data>
+  <data name="Geodata.FormatLabel" xml:space="preserve">
+    <value>Output format</value>
+  </data>
+  <data name="Geodata.FormatPlaceholderLabel" xml:space="preserve">
+    <value>Select an output format</value>
+  </data>
+  <data name="Geodata.FoundLog.One" xml:space="preserve">
+    <value>Found {count} geodata file.</value>
+  </data>
+  <data name="Geodata.FoundLog.Other" xml:space="preserve">
+    <value>Found {count} geodata files.</value>
+  </data>
+  <data name="Geodata.InputDirLabel" xml:space="preserve">
+    <value>Input folder (geodata files)</value>
+  </data>
+  <data name="Geodata.InputDirWatermark" xml:space="preserve">
+    <value>Select the folder with the geodata files…</value>
+  </data>
+  <data name="Geodata.InputLog" xml:space="preserve">
+    <value>Input: {folder}</value>
+  </data>
+  <data name="Geodata.InvalidFileError" xml:space="preserve">
+    <value>Invalid file</value>
+  </data>
+  <data name="Geodata.InvalidFileLog" xml:space="preserve">
+    <value>[SKIP] {fileName} - invalid file or coordinates out of range</value>
+  </data>
+  <data name="Geodata.LogWatermark" xml:space="preserve">
+    <value>Processing logs will appear here…</value>
+  </data>
+  <data name="Geodata.NoFilesLog" xml:space="preserve">
+    <value>No geodata files found in the input folder.</value>
+  </data>
+  <data name="Geodata.NoFormatError" xml:space="preserve">
+    <value>Select an output format.</value>
+  </data>
+  <data name="Geodata.NoInputError" xml:space="preserve">
+    <value>Select the input folder with the geodata files.</value>
+  </data>
+  <data name="Geodata.NoOutputError" xml:space="preserve">
+    <value>Select the output folder.</value>
+  </data>
+  <data name="Geodata.OutputDirLabel" xml:space="preserve">
+    <value>Output folder</value>
+  </data>
+  <data name="Geodata.OutputDirWatermark" xml:space="preserve">
+    <value>Select the output folder…</value>
+  </data>
+  <data name="Geodata.OutputLog" xml:space="preserve">
+    <value>Output: {folder}</value>
+  </data>
+  <data name="Geodata.ProgressStatus.One" xml:space="preserve">
+    <value>{current} of {count} file</value>
+  </data>
+  <data name="Geodata.ProgressStatus.Other" xml:space="preserve">
+    <value>{current} of {count} files</value>
+  </data>
+  <data name="Geodata.ProgressTitle" xml:space="preserve">
+    <value>PROGRESS</value>
+  </data>
+  <data name="Geodata.ReadLog" xml:space="preserve">
+    <value>[READ] {fileName} ({format})…</value>
+  </data>
+  <data name="Geodata.SavedLog" xml:space="preserve">
+    <value>[OK]   {fileName} saved successfully</value>
+  </data>
+  <data name="Geodata.SettingsTitle" xml:space="preserve">
+    <value>SETTINGS</value>
+  </data>
+  <data name="Geodata.SkipUnknownLog" xml:space="preserve">
+    <value>[SKIP] {fileName} - unrecognized format</value>
+  </data>
+  <data name="Geodata.StartButton" xml:space="preserve">
+    <value>Start conversion</value>
+  </data>
+  <data name="Geodata.StartLog" xml:space="preserve">
+    <value>Starting conversion to {format}…</value>
+  </data>
+  <data name="Geodata.SubtitleLabel" xml:space="preserve">
+    <value>Convert geodata files between the L2J, CONV_DAT and L2G formats</value>
+  </data>
+  <data name="Geodata.Title" xml:space="preserve">
+    <value>Geodata converter</value>
+  </data>
+  <data name="Geodata.UnknownFormatError" xml:space="preserve">
+    <value>Unrecognized format</value>
+  </data>
+  <data name="Geodata.UnsupportedFormatError" xml:space="preserve">
+    <value>Unsupported format: {format}</value>
+  </data>
+  <data name="Geodata.UnsupportedOutputError" xml:space="preserve">
+    <value>Unsupported output format: {format}</value>
+  </data>
+  <data name="Geodata.WaitingStatus" xml:space="preserve">
+    <value>Waiting…</value>
+  </data>
 
   <!-- ═══ LiveData ═══ -->
 
   <!-- ═══ LogParse ═══ -->
+  <data name="LogParse.CreatedLog" xml:space="preserve">
+    <value>Done, the file {fileName} was created successfully.</value>
+  </data>
+  <data name="LogParse.EventLabel" xml:space="preserve">
+    <value>Event — optional (filters by event type)</value>
+  </data>
+  <data name="LogParse.EventWatermark" xml:space="preserve">
+    <value>e.g. TRADE, ENCHANT, DROP…</value>
+  </data>
+  <data name="LogParse.FoundLog" xml:space="preserve">
+    <value>Logs found: {count:N0}</value>
+  </data>
+  <data name="LogParse.GenerateButton" xml:space="preserve">
+    <value>Generate data</value>
+  </data>
+  <data name="LogParse.LogFileLabel" xml:space="preserve">
+    <value>Log file</value>
+  </data>
+  <data name="LogParse.LogFileWatermark" xml:space="preserve">
+    <value>Select the .log file…</value>
+  </data>
+  <data name="LogParse.LogFilesFilter" xml:space="preserve">
+    <value>Log files</value>
+  </data>
+  <data name="LogParse.LogWatermark" xml:space="preserve">
+    <value>Processing logs will appear here…</value>
+  </data>
+  <data name="LogParse.LogsTitle" xml:space="preserve">
+    <value>PROCESSING LOGS</value>
+  </data>
+  <data name="LogParse.NoKeyError" xml:space="preserve">
+    <value>Enter the search key.</value>
+  </data>
+  <data name="LogParse.NoLogFileError" xml:space="preserve">
+    <value>Select the log file.</value>
+  </data>
+  <data name="LogParse.NoMatchLog" xml:space="preserve">
+    <value>No logs found for key {key}.</value>
+  </data>
+  <data name="LogParse.NoOutputError" xml:space="preserve">
+    <value>Fill in the output folder.</value>
+  </data>
+  <data name="LogParse.OutputDirLabel" xml:space="preserve">
+    <value>Output folder</value>
+  </data>
+  <data name="LogParse.OutputDirWatermark" xml:space="preserve">
+    <value>Select the output folder…</value>
+  </data>
+  <data name="LogParse.ProcessingButton" xml:space="preserve">
+    <value>Processing…</value>
+  </data>
+  <data name="LogParse.SearchKeyLabel" xml:space="preserve">
+    <value>Search key (player name or term)</value>
+  </data>
+  <data name="LogParse.SearchKeyWatermark" xml:space="preserve">
+    <value>e.g. PlayerName</value>
+  </data>
+  <data name="LogParse.SettingsTitle" xml:space="preserve">
+    <value>SETTINGS</value>
+  </data>
+  <data name="LogParse.StartLog" xml:space="preserve">
+    <value>Starting the process…</value>
+  </data>
+  <data name="LogParse.SubtitleLabel" xml:space="preserve">
+    <value>Log splitter — for easier data analysis</value>
+  </data>
+  <data name="LogParse.Title" xml:space="preserve">
+    <value>Log manager</value>
+  </data>
+  <data name="LogParse.TotalLog" xml:space="preserve">
+    <value>Total logs: {count:N0}</value>
+  </data>
 
   <!-- ═══ Main ═══ -->
 
   <!-- ═══ Missions ═══ -->
+  <data name="Missions.FileNotFoundError" xml:space="preserve">
+    <value>The file was not found.</value>
+  </data>
+  <data name="Missions.FileTitle" xml:space="preserve">
+    <value>XML FILE</value>
+  </data>
+  <data name="Missions.FileWatermark" xml:space="preserve">
+    <value>Select OneDayReward.xml…</value>
+  </data>
+  <data name="Missions.GenerateButton" xml:space="preserve">
+    <value>Generate data</value>
+  </data>
+  <data name="Missions.InvalidDataError" xml:space="preserve">
+    <value>Check the file data.</value>
+  </data>
+  <data name="Missions.NoCategoryError" xml:space="preserve">
+    <value>The `category` field is missing.</value>
+  </data>
+  <data name="Missions.NoPathError" xml:space="preserve">
+    <value>Fill in the file path.</value>
+  </data>
+  <data name="Missions.ResultTitle" xml:space="preserve">
+    <value>RESULT</value>
+  </data>
+  <data name="Missions.ResultWatermark" xml:space="preserve">
+    <value>The result will appear here…</value>
+  </data>
+  <data name="Missions.SubtitleLabel" xml:space="preserve">
+    <value>Generates client data from OneDayReward.xml</value>
+  </data>
+  <data name="Missions.Title" xml:space="preserve">
+    <value>Daily missions</value>
+  </data>
 
   <!-- ═══ Nav ═══ -->
 
   <!-- ═══ PawnData ═══ -->
+  <data name="PawnData.EntriesTitle" xml:space="preserve">
+    <value>ANIMATION ENTRIES</value>
+  </data>
+  <data name="PawnData.GenerateButton" xml:space="preserve">
+    <value>Generate PawnAnimData</value>
+  </data>
+  <data name="PawnData.OutputTitle" xml:space="preserve">
+    <value>GENERATED OUTPUT</value>
+  </data>
+  <data name="PawnData.OutputWatermark" xml:space="preserve">
+    <value>The generated output will appear here…</value>
+  </data>
+  <data name="PawnData.PawnNameTitle" xml:space="preserve">
+    <value>PAWN NAME</value>
+  </data>
+  <data name="PawnData.PawnNameWatermark" xml:space="preserve">
+    <value>e.g. mon_Goblin_m00</value>
+  </data>
+  <data name="PawnData.SubtitleLabel" xml:space="preserve">
+    <value>PawnAnimData.dat generator for Lineage II</value>
+  </data>
+  <data name="PawnData.Title" xml:space="preserve">
+    <value>NPC animations</value>
+  </data>
 
   <!-- ═══ PrimeShop ═══ -->
 
@@ -81,6 +441,45 @@
   <!-- ═══ SkinBuilder ═══ -->
 
   <!-- ═══ SpawnManager ═══ -->
+  <data name="SpawnManager.CreateButton" xml:space="preserve">
+    <value>Create spawns</value>
+  </data>
+  <data name="SpawnManager.NoIdsError" xml:space="preserve">
+    <value>Please enter the NPC IDs.</value>
+  </data>
+  <data name="SpawnManager.NoSpawnDataError" xml:space="preserve">
+    <value>Please enter the original spawn data.</value>
+  </data>
+  <data name="SpawnManager.NoValidIdsError" xml:space="preserve">
+    <value>No valid ID found.</value>
+  </data>
+  <data name="SpawnManager.NpcIdsTitle" xml:space="preserve">
+    <value>NPC IDS</value>
+  </data>
+  <data name="SpawnManager.NpcIdsWatermark" xml:space="preserve">
+    <value>e.g. 20001;20002;20003</value>
+  </data>
+  <data name="SpawnManager.ProcessError" xml:space="preserve">
+    <value>An error occurred while processing the spawns: {message}</value>
+  </data>
+  <data name="SpawnManager.ResultTitle" xml:space="preserve">
+    <value>RESULT</value>
+  </data>
+  <data name="SpawnManager.ResultWatermark" xml:space="preserve">
+    <value>The result will appear here…</value>
+  </data>
+  <data name="SpawnManager.SpawnDataTitle" xml:space="preserve">
+    <value>ORIGINAL SPAWN DATA</value>
+  </data>
+  <data name="SpawnManager.SpawnDataWatermark" xml:space="preserve">
+    <value>Paste the original spawn data here…</value>
+  </data>
+  <data name="SpawnManager.SubtitleLabel" xml:space="preserve">
+    <value>Replaces NPC IDs in the original spawn data</value>
+  </data>
+  <data name="SpawnManager.Title" xml:space="preserve">
+    <value>Spawn manager</value>
+  </data>
 
   <!-- ═══ Splash ═══ -->
 
@@ -97,6 +496,27 @@
   <!-- ═══ Update ═══ -->
 
   <!-- ═══ UpgradeNormal ═══ -->
+  <data name="UpgradeNormal.FileTitle" xml:space="preserve">
+    <value>XML FILE</value>
+  </data>
+  <data name="UpgradeNormal.FileWatermark" xml:space="preserve">
+    <value>Select upgrade_normal_system.xml…</value>
+  </data>
+  <data name="UpgradeNormal.GenerateButton" xml:space="preserve">
+    <value>Generate data</value>
+  </data>
+  <data name="UpgradeNormal.NoPathError" xml:space="preserve">
+    <value>Fill in the file path.</value>
+  </data>
+  <data name="UpgradeNormal.ResultTitle" xml:space="preserve">
+    <value>RESULT</value>
+  </data>
+  <data name="UpgradeNormal.ResultWatermark" xml:space="preserve">
+    <value>The result will appear here…</value>
+  </data>
+  <data name="UpgradeNormal.SubtitleLabel" xml:space="preserve">
+    <value>Generates client data from upgrade_normal_system.xml</value>
+  </data>
 
   <!-- ═══ Overrides do Fluent (String*: só no ResourceDictionary, sem Loc) ═══ -->
   <data name="StringTextFlyoutCopyText" xml:space="preserve">

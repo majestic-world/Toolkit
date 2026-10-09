@@ -7,6 +7,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
+using L2Toolkit.Localization;
 using L2Toolkit.Settings;
 
 namespace L2Toolkit.Views;
@@ -36,7 +37,7 @@ public partial class UpgradeNormalSystem : UserControl
     {
         _errorTimer.Stop();
         NotificacaoBorder.IsVisible = true;
-        StatusNotificacao.Text = !string.IsNullOrWhiteSpace(message) ? message : "Ocorreu um erro inesperado.";
+        StatusNotificacao.Text = !string.IsNullOrWhiteSpace(message) ? message : Loc.Common.UnexpectedError;
         _errorTimer.Start();
     }
 
@@ -47,12 +48,12 @@ public partial class UpgradeNormalSystem : UserControl
 
         var files = await topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
-            Title = "Selecione o arquivo",
+            Title = Loc.Common.SelectFilePicker,
             AllowMultiple = false,
             FileTypeFilter = new[]
             {
-                new FilePickerFileType("Arquivos XML") { Patterns = new[] { "*.xml" } },
-                new FilePickerFileType("Todos os arquivos") { Patterns = new[] { "*" } }
+                new FilePickerFileType(Loc.Common.XmlFilesFilter) { Patterns = new[] { "*.xml" } },
+                new FilePickerFileType(Loc.Common.AllFilesFilter) { Patterns = new[] { "*" } }
             }
         });
 
@@ -69,7 +70,7 @@ public partial class UpgradeNormalSystem : UserControl
             var filePath = UpgradeContent.Text;
             if (string.IsNullOrEmpty(filePath))
             {
-                throw new Exception("Preencha o caminho até o arquivo.");
+                throw new Exception(Loc.UpgradeNormal.NoPathError);
             }
 
             var element = XElement.Load(filePath);
