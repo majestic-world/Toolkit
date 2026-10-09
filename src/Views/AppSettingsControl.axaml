@@ -132,6 +132,16 @@
                                     <ComboBoxItem Content="Claro"/>
                                 </ComboBox>
                             </Grid>
+                            <Grid ColumnDefinitions="Auto,12,*">
+                                <TextBlock Text="{DynamicResource Settings.LanguageLabel}" Classes="Label"/>
+                                <ComboBox x:Name="LanguageComboBox"
+                                          Grid.Column="2"
+                                          HorizontalAlignment="Stretch"
+                                          SelectionChanged="LanguageComboBox_OnSelectionChanged">
+                                    <ComboBoxItem Content="Português (Brasil)" Tag="pt-BR"/>
+                                    <ComboBoxItem Content="English" Tag="en"/>
+                                </ComboBox>
+                            </Grid>
                             <Grid ColumnDefinitions="Auto,12,*,8,Auto">
                                 <TextBlock Text="Versão" Classes="Label"/>
                                 <TextBlock x:Name="AppVersionText"

@@ -137,6 +137,9 @@
   <!-- ═══ SearchIcon ═══ -->
 
   <!-- ═══ Settings ═══ -->
+  <data name="Settings.LanguageLabel" xml:space="preserve">
+    <value>Language</value>
+  </data>
 
   <!-- ═══ SkinBuilder ═══ -->
 
