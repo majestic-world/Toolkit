@@ -1320,12 +1320,446 @@
   </data>
 
   <!-- ═══ Splash ═══ -->
+  <data name="Splash.BmpTooLargeError" xml:space="preserve">
+    <value>O BMP passa do tamanho máximo suportado de {maxSize} px.</value>
+  </data>
+  <data name="Splash.CompressedError" xml:space="preserve">
+    <value>BMPs comprimidos (RLE ou JPEG/PNG embutido) não são suportados.</value>
+  </data>
+  <data name="Splash.CoreHeaderError" xml:space="preserve">
+    <value>Este BMP usa um cabeçalho antigo (BITMAPCOREHEADER) que não é suportado.</value>
+  </data>
+  <data name="Splash.DecodeError" xml:space="preserve">
+    <value>Não foi possível decodificar a imagem ({result}).</value>
+    <comment>result é o código do SkiaSharp (SKCodecResult), sem tradução.</comment>
+  </data>
+  <data name="Splash.ImageTooLargeError" xml:space="preserve">
+    <value>A imagem tem {width} × {height} px e passa do limite de 4096 × 4096 px do editor.</value>
+  </data>
+  <data name="Splash.InvalidDimensionsError" xml:space="preserve">
+    <value>A imagem não possui dimensões válidas.</value>
+  </data>
+  <data name="Splash.InvalidHeightError" xml:space="preserve">
+    <value>O BMP possui altura inválida.</value>
+  </data>
+  <data name="Splash.InvalidWidthError" xml:space="preserve">
+    <value>O BMP possui largura inválida.</value>
+  </data>
+  <data name="Splash.NotBmpError" xml:space="preserve">
+    <value>O arquivo não é um bitmap (BMP) válido.</value>
+  </data>
+  <data name="Splash.PaletteIndexError" xml:space="preserve">
+    <value>O BMP referencia uma cor fora da paleta.</value>
+  </data>
+  <data name="Splash.PixelDataMismatchError" xml:space="preserve">
+    <value>Os dados da imagem não correspondem às suas dimensões.</value>
+  </data>
+  <data name="Splash.PngEncodeError" xml:space="preserve">
+    <value>Falha ao gerar o PNG.</value>
+  </data>
+  <data name="Splash.TruncatedError" xml:space="preserve">
+    <value>O BMP está truncado.</value>
+  </data>
+  <data name="Splash.TruncatedPaletteError" xml:space="preserve">
+    <value>O BMP está truncado: a paleta está incompleta.</value>
+  </data>
+  <data name="Splash.TruncatedRowsError" xml:space="preserve">
+    <value>O BMP está truncado: faltam linhas de pixels.</value>
+  </data>
+  <data name="Splash.UnsupportedBitsError" xml:space="preserve">
+    <value>BMPs de {bits} bits não são suportados.</value>
+  </data>
+  <data name="Splash.UnsupportedEncryptionError" xml:space="preserve">
+    <value>A criptografia Lineage2Ver{version} não é suportada para splash screens (use 111 ou 121).</value>
+    <comment>version é o sufixo lido do cabeçalho do arquivo.</comment>
+  </data>
+  <data name="Splash.UnsupportedImageFormatError" xml:space="preserve">
+    <value>Formato de imagem não suportado. Use PNG, JPG, WEBP ou BMP.</value>
+  </data>
 
   <!-- ═══ SplashCompose ═══ -->
+  <data name="SplashCompose.ArtPicker" xml:space="preserve">
+    <value>Arte da splash</value>
+  </data>
+  <data name="SplashCompose.ArtSectionTitle" xml:space="preserve">
+    <value>ARTE</value>
+  </data>
+  <data name="SplashCompose.BlurLabel" xml:space="preserve">
+    <value>Desfoque</value>
+  </data>
+  <data name="SplashCompose.ChooseArtButton" xml:space="preserve">
+    <value>Escolher imagem…</value>
+  </data>
+  <data name="SplashCompose.ClawsLabel" xml:space="preserve">
+    <value>Garras</value>
+  </data>
+  <data name="SplashCompose.CracksLabel" xml:space="preserve">
+    <value>Rachaduras</value>
+  </data>
+  <data name="SplashCompose.DebrisLabel" xml:space="preserve">
+    <value>Estilhaços</value>
+  </data>
+  <data name="SplashCompose.EditorImageLabel" xml:space="preserve">
+    <value>imagem do editor</value>
+    <comment>Nome exibido da arte quando ela veio do editor sem arquivo.</comment>
+  </data>
+  <data name="SplashCompose.EmptyHint" xml:space="preserve">
+    <value>Escolha a arte da splash. O brush recorta as bordas como uma máscara do Photoshop.</value>
+  </data>
+  <data name="SplashCompose.ExportButton" xml:space="preserve">
+    <value>Exportar PNG…</value>
+  </data>
+  <data name="SplashCompose.ExportPicker" xml:space="preserve">
+    <value>Exportar splash recortada</value>
+  </data>
+  <data name="SplashCompose.ExportedStatus" xml:space="preserve">
+    <value>{fileName} exportado com transparência.</value>
+  </data>
+  <data name="SplashCompose.FillLabel" xml:space="preserve">
+    <value>Ocupar a arte toda (−10 px)</value>
+  </data>
+  <data name="SplashCompose.FillTip" xml:space="preserve">
+    <value>Estica o brush para a arte inteira menos 5 px de cada lado (ex.: 640 × 480 → 630 × 470)</value>
+  </data>
+  <data name="SplashCompose.HorizontalLabel" xml:space="preserve">
+    <value>Horizontal</value>
+  </data>
+  <data name="SplashCompose.ImagesFilter" xml:space="preserve">
+    <value>Imagens</value>
+  </data>
+  <data name="SplashCompose.NoArtLabel" xml:space="preserve">
+    <value>Nenhuma arte carregada.</value>
+  </data>
+  <data name="SplashCompose.OpacityLabel" xml:space="preserve">
+    <value>Opacidade</value>
+  </data>
+  <data name="SplashCompose.PositionSectionTitle" xml:space="preserve">
+    <value>POSIÇÃO</value>
+  </data>
+  <data name="SplashCompose.SeedTip" xml:space="preserve">
+    <value>A mesma semente gera sempre o mesmo brush</value>
+  </data>
+  <data name="SplashCompose.SendButton" xml:space="preserve">
+    <value>Enviar para o editor</value>
+  </data>
+  <data name="SplashCompose.SentStatus" xml:space="preserve">
+    <value>Brush {seed} enviado para o editor · salve lá no formato da splash.</value>
+  </data>
+  <data name="SplashCompose.ShadowLabel" xml:space="preserve">
+    <value>Sombra projetada</value>
+  </data>
+  <data name="SplashCompose.ShadowSectionTitle" xml:space="preserve">
+    <value>SOMBRA</value>
+  </data>
+  <data name="SplashCompose.ShadowStatus" xml:space="preserve">
+    <value>sombra</value>
+    <comment>Sufixo do status da prévia quando a sombra está ligada.</comment>
+  </data>
+  <data name="SplashCompose.ShadowTip" xml:space="preserve">
+    <value>Sombra projetada por baixo do recorte (e do contorno), como o box-shadow do CSS</value>
+  </data>
+  <data name="SplashCompose.ShuffleButton" xml:space="preserve">
+    <value>Outro brush</value>
+  </data>
+  <data name="SplashCompose.SizeLabel" xml:space="preserve">
+    <value>Tamanho</value>
+  </data>
+  <data name="SplashCompose.SoftnessLabel" xml:space="preserve">
+    <value>Borda suave</value>
+  </data>
+  <data name="SplashCompose.SpikesLabel" xml:space="preserve">
+    <value>Pontas</value>
+  </data>
+  <data name="SplashCompose.SpreadLabel" xml:space="preserve">
+    <value>Expansão</value>
+  </data>
+  <data name="SplashCompose.SpreadTip" xml:space="preserve">
+    <value>Engorda a silhueta da sombra antes do desfoque (spread do CSS)</value>
+  </data>
+  <data name="SplashCompose.StrokeCenterLabel" xml:space="preserve">
+    <value>Centro</value>
+  </data>
+  <data name="SplashCompose.StrokeInsideLabel" xml:space="preserve">
+    <value>Dentro</value>
+  </data>
+  <data name="SplashCompose.StrokeOutsideLabel" xml:space="preserve">
+    <value>Fora</value>
+  </data>
+  <data name="SplashCompose.StrokeSectionTitle" xml:space="preserve">
+    <value>CONTORNO</value>
+  </data>
+  <data name="SplashCompose.StrokeStatus" xml:space="preserve">
+    <value>contorno {width} px</value>
+    <comment>Sufixo do status da prévia; width é a espessura do contorno.</comment>
+  </data>
+  <data name="SplashCompose.StrokeWidthLabel" xml:space="preserve">
+    <value>Espessura</value>
+  </data>
+  <data name="SplashCompose.StrokeWidthTip" xml:space="preserve">
+    <value>Borda de cor sólida em volta do recorte, como o Traçado do Photoshop; 0 desliga</value>
+  </data>
+  <data name="SplashCompose.SymmetryLabel" xml:space="preserve">
+    <value>Simetria</value>
+  </data>
+  <data name="SplashCompose.SymmetryTip" xml:space="preserve">
+    <value>Retângulo arredondado com pontas regulares, espelhado na vertical</value>
+  </data>
+  <data name="SplashCompose.VerticalLabel" xml:space="preserve">
+    <value>Vertical</value>
+  </data>
+  <data name="SplashCompose.WindowTitle" xml:space="preserve">
+    <value>Compor com brush — Splash Screen</value>
+  </data>
 
   <!-- ═══ SplashLibrary ═══ -->
+  <data name="SplashLibrary.ApplyingStatus.One" xml:space="preserve">
+    <value>Aplicando {fileName} em {count} arquivo…</value>
+  </data>
+  <data name="SplashLibrary.ApplyingStatus.Other" xml:space="preserve">
+    <value>Aplicando {fileName} em {count} arquivos…</value>
+  </data>
+  <data name="SplashLibrary.BackupsStatus" xml:space="preserve">
+    <value>originais preservados em .bak ({count})</value>
+    <comment>Parte do status depois de "Salvar todos"; count é o número de backups criados.</comment>
+  </data>
+  <data name="SplashLibrary.ChooseFolderStatus" xml:space="preserve">
+    <value>Escolha a pasta do client para listar os BMP.</value>
+  </data>
+  <data name="SplashLibrary.DiscardButton" xml:space="preserve">
+    <value>Descartar</value>
+  </data>
+  <data name="SplashLibrary.DiscardedStatus" xml:space="preserve">
+    <value>Trocas descartadas.</value>
+  </data>
+  <data name="SplashLibrary.EmptyFolderStatus" xml:space="preserve">
+    <value>Nenhum BMP legível nesta pasta.</value>
+  </data>
+  <data name="SplashLibrary.FailedStatus.One" xml:space="preserve">
+    <value>{count} falhou: {errors}</value>
+    <comment>errors lista "arquivo: mensagem" separados por "; ".</comment>
+  </data>
+  <data name="SplashLibrary.FailedStatus.Other" xml:space="preserve">
+    <value>{count} falharam: {errors}</value>
+  </data>
+  <data name="SplashLibrary.FolderPicker" xml:space="preserve">
+    <value>Pasta do client (SysTextures)</value>
+  </data>
+  <data name="SplashLibrary.FolderTip" xml:space="preserve">
+    <value>Clique para escolher a pasta</value>
+  </data>
+  <data name="SplashLibrary.FolderWatermark" xml:space="preserve">
+    <value>Clique para selecionar a pasta SysTextures do client...</value>
+  </data>
+  <data name="SplashLibrary.ImagesFilter" xml:space="preserve">
+    <value>Imagens</value>
+  </data>
+  <data name="SplashLibrary.ListedStatus.One" xml:space="preserve">
+    <value>{count} bitmap · clique para abrir no editor</value>
+  </data>
+  <data name="SplashLibrary.ListedStatus.Other" xml:space="preserve">
+    <value>{count} bitmaps · clique para abrir no editor</value>
+  </data>
+  <data name="SplashLibrary.LoadingStatus" xml:space="preserve">
+    <value>Carregando…</value>
+  </data>
+  <data name="SplashLibrary.NoEncryptionLabel" xml:space="preserve">
+    <value>sem criptografia</value>
+    <comment>Legenda do tile de um BMP sem envelope Lineage2Ver.</comment>
+  </data>
+  <data name="SplashLibrary.PendingTileTip" xml:space="preserve">
+    <value>O editor abre o arquivo do disco, sem a troca.</value>
+    <comment>Tooltip do tile trocado, abaixo do caminho do arquivo.</comment>
+  </data>
+  <data name="SplashLibrary.RefreshButton" xml:space="preserve">
+    <value>Atualizar</value>
+  </data>
+  <data name="SplashLibrary.ReplaceAllButton" xml:space="preserve">
+    <value>Trocar todos por imagem…</value>
+  </data>
+  <data name="SplashLibrary.ReplaceAllPicker" xml:space="preserve">
+    <value>Imagem para todos os BMP</value>
+  </data>
+  <data name="SplashLibrary.ReplaceAllTip" xml:space="preserve">
+    <value>Usa uma imagem em todos os BMP listados, cada um no seu tamanho e formato. Nada é gravado ainda.</value>
+  </data>
+  <data name="SplashLibrary.SaveAllButton" xml:space="preserve">
+    <value>Salvar todos</value>
+  </data>
+  <data name="SplashLibrary.SavedStatus.One" xml:space="preserve">
+    <value>{count} arquivo salvo</value>
+  </data>
+  <data name="SplashLibrary.SavedStatus.Other" xml:space="preserve">
+    <value>{count} arquivos salvos</value>
+  </data>
+  <data name="SplashLibrary.SavingStatus.One" xml:space="preserve">
+    <value>Gravando {count} arquivo…</value>
+  </data>
+  <data name="SplashLibrary.SavingStatus.Other" xml:space="preserve">
+    <value>Gravando {count} arquivos…</value>
+  </data>
+  <data name="SplashLibrary.SwappedStatus.One" xml:space="preserve">
+    <value>{count} arquivo trocado em memória ({width} × {height}) · nada foi gravado ainda · use Salvar todos</value>
+  </data>
+  <data name="SplashLibrary.SwappedStatus.Other" xml:space="preserve">
+    <value>{count} arquivos trocados em memória ({width} × {height}) · nada foi gravado ainda · use Salvar todos</value>
+  </data>
+  <data name="SplashLibrary.SwappedTileLabel" xml:space="preserve">
+    <value>Trocado · {width} × {height} · não salvo</value>
+    <comment>Legenda do tile com troca pendente; width/height são da arte nova.</comment>
+  </data>
+  <data name="SplashLibrary.TileLabel" xml:space="preserve">
+    <value>{width} × {height} · {bits} bits · {encryption}</value>
+    <comment>encryption é Ver121, Ver111 ou o texto de NoEncryptionLabel.</comment>
+  </data>
+  <data name="SplashLibrary.WindowTitle" xml:space="preserve">
+    <value>Pasta do client — Splash Screen</value>
+  </data>
 
   <!-- ═══ SplashScreen ═══ -->
+  <data name="SplashScreen.BackupStatus" xml:space="preserve">
+    <value>Original preservado em {backupName}.</value>
+    <comment>Segunda frase do aviso de gravação; backupName é o nome do .bak criado.</comment>
+  </data>
+  <data name="SplashScreen.BitsLabel" xml:space="preserve">
+    <value>{bits} bits</value>
+  </data>
+  <data name="SplashScreen.BmpFilter" xml:space="preserve">
+    <value>Splash screen (BMP)</value>
+  </data>
+  <data name="SplashScreen.ComposeButton" xml:space="preserve">
+    <value>Compor com brush…</value>
+  </data>
+  <data name="SplashScreen.ComposeTip" xml:space="preserve">
+    <value>Recorta uma arte com um brush aleatório, como uma máscara do Photoshop</value>
+  </data>
+  <data name="SplashScreen.ComposedStatus" xml:space="preserve">
+    <value>Recorte recebido do Compor com brush · salve para gravar a splash.</value>
+  </data>
+  <data name="SplashScreen.DitherLabel" xml:space="preserve">
+    <value>Dithering na redução de cores</value>
+  </data>
+  <data name="SplashScreen.EditSectionTitle" xml:space="preserve">
+    <value>EDIÇÃO</value>
+  </data>
+  <data name="SplashScreen.EmptyHint" xml:space="preserve">
+    <value>Abra uma splash screen ou substitua por uma imagem para começar.</value>
+  </data>
+  <data name="SplashScreen.EncryptionLabel" xml:space="preserve">
+    <value>Criptografia</value>
+  </data>
+  <data name="SplashScreen.EncryptionNoneLabel" xml:space="preserve">
+    <value>Sem criptografia</value>
+  </data>
+  <data name="SplashScreen.ExportButton" xml:space="preserve">
+    <value>Exportar PNG</value>
+  </data>
+  <data name="SplashScreen.ExportPicker" xml:space="preserve">
+    <value>Exportar PNG</value>
+  </data>
+  <data name="SplashScreen.ExportedStatus" xml:space="preserve">
+    <value>{fileName} exportado com o canal alpha.</value>
+  </data>
+  <data name="SplashScreen.FilePathTip" xml:space="preserve">
+    <value>Clique para escolher outro arquivo</value>
+  </data>
+  <data name="SplashScreen.FilePathWatermark" xml:space="preserve">
+    <value>Clique para selecionar um sp_256_*.bmp, sp_32b_*.bmp ou logo_*.bmp do SysTextures...</value>
+  </data>
+  <data name="SplashScreen.FormatBgra32Label" xml:space="preserve">
+    <value>32 bits com alpha (sp_32b)</value>
+  </data>
+  <data name="SplashScreen.FormatIndexed8Label" xml:space="preserve">
+    <value>256 cores (sp_256)</value>
+  </data>
+  <data name="SplashScreen.FormatLabel" xml:space="preserve">
+    <value>Formato</value>
+  </data>
+  <data name="SplashScreen.FormatRgb24Label" xml:space="preserve">
+    <value>24 bits sem alpha</value>
+  </data>
+  <data name="SplashScreen.ImagesFilter" xml:space="preserve">
+    <value>Imagens</value>
+  </data>
+  <data name="SplashScreen.KeyColorHint" xml:space="preserve">
+    <value>Sem alpha, o cliente recorta esta cor.</value>
+  </data>
+  <data name="SplashScreen.KeyColorLabel" xml:space="preserve">
+    <value>Cor-chave</value>
+  </data>
+  <data name="SplashScreen.KeyOutButton" xml:space="preserve">
+    <value>Recortar cor-chave</value>
+  </data>
+  <data name="SplashScreen.KeyedOutStatus.One" xml:space="preserve">
+    <value>{count:N0} pixel recortado.</value>
+  </data>
+  <data name="SplashScreen.KeyedOutStatus.Other" xml:space="preserve">
+    <value>{count:N0} pixels recortados.</value>
+  </data>
+  <data name="SplashScreen.LibraryButton" xml:space="preserve">
+    <value>Pasta do client</value>
+  </data>
+  <data name="SplashScreen.LibraryTip" xml:space="preserve">
+    <value>Abre uma janela com todos os BMP da pasta do client</value>
+  </data>
+  <data name="SplashScreen.NewImageLabel" xml:space="preserve">
+    <value>nova imagem</value>
+    <comment>Rodapé: nome exibido quando a imagem ainda não tem arquivo.</comment>
+  </data>
+  <data name="SplashScreen.NoEncryptionLabel" xml:space="preserve">
+    <value>sem criptografia</value>
+    <comment>Descrição do arquivo no rodapé e no aviso de gravação.</comment>
+  </data>
+  <data name="SplashScreen.NoKeyColorPixelsError" xml:space="preserve">
+    <value>Nenhum pixel está perto da cor-chave. Ajuste a cor ou aumente a tolerância.</value>
+  </data>
+  <data name="SplashScreen.OnDiskLabel" xml:space="preserve">
+    <value>no disco: {details}</value>
+    <comment>details: formato, criptografia e tamanho do arquivo.</comment>
+  </data>
+  <data name="SplashScreen.OpenButton" xml:space="preserve">
+    <value>Abrir</value>
+  </data>
+  <data name="SplashScreen.OpenPicker" xml:space="preserve">
+    <value>Abrir splash screen</value>
+  </data>
+  <data name="SplashScreen.PaletteBitsLabel" xml:space="preserve">
+    <value>{bits} bits (paleta)</value>
+  </data>
+  <data name="SplashScreen.PreviewColorsLabel" xml:space="preserve">
+    <value>prévia com {count} cores</value>
+  </data>
+  <data name="SplashScreen.ReplaceButton" xml:space="preserve">
+    <value>Substituir imagem…</value>
+  </data>
+  <data name="SplashScreen.ReplacePicker" xml:space="preserve">
+    <value>Substituir imagem</value>
+  </data>
+  <data name="SplashScreen.SaveAsButton" xml:space="preserve">
+    <value>Salvar como…</value>
+  </data>
+  <data name="SplashScreen.SavePicker" xml:space="preserve">
+    <value>Salvar splash screen</value>
+  </data>
+  <data name="SplashScreen.SaveSectionTitle" xml:space="preserve">
+    <value>GRAVAÇÃO</value>
+  </data>
+  <data name="SplashScreen.SavedStatus" xml:space="preserve">
+    <value>{fileName} salva — {details}.</value>
+    <comment>details: formato, criptografia e tamanho do arquivo gravado.</comment>
+  </data>
+  <data name="SplashScreen.SubtitleLabel" xml:space="preserve">
+    <value>Abre, edita e grava os BMP de abertura do cliente (sp_256, sp_32b, logo)</value>
+  </data>
+  <data name="SplashScreen.ToleranceLabel" xml:space="preserve">
+    <value>Tolerância</value>
+  </data>
+  <data name="SplashScreen.UnexpectedError" xml:space="preserve">
+    <value>Ocorreu um erro inesperado.</value>
+  </data>
+  <data name="SplashScreen.UnsavedLabel" xml:space="preserve">
+    <value>não salva</value>
+    <comment>Rodapé: a imagem tem edição não gravada.</comment>
+  </data>
 
   <!-- ═══ SystemMsgColor ═══ -->
   <data name="SystemMsgColor.BackupWarningHint" xml:space="preserve">

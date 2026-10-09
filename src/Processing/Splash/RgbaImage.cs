@@ -1,4 +1,5 @@
 using System;
+using L2Toolkit.Localization;
 
 namespace L2Toolkit.Processing.Splash;
 
@@ -15,12 +16,11 @@ public sealed class RgbaImage
     public RgbaImage(int width, int height, byte[] pixels)
     {
         if (width <= 0 || height <= 0)
-            throw new InvalidOperationException("A imagem não possui dimensões válidas.");
+            throw new InvalidOperationException(Loc.Splash.InvalidDimensionsError);
         if ((long)width * height > MaxPixels)
-            throw new InvalidOperationException(
-                $"A imagem tem {width} × {height} px e passa do limite de 4096 × 4096 px do editor.");
+            throw new InvalidOperationException(Loc.Splash.ImageTooLargeError(width, height));
         if (pixels.Length != width * height * 4)
-            throw new InvalidOperationException("Os dados da imagem não correspondem às suas dimensões.");
+            throw new InvalidOperationException(Loc.Splash.PixelDataMismatchError);
 
         Width = width;
         Height = height;

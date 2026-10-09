@@ -113,10 +113,16 @@ Status
 # ── Splash ──
 
 # ── SplashCompose ──
+BRUSH
+PNG
 
 # ── SplashLibrary ──
 
 # ── SplashScreen ──
+Lineage2Ver111
+Lineage2Ver121
+PNG
+Splash Screen
 
 # ── SystemMsgColor ──
 HEX

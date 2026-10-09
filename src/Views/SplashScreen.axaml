@@ -88,7 +88,7 @@
                 <TextBlock Text="Splash Screen"
                            FontSize="22" FontWeight="SemiBold"
                            Foreground="{DynamicResource ThemeTextTitle}"/>
-                <TextBlock Text="Abre, edita e grava os BMP de abertura do cliente (sp_256, sp_32b, logo)"
+                <TextBlock Text="{DynamicResource SplashScreen.SubtitleLabel}"
                            FontSize="13"
                            Foreground="{DynamicResource ThemeTextTitle}"/>
             </StackPanel>
@@ -121,29 +121,29 @@
             <Grid Grid.Row="2" ColumnDefinitions="*,10,Auto,8,Auto" Margin="0,0,0,14">
                     <!-- Clicar no campo escolhe outro arquivo; o botão abre o que já está nele. -->
                     <Border Grid.Column="0" Background="Transparent" Cursor="Hand"
-                            ToolTip.Tip="Clique para escolher outro arquivo"
+                            ToolTip.Tip="{DynamicResource SplashScreen.FilePathTip}"
                             PointerPressed="FilePath_PointerPressed">
                         <TextBox x:Name="FilePathBox" Classes="FormField"
                                  IsReadOnly="True" Focusable="False" IsHitTestVisible="False"
                                  Height="36" Padding="12,0" VerticalContentAlignment="Center"
                                  FontFamily="Consolas,Courier New,monospace"
-                                 Watermark="Clique para selecionar um sp_256_*.bmp, sp_32b_*.bmp ou logo_*.bmp do SysTextures..."/>
+                                 Watermark="{DynamicResource SplashScreen.FilePathWatermark}"/>
                     </Border>
                     <Button x:Name="OpenButton" Grid.Column="2" Height="36" Padding="16,0"
                             Theme="{StaticResource GhostButton}" Click="Open_Click">
                         <StackPanel Orientation="Horizontal" Spacing="8">
                             <PathIcon Data="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"
                                       Foreground="{DynamicResource ThemeTextLabel}" Width="14" Height="14" VerticalAlignment="Center"/>
-                            <TextBlock Text="Abrir" FontSize="13" FontWeight="Medium" VerticalAlignment="Center"/>
+                            <TextBlock Text="{DynamicResource SplashScreen.OpenButton}" FontSize="13" FontWeight="Medium" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
                     <Button x:Name="LibraryButton" Grid.Column="4" Height="36" Padding="16,0"
                             Theme="{StaticResource GhostButton}" Click="Library_Click"
-                            ToolTip.Tip="Abre uma janela com todos os BMP da pasta do client">
+                            ToolTip.Tip="{DynamicResource SplashScreen.LibraryTip}">
                         <StackPanel Orientation="Horizontal" Spacing="8">
                             <PathIcon Data="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12zM10 13l2.03 2.71L15 12l4 5H9l1-4z"
                                       Foreground="{DynamicResource ThemeTextLabel}" Width="14" Height="14" VerticalAlignment="Center"/>
-                            <TextBlock Text="Pasta do client" FontSize="13" FontWeight="Medium" VerticalAlignment="Center"/>
+                            <TextBlock Text="{DynamicResource SplashScreen.LibraryButton}" FontSize="13" FontWeight="Medium" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
                 </Grid>
@@ -159,7 +159,7 @@
                                 Background="{DynamicResource ThemeSurfaceInput}">
                             <Grid>
                                 <TextBlock x:Name="EmptyText"
-                                           Text="Abra uma splash screen ou substitua por uma imagem para começar."
+                                           Text="{DynamicResource SplashScreen.EmptyHint}"
                                            Classes="Hint" FontSize="13" TextAlignment="Center"
                                            HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="320"/>
                                 <Grid x:Name="PreviewFrame" IsVisible="False"
@@ -178,28 +178,28 @@
                             <ScrollViewer VerticalScrollBarVisibility="Auto">
                             <StackPanel Margin="16,14" Spacing="10">
 
-                                <TextBlock Text="GRAVAÇÃO" Classes="Section"/>
+                                <TextBlock Text="{DynamicResource SplashScreen.SaveSectionTitle}" Classes="Section"/>
 
                                 <StackPanel>
-                                    <TextBlock Text="Formato" Classes="Field"/>
+                                    <TextBlock Text="{DynamicResource SplashScreen.FormatLabel}" Classes="Field"/>
                                     <ComboBox x:Name="FormatCombo" HorizontalAlignment="Stretch">
-                                        <ComboBoxItem Content="32 bits com alpha (sp_32b)"/>
-                                        <ComboBoxItem Content="256 cores (sp_256)"/>
-                                        <ComboBoxItem Content="24 bits sem alpha"/>
+                                        <ComboBoxItem Content="{DynamicResource SplashScreen.FormatBgra32Label}"/>
+                                        <ComboBoxItem Content="{DynamicResource SplashScreen.FormatIndexed8Label}"/>
+                                        <ComboBoxItem Content="{DynamicResource SplashScreen.FormatRgb24Label}"/>
                                     </ComboBox>
                                 </StackPanel>
 
                                 <StackPanel>
-                                    <TextBlock Text="Criptografia" Classes="Field"/>
+                                    <TextBlock Text="{DynamicResource SplashScreen.EncryptionLabel}" Classes="Field"/>
                                     <ComboBox x:Name="EncryptionCombo" HorizontalAlignment="Stretch">
                                         <ComboBoxItem Content="Lineage2Ver121"/>
                                         <ComboBoxItem Content="Lineage2Ver111"/>
-                                        <ComboBoxItem Content="Sem criptografia"/>
+                                        <ComboBoxItem Content="{DynamicResource SplashScreen.EncryptionNoneLabel}"/>
                                     </ComboBox>
                                 </StackPanel>
 
                                 <StackPanel>
-                                    <TextBlock Text="Cor-chave" Classes="Field"/>
+                                    <TextBlock Text="{DynamicResource SplashScreen.KeyColorLabel}" Classes="Field"/>
                                     <Button x:Name="KeyColorButton" Theme="{StaticResource GhostButton}"
                                             HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
                                             Height="32" Padding="8,0" Click="KeyColor_Click">
@@ -211,30 +211,30 @@
                                         </StackPanel>
                                     </Button>
                                     <TextBlock Classes="Hint" Margin="0,4,0,0"
-                                               Text="Sem alpha, o cliente recorta esta cor."/>
+                                               Text="{DynamicResource SplashScreen.KeyColorHint}"/>
                                 </StackPanel>
 
-                                <CheckBox x:Name="DitherCheck" Content="Dithering na redução de cores"/>
+                                <CheckBox x:Name="DitherCheck" Content="{DynamicResource SplashScreen.DitherLabel}"/>
 
                                 <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
 
-                                <TextBlock Text="EDIÇÃO" Classes="Section"/>
+                                <TextBlock Text="{DynamicResource SplashScreen.EditSectionTitle}" Classes="Section"/>
 
                                 <StackPanel Spacing="6">
                                     <Button x:Name="ReplaceButton" Theme="{StaticResource GhostButton}"
                                             HorizontalAlignment="Stretch" Height="32" Click="Replace_Click">
-                                        <TextBlock Text="Substituir imagem…" FontSize="12" FontWeight="Medium"/>
+                                        <TextBlock Text="{DynamicResource SplashScreen.ReplaceButton}" FontSize="12" FontWeight="Medium"/>
                                     </Button>
                                     <Button x:Name="ComposeButton" Theme="{StaticResource GhostButton}"
                                             HorizontalAlignment="Stretch" Height="32" Click="Compose_Click"
-                                            ToolTip.Tip="Recorta uma arte com um brush aleatório, como uma máscara do Photoshop">
-                                        <TextBlock Text="Compor com brush…" FontSize="12" FontWeight="Medium"/>
+                                            ToolTip.Tip="{DynamicResource SplashScreen.ComposeTip}">
+                                        <TextBlock Text="{DynamicResource SplashScreen.ComposeButton}" FontSize="12" FontWeight="Medium"/>
                                     </Button>
                                 </StackPanel>
 
                                 <StackPanel Spacing="4">
                                     <Grid ColumnDefinitions="*,Auto">
-                                        <TextBlock Text="Tolerância" Classes="Field" Margin="0"/>
+                                        <TextBlock Text="{DynamicResource SplashScreen.ToleranceLabel}" Classes="Field" Margin="0"/>
                                         <TextBlock Grid.Column="1" FontSize="12" Foreground="{DynamicResource ThemeTextBody}"
                                                    Text="{Binding #ToleranceSlider.Value, StringFormat={}{0:0}}"/>
                                     </Grid>
@@ -242,7 +242,7 @@
                                             TickFrequency="1" IsSnapToTickEnabled="True"/>
                                     <Button x:Name="KeyOutButton" Theme="{StaticResource GhostButton}"
                                             HorizontalAlignment="Stretch" Height="32" Click="KeyOut_Click">
-                                        <TextBlock Text="Recortar cor-chave" FontSize="12" FontWeight="Medium"/>
+                                        <TextBlock Text="{DynamicResource SplashScreen.KeyOutButton}" FontSize="12" FontWeight="Medium"/>
                                     </Button>
                                 </StackPanel>
                             </StackPanel>
@@ -257,18 +257,18 @@
                                            VerticalAlignment="Center" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
                                 <Button x:Name="ExportButton" Grid.Column="1" Theme="{StaticResource GhostButton}"
                                         Height="34" Padding="14,0" Click="ExportPng_Click">
-                                    <TextBlock Text="Exportar PNG" FontSize="12" FontWeight="Medium"/>
+                                    <TextBlock Text="{DynamicResource SplashScreen.ExportButton}" FontSize="12" FontWeight="Medium"/>
                                 </Button>
                                 <Button x:Name="SaveAsButton" Grid.Column="3" Theme="{StaticResource GhostButton}"
                                         Height="34" Padding="14,0" Click="SaveAs_Click">
-                                    <TextBlock Text="Salvar como…" FontSize="12" FontWeight="Medium"/>
+                                    <TextBlock Text="{DynamicResource SplashScreen.SaveAsButton}" FontSize="12" FontWeight="Medium"/>
                                 </Button>
                                 <Button x:Name="SaveButton" Grid.Column="5" Theme="{StaticResource SecondaryButton}"
                                         Height="34" Padding="20,0" Click="Save_Click">
                                     <StackPanel Orientation="Horizontal" Spacing="8">
                                         <PathIcon Data="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"
                                                   Foreground="White" Width="13" Height="13" VerticalAlignment="Center"/>
-                                        <TextBlock Text="Salvar" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                        <TextBlock Text="{DynamicResource Common.Save}" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Button>
                             </Grid>

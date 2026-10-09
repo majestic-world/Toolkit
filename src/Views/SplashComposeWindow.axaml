@@ -2,7 +2,7 @@
         xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:controls="using:L2Toolkit.Views.Controls"
-        Title="Compor com brush — Splash Screen"
+        Title="{DynamicResource SplashCompose.WindowTitle}"
         Width="1100" Height="760" MinWidth="760" MinHeight="520"
         WindowStartupLocation="CenterScreen"
         Background="{DynamicResource ThemeSurfacePage}">
@@ -92,7 +92,7 @@
             <Grid>
                 <TextBlock x:Name="EmptyText" Classes="Hint" FontSize="13" TextAlignment="Center"
                            HorizontalAlignment="Center" VerticalAlignment="Center" Width="380"
-                           Text="Escolha a arte da splash. O brush recorta as bordas como uma máscara do Photoshop."/>
+                           Text="{DynamicResource SplashCompose.EmptyHint}"/>
                 <Grid x:Name="PreviewFrame" IsVisible="False"
                       HorizontalAlignment="Center" VerticalAlignment="Center">
                     <controls:Checkerboard LightBrush="{DynamicResource ThemeSurfaceCard}"
@@ -109,12 +109,12 @@
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <StackPanel Margin="16,14" Spacing="10">
 
-                    <TextBlock Text="ARTE" Classes="Section"/>
+                    <TextBlock Text="{DynamicResource SplashCompose.ArtSectionTitle}" Classes="Section"/>
                     <Button x:Name="ArtButton" Theme="{StaticResource GhostButton}"
                             HorizontalAlignment="Stretch" Height="32" Click="ChooseArt_Click">
-                        <TextBlock Text="Escolher imagem…" FontSize="12" FontWeight="Medium"/>
+                        <TextBlock Text="{DynamicResource SplashCompose.ChooseArtButton}" FontSize="12" FontWeight="Medium"/>
                     </Button>
-                    <TextBlock x:Name="ArtText" Classes="Hint" Text="Nenhuma arte carregada."/>
+                    <TextBlock x:Name="ArtText" Classes="Hint"/>
 
                     <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
                     <TextBlock Text="BRUSH" Classes="Section"/>
@@ -122,83 +122,83 @@
                         <TextBox x:Name="SeedBox" Classes="FormField" Height="32" Padding="10,0"
                                  VerticalContentAlignment="Center"
                                  FontFamily="Consolas,Courier New,monospace"
-                                 ToolTip.Tip="A mesma semente gera sempre o mesmo brush"/>
+                                 ToolTip.Tip="{DynamicResource SplashCompose.SeedTip}"/>
                         <Button Grid.Column="2" Theme="{StaticResource GhostButton}"
                                 Height="32" Padding="12,0" Click="Shuffle_Click">
-                            <TextBlock Text="Outro brush" FontSize="12" FontWeight="Medium"/>
+                            <TextBlock Text="{DynamicResource SplashCompose.ShuffleButton}" FontSize="12" FontWeight="Medium"/>
                         </Button>
                     </Grid>
 
                     <StackPanel>
                         <Grid ColumnDefinitions="*,Auto">
-                            <TextBlock Text="Pontas" Classes="Field"/>
+                            <TextBlock Text="{DynamicResource SplashCompose.SpikesLabel}" Classes="Field"/>
                             <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #SpikesSlider.Value, StringFormat={}{0:0}}"/>
                         </Grid>
                         <Slider x:Name="SpikesSlider" Minimum="0" Maximum="100" Value="50"/>
                     </StackPanel>
                     <StackPanel>
                         <Grid ColumnDefinitions="*,Auto">
-                            <TextBlock Text="Rachaduras" Classes="Field"/>
+                            <TextBlock Text="{DynamicResource SplashCompose.CracksLabel}" Classes="Field"/>
                             <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #CracksSlider.Value, StringFormat={}{0:0}}"/>
                         </Grid>
                         <Slider x:Name="CracksSlider" Minimum="0" Maximum="100" Value="50"/>
                     </StackPanel>
                     <StackPanel>
                         <Grid ColumnDefinitions="*,Auto">
-                            <TextBlock Text="Garras" Classes="Field"/>
+                            <TextBlock Text="{DynamicResource SplashCompose.ClawsLabel}" Classes="Field"/>
                             <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #ClawsSlider.Value, StringFormat={}{0:0}}"/>
                         </Grid>
                         <Slider x:Name="ClawsSlider" Minimum="0" Maximum="100" Value="50"/>
                     </StackPanel>
                     <StackPanel>
                         <Grid ColumnDefinitions="*,Auto">
-                            <TextBlock Text="Estilhaços" Classes="Field"/>
+                            <TextBlock Text="{DynamicResource SplashCompose.DebrisLabel}" Classes="Field"/>
                             <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #DebrisSlider.Value, StringFormat={}{0:0}}"/>
                         </Grid>
                         <Slider x:Name="DebrisSlider" Minimum="0" Maximum="100" Value="50"/>
                     </StackPanel>
                     <StackPanel>
                         <Grid ColumnDefinitions="*,Auto">
-                            <TextBlock Text="Borda suave" Classes="Field"/>
+                            <TextBlock Text="{DynamicResource SplashCompose.SoftnessLabel}" Classes="Field"/>
                             <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #SoftnessSlider.Value, StringFormat={}{0:0}}"/>
                         </Grid>
                         <Slider x:Name="SoftnessSlider" Minimum="0" Maximum="100" Value="30"/>
                     </StackPanel>
                     <StackPanel>
                         <Grid ColumnDefinitions="*,Auto">
-                            <TextBlock Text="Simetria" Classes="Field"
-                                       ToolTip.Tip="Retângulo arredondado com pontas regulares, espelhado na vertical"/>
+                            <TextBlock Text="{DynamicResource SplashCompose.SymmetryLabel}" Classes="Field"
+                                       ToolTip.Tip="{DynamicResource SplashCompose.SymmetryTip}"/>
                             <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #SymmetrySlider.Value, StringFormat={}{0:0}}"/>
                         </Grid>
                         <Slider x:Name="SymmetrySlider" Minimum="0" Maximum="100" Value="0"/>
                     </StackPanel>
 
                     <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
-                    <TextBlock Text="POSIÇÃO" Classes="Section"/>
+                    <TextBlock Text="{DynamicResource SplashCompose.PositionSectionTitle}" Classes="Section"/>
                     <CheckBox x:Name="FillCheck"
                               FontSize="12"
                               Foreground="{DynamicResource ThemeTextBody}"
-                              ToolTip.Tip="Estica o brush para a arte inteira menos 5 px de cada lado (ex.: 640 × 480 → 630 × 470)">
-                        <TextBlock Text="Ocupar a arte toda (−10 px)" TextWrapping="Wrap"/>
+                              ToolTip.Tip="{DynamicResource SplashCompose.FillTip}">
+                        <TextBlock Text="{DynamicResource SplashCompose.FillLabel}" TextWrapping="Wrap"/>
                     </CheckBox>
                     <StackPanel x:Name="PositionPanel" Spacing="10">
                     <StackPanel>
                         <Grid ColumnDefinitions="*,Auto">
-                            <TextBlock Text="Tamanho" Classes="Field"/>
+                            <TextBlock Text="{DynamicResource SplashCompose.SizeLabel}" Classes="Field"/>
                             <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #ScaleSlider.Value, StringFormat={}{0:0}%}"/>
                         </Grid>
                         <Slider x:Name="ScaleSlider" Minimum="50" Maximum="160" Value="100"/>
                     </StackPanel>
                     <StackPanel>
                         <Grid ColumnDefinitions="*,Auto">
-                            <TextBlock Text="Horizontal" Classes="Field"/>
+                            <TextBlock Text="{DynamicResource SplashCompose.HorizontalLabel}" Classes="Field"/>
                             <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #OffsetXSlider.Value, StringFormat={}{0:0}%}"/>
                         </Grid>
                         <Slider x:Name="OffsetXSlider" Minimum="-30" Maximum="30" Value="0"/>
                     </StackPanel>
                     <StackPanel>
                         <Grid ColumnDefinitions="*,Auto">
-                            <TextBlock Text="Vertical" Classes="Field"/>
+                            <TextBlock Text="{DynamicResource SplashCompose.VerticalLabel}" Classes="Field"/>
                             <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #OffsetYSlider.Value, StringFormat={}{0:0}%}"/>
                         </Grid>
                         <Slider x:Name="OffsetYSlider" Minimum="-30" Maximum="30" Value="0"/>
@@ -206,11 +206,11 @@
                     </StackPanel>
 
                     <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
-                    <TextBlock Text="CONTORNO" Classes="Section"/>
+                    <TextBlock Text="{DynamicResource SplashCompose.StrokeSectionTitle}" Classes="Section"/>
                     <StackPanel>
                         <Grid ColumnDefinitions="*,Auto">
-                            <TextBlock Text="Espessura" Classes="Field"
-                                       ToolTip.Tip="Borda de cor sólida em volta do recorte, como o Traçado do Photoshop; 0 desliga"/>
+                            <TextBlock Text="{DynamicResource SplashCompose.StrokeWidthLabel}" Classes="Field"
+                                       ToolTip.Tip="{DynamicResource SplashCompose.StrokeWidthTip}"/>
                             <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #StrokeSlider.Value, StringFormat={}{0:0} px}"/>
                         </Grid>
                         <Slider x:Name="StrokeSlider" Minimum="0" Maximum="50" Value="0"/>
@@ -228,19 +228,19 @@
                         </Button>
                         <ComboBox x:Name="StrokePositionCombo" Grid.Column="2" Height="32"
                                   HorizontalAlignment="Stretch" SelectedIndex="0">
-                            <ComboBoxItem Content="Fora"/>
-                            <ComboBoxItem Content="Dentro"/>
-                            <ComboBoxItem Content="Centro"/>
+                            <ComboBoxItem Content="{DynamicResource SplashCompose.StrokeOutsideLabel}"/>
+                            <ComboBoxItem Content="{DynamicResource SplashCompose.StrokeInsideLabel}"/>
+                            <ComboBoxItem Content="{DynamicResource SplashCompose.StrokeCenterLabel}"/>
                         </ComboBox>
                     </Grid>
 
                     <Border Height="1" Background="{DynamicResource ThemeBorder}"/>
-                    <TextBlock Text="SOMBRA" Classes="Section"/>
+                    <TextBlock Text="{DynamicResource SplashCompose.ShadowSectionTitle}" Classes="Section"/>
                     <CheckBox x:Name="ShadowCheck"
                               FontSize="12"
                               Foreground="{DynamicResource ThemeTextBody}"
-                              ToolTip.Tip="Sombra projetada por baixo do recorte (e do contorno), como o box-shadow do CSS">
-                        <TextBlock Text="Sombra projetada" TextWrapping="Wrap"/>
+                              ToolTip.Tip="{DynamicResource SplashCompose.ShadowTip}">
+                        <TextBlock Text="{DynamicResource SplashCompose.ShadowLabel}" TextWrapping="Wrap"/>
                     </CheckBox>
                     <StackPanel x:Name="ShadowPanel" Spacing="10" Opacity="0.4" IsHitTestVisible="False">
                         <Button x:Name="ShadowColorButton" Theme="{StaticResource GhostButton}"
@@ -255,36 +255,36 @@
                         </Button>
                         <StackPanel>
                             <Grid ColumnDefinitions="*,Auto">
-                                <TextBlock Text="Opacidade" Classes="Field"/>
+                                <TextBlock Text="{DynamicResource SplashCompose.OpacityLabel}" Classes="Field"/>
                                 <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #ShadowOpacitySlider.Value, StringFormat={}{0:0}%}"/>
                             </Grid>
                             <Slider x:Name="ShadowOpacitySlider" Minimum="0" Maximum="100" Value="60"/>
                         </StackPanel>
                         <StackPanel>
                             <Grid ColumnDefinitions="*,Auto">
-                                <TextBlock Text="Horizontal" Classes="Field"/>
+                                <TextBlock Text="{DynamicResource SplashCompose.HorizontalLabel}" Classes="Field"/>
                                 <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #ShadowXSlider.Value, StringFormat={}{0:0} px}"/>
                             </Grid>
                             <Slider x:Name="ShadowXSlider" Minimum="-50" Maximum="50" Value="6"/>
                         </StackPanel>
                         <StackPanel>
                             <Grid ColumnDefinitions="*,Auto">
-                                <TextBlock Text="Vertical" Classes="Field"/>
+                                <TextBlock Text="{DynamicResource SplashCompose.VerticalLabel}" Classes="Field"/>
                                 <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #ShadowYSlider.Value, StringFormat={}{0:0} px}"/>
                             </Grid>
                             <Slider x:Name="ShadowYSlider" Minimum="-50" Maximum="50" Value="6"/>
                         </StackPanel>
                         <StackPanel>
                             <Grid ColumnDefinitions="*,Auto">
-                                <TextBlock Text="Desfoque" Classes="Field"/>
+                                <TextBlock Text="{DynamicResource SplashCompose.BlurLabel}" Classes="Field"/>
                                 <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #ShadowBlurSlider.Value, StringFormat={}{0:0} px}"/>
                             </Grid>
                             <Slider x:Name="ShadowBlurSlider" Minimum="0" Maximum="50" Value="12"/>
                         </StackPanel>
                         <StackPanel>
                             <Grid ColumnDefinitions="*,Auto">
-                                <TextBlock Text="Expansão" Classes="Field"
-                                           ToolTip.Tip="Engorda a silhueta da sombra antes do desfoque (spread do CSS)"/>
+                                <TextBlock Text="{DynamicResource SplashCompose.SpreadLabel}" Classes="Field"
+                                           ToolTip.Tip="{DynamicResource SplashCompose.SpreadTip}"/>
                                 <TextBlock Grid.Column="1" Classes="Value" Text="{Binding #ShadowSpreadSlider.Value, StringFormat={}{0:0} px}"/>
                             </Grid>
                             <Slider x:Name="ShadowSpreadSlider" Minimum="0" Maximum="30" Value="0"/>
@@ -302,14 +302,14 @@
                            VerticalAlignment="Center" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
                 <Button x:Name="ExportButton" Grid.Column="1" Theme="{StaticResource GhostButton}"
                         Height="34" Padding="14,0" Click="Export_Click">
-                    <TextBlock Text="Exportar PNG…" FontSize="12" FontWeight="Medium"/>
+                    <TextBlock Text="{DynamicResource SplashCompose.ExportButton}" FontSize="12" FontWeight="Medium"/>
                 </Button>
                 <Button x:Name="SendButton" Grid.Column="3" Theme="{StaticResource SecondaryButton}"
                         Height="34" Padding="20,0" Click="Send_Click">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <PathIcon Data="M2.01 21 23 12 2.01 3 2 10l15 2-15 2z"
                                   Foreground="White" Width="13" Height="13" VerticalAlignment="Center"/>
-                        <TextBlock Text="Enviar para o editor" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                        <TextBlock Text="{DynamicResource SplashCompose.SendButton}" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center"/>
                     </StackPanel>
                 </Button>
             </Grid>
