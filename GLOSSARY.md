@@ -53,3 +53,17 @@ _Avoid_: chave de recriptografia privada.
 **`v413_encdec`**:
 Par de chaves `Lineage2Ver413` usado para recriptografar arquivos destinados a clientes privados compatíveis.
 _Avoid_: chave oficial NCSoft.
+
+## Interface
+
+**Idioma da interface**:
+Idioma dos textos do app: `pt-BR` (padrão) ou `en`. Escolhido em Configurações → APLICATIVO → Idioma e salvo como `app_language`; não muda dados do jogo nem artefatos do servidor.
+_Avoid_: locale, cultura, tradução do cliente.
+
+**Catálogo de strings**:
+Arquivos `src/Localization/Strings*.resx` (`Strings.resx` pt-BR base, `Strings.en.resx` en) com todos os textos de interface, compilados na classe `Loc` durante o build.
+_Avoid_: arquivo de recursos, tabela de tradução, `.l2dat`.
+
+**Chave de string**:
+Identificador de um texto no catálogo de strings, no formato `Área.Elemento[.Qualificador]` em PascalCase (ex.: `Settings.ThemeLabel`), igual nos dois idiomas.
+_Avoid_: id de texto, nome do recurso.

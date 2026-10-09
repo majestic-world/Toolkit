@@ -28,6 +28,7 @@ The repository root holds only repository-level files (`L2Toolkit.sln`, `Directo
 | `ClientDat/` | `L2Toolkit.ClientDat` | Client `.dat` reading/writing and `.l2dat` packing |
 | `Settings/` | `L2Toolkit.Settings` | User settings persistence (`AppDatabase`) |
 | `Utilities/` | `L2Toolkit.Utilities` | Shared UI and data helpers, including logs and table loading |
+| `Localization/` | `L2Toolkit.Localization` | UI string catalogs (`Strings.resx` pt-BR, `Strings.en.resx` en), `AppLanguage`, `LiveText`, build generator/validator |
 | `Data/` | `L2Toolkit.Data` | Built-in data (`H5Names`, embedded `Presets.dat`) |
 | `Tables/` | — | Embedded `.l2dat` tables shipped with the app |
 | `Assets/` | — | App and installer icons |
@@ -40,11 +41,12 @@ Embedded resource names follow the folder under the project (`L2Toolkit.Tables.<
 - The shared ComboBox template presents `ComboBoxLiveSelection.Content` (`Localization/ComboBoxLiveSelection.cs`, registered in `App.Initialize`), not `SelectionBoxItem`: Avalonia snapshots the selected item's `Content` at selection time, so a translated `<ComboBoxItem Content="{DynamicResource …}">` would keep the old language after a live switch. Any other ComboBox template must present the same property.
 - Keep button themes free of `BrushTransition`; it produces a two-tone hover flicker.
 - Buttons and inputs (TextBox, ComboBox, file-path wrappers, button `ControlTheme`s in pages and windows) use `CornerRadius` 4; `App.axaml` also sets Fluent's `ControlCornerRadius` to 4 for unthemed controls. Cards keep 8, banners 6, popups 10, gallery tiles (`TileButton`) 8.
-- Themes: Dark (default) and Light, chosen in Configurações → Aparência and saved as `app_theme` in the settings file (`Utilities/AppTheme`). Every app color is a `Theme*` brush in `Themes/Colors.axaml` with a Dark and a Light value. Views use `{DynamicResource Theme*}`; controls built in code bind with `[!Border.BackgroundProperty] = AppTheme.Brush("Theme*")` (also `Border.BorderBrushProperty`, `TextElement.ForegroundProperty`, `Shape.StrokeProperty`) so a theme switch updates them live. Never hardcode a hex color in a view or code-behind; add a token to both dictionaries. Swatches that show data colors (client `.dat` values) stay literal.
+- Themes: Dark (default) and Light, chosen in Configurações → APLICATIVO → Tema and saved as `app_theme` in the settings file (`Utilities/AppTheme`). Every app color is a `Theme*` brush in `Themes/Colors.axaml` with a Dark and a Light value. Views use `{DynamicResource Theme*}`; controls built in code bind with `[!Border.BackgroundProperty] = AppTheme.Brush("Theme*")` (also `Border.BorderBrushProperty`, `TextElement.ForegroundProperty`, `Shape.StrokeProperty`) so a theme switch updates them live. Never hardcode a hex color in a view or code-behind; add a token to both dictionaries. Swatches that show data colors (client `.dat` values) stay literal.
 - Dark palette and its restrained surface steps: titlebar/sidebar `#2A2A2A`, page `#333333`, panels/cards `#2C2C2C`, recessed inputs `#252525`, borders `#464646`, blue accent around `#5B9BD5`, page subtitles in `#E8E8E8`, secondary labels no darker than `#B8B8B8`. Get contrast from text and borders, not from large gaps between surface grays. Light uses white cards on `#F3F3F3`, and its accent, icons and primary buttons are dark gray (`#3D3D3D`), not blue; Fluent's own accent follows it through `ColorPaletteResources` in `App.axaml`.
 - Fluent's `TextBox` watermark has a template-fixed `Opacity="0.5"`; `App.axaml` sets its foreground to `ThemeWatermark` (white in Dark, black in Light) so the effective placeholder stays legible. Do not set watermark colors per page.
 - Color selection uses the shared `Views/Controls/HsvColorPicker` (saturation/value square + hue strip, RGB only) hosted in a page `Popup`; pages call `SetColor` when opening it and react to `ColorChanged`. Do not build per-page slider pickers.
 - The custom titlebar supports drag-to-move and double-click maximize. Do not replace that behavior when changing window chrome.
+- Never write UI text as a literal in a view or code-behind; every label comes from the string catalog (see [Localization](#localization)).
 
 ### Shared runtime services
 
@@ -58,12 +60,58 @@ Pages select files or folders through Avalonia's storage provider, process async
 
 `docs/index.html` is the public, single-page product documentation. It is standalone HTML/CSS with Font Awesome and Google Fonts; update it directly when product documentation changes.
 
+## Localization
+
+The UI is bilingual: pt-BR (default) and en, chosen in Configurações → APLICATIVO → Idioma and saved as `app_language` (`pt-BR` | `en`; missing or unknown → pt-BR, nothing is written until the user switches). The switch is live, no restart.
+
+**Files** (`src/Localization/`): `Strings.resx` (pt-BR, base catalog: defines keys and parameter order), `Strings.en.resx` (en, same keys), `NonTranslatable.txt`, `AppLanguage.cs`, `LiveText.cs`, `Localization.targets`. The csproj lists the catalogs as `L2LocCatalog` items (first = base). The build generates `build/obj/<Config>/Localization.g.cs` (`Loc`, `LocKey`, `LocCatalog`); never edit it, read it for signatures. There is no `ResourceManager` or satellite assembly. Edit the `.resx` as XML text (the VS/Rider designer drops the per-area `<!-- ═══ Area ═══ -->` anchors); add keys under the area anchor, sorted, same order in both files.
+
+**Keys**: `Area.Element[.Qualifier]`, PascalCase, at least two segments. Area = view name without technical suffix (`SplashScreen`, `Geodata`, `Settings`…), plus `Common` (generic: Cancel, Close, Copy, Save, Browse, Error, Done, All files), `Nav` (tool names), `Main`, `Update`, `Format`, and `Splash`/`Brush`/`Tables` for `Processing/`/`TableManager` messages. Only `Common.*` and `Nav.*` are reused across areas. The last segment names the role: `…Button`, `…Label`, `…Title`, `…Hint`, `…Tip`, `…Watermark`, `…Status`, `…Error`, `…Log`, `…Picker` (file-dialog title), `…Filter` (`FilePickerFileType` name), `…Item`. Placeholders are named camelCase (`{count}`, `{fileName}`, `{folder}`), optional format (`{count:N0}`), literal braces `{{ }}`; never `{0}`. Add `<comment>` when a value is ambiguous or has placeholders.
+
+**API** (`using L2Toolkit.Localization;`) and which text follows a language switch:
+
+| Text | Use | Follows switch |
+| --- | --- | --- |
+| Static AXAML (`Text`, `Content`, `Header`, `Watermark`, `PlaceholderText`, `ToolTip.Tip`, `Title`, `ComboBoxItem`, `Run`) | `{DynamicResource Area.Key}` (keys without placeholders/plural) | Yes |
+| Fixed label on a control built in code | `[!TextBlock.TextProperty] = AppLanguage.Bind(LocKey.Area.Key)` | Yes |
+| State text that stays on screen (status, counter, composed title) | `LiveText.Set(control, () => Loc.Area.Key(args))` or `LiveText.Set(target, property, …)`; afterwards write only through `LiveText.Set`/`LiveText.Clear` (a direct assignment is overwritten on the next switch). UI thread only | Yes |
+| Transient text (log line, notification, MessageBox, exception message) | `Loc.Area.Key` / `Loc.Area.Key(args)` at emission | No, stays in the emission language |
+
+`Loc.*` is thread-safe and formats with `CultureInfo.InvariantCulture` (numbers stay invariant). Parameters follow first appearance in the pt-BR value. **Plural**: sibling keys `X.One` and `X.Other`, both with `{count}`; call `Loc.Area.X(count, …)` (`count == 1` → One; replaces `arquivo(s)`). **Dates**: `date.ToString(Loc.Format.DateTime)` (`dd/MM/yyyy HH:mm` / `yyyy-MM-dd HH:mm`). **ComboBox**: each item has a stable `Tag` id and a translated `Content`; logic reads `Tag` or `SelectedIndex`, never the displayed text. Values from game data (grades, preset names, Prime Shop categories) are not translated.
+
+**Literals that stay untranslated**: add the whole trimmed literal as one line of `NonTranslatable.txt`, under its `# ── Area ──` block and a `#` reason. Only product/tool names, glossary domain terms (`Skills`, `Weapons`…), formats/versions, numbers/sizes, language endonyms and game-data values qualify; labels, titles, tabs and column headers go to the catalog even when both languages read the same. A C# line ending in `// loc-ok` (on the literal's line or where the assignment/call starts) is skipped, only for text that never reaches the screen (default file extension, resource key, geometry).
+
+**Build diagnostics** (`ValidateLocalization` runs on every build with file/line/column; an error stops the build before C# compiles; a typo in `Loc.X.Y` is a normal compile error):
+
+| Code | Level | Condition |
+| --- | --- | --- |
+| L2LOC001 | error | Key in one catalog and missing in the other |
+| L2LOC002 | error | Placeholder sets differ between languages, or malformed placeholder/brace |
+| L2LOC003 | error | Invalid key format, duplicate key, leaf that is also a prefix, or name that breaks the generated C# |
+| L2LOC004 | error | Empty value |
+| L2LOC005 | error | AXAML `DynamicResource` to a missing dotted key, or to a key with placeholders/plural |
+| L2LOC006 | error | Incomplete plural (`.One` without `.Other` or vice versa) or without `{count}` |
+| L2LOC007 | error | AXAML literal with letters in `Text`, `Content`, `Header`, `Watermark`, `PlaceholderText`, `ToolTip.Tip`, `Title`, or element text, not in `NonTranslatable.txt` |
+| L2LOC008 | error | C# literal with letters in `Views/`, `Processing/`, `Utilities/` assigned to `Text`/`Title`/`Content`/`Watermark`/`PlaceholderText` or passed to `AddLog(`, `GetMessageBoxStandard(`, `new FilePickerFileType(`, `PickOpenAsync(`, `PickSaveAsync(`, `SendNotify(`, `ShowNotification(`, `throw new …Exception(`; not in `NonTranslatable.txt` and no `// loc-ok` |
+| L2LOC009 | warning | Key not used in AXAML (`DynamicResource`) nor C# (`Loc.`/`LocKey.`) |
+
+The scanners are heuristics: text that flows through variables or helpers is not seen, so zero diagnostics is necessary, not sufficient.
+
+**New feature checklist**:
+
+1. Pick area and key name by the convention above.
+2. Add the `<data>` to `Strings.resx` in Portuguese and the same key to `Strings.en.resx` in English (en uses sentence case; section titles stay uppercase in both; `…` marks an action that opens a dialog; labels and buttons have no final period, status and error sentences do).
+3. Use it: AXAML `{DynamicResource Area.Key}`; C# `Loc.Area.Key` / `Loc.Area.Key(args)`; state text `LiveText.Set`; code-built controls `AppLanguage.Bind(LocKey.Area.Key)`; ComboBox `Tag` id + translated `Content`.
+4. `make run`: L2LOC errors point at what is missing. With the screen open, switch Configurações → APLICATIVO → Idioma and check that nothing stays in the old language or gets clipped.
+
+**Adding a third language**: create `Strings.<tag>.resx` with every key (L2LOC001 lists the missing ones); add an `L2LocCatalog` item with `Language="<tag>"` in the csproj; add the `UiLanguage` value, its tag and plural rule in `AppLanguage`; add the endonym to the selector in `AppSettingsControl` and to `NonTranslatable.txt`.
+
 ## App updates
 
 `Utilities/AppUpdater` updates the app from GitHub Releases of `majestic-world/Toolkit` (`releases/latest`). A release counts as newer when its tag (`3.9`, `v3.9.1`; missing parts are 0) is above `APP_VERSION`, so publish each release with the tag equal to the `.env` version and the Inno Setup installer (`.exe`) as an asset.
 
 - `CheckAsync` is the only way to query: at most one request every 10 s (anti-flood, in memory), concurrent callers share the running request, and the throttled result carries the remaining wait.
-- Nothing downloads without consent. On open (`MainWindow`) and from Settings → Aplicativo → "Verificar atualizações", an available release opens `MainWindow.PromptUpdate`: a modal with current → new version, release name, publish date, installer size and the release notes (GitHub `body`), plus "Ver no GitHub", "Agora não" and "Atualizar agora". Declining just closes it; the next open asks again.
+- Nothing downloads without consent. On open (`MainWindow`) and from Configurações → APLICATIVO → "Verificar atualizações", an available release opens `MainWindow.PromptUpdate`: a modal with current → new version, release name, publish date, installer size and the release notes (GitHub `body`), plus "Ver no GitHub", "Agora não" and "Atualizar agora". Declining just closes it; the next open asks again.
 - `DownloadAsync` saves to `%TEMP%\L2Toolkit`, checks size and the asset's GitHub `digest` (SHA-256). `LaunchInstaller` opens the installer wizard (`/SP- /NORESTART /CLOSEAPPLICATIONS`, not silent) and the app shuts down right after; the wizard ends on the Finished page with the "Abrir L2 Toolkit" checkbox (`postinstall` entry in `Setup.iss`), same as a manual install. The next start deletes leftover installers.
 - After "Atualizar agora" the same modal switches to download progress and can cancel the download. Outside Windows there is no installer: confirming opens the release page.
 
@@ -135,7 +183,7 @@ For every file marked `isSafePackage="true"` in the structure XML, the serialize
 - "Trocar todos por imagem…" in that window applies one image (PNG/JPG/WEBP/BMP) to every listed BMP in memory only, at the image's own resolution (never resized: an 800 × 600 art saves 800 × 600 over a 640 × 480 file; the client does not require 640 × 480). Each tile shows the conversion the save will apply (its own format, `SplashConverter.RetailKeyColor`, no dithering), marked "Trocado · W × H · não salvo". "Descartar" restores the tiles; changing or reloading the folder drops pending swaps. "Salvar todos" writes each file in parallel with its original format and encryption, using the same `SplashFile.BackupOnce` + `SplashFile.Save` path as the page, then rereads the tiles and raises `FilesSaved`; the page reloads its open file when it was rewritten and has no unsaved edits.
 - "Compor com brush…" opens `Views/SplashComposeWindow`: it cuts an art (preloaded from the editor canvas when there is one) with a procedural brush mask, like a Photoshop clipping mask. `BrushGenerator.Cut` multiplies each pixel's alpha by `BrushGenerator.Mask`, which renders the same brush field as the exported brushes at the art's size; at scale 100% the brush spans the art's longer side, centered, and the position sliders shift it in fractions of width/height. "Enviar para o editor" raises `ResultSent`; the page treats it like "Substituir imagem" (keeps the cut's resolution) and switches to 32-bit, since the cut only survives with a real alpha channel. "Exportar PNG…" saves the cut with transparency.
 - "Ocupar a arte toda (−10 px)" switches the compose window to `BrushGenerator.MaskFilled(settings, w, h, inset: 5)`: the brush is measured at a small probe scale (so its tips never clip), then each axis is rescaled independently so the painted bounding box spans the art minus 5 px per side (640 × 480 → 630 × 470); a second pass corrects the antialias/blur drift (≈1 px). `Placement` therefore carries separate `HalfX`/`HalfY`; square brush exports keep them equal, so exported brushes are unchanged. Size/position sliders are dimmed and ignored in this mode.
-- "Contorno" in the compose window adds a solid stroke around the cut, like Photoshop's Stroke layer style: thickness 0–50 px (0 = off, default), color (default `#FFFFFF`) and position Fora/Dentro/Centro. `Processing/Splash/SplashStroke.Apply` runs after `BrushGenerator.Cut`, so the stroke is part of what goes to the editor and to the PNG. The edge is alpha ≥ 128; distances come from `DistanceField` (exact Euclidean distance transform, Felzenszwalb–Huttenlocher) with half a pixel of antialias. Outside is a layer under the cut (full under the silhouette, so the antialiased rim leaves no gap); inside recolors the cut without changing its alpha, and pixels below alpha 128 count as the rim; center is half of each. Cracks, holes and debris are edges too, so they get stroked as in Photoshop.
+- "CONTORNO" (section) in the compose window adds a solid stroke around the cut, like Photoshop's Stroke layer style: thickness 0–50 px (0 = off, default), color (default `#FFFFFF`) and position Fora/Dentro/Centro. `Processing/Splash/SplashStroke.Apply` runs after `BrushGenerator.Cut`, so the stroke is part of what goes to the editor and to the PNG. The edge is alpha ≥ 128; distances come from `DistanceField` (exact Euclidean distance transform, Felzenszwalb–Huttenlocher) with half a pixel of antialias. Outside is a layer under the cut (full under the silhouette, so the antialiased rim leaves no gap); inside recolors the cut without changing its alpha, and pixels below alpha 128 count as the rim; center is half of each. Cracks, holes and debris are edges too, so they get stroked as in Photoshop.
 - "Sombra projetada" (checkbox, off by default) adds a CSS box-shadow/drop-shadow style shadow under the cut and the stroke: color (default `#000000`), opacity (60%), horizontal/vertical offset (−50…50 px, default 6), blur (0–50 px, CSS semantics: σ = blur / 2, three box-blur passes) and spread (0–30 px, the alpha ≥ 128 silhouette grown with `DistanceField` before the blur). `SplashShadow.Apply` runs last; the canvas keeps its size, so shadow past the edge is clipped. Stroke and shadow share one `HsvColorPicker` popup; `_pickColor` routes the picked color to whichever button opened it. Both layers go under the image through `Compositing.PaintUnder`.
 
 ## Gallery windows
