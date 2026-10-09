@@ -7,6 +7,7 @@ using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
+using L2Toolkit.Localization;
 using L2Toolkit.Processing.Brush;
 using L2Toolkit.Processing.Splash;
 using L2Toolkit.Utilities;
@@ -23,7 +24,8 @@ public partial class SplashComposeWindow : Window
 {
     private readonly DispatcherTimer _debounce = new() { Interval = TimeSpan.FromMilliseconds(120) };
     private RgbaImage? _art;
-    private string _artName = "";
+    /// <summary>Nome do arquivo da arte; <c>null</c> quando ela veio do editor sem arquivo.</summary>
+    private string? _artName;
     private RgbaImage? _result;
     private int _seed;
     private int _strokeColor = 0xFFFFFF;
@@ -72,17 +74,18 @@ public partial class SplashComposeWindow : Window
         {
             if (e.Key == Key.Enter) ApplySeedText();
         };
+        LiveText.Set(ArtText, () => Loc.SplashCompose.NoArtLabel);
         ShowColor(StrokeColorSwatch, StrokeColorText, _strokeColor);
         ShowColor(ShadowColorSwatch, ShadowColorText, _shadowColor);
         SetSeed(Random.Shared.Next(1, 1_000_000));
     }
 
-    /// <summary>Usa como arte a imagem que já está no editor.</summary>
-    public void SetArt(RgbaImage art, string name)
+    /// <summary>Usa como arte a imagem que já está no editor; <paramref name="name"/> é o nome do arquivo, se houver.</summary>
+    public void SetArt(RgbaImage art, string? name)
     {
         _art = art;
         _artName = name;
-        ArtText.Text = $"{name} · {art.Width} × {art.Height} px";
+        LiveText.Set(ArtText, () => $"{name ?? Loc.SplashCompose.EditorImageLabel} · {art.Width} × {art.Height} px");
         Refresh();
     }
 
@@ -101,9 +104,9 @@ public partial class SplashComposeWindow : Window
     {
         var files = await StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
-            Title = "Arte da splash",
+            Title = Loc.SplashCompose.ArtPicker,
             AllowMultiple = false,
-            FileTypeFilter = [new FilePickerFileType("Imagens") { Patterns = ["*.png", "*.jpg", "*.jpeg", "*.webp", "*.bmp"] }],
+            FileTypeFilter = [new FilePickerFileType(Loc.SplashCompose.ImagesFilter) { Patterns = ["*.png", "*.jpg", "*.jpeg", "*.webp", "*.bmp"] }],
         });
         if (files.Count == 0) return;
 
@@ -114,7 +117,7 @@ public partial class SplashComposeWindow : Window
         }
         catch (Exception ex)
         {
-            StatusText.Text = ex.Message;
+            SetStatus(() => ex.Message);
         }
     }
 
@@ -214,15 +217,19 @@ public partial class SplashComposeWindow : Window
             var previous = PreviewImage.Source as IDisposable;
             PreviewImage.Source = RgbaBitmap.ToBitmap(result);
             previous?.Dispose();
-            var status = $"Brush {settings.Seed} · {art.Width} × {art.Height} px";
-            if (strokeWidth > 0) status += $" · contorno {strokeWidth} px";
-            if (shadow != null) status += " · sombra";
-            StatusText.Text = status;
+            var hasShadow = shadow != null;
+            SetStatus(() =>
+            {
+                var status = $"Brush {settings.Seed} · {art.Width} × {art.Height} px";
+                if (strokeWidth > 0) status += " · " + Loc.SplashCompose.StrokeStatus(strokeWidth);
+                if (hasShadow) status += " · " + Loc.SplashCompose.ShadowStatus;
+                return status;
+            });
             UpdateControls();
         }
         catch (Exception ex)
         {
-            if (version == _version) StatusText.Text = ex.Message;
+            if (version == _version) SetStatus(() => ex.Message);
         }
     }
 
@@ -232,7 +239,8 @@ public partial class SplashComposeWindow : Window
     {
         if (_result == null) return;
         ResultSent?.Invoke(_result);
-        StatusText.Text = $"Brush {_seed} enviado para o editor · salve lá no formato da splash.";
+        var seed = _seed;
+        SetStatus(() => Loc.SplashCompose.SentStatus(seed));
     }
 
     private async void Export_Click(object? sender, RoutedEventArgs e)
@@ -240,8 +248,9 @@ public partial class SplashComposeWindow : Window
         if (_result is not { } result) return;
         var file = await StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
         {
-            Title = "Exportar splash recortada",
-            SuggestedFileName = $"{Path.GetFileNameWithoutExtension(_artName)}_brush{_seed}.png",
+            Title = Loc.SplashCompose.ExportPicker,
+            // Nome de arquivo sugerido: fixo, não segue o idioma da interface.
+            SuggestedFileName = $"{Path.GetFileNameWithoutExtension(_artName ?? "imagem do editor")}_brush{_seed}.png",
             DefaultExtension = "png",
             FileTypeChoices = [new FilePickerFileType("PNG") { Patterns = ["*.png"] }],
         });
@@ -251,13 +260,17 @@ public partial class SplashComposeWindow : Window
         try
         {
             await Task.Run(() => SplashFile.ExportPng(path, result));
-            StatusText.Text = $"{Path.GetFileName(path)} exportado com transparência.";
+            var fileName = Path.GetFileName(path);
+            SetStatus(() => Loc.SplashCompose.ExportedStatus(fileName));
         }
         catch (Exception ex)
         {
-            StatusText.Text = ex.Message;
+            SetStatus(() => ex.Message);
         }
     }
+
+    /// <summary>Todo texto do status passa por aqui, para acompanhar a troca de idioma.</summary>
+    private void SetStatus(Func<string> text) => LiveText.Set(StatusText, text);
 
     private void UpdateControls()
     {

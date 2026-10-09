@@ -13,6 +13,7 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.Styling;
+using L2Toolkit.Localization;
 using L2Toolkit.Processing.Splash;
 using L2Toolkit.Settings;
 using L2Toolkit.Utilities;
@@ -48,6 +49,7 @@ public partial class SplashLibraryWindow : Window
     public SplashLibraryWindow()
     {
         InitializeComponent();
+        SetStatus(() => Loc.SplashLibrary.ChooseFolderStatus);
         UpdateControls();
     }
 
@@ -71,7 +73,7 @@ public partial class SplashLibraryWindow : Window
         var version = ++_loadVersion;
         _busy = true;
         UpdateControls();
-        StatusText.Text = "Carregando…";
+        SetStatus(() => Loc.SplashLibrary.LoadingStatus);
         TilesPanel.Children.Clear();
         _tiles.Clear();
         _entries.Clear();
@@ -85,13 +87,12 @@ public partial class SplashLibraryWindow : Window
                 _entries[entry.FilePath] = entry;
                 AddTile(entry, entry.Thumbnail, pending: false);
             }
-            StatusText.Text = entries.Length == 0
-                ? "Nenhum BMP legível nesta pasta."
-                : $"{entries.Length} bitmaps · clique para abrir no editor";
+            var count = entries.Length;
+            SetStatus(() => count == 0 ? Loc.SplashLibrary.EmptyFolderStatus : Loc.SplashLibrary.ListedStatus(count));
         }
         catch (Exception ex)
         {
-            if (version == _loadVersion) StatusText.Text = ex.Message;
+            if (version == _loadVersion) SetStatus(() => ex.Message);
         }
         finally
         {
@@ -133,9 +134,9 @@ public partial class SplashLibraryWindow : Window
     {
         var files = await StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
-            Title = "Imagem para todos os BMP",
+            Title = Loc.SplashLibrary.ReplaceAllPicker,
             AllowMultiple = false,
-            FileTypeFilter = [new FilePickerFileType("Imagens") { Patterns = ["*.png", "*.jpg", "*.jpeg", "*.webp", "*.bmp"] }],
+            FileTypeFilter = [new FilePickerFileType(Loc.SplashLibrary.ImagesFilter) { Patterns = ["*.png", "*.jpg", "*.jpeg", "*.webp", "*.bmp"] }],
         });
         if (files.Count == 0) return;
 
@@ -143,7 +144,8 @@ public partial class SplashLibraryWindow : Window
         var entries = _entries.Values.ToArray();
         await RunAsync(async () =>
         {
-            StatusText.Text = $"Aplicando {Path.GetFileName(source)} em {entries.Length} arquivos…";
+            var sourceName = Path.GetFileName(source);
+            SetStatus(() => Loc.SplashLibrary.ApplyingStatus(entries.Length, sourceName));
             // Todos recebem a arte na resolução dela, sem redimensionar. A miniatura mostra a
             // conversão que a gravação vai aplicar (256 cores, cor-chave): uma por formato.
             var (image, thumbnails) = await Task.Run(() =>
@@ -160,7 +162,7 @@ public partial class SplashLibraryWindow : Window
                 _pending[entry.FilePath] = image;
                 ShowTile(entry, thumbnails[entry.Format], pending: true);
             }
-            StatusText.Text = $"{entries.Length} arquivos trocados em memória ({image.Width} × {image.Height}) · nada foi gravado ainda · use Salvar todos";
+            SetStatus(() => Loc.SplashLibrary.SwappedStatus(entries.Length, image.Width, image.Height));
         });
     }
 
@@ -169,7 +171,7 @@ public partial class SplashLibraryWindow : Window
         foreach (var path in _pending.Keys.ToArray())
             ShowTile(_entries[path], _entries[path].Thumbnail, pending: false);
         _pending.Clear();
-        StatusText.Text = "Trocas descartadas.";
+        SetStatus(() => Loc.SplashLibrary.DiscardedStatus);
         UpdateControls();
     }
 
@@ -180,7 +182,7 @@ public partial class SplashLibraryWindow : Window
 
         await RunAsync(async () =>
         {
-            StatusText.Text = $"Gravando {jobs.Length} arquivos…";
+            SetStatus(() => Loc.SplashLibrary.SavingStatus(jobs.Length));
             var saved = new ConcurrentBag<string>();
             var backups = new ConcurrentBag<string>();
             var errors = new ConcurrentBag<string>();
@@ -206,10 +208,14 @@ public partial class SplashLibraryWindow : Window
                 await RefreshFileAsync(path);
             FilesSaved?.Invoke(saved.ToArray());
 
-            var message = $"{saved.Count} arquivos salvos";
-            if (backups.Count > 0) message += $" · originais preservados em .bak ({backups.Count})";
-            if (!errors.IsEmpty) message += $" · {errors.Count} falharam: {string.Join("; ", errors)}";
-            StatusText.Text = message;
+            var (savedCount, backupCount, failures) = (saved.Count, backups.Count, errors.ToArray());
+            SetStatus(() =>
+            {
+                var message = Loc.SplashLibrary.SavedStatus(savedCount);
+                if (backupCount > 0) message += " · " + Loc.SplashLibrary.BackupsStatus(backupCount);
+                if (failures.Length > 0) message += " · " + Loc.SplashLibrary.FailedStatus(failures.Length, string.Join("; ", failures));
+                return message;
+            });
         });
     }
 
@@ -262,21 +268,37 @@ public partial class SplashLibraryWindow : Window
             TextTrimming = TextTrimming.CharacterEllipsis,
             [!TextElement.ForegroundProperty] = AppTheme.Brush("ThemeTextBody"),
         });
-        content.Children.Add(new TextBlock
+        var caption = new TextBlock
         {
-            Text = pending
-                ? $"Trocado · {_pending[entry.FilePath].Width} × {_pending[entry.FilePath].Height} · não salvo"
-                : $"{entry.Width} × {entry.Height} · {entry.BitsPerPixel} bits · {Describe(entry.Encryption)}",
             FontSize = 11,
             [!TextElement.ForegroundProperty] = AppTheme.Brush(pending ? "ThemeWarning" : "ThemeTextHint"),
-        });
+        };
+        if (pending)
+        {
+            var swapped = _pending[entry.FilePath];
+            LiveText.Set(caption, () => Loc.SplashLibrary.SwappedTileLabel(swapped.Width, swapped.Height));
+        }
+        else
+        {
+            LiveText.Set(caption, () => Loc.SplashLibrary.TileLabel(entry.Width, entry.Height, entry.BitsPerPixel, Describe(entry.Encryption)));
+        }
+        content.Children.Add(caption);
 
         var tile = new Button
         {
             Content = content,
             Theme = (ControlTheme)this.FindResource("TileButton")!,
         };
-        ToolTip.SetTip(tile, pending ? $"{entry.FilePath}\nO editor abre o arquivo do disco, sem a troca." : entry.FilePath);
+        if (pending)
+        {
+            var tip = new TextBlock();
+            LiveText.Set(tip, () => $"{entry.FilePath}\n{Loc.SplashLibrary.PendingTileTip}");
+            ToolTip.SetTip(tile, tip);
+        }
+        else
+        {
+            ToolTip.SetTip(tile, entry.FilePath);
+        }
         tile.Click += (_, _) => FileChosen?.Invoke(entry.FilePath);
 
         if (index < 0) TilesPanel.Children.Add(tile);
@@ -290,7 +312,7 @@ public partial class SplashLibraryWindow : Window
     {
         SplashEncryption.Ver121 => "Ver121",
         SplashEncryption.Ver111 => "Ver111",
-        SplashEncryption.None => "sem criptografia",
+        SplashEncryption.None => Loc.SplashLibrary.NoEncryptionLabel,
         _ => throw new ArgumentOutOfRangeException(nameof(encryption), encryption, null),
     };
 
@@ -314,7 +336,7 @@ public partial class SplashLibraryWindow : Window
         var start = _folder != null ? await StorageProvider.TryGetFolderFromPathAsync(_folder) : null;
         var folders = await StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
         {
-            Title = "Pasta do client (SysTextures)",
+            Title = Loc.SplashLibrary.FolderPicker,
             AllowMultiple = false,
             SuggestedStartLocation = start,
         });
@@ -332,7 +354,7 @@ public partial class SplashLibraryWindow : Window
         }
         catch (Exception ex)
         {
-            StatusText.Text = ex.Message;
+            SetStatus(() => ex.Message);
         }
         finally
         {
@@ -340,6 +362,9 @@ public partial class SplashLibraryWindow : Window
             UpdateControls();
         }
     }
+
+    /// <summary>Todo texto do status passa por aqui, para acompanhar a troca de idioma.</summary>
+    private void SetStatus(Func<string> text) => LiveText.Set(StatusText, text);
 
     private void UpdateControls()
     {

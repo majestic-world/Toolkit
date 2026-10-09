@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using L2Toolkit.Localization;
 
 namespace L2Toolkit.Processing.Splash;
 
@@ -34,8 +35,7 @@ public static class SplashEnvelope
         {
             "111" => SplashEncryption.Ver111,
             "121" => SplashEncryption.Ver121,
-            var other => throw new NotSupportedException(
-                $"A criptografia Lineage2Ver{other} não é suportada para splash screens (use 111 ou 121)."),
+            var other => throw new NotSupportedException(Loc.Splash.UnsupportedEncryptionError(other)),
         };
 
         var key = KeyFor(encryption, fileName);

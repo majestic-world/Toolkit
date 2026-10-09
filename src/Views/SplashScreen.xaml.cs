@@ -10,6 +10,7 @@ using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
+using L2Toolkit.Localization;
 using L2Toolkit.Processing.Splash;
 using L2Toolkit.Settings;
 using L2Toolkit.Utilities;
@@ -83,8 +84,8 @@ public partial class SplashScreen : UserControl
 
     private async Task PickAndLoadAsync()
     {
-        var path = await PickOpenAsync("Abrir splash screen",
-            new FilePickerFileType("Splash screen (BMP)") { Patterns = ["*.bmp"] });
+        var path = await PickOpenAsync(Loc.SplashScreen.OpenPicker,
+            new FilePickerFileType(Loc.SplashScreen.BmpFilter) { Patterns = ["*.bmp"] });
         if (path != null)
             await LoadAsync(path);
     }
@@ -121,8 +122,8 @@ public partial class SplashScreen : UserControl
     private async Task SaveAsAsync()
     {
         var suggested = _document?.FileName ?? (SelectedFormat == SplashFormat.Indexed8 ? "sp_256_01.bmp" : "sp_32b_01.bmp");
-        var path = await PickSaveAsync("Salvar splash screen", suggested, "bmp",
-            new FilePickerFileType("Splash screen (BMP)") { Patterns = ["*.bmp"] });
+        var path = await PickSaveAsync(Loc.SplashScreen.SavePicker, suggested, "bmp", // loc-ok
+            new FilePickerFileType(Loc.SplashScreen.BmpFilter) { Patterns = ["*.bmp"] });
         if (path != null)
             await SaveAsync(path);
     }
@@ -143,8 +144,8 @@ public partial class SplashScreen : UserControl
             Adopt(saved);
             if (_library != null)
                 await _library.RefreshFileAsync(path);
-            ShowSuccess($"{saved.FileName} salva — {Describe(saved)}."
-                        + (backup != null ? $" Original preservado em {Path.GetFileName(backup)}." : ""));
+            ShowSuccess(Loc.SplashScreen.SavedStatus(saved.FileName, Describe(saved))
+                        + (backup != null ? " " + Loc.SplashScreen.BackupStatus(Path.GetFileName(backup)) : ""));
         });
     }
 
@@ -152,14 +153,14 @@ public partial class SplashScreen : UserControl
     {
         if (_canvas is not { } canvas) return;
         var suggested = Path.ChangeExtension(_document?.FileName ?? "splash.bmp", ".png");
-        var path = await PickSaveAsync("Exportar PNG", suggested, "png",
+        var path = await PickSaveAsync(Loc.SplashScreen.ExportPicker, suggested, "png", // loc-ok
             new FilePickerFileType("PNG") { Patterns = ["*.png"] });
         if (path == null) return;
 
         await RunAsync(async () =>
         {
             await Task.Run(() => SplashFile.ExportPng(path, canvas));
-            ShowSuccess($"{Path.GetFileName(path)} exportado com o canal alpha.");
+            ShowSuccess(Loc.SplashScreen.ExportedStatus(Path.GetFileName(path)));
         });
     }
 
@@ -205,8 +206,8 @@ public partial class SplashScreen : UserControl
 
     private async void Replace_Click(object? sender, RoutedEventArgs e)
     {
-        var path = await PickOpenAsync("Substituir imagem",
-            new FilePickerFileType("Imagens") { Patterns = ["*.png", "*.jpg", "*.jpeg", "*.webp", "*.bmp"] });
+        var path = await PickOpenAsync(Loc.SplashScreen.ReplacePicker,
+            new FilePickerFileType(Loc.SplashScreen.ImagesFilter) { Patterns = ["*.png", "*.jpg", "*.jpeg", "*.webp", "*.bmp"] });
         if (path == null) return;
 
         await RunAsync(async () =>
@@ -240,7 +241,7 @@ public partial class SplashScreen : UserControl
             main.Closed += (_, _) => compose.Close();
         _compose = compose;
         if (_canvas != null)
-            compose.SetArt(_canvas, _document?.FileName ?? "imagem do editor");
+            compose.SetArt(_canvas, _document?.FileName);
         compose.Show();
     }
 
@@ -252,7 +253,7 @@ public partial class SplashScreen : UserControl
         // O recorte só existe com alpha real; em 256 cores ele vira a cor-chave.
         FormatCombo.SelectedIndex = Array.IndexOf(Formats, SplashFormat.Bgra32);
         RefreshPreview();
-        ShowSuccess("Recorte recebido do Compor com brush · salve para gravar a splash.");
+        ShowSuccess(Loc.SplashScreen.ComposedStatus);
     }
 
     private void KeyOut_Click(object? sender, RoutedEventArgs e)
@@ -261,7 +262,7 @@ public partial class SplashScreen : UserControl
         var (image, removed) = SplashConverter.KeyOut(_canvas, _keyColor, Tolerance);
         if (removed == 0)
         {
-            ShowError("Nenhum pixel está perto da cor-chave. Ajuste a cor ou aumente a tolerância.");
+            ShowError(Loc.SplashScreen.NoKeyColorPixelsError);
             return;
         }
         _canvas = image;
@@ -270,7 +271,7 @@ public partial class SplashScreen : UserControl
         // voltaria a ser a própria cor-chave.
         FormatCombo.SelectedIndex = Array.IndexOf(Formats, SplashFormat.Bgra32);
         RefreshPreview();
-        ShowSuccess($"{removed:N0} pixels recortados.");
+        ShowSuccess(Loc.SplashScreen.KeyedOutStatus(removed));
     }
 
     private void KeyColor_Click(object? sender, RoutedEventArgs e)
@@ -336,26 +337,34 @@ public partial class SplashScreen : UserControl
             control.IsEnabled = hasCanvas && !_busy;
         OpenButton.IsEnabled = ReplaceButton.IsEnabled = ComposeButton.IsEnabled = !_busy;
 
-        var details = new List<string>();
-        if (hasCanvas)
+        LiveText.Set(InfoText, Details);
+    }
+
+    /// <summary>Rodapé: lido do estado atual, então acompanha a troca de idioma.</summary>
+    private string Details()
+    {
+        if (_canvas is not { } canvas) return "";
+        var details = new List<string>
         {
-            details.Add(_document?.FileName ?? "nova imagem");
-            details.Add($"{_canvas!.Width} × {_canvas.Height} px");
-            if (_document != null) details.Add($"no disco: {Describe(_document)}");
-            if (SelectedFormat == SplashFormat.Indexed8 && _previewColors > 0) details.Add($"prévia com {_previewColors} cores");
-            if (_modified) details.Add("não salva");
-        }
-        InfoText.Text = string.Join("  ·  ", details);
+            _document?.FileName ?? Loc.SplashScreen.NewImageLabel,
+            $"{canvas.Width} × {canvas.Height} px",
+        };
+        if (_document != null) details.Add(Loc.SplashScreen.OnDiskLabel(Describe(_document)));
+        if (SelectedFormat == SplashFormat.Indexed8 && _previewColors > 0) details.Add(Loc.SplashScreen.PreviewColorsLabel(_previewColors));
+        if (_modified) details.Add(Loc.SplashScreen.UnsavedLabel);
+        return string.Join("  ·  ", details);
     }
 
     private static string Describe(SplashDocument document)
     {
-        var format = document.BitsPerPixel <= 8 ? $"{document.BitsPerPixel} bits (paleta)" : $"{document.BitsPerPixel} bits";
+        var format = document.BitsPerPixel <= 8
+            ? Loc.SplashScreen.PaletteBitsLabel(document.BitsPerPixel)
+            : Loc.SplashScreen.BitsLabel(document.BitsPerPixel);
         var encryption = document.Encryption switch
         {
             SplashEncryption.Ver121 => "Lineage2Ver121",
             SplashEncryption.Ver111 => "Lineage2Ver111",
-            SplashEncryption.None => "sem criptografia",
+            SplashEncryption.None => Loc.SplashScreen.NoEncryptionLabel,
             _ => throw new ArgumentOutOfRangeException(nameof(document), document.Encryption, null),
         };
         return $"{format}, {encryption}, {document.FileSize / 1024.0:N0} KB";
@@ -421,7 +430,7 @@ public partial class SplashScreen : UserControl
     private void ShowError(string message)
     {
         SuccessBanner.IsVisible = false;
-        ErrorText.Text = string.IsNullOrWhiteSpace(message) ? "Ocorreu um erro inesperado." : message;
+        ErrorText.Text = string.IsNullOrWhiteSpace(message) ? Loc.SplashScreen.UnexpectedError : message;
         ErrorBanner.IsVisible = true;
         _bannerTimer.Stop();
         _bannerTimer.Start();

@@ -51,10 +51,16 @@ L2 Toolkit (Fafurion) By Mk
 # ── Splash ──
 
 # ── SplashCompose ──
+BRUSH
+PNG
 
 # ── SplashLibrary ──
 
 # ── SplashScreen ──
+Lineage2Ver111
+Lineage2Ver121
+PNG
+Splash Screen
 
 # ── SystemMsgColor ──
 
