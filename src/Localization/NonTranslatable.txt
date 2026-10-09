@@ -50,7 +50,9 @@ PNG
 # ── SearchIcon ──
 
 # ── Settings ──
+Build
 English
+L2DAT BUILD
 Português (Brasil)
 
 # ── SkinBuilder ──

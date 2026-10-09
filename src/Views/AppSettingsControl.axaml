@@ -105,11 +105,11 @@
 
             <!-- Cabeçalho -->
             <StackPanel Spacing="3">
-                <TextBlock Text="Configurações"
+                <TextBlock Text="{DynamicResource Settings.Title}"
                            FontSize="22"
                            FontWeight="SemiBold"
                            Foreground="{DynamicResource ThemeTextTitle}"/>
-                <TextBlock Text="Configure os caminhos e preferências do aplicativo"
+                <TextBlock Text="{DynamicResource Settings.Subtitle}"
                            FontSize="13"
                            Foreground="{DynamicResource ThemeTextTitle}"/>
             </StackPanel>
@@ -120,16 +120,16 @@
                     <Grid ColumnDefinitions="4,*">
                         <Border Grid.Column="0" Background="{DynamicResource ThemeAccent}"/>
                         <StackPanel Grid.Column="1" Margin="20,14,20,18" Spacing="12">
-                            <TextBlock Text="APLICATIVO" Classes="CardTitle"/>
+                            <TextBlock Text="{DynamicResource Settings.ApplicationTitle}" Classes="CardTitle"/>
                             <Border Classes="Divider"/>
                             <Grid ColumnDefinitions="Auto,12,*">
-                                <TextBlock Text="Tema" Classes="Label"/>
+                                <TextBlock Text="{DynamicResource Settings.ThemeLabel}" Classes="Label"/>
                                 <ComboBox x:Name="ThemeComboBox"
                                           Grid.Column="2"
                                           HorizontalAlignment="Stretch"
                                           SelectionChanged="ThemeComboBox_OnSelectionChanged">
-                                    <ComboBoxItem Content="Escuro (padrão)"/>
-                                    <ComboBoxItem Content="Claro"/>
+                                    <ComboBoxItem Content="{DynamicResource Settings.ThemeDarkItem}"/>
+                                    <ComboBoxItem Content="{DynamicResource Settings.ThemeLightItem}"/>
                                 </ComboBox>
                             </Grid>
                             <Grid ColumnDefinitions="Auto,12,*">
@@ -143,7 +143,7 @@
                                 </ComboBox>
                             </Grid>
                             <Grid ColumnDefinitions="Auto,12,*,8,Auto">
-                                <TextBlock Text="Versão" Classes="Label"/>
+                                <TextBlock Text="{DynamicResource Settings.VersionLabel}" Classes="Label"/>
                                 <TextBlock x:Name="AppVersionText"
                                            Grid.Column="2"
                                            FontSize="12"
@@ -155,10 +155,10 @@
                                         Height="32"
                                         Padding="12,0"
                                         Theme="{StaticResource GhostButton}"
-                                        ToolTip.Tip="Procura uma versão nova no GitHub e pergunta antes de baixar">
+                                        ToolTip.Tip="{DynamicResource Settings.UpdateCheckTip}">
                                     <StackPanel Orientation="Horizontal" Spacing="7">
                                         <PathIcon Data="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z" Width="13" Height="13" Foreground="{DynamicResource ThemeTextLabel}" VerticalAlignment="Center"/>
-                                        <TextBlock Text="Verificar atualizações" FontSize="12" FontWeight="Medium" VerticalAlignment="Center"/>
+                                        <TextBlock Text="{DynamicResource Settings.UpdateCheckButton}" FontSize="12" FontWeight="Medium" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Button>
                             </Grid>
@@ -171,11 +171,9 @@
                     <Grid ColumnDefinitions="4,*">
                         <Border Grid.Column="0" Background="{DynamicResource ThemeAccent}"/>
                         <StackPanel Grid.Column="1" Margin="20,14,20,18" Spacing="12">
-                            <TextBlock Text="ARQUIVO DE CONFIGURAÇÃO" Classes="CardTitle"/>
+                            <TextBlock Text="{DynamicResource Settings.ConfigFileTitle}" Classes="CardTitle"/>
                             <Border Classes="Divider"/>
-                            <TextBlock Classes="Desc">
-                                As configurações do aplicativo são salvas em um arquivo local no AppData. Localização do arquivo:
-                            </TextBlock>
+                            <TextBlock Classes="Desc" Text="{DynamicResource Settings.ConfigFileHint}"/>
                             <Grid ColumnDefinitions="*,10,Auto,8,Auto">
                                 <TextBlock x:Name="ConfigPathText"
                                            Background="Transparent"
@@ -189,10 +187,10 @@
                                         Height="36"
                                         Padding="12,0"
                                         Theme="{StaticResource GhostButton}"
-                                        ToolTip.Tip="Abrir pasta de configuração">
+                                        ToolTip.Tip="{DynamicResource Settings.ConfigFolderTip}">
                                     <StackPanel Orientation="Horizontal" Spacing="7">
                                         <PathIcon Data="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" Width="13" Height="13" Foreground="{DynamicResource ThemeTextLabel}" VerticalAlignment="Center"/>
-                                        <TextBlock Text="Pasta de configuração" FontSize="12" FontWeight="Medium" VerticalAlignment="Center"/>
+                                        <TextBlock Text="{DynamicResource Settings.ConfigFolderButton}" FontSize="12" FontWeight="Medium" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Button>
                                 <Button x:Name="OpenAppFolderBtn"
@@ -200,10 +198,10 @@
                                         Height="36"
                                         Padding="12,0"
                                         Theme="{StaticResource GhostButton}"
-                                        ToolTip.Tip="Abrir pasta do aplicativo">
+                                        ToolTip.Tip="{DynamicResource Settings.AppFolderTip}">
                                     <StackPanel Orientation="Horizontal" Spacing="7">
                                         <PathIcon Data="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z" Foreground="{DynamicResource ThemeTextLabel}" Width="13" Height="13" VerticalAlignment="Center"/>
-                                        <TextBlock Text="Pasta do aplicativo" FontSize="12" FontWeight="Medium" VerticalAlignment="Center"/>
+                                        <TextBlock Text="{DynamicResource Settings.AppFolderButton}" FontSize="12" FontWeight="Medium" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Button>
                             </Grid>
@@ -217,11 +215,9 @@
                 <Grid ColumnDefinitions="4,*">
                     <Border Grid.Column="0" Background="{DynamicResource ThemeAccent}"/>
                     <StackPanel Grid.Column="1" Margin="20,14,20,18" Spacing="12">
-                        <TextBlock Text="PASTA DE ASSETS" Classes="CardTitle"/>
+                        <TextBlock Text="{DynamicResource Settings.AssetsTitle}" Classes="CardTitle"/>
                         <Border Classes="Divider"/>
-                        <TextBlock Classes="Desc">
-                            Alguns módulos dependem de arquivos de dados do cliente Lineage 2 (ex: ItemName, Armorgrp, Weapongrp). Selecione a pasta onde esses arquivos estão localizados.
-                        </TextBlock>
+                        <TextBlock Classes="Desc" Text="{DynamicResource Settings.AssetsHint}"/>
                         <Grid ColumnDefinitions="*,10,Auto,8,Auto">
                             <TextBox x:Name="AssetsDirBox"
                                      Grid.Column="0"
@@ -232,8 +228,8 @@
                                      Padding="10,0"
                                      FontFamily="Consolas,Courier New,monospace"
                                      FontSize="12"
-                                     ToolTip.Tip="Localização da pasta de assets"
-                                     Watermark="Nenhuma pasta selecionada..."/>
+                                     ToolTip.Tip="{DynamicResource Settings.AssetsPathTip}"
+                                     Watermark="{DynamicResource Settings.NoFolderWatermark}"/>
                             <Button x:Name="SelectAssetsBtn"
                                     Grid.Column="2"
                                     Height="36"
@@ -241,7 +237,7 @@
                                     Theme="{StaticResource GhostButton}">
                                 <StackPanel Orientation="Horizontal" Spacing="7">
                                     <PathIcon Data="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" Foreground="{DynamicResource ThemeTextLabel}" Width="13" Height="13" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Selecionar" FontSize="12" FontWeight="Medium" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{DynamicResource Common.Browse}" FontSize="12" FontWeight="Medium" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
                             <Button x:Name="ClearAssetsBtn"
@@ -251,26 +247,26 @@
                                     Theme="{StaticResource GhostButton}">
                                 <StackPanel Orientation="Horizontal" Spacing="7">
                                     <PathIcon Data="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" Width="12" Height="12" VerticalAlignment="Center" Foreground="{DynamicResource ThemeTextLabel}"/>
-                                    <TextBlock Text="Limpar" FontSize="12" FontWeight="Medium" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{DynamicResource Settings.ClearButton}" FontSize="12" FontWeight="Medium" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
                         </Grid>
 
                         <!-- Módulos e arquivos necessários, uma linha cada -->
                         <Grid ColumnDefinitions="Auto,12,*" RowDefinitions="Auto,10,Auto">
-                            <TextBlock Grid.Row="0" Text="Módulos que utilizam esta pasta:" Classes="Label"/>
+                            <TextBlock Grid.Row="0" Text="{DynamicResource Settings.AssetsModulesLabel}" Classes="Label"/>
                             <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal" Spacing="6">
                                 <Border Classes="Chip">
-                                    <TextBlock Text="Prime Shop" FontSize="12" Foreground="{DynamicResource ThemeTextButton}"/>
+                                    <TextBlock Text="{DynamicResource Nav.PrimeShop}" FontSize="12" Foreground="{DynamicResource ThemeTextButton}"/>
                                 </Border>
                                 <Border Classes="Chip">
-                                    <TextBlock Text="Pesquisar Ícone" FontSize="12" Foreground="{DynamicResource ThemeTextButton}"/>
+                                    <TextBlock Text="{DynamicResource Nav.SearchIcon}" FontSize="12" Foreground="{DynamicResource ThemeTextButton}"/>
                                 </Border>
                                 <Border Classes="Chip">
-                                    <TextBlock Text="Criar MultiSell" FontSize="12" Foreground="{DynamicResource ThemeTextButton}"/>
+                                    <TextBlock Text="{DynamicResource Nav.CreateMultisell}" FontSize="12" Foreground="{DynamicResource ThemeTextButton}"/>
                                 </Border>
                             </StackPanel>
-                            <TextBlock Grid.Row="2" Text="Arquivos necessários na pasta:" Classes="Label"/>
+                            <TextBlock Grid.Row="2" Text="{DynamicResource Settings.AssetsRequiredFilesLabel}" Classes="Label"/>
                             <WrapPanel x:Name="FilesStatusPanel" Grid.Row="2" Grid.Column="2" Orientation="Horizontal"/>
                         </Grid>
                     </StackPanel>
@@ -287,13 +283,11 @@
                             <TextBlock Text="L2DAT BUILD" Classes="CardTitle"/>
                         </StackPanel>
                         <Border Classes="Divider"/>
-                        <TextBlock Classes="Desc">
-                            Compila arquivos .txt da pasta de origem em .l2dat na pasta de saída. Somente arquivos na raiz da pasta são processados.
-                        </TextBlock>
+                        <TextBlock Classes="Desc" Text="{DynamicResource Settings.BuildHint}"/>
 
                         <!-- Pastas: rótulo à esquerda, campo e ações na mesma linha -->
                         <Grid ColumnDefinitions="Auto,12,*,8,Auto,8,Auto" RowDefinitions="Auto,10,Auto">
-                            <TextBlock Grid.Row="0" Text="Pasta de origem (.txt)" Classes="Label"/>
+                            <TextBlock Grid.Row="0" Text="{DynamicResource Settings.BuildSourceLabel}" Classes="Label"/>
                             <TextBox x:Name="BuildSourceBox"
                                      Grid.Row="0" Grid.Column="2"
                                      Classes="FormField"
@@ -305,7 +299,7 @@
                                      Padding="10,0"
                                      FontFamily="Consolas,Courier New,monospace"
                                      FontSize="12"
-                                     Watermark="Nenhuma pasta selecionada..."/>
+                                     Watermark="{DynamicResource Settings.NoFolderWatermark}"/>
                             <Button x:Name="BuildSelectSourceBtn"
                                     Grid.Row="0" Grid.Column="4"
                                     Height="36"
@@ -313,7 +307,7 @@
                                     Theme="{StaticResource GhostButton}">
                                 <StackPanel Orientation="Horizontal" Spacing="7">
                                     <PathIcon Data="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" Foreground="{DynamicResource ThemeTextLabel}" Width="13" Height="13" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Selecionar" FontSize="12" FontWeight="Medium" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{DynamicResource Common.Browse}" FontSize="12" FontWeight="Medium" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
                             <Button x:Name="BuildClearSourceBtn"
@@ -322,11 +316,11 @@
                                     Padding="12,0"
                                     HorizontalAlignment="Stretch"
                                     Theme="{StaticResource GhostButton}"
-                                    ToolTip.Tip="Limpar pasta de origem">
+                                    ToolTip.Tip="{DynamicResource Settings.BuildSourceClearTip}">
                                 <PathIcon Data="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" Width="12" Height="12" Foreground="{DynamicResource ThemeTextLabel}"/>
                             </Button>
 
-                            <TextBlock Grid.Row="2" Text="Pasta de saída (.l2dat)" Classes="Label"/>
+                            <TextBlock Grid.Row="2" Text="{DynamicResource Settings.BuildOutputLabel}" Classes="Label"/>
                             <TextBox x:Name="BuildOutputBox"
                                      Grid.Row="2" Grid.Column="2"
                                      Classes="FormField"
@@ -338,7 +332,7 @@
                                      Padding="10,0"
                                      FontFamily="Consolas,Courier New,monospace"
                                      FontSize="12"
-                                     Watermark="Padrão: exePath/tables"/>
+                                     Watermark="{DynamicResource Settings.BuildOutputWatermark}"/>
                             <Button x:Name="BuildSelectOutputBtn"
                                     Grid.Row="2" Grid.Column="4"
                                     Height="36"
@@ -346,7 +340,7 @@
                                     Theme="{StaticResource GhostButton}">
                                 <StackPanel Orientation="Horizontal" Spacing="7">
                                     <PathIcon Data="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" Foreground="{DynamicResource ThemeTextLabel}" Width="13" Height="13" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Selecionar" FontSize="12" FontWeight="Medium" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{DynamicResource Common.Browse}" FontSize="12" FontWeight="Medium" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
                             <Button x:Name="BuildResetOutputBtn"
@@ -356,23 +350,23 @@
                                     Theme="{StaticResource GhostButton}">
                                 <StackPanel Orientation="Horizontal" Spacing="7">
                                     <PathIcon Data="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z" Foreground="{DynamicResource ThemeTextLabel}" Width="13" Height="13" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Padrão" FontSize="12" FontWeight="Medium" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{DynamicResource Settings.DefaultButton}" FontSize="12" FontWeight="Medium" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
                         </Grid>
 
                         <!-- Compressão, filtro e ação na mesma linha -->
                         <Grid ColumnDefinitions="Auto,12,160,20,*,12,Auto">
-                            <TextBlock Text="Nível de compressão" Classes="Label"/>
+                            <TextBlock Text="{DynamicResource Settings.CompressionLabel}" Classes="Label"/>
                             <ComboBox x:Name="BuildQualityBox"
                                       Grid.Column="2"
                                       Height="36"
                                       HorizontalAlignment="Stretch"
                                       SelectedIndex="1">
-                                <ComboBoxItem Content="Minimum"/>
-                                <ComboBoxItem Content="Medium"/>
-                                <ComboBoxItem Content="High"/>
-                                <ComboBoxItem Content="Maximum"/>
+                                <ComboBoxItem Content="{DynamicResource Settings.QualityMinimumItem}"/>
+                                <ComboBoxItem Content="{DynamicResource Settings.QualityMediumItem}"/>
+                                <ComboBoxItem Content="{DynamicResource Settings.QualityHighItem}"/>
+                                <ComboBoxItem Content="{DynamicResource Settings.QualityMaximumItem}"/>
                             </ComboBox>
                             <CheckBox x:Name="BuildOnlyRequiredCheckBox"
                                       Grid.Column="4"
@@ -380,7 +374,7 @@
                                       VerticalAlignment="Center"
                                       Foreground="{DynamicResource ThemeTextButton}">
                                 <TextBlock FontSize="12" TextWrapping="Wrap"
-                                           Text="Apenas os necessários (empacota somente as tabelas usadas pelo sistema, ignora o resto)"/>
+                                           Text="{DynamicResource Settings.BuildOnlyRequiredLabel}"/>
                             </CheckBox>
                             <Button x:Name="BuildBtn"
                                     Grid.Column="6"
