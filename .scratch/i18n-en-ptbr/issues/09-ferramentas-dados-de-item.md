@@ -1,6 +1,6 @@
 # 09 — Ferramentas de dados de item
 
-Status: ready-for-agent
+Status: resolved
 Type: task
 Blocked by: 01, 03
 

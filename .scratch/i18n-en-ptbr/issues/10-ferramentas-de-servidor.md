@@ -1,6 +1,6 @@
 # 10 — Ferramentas de servidor (XML, geodata, logs)
 
-Status: ready-for-agent
+Status: resolved
 Type: task
 Blocked by: 01
 

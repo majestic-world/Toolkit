@@ -1,6 +1,6 @@
 # 02 — Seletor de idioma e persistência
 
-Status: ready-for-agent
+Status: resolved
 Type: task
 Blocked by: 01
 

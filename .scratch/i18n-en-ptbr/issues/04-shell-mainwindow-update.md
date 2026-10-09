@@ -1,6 +1,6 @@
 # 04 — Shell: `MainWindow` e modal de update
 
-Status: ready-for-agent
+Status: resolved
 Type: task
 Blocked by: 01
 

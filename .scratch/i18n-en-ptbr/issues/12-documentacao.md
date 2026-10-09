@@ -1,6 +1,6 @@
 # 12 — Documentação
 
-Status: ready-for-agent
+Status: resolved
 Type: task
 Blocked by: 11
 

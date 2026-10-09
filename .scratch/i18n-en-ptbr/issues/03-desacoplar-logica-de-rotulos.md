@@ -1,6 +1,6 @@
 # 03 — Desacoplar lógica dos rótulos exibidos
 
-Status: ready-for-agent
+Status: resolved
 Type: task
 Blocked by: —
 

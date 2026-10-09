@@ -1,6 +1,6 @@
 # 11 — Endurecer guardas do build
 
-Status: ready-for-agent
+Status: resolved
 Type: task
 Blocked by: 04, 05, 06, 07, 08, 09, 10
 

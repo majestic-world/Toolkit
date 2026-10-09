@@ -1,6 +1,6 @@
 # 01 — Infraestrutura de localização
 
-Status: ready-for-agent
+Status: resolved
 Type: task
 Blocked by: —
 
