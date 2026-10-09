@@ -1,0 +1,65 @@
+# Literais que podem ficar em AXAML/C# sem catálogo (L2LOC007/L2LOC008): iguais nos dois idiomas.
+# Um por linha, comparado com o texto inteiro do literal (sem espaços nas pontas). Linhas com # são comentário.
+# Cada área tem um bloco, em ordem alfabética: adicione as linhas logo abaixo do comentário da área.
+
+# ── App (nome do produto) ──
+L2 Toolkit
+L2 Toolkit (Fafurion) By Mk
+
+# ── Brush ──
+
+# ── BrushGenerator ──
+
+# ── BrushVariants ──
+
+# ── Common ──
+
+# ── CreateMultisell ──
+
+# ── DescriptionFix ──
+
+# ── DoorGenerate ──
+
+# ── EnchantEffect ──
+
+# ── Format ──
+
+# ── Geodata ──
+
+# ── LiveData ──
+
+# ── LogParse ──
+
+# ── Main ──
+
+# ── Missions ──
+
+# ── Nav ──
+
+# ── PawnData ──
+
+# ── PrimeShop ──
+
+# ── SearchIcon ──
+
+# ── Settings ──
+
+# ── SkinBuilder ──
+
+# ── SpawnManager ──
+
+# ── Splash ──
+
+# ── SplashCompose ──
+
+# ── SplashLibrary ──
+
+# ── SplashScreen ──
+
+# ── SystemMsgColor ──
+
+# ── Tables ──
+
+# ── Update ──
+
+# ── UpgradeNormal ──

@@ -1,0 +1,968 @@
+<Project>
+  <!--
+    Localização da UI (pt-BR padrão, en opcional). Catálogos: itens L2LocCatalog do csproj; o primeiro é o base (pt-BR).
+
+    GenerateLocalization  gera $(IntermediateOutputPath)Localization.g.cs (Loc, LocKey, LocCatalog) a partir dos .resx.
+                          Incremental: só roda quando um catálogo ou este arquivo muda.
+    ValidateLocalization  roda em todo build (fora do design-time build) e emite L2LOC001–009 com arquivo, linha e coluna.
+
+    As tasks são inline (RoslynCodeTaskFactory) e usam só System.Xml.Linq: System.Text.Json não funciona em task inline.
+    O código da task segue C# 7.3, a versão que o RoslynCodeTaskFactory compila para netstandard.
+  -->
+
+  <UsingTask TaskName="L2LocalizationTask" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+    <Task>
+      <Code Type="Class" Language="cs"><![CDATA[
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Xml;
+using System.Xml.Linq;
+using Microsoft.Build.Framework;
+
+public class L2LocalizationTask : Microsoft.Build.Utilities.Task
+{
+    [Required] public string Mode { get; set; }
+    [Required] public ITaskItem[] Catalogs { get; set; }
+    public string OutputFile { get; set; }
+    public string ProjectDirectory { get; set; }
+    public ITaskItem[] AxamlFiles { get; set; }
+    public ITaskItem[] CSharpFiles { get; set; }
+    public string NonTranslatableFile { get; set; }
+
+    // ─── Modelo dos catálogos ─────────────────────────────────────────────────
+
+    sealed class Catalog
+    {
+        public string Path;
+        public string Language;
+        public readonly List<Entry> Entries = new List<Entry>();
+        public readonly Dictionary<string, Entry> ByKey = new Dictionary<string, Entry>(StringComparer.Ordinal);
+        public string FileName { get { return System.IO.Path.GetFileName(Path); } }
+    }
+
+    sealed class Entry
+    {
+        public Catalog Catalog;
+        public string Key;
+        public string Value;
+        public int Line;
+        public int Column;
+        public Template Template;   // null em overrides String* (texto literal)
+    }
+
+    sealed class Hole
+    {
+        public string Name;
+        public string Suffix;       // ",alinhamento" e/ou ":formato", como escrito
+    }
+
+    sealed class Template
+    {
+        public readonly List<object> Parts = new List<object>();   // string (texto já sem escape) ou Hole
+        public readonly List<string> Names = new List<string>();   // placeholders na ordem da primeira aparição
+        public string Error;
+
+        public bool HasHoles { get { return Names.Count > 0; } }
+
+        public string Unescaped()
+        {
+            var sb = new StringBuilder();
+            foreach (var part in Parts) { var text = part as string; if (text != null) sb.Append(text); }
+            return sb.ToString();
+        }
+
+        public string Positional(List<string> parameters)
+        {
+            var sb = new StringBuilder();
+            foreach (var part in Parts)
+            {
+                var text = part as string;
+                if (text != null) { sb.Append(text.Replace("{", "{{").Replace("}", "}}")); continue; }
+                var hole = (Hole)part;
+                sb.Append('{').Append(parameters.IndexOf(hole.Name)).Append(hole.Suffix).Append('}');
+            }
+            return sb.ToString();
+        }
+    }
+
+    sealed class Diagnostic
+    {
+        public string Code;
+        public bool IsError;
+        public string File;
+        public int Line;
+        public int Column;
+        public string Message;
+    }
+
+    static readonly Regex KeyPattern = new Regex(@"^[A-Z][A-Za-z0-9]*(\.[A-Z][A-Za-z0-9]*)+$");
+    static readonly Regex FluentKeyPattern = new Regex(@"^String[A-Za-z0-9]*$");
+    static readonly Regex PlaceholderName = new Regex(@"^[a-z][A-Za-z0-9]*$");
+    static readonly Regex AlignmentPattern = new Regex(@"^\s*-?[0-9]+\s*$");
+
+    readonly List<Diagnostic> _diagnostics = new List<Diagnostic>();
+    readonly HashSet<Entry> _structural = new HashSet<Entry>();   // entradas que não podem virar membro de Loc
+
+    void Report(string code, bool isError, string file, int line, int column, string message)
+    {
+        _diagnostics.Add(new Diagnostic { Code = code, IsError = isError, File = file, Line = line, Column = column, Message = message });
+    }
+
+    void Report(string code, Entry entry, string message)
+    {
+        Report(code, true, entry.Catalog.Path, entry.Line, entry.Column, message);
+    }
+
+    static bool IsFluent(string key) { return FluentKeyPattern.IsMatch(key); }
+
+    static string PluralBase(string key)
+    {
+        if (key.EndsWith(".One", StringComparison.Ordinal)) return key.Substring(0, key.Length - 4);
+        if (key.EndsWith(".Other", StringComparison.Ordinal)) return key.Substring(0, key.Length - 6);
+        return null;
+    }
+
+    static string PluralSibling(string key)
+    {
+        return key.EndsWith(".One", StringComparison.Ordinal) ? PluralBase(key) + ".Other" : PluralBase(key) + ".One";
+    }
+
+    static Template ParseTemplate(string value)
+    {
+        var template = new Template();
+        var text = new StringBuilder();
+        int i = 0;
+        while (i < value.Length)
+        {
+            char c = value[i];
+            if (c == '{' && i + 1 < value.Length && value[i + 1] == '{') { text.Append('{'); i += 2; continue; }
+            if (c == '}' && i + 1 < value.Length && value[i + 1] == '}') { text.Append('}'); i += 2; continue; }
+            if (c == '}') { template.Error = "'}' sem par na posição " + (i + 1) + " (use '}}' para o caractere)"; return template; }
+            if (c != '{') { text.Append(c); i++; continue; }
+
+            int close = value.IndexOf('}', i + 1);
+            int nextOpen = value.IndexOf('{', i + 1);
+            if (close < 0 || (nextOpen >= 0 && nextOpen < close))
+            {
+                template.Error = "'{' sem fechamento na posição " + (i + 1) + " (use '{{' para o caractere)";
+                return template;
+            }
+            string body = value.Substring(i + 1, close - i - 1);
+            int colon = body.IndexOf(':');
+            string head = colon < 0 ? body : body.Substring(0, colon);
+            string format = colon < 0 ? "" : body.Substring(colon);
+            int comma = head.IndexOf(',');
+            string name = (comma < 0 ? head : head.Substring(0, comma)).Trim();
+            string alignment = comma < 0 ? "" : head.Substring(comma);
+            if (!PlaceholderName.IsMatch(name))
+            {
+                template.Error = "placeholder '{" + body + "}' inválido: o nome deve ser camelCase (ex.: {count}, {fileName}), nunca posicional";
+                return template;
+            }
+            if (alignment.Length > 0 && !AlignmentPattern.IsMatch(alignment.Substring(1)))
+            {
+                template.Error = "alinhamento inválido em '{" + body + "}'";
+                return template;
+            }
+            if (text.Length > 0) { template.Parts.Add(text.ToString()); text.Clear(); }
+            template.Parts.Add(new Hole { Name = name, Suffix = alignment + format });
+            if (!template.Names.Contains(name)) template.Names.Add(name);
+            i = close + 1;
+        }
+        if (text.Length > 0) template.Parts.Add(text.ToString());
+        return template;
+    }
+
+    Catalog LoadCatalog(ITaskItem item)
+    {
+        var catalog = new Catalog { Path = item.GetMetadata("FullPath"), Language = item.GetMetadata("Language") };
+        if (string.IsNullOrEmpty(catalog.Language))
+        {
+            Log.LogError(null, null, null, catalog.Path, 0, 0, 0, 0, "Item L2LocCatalog sem o metadado Language.");
+            return null;
+        }
+        XDocument document;
+        try
+        {
+            document = XDocument.Load(catalog.Path, LoadOptions.SetLineInfo | LoadOptions.PreserveWhitespace);
+        }
+        catch (XmlException ex)
+        {
+            Log.LogError(null, null, null, catalog.Path, ex.LineNumber, ex.LinePosition, 0, 0, "XML inválido: " + ex.Message);
+            return null;
+        }
+        catch (IOException ex)
+        {
+            Log.LogError(null, null, null, catalog.Path, 0, 0, 0, 0, "Não foi possível ler o catálogo: " + ex.Message);
+            return null;
+        }
+        foreach (var data in document.Root.Elements("data"))
+        {
+            if (data.Attribute("type") != null || data.Attribute("mimetype") != null) continue;
+            var info = (IXmlLineInfo)data;
+            var valueElement = data.Element("value");
+            catalog.Entries.Add(new Entry
+            {
+                Catalog = catalog,
+                Key = (string)data.Attribute("name") ?? "",
+                Value = valueElement == null ? "" : valueElement.Value,
+                Line = info.LineNumber,
+                Column = info.LinePosition,
+            });
+        }
+        return catalog;
+    }
+
+    // Valida chaves, valores e placeholders e preenche ByKey. Os diagnósticos ficam em _diagnostics.
+    void BuildModel(List<Catalog> catalogs)
+    {
+        var baseCatalog = catalogs[0];
+        foreach (var catalog in catalogs)
+        {
+            foreach (var entry in catalog.Entries)
+            {
+                if (!KeyPattern.IsMatch(entry.Key) && !IsFluent(entry.Key))
+                {
+                    Report("L2LOC003", entry, "Chave '" + entry.Key + "' inválida: use Área.Elemento[.Qualificador] em PascalCase, com pelo menos dois segmentos.");
+                    continue;
+                }
+                if (catalog.ByKey.ContainsKey(entry.Key))
+                {
+                    Report("L2LOC003", entry, "Chave '" + entry.Key + "' duplicada em " + catalog.FileName + " (primeira na linha " + catalog.ByKey[entry.Key].Line + ").");
+                    continue;
+                }
+                catalog.ByKey.Add(entry.Key, entry);
+                if (entry.Value.Trim().Length == 0)
+                    Report("L2LOC004", entry, "Chave '" + entry.Key + "' com valor vazio em " + catalog.FileName + ".");
+                if (IsFluent(entry.Key)) continue;
+                entry.Template = ParseTemplate(entry.Value);
+                if (entry.Template.Error != null)
+                    Report("L2LOC002", entry, "Chave '" + entry.Key + "' em " + catalog.FileName + ": " + entry.Template.Error + ".");
+            }
+        }
+
+        // Estrutura (só no catálogo base; o L2LOC001 garante as mesmas chaves nos outros).
+        var keyPrefixes = new Dictionary<string, string>(StringComparer.Ordinal);
+        foreach (var key in baseCatalog.ByKey.Keys)
+            foreach (var prefix in Prefixes(key))
+                if (!keyPrefixes.ContainsKey(prefix)) keyPrefixes.Add(prefix, key);
+
+        var memberPrefixes = new Dictionary<string, string>(StringComparer.Ordinal);
+        foreach (var entry in baseCatalog.ByKey.Values)
+        {
+            if (IsFluent(entry.Key)) continue;
+            var member = PluralBase(entry.Key) ?? entry.Key;
+            foreach (var prefix in Prefixes(member))
+                if (!memberPrefixes.ContainsKey(prefix)) memberPrefixes.Add(prefix, entry.Key);
+        }
+
+        foreach (var entry in baseCatalog.ByKey.Values)
+        {
+            if (IsFluent(entry.Key)) continue;
+            string other;
+            if (keyPrefixes.TryGetValue(entry.Key, out other))
+            {
+                Report("L2LOC003", entry, "Chave '" + entry.Key + "' também é prefixo de '" + other + "': uma folha não pode ter filhos.");
+                _structural.Add(entry);
+                continue;
+            }
+            var segments = entry.Key.Split('.');
+            if (segments[0] == "Loc" || segments[0] == "LocKey" || Enumerable.Range(1, segments.Length - 1).Any(i => segments[i] == segments[i - 1]))
+            {
+                Report("L2LOC003", entry, "Chave '" + entry.Key + "' repete o nome do segmento anterior (ou começa com Loc/LocKey); o C# gerado não compila.");
+                _structural.Add(entry);
+                continue;
+            }
+            var pluralBase = PluralBase(entry.Key);
+            if (pluralBase == null) continue;
+            if (!baseCatalog.ByKey.ContainsKey(PluralSibling(entry.Key)))
+            {
+                Report("L2LOC006", entry, "Plural incompleto: '" + entry.Key + "' existe e '" + PluralSibling(entry.Key) + "' não.");
+                _structural.Add(entry);
+                continue;
+            }
+            if (memberPrefixes.TryGetValue(pluralBase, out other))
+            {
+                Report("L2LOC003", entry, "O plural '" + pluralBase + "' conflita com '" + other + "': '" + pluralBase + "' não pode ser método e grupo ao mesmo tempo.");
+                _structural.Add(entry);
+            }
+        }
+
+        // {count} em todo plural, em todos os catálogos.
+        foreach (var catalog in catalogs)
+            foreach (var entry in catalog.ByKey.Values)
+                if (PluralBase(entry.Key) != null && entry.Template != null && entry.Template.Error == null && !entry.Template.Names.Contains("count"))
+                {
+                    Report("L2LOC006", entry, "Plural '" + entry.Key + "' sem {count} em " + catalog.FileName + ".");
+                    if (catalog == baseCatalog) _structural.Add(entry);
+                }
+
+        // Mesmas chaves e mesmos placeholders entre o base e cada tradução.
+        foreach (var catalog in catalogs.Skip(1))
+        {
+            foreach (var entry in baseCatalog.ByKey.Values)
+                if (!catalog.ByKey.ContainsKey(entry.Key))
+                    Report("L2LOC001", entry, "Chave '" + entry.Key + "' existe em " + baseCatalog.FileName + " (" + baseCatalog.Language + ") e falta em " + catalog.FileName + " (" + catalog.Language + ").");
+            foreach (var entry in catalog.ByKey.Values)
+            {
+                Entry baseEntry;
+                if (!baseCatalog.ByKey.TryGetValue(entry.Key, out baseEntry))
+                {
+                    Report("L2LOC001", entry, "Chave '" + entry.Key + "' existe em " + catalog.FileName + " (" + catalog.Language + ") e falta em " + baseCatalog.FileName + " (" + baseCatalog.Language + ").");
+                    continue;
+                }
+                if (!SamePlaceholders(baseEntry, entry))
+                    Report("L2LOC002", entry, "Chave '" + entry.Key + "': placeholders diferentes entre " + baseCatalog.Language + " (" + Describe(baseEntry.Template) + ") e " + catalog.Language + " (" + Describe(entry.Template) + ").");
+            }
+        }
+    }
+
+    static bool IsUsable(Template template) { return template != null && template.Error == null; }
+
+    static bool SamePlaceholders(Entry a, Entry b)
+    {
+        if (!IsUsable(a.Template) || !IsUsable(b.Template)) return true;   // ausente (String*) ou já reportado como malformado
+        return new HashSet<string>(a.Template.Names).SetEquals(b.Template.Names);
+    }
+
+    static string Describe(Template template)
+    {
+        return template.Names.Count == 0 ? "nenhum" : string.Join(", ", template.Names.Select(n => "{" + n + "}"));
+    }
+
+    static IEnumerable<string> Prefixes(string key)
+    {
+        for (int i = key.IndexOf('.'); i >= 0; i = key.IndexOf('.', i + 1))
+            yield return key.Substring(0, i);
+    }
+
+    // ─── Execução ─────────────────────────────────────────────────────────────
+
+    public override bool Execute()
+    {
+        var catalogs = new List<Catalog>();
+        foreach (var item in Catalogs)
+        {
+            var catalog = LoadCatalog(item);
+            if (catalog == null) return false;
+            catalogs.Add(catalog);
+        }
+        if (catalogs.Count == 0)
+        {
+            Log.LogError("Nenhum item L2LocCatalog no projeto.");
+            return false;
+        }
+        BuildModel(catalogs);
+
+        if (Mode == "Generate")
+        {
+            Generate(catalogs);
+        }
+        else if (Mode == "Validate")
+        {
+            ValidateSources(catalogs[0]);
+            foreach (var d in _diagnostics)
+            {
+                if (d.IsError) Log.LogError(null, d.Code, null, d.File, d.Line, d.Column, 0, 0, d.Message);
+                else Log.LogWarning(null, d.Code, null, d.File, d.Line, d.Column, 0, 0, d.Message);
+            }
+        }
+        else
+        {
+            Log.LogError("Mode desconhecido: " + Mode);
+        }
+        return !Log.HasLoggedErrors;
+    }
+
+    // ─── Geração ──────────────────────────────────────────────────────────────
+
+    sealed class Node
+    {
+        public readonly List<string> Order = new List<string>();
+        public readonly Dictionary<string, Node> Classes = new Dictionary<string, Node>(StringComparer.Ordinal);
+        public readonly Dictionary<string, string> Members = new Dictionary<string, string>(StringComparer.Ordinal);
+
+        public bool Add(string path, string code)
+        {
+            var segments = path.Split('.');
+            var node = this;
+            for (int i = 0; i < segments.Length - 1; i++)
+            {
+                if (node.Members.ContainsKey(segments[i])) return false;
+                Node child;
+                if (!node.Classes.TryGetValue(segments[i], out child))
+                {
+                    child = new Node();
+                    node.Classes.Add(segments[i], child);
+                    node.Order.Add(segments[i]);
+                }
+                node = child;
+            }
+            var leaf = segments[segments.Length - 1];
+            if (node.Classes.ContainsKey(leaf) || node.Members.ContainsKey(leaf)) return false;
+            node.Members.Add(leaf, code);
+            node.Order.Add(leaf);
+            return true;
+        }
+
+        public void Write(StringBuilder sb, string indent)
+        {
+            foreach (var name in Order)
+            {
+                string code;
+                if (Members.TryGetValue(name, out code))
+                {
+                    foreach (var line in code.Split('\n')) sb.Append(indent).Append(line).Append('\n');
+                    continue;
+                }
+                sb.Append(indent).Append("public static class ").Append(name).Append('\n');
+                sb.Append(indent).Append("{\n");
+                Classes[name].Write(sb, indent + "    ");
+                sb.Append(indent).Append("}\n");
+            }
+        }
+    }
+
+    const string Api = "global::L2Toolkit.Localization.AppLanguage";
+
+    void Generate(List<Catalog> catalogs)
+    {
+        var baseCatalog = catalogs[0];
+        var keys = baseCatalog.Entries.Where(e => baseCatalog.ByKey.ContainsKey(e.Key) && baseCatalog.ByKey[e.Key] == e).ToList();
+        var index = new Dictionary<string, int>(StringComparer.Ordinal);
+        for (int i = 0; i < keys.Count; i++) index.Add(keys[i].Key, i);
+
+        // Parâmetros por chave: ordem da primeira aparição no base; plural tem int count primeiro.
+        var parameters = new Dictionary<string, List<string>>(StringComparer.Ordinal);
+        var loc = new Node();
+        var locKey = new Node();
+        var dictionary = new List<int>();
+        foreach (var entry in keys)
+        {
+            if (IsFluent(entry.Key)) { dictionary.Add(index[entry.Key]); continue; }
+            if (!IsUsable(entry.Template)) continue;
+            var pluralBase = PluralBase(entry.Key);
+            if (pluralBase == null)
+            {
+                parameters[entry.Key] = entry.Template.Names;
+                if (_structural.Contains(entry)) continue;
+                var doc = Doc(entry.Value);
+                if (!entry.Template.HasHoles)
+                {
+                    dictionary.Add(index[entry.Key]);
+                    loc.Add(entry.Key, doc + "public static string " + Leaf(entry.Key) + " => " + Api + ".Text(" + index[entry.Key] + ");");
+                    locKey.Add(entry.Key, "public const string " + Leaf(entry.Key) + " = \"" + entry.Key + "\";");
+                }
+                else
+                {
+                    var names = entry.Template.Names;
+                    loc.Add(entry.Key, doc + "public static string " + Leaf(entry.Key) + "(" + string.Join(", ", names.Select(n => "object? @" + n)) + ") => "
+                        + Api + ".Format(" + index[entry.Key] + ", " + string.Join(", ", names.Select(n => "@" + n)) + ");");
+                }
+                continue;
+            }
+            if (!entry.Key.EndsWith(".One", StringComparison.Ordinal)) continue;
+            Entry other;
+            if (!baseCatalog.ByKey.TryGetValue(pluralBase + ".Other", out other) || !IsUsable(other.Template)) continue;
+            var pluralParameters = new List<string> { "count" };
+            foreach (var name in entry.Template.Names.Concat(other.Template.Names))
+                if (!pluralParameters.Contains(name)) pluralParameters.Add(name);
+            parameters[entry.Key] = pluralParameters;
+            parameters[other.Key] = pluralParameters;
+            if (_structural.Contains(entry) || _structural.Contains(other)) continue;
+            var extra = pluralParameters.Skip(1).ToList();
+            loc.Add(pluralBase, Doc(entry.Value + " | " + other.Value) + "public static string " + Leaf(pluralBase) + "(int count" + string.Concat(extra.Select(n => ", object? @" + n)) + ") => "
+                + Api + ".Plural(" + index[entry.Key] + ", " + index[other.Key] + ", count" + string.Concat(extra.Select(n => ", @" + n)) + ");");
+        }
+
+        var sb = new StringBuilder();
+        sb.Append("// <auto-generated>\n");
+        sb.Append("//     Gerado por src/Localization/Localization.targets a partir de ").Append(string.Join(", ", catalogs.Select(c => c.FileName))).Append(".\n");
+        sb.Append("//     Não edite: altere os catálogos e recompile.\n");
+        sb.Append("// </auto-generated>\n");
+        sb.Append("#nullable enable\n\n");
+        sb.Append("namespace L2Toolkit.Localization;\n\n");
+        sb.Append("/// <summary>Textos da UI no idioma ativo. Chaves em Localization/Strings.resx.</summary>\n");
+        sb.Append("public static class Loc\n{\n");
+        loc.Write(sb, "    ");
+        sb.Append("}\n\n");
+        sb.Append("/// <summary>Chaves dos textos sem placeholder, para AppLanguage.Bind em controles criados em código.</summary>\n");
+        sb.Append("public static class LocKey\n{\n");
+        locKey.Write(sb, "    ");
+        sb.Append("}\n\n");
+        sb.Append("internal static class LocCatalog\n{\n");
+        sb.Append("    internal static readonly string[] Keys =\n    [\n");
+        foreach (var entry in keys) sb.Append("        ").Append(Literal(entry.Key)).Append(",\n");
+        sb.Append("    ];\n\n");
+        sb.Append("    /// <summary>Índices que vão para o ResourceDictionary: textos sem placeholder e overrides String* do Fluent.</summary>\n");
+        sb.Append("    internal static readonly int[] ResourceIndexes = [").Append(string.Join(", ", dictionary)).Append("];\n");
+        foreach (var catalog in catalogs)
+        {
+            sb.Append("\n    /// <summary>").Append(catalog.Language).Append("</summary>\n");
+            sb.Append("    internal static readonly string[] ").Append(LanguageIdentifier(catalog.Language)).Append(" =\n    [\n");
+            foreach (var baseEntry in keys)
+                sb.Append("        ").Append(Literal(StoredValue(baseEntry, catalog, parameters))).Append(", // ").Append(baseEntry.Key).Append('\n');
+            sb.Append("    ];\n");
+        }
+        sb.Append("}\n");
+
+        Directory.CreateDirectory(System.IO.Path.GetDirectoryName(System.IO.Path.GetFullPath(OutputFile)));
+        File.WriteAllText(OutputFile, sb.ToString(), new UTF8Encoding(true));
+    }
+
+    // Valor gravado no array: texto sem escape, ou formato posicional; tradução inválida cai no base.
+    static string StoredValue(Entry baseEntry, Catalog catalog, Dictionary<string, List<string>> parameters)
+    {
+        Entry entry;
+        if (!catalog.ByKey.TryGetValue(baseEntry.Key, out entry)) entry = baseEntry;
+        if (IsFluent(baseEntry.Key)) return entry.Value;
+        if (!IsUsable(entry.Template) || !SamePlaceholders(baseEntry, entry)) entry = baseEntry;
+        if (!IsUsable(entry.Template)) return entry.Value;
+        List<string> names;
+        if (!parameters.TryGetValue(baseEntry.Key, out names)) return entry.Value;
+        if (names.Count == 0) return entry.Template.Unescaped();
+        return entry.Template.Positional(names);
+    }
+
+    static string Leaf(string path) { return path.Substring(path.LastIndexOf('.') + 1); }
+
+    static string LanguageIdentifier(string language)
+    {
+        var sb = new StringBuilder();
+        foreach (var part in language.Split('-', '_'))
+            if (part.Length > 0) sb.Append(char.ToUpperInvariant(part[0])).Append(part.Substring(1).ToLowerInvariant());
+        return sb.ToString();
+    }
+
+    static string Doc(string value)
+    {
+        var text = value.Replace("\r", " ").Replace("\n", " ").Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;");
+        return "/// <summary>" + text + "</summary>\n";
+    }
+
+    static string Literal(string value)
+    {
+        var sb = new StringBuilder("\"");
+        foreach (char c in value)
+        {
+            switch (c)
+            {
+                case '"': sb.Append("\\\""); break;
+                case '\\': sb.Append("\\\\"); break;
+                case '\n': sb.Append("\\n"); break;
+                case '\r': sb.Append("\\r"); break;
+                case '\t': sb.Append("\\t"); break;
+                default:
+                    if (c < ' ' || c == '\u2028' || c == '\u2029' || c == '\u0085') sb.Append("\\u").Append(((int)c).ToString("X4"));
+                    else sb.Append(c);
+                    break;
+            }
+        }
+        return sb.Append('"').ToString();
+    }
+
+    // ─── Validação de AXAML e C# ──────────────────────────────────────────────
+
+    static readonly Regex DynamicResourcePattern = new Regex(@"\{\s*DynamicResource\s+(?:ResourceKey\s*=\s*)?([^\s,}]+)");
+    static readonly Regex XmlCommentPattern = new Regex(@"<!--.*?-->", RegexOptions.Singleline);
+    static readonly Regex CodeUsagePattern = new Regex(@"(?<!\w)(?:Loc|LocKey)\s*\.\s*([A-Z][A-Za-z0-9]*(?:\s*\.\s*[A-Z][A-Za-z0-9]*)*)");
+    // ".Text =" etc. e a mesma propriedade em inicializador ("new TextBlock { Text = … }", "Title = …").
+    static readonly Regex AssignTrigger = new Regex(@"(?<!\w)(?:Text|Title|Content|Watermark)\s*\+?=(?![=>])");
+    static readonly Regex CallTrigger = new Regex(@"(?<!\w)(?:(?:AddLog|GetMessageBoxStandard|PickOpenAsync|PickSaveAsync|SendNotify|ShowNotification)\s*(?:<[^<>();]*>)?|new\s+FilePickerFileType|throw\s+new\s+(?:\w+\s*\.\s*)*\w*Exception)\s*\(");
+    // Listas de padrões do FilePickerFileType ("*.png", "image/png") não são texto de UI.
+    static readonly Regex FileTypeListTrigger = new Regex(@"(?<!\w)(?:Patterns|MimeTypes|AppleUniformTypeIdentifiers)\s*=(?![=>])");
+    static readonly string[] CSharpTextFolders = { "Views", "Processing", "Utilities" };
+    static readonly HashSet<string> TextAttributes = new HashSet<string>(StringComparer.Ordinal) { "Text", "Content", "Header", "Watermark", "ToolTip.Tip", "Title" };
+    static readonly HashSet<string> TextElements = new HashSet<string>(StringComparer.Ordinal)
+    {
+        "TextBlock", "SelectableTextBlock", "Run", "Span", "Bold", "Italic", "Underline", "ComboBoxItem", "ListBoxItem",
+        "Button", "ToggleButton", "RepeatButton", "CheckBox", "RadioButton", "Label", "MenuItem", "TabItem", "Expander",
+        "ToolTip", "ContentControl", "HeaderedContentControl", "HyperlinkButton", "String",
+    };
+    static readonly string[] TextPropertyElements = { ".Text", ".Content", ".Header", ".Watermark", ".Title", ".Tip" };
+
+    HashSet<string> _nonTranslatable;
+    readonly HashSet<string> _usedPaths = new HashSet<string>(StringComparer.Ordinal);
+
+    void ValidateSources(Catalog baseCatalog)
+    {
+        _nonTranslatable = LoadNonTranslatable();
+        foreach (var item in AxamlFiles ?? new ITaskItem[0]) ValidateAxaml(item.GetMetadata("FullPath"), baseCatalog);
+        foreach (var item in CSharpFiles ?? new ITaskItem[0]) ValidateCSharp(item.GetMetadata("FullPath"));
+
+        foreach (var entry in baseCatalog.ByKey.Values)
+        {
+            if (IsFluent(entry.Key) || _usedPaths.Contains(entry.Key)) continue;
+            var pluralBase = PluralBase(entry.Key);
+            if (pluralBase != null && _usedPaths.Contains(pluralBase)) continue;
+            Report("L2LOC009", false, entry.Catalog.Path, entry.Line, entry.Column,
+                "Chave '" + entry.Key + "' não é usada em AXAML ({DynamicResource}) nem em C# (Loc./LocKey.).");
+        }
+    }
+
+    HashSet<string> LoadNonTranslatable()
+    {
+        var set = new HashSet<string>(StringComparer.Ordinal);
+        if (string.IsNullOrEmpty(NonTranslatableFile) || !File.Exists(NonTranslatableFile)) return set;
+        foreach (var raw in File.ReadAllLines(NonTranslatableFile, Encoding.UTF8))
+        {
+            var line = raw.Trim();
+            if (line.Length > 0 && line[0] != '#') set.Add(line);
+        }
+        return set;
+    }
+
+    static bool HasLetter(string text) { return text.Any(char.IsLetter); }
+
+    bool IsTranslatableLiteral(string raw, string visible)
+    {
+        return HasLetter(visible) && !_nonTranslatable.Contains(raw.Trim());
+    }
+
+    static string Preview(string text)
+    {
+        text = text.Replace("\r", " ").Replace("\n", " ").Trim();
+        return text.Length > 80 ? text.Substring(0, 77) + "..." : text;
+    }
+
+    void ValidateAxaml(string path, Catalog baseCatalog)
+    {
+        string source = File.ReadAllText(path);
+        var lines = new LineMap(source);
+        var masked = XmlCommentPattern.Replace(source, m => Regex.Replace(m.Value, @"[^\r\n]", " "));
+        foreach (Match match in DynamicResourcePattern.Matches(masked))
+        {
+            var key = match.Groups[1].Value;
+            if (key.IndexOf('.') < 0) continue;   // Theme*, String* e recursos do Fluent não têm ponto
+            int line, column;
+            lines.Locate(match.Groups[1].Index, out line, out column);
+            Entry entry;
+            string problem = null;
+            if (!baseCatalog.ByKey.TryGetValue(key, out entry))
+            {
+                bool plural = baseCatalog.ByKey.ContainsKey(key + ".One") || baseCatalog.ByKey.ContainsKey(key + ".Other");
+                problem = plural
+                    ? "'" + key + "' é plural; use Loc." + key + "(count) com LiveText em C#."
+                    : "Chave '" + key + "' não existe em " + baseCatalog.FileName + ".";
+            }
+            else if (PluralBase(key) != null)
+                problem = "'" + key + "' é parte de um plural; use Loc." + PluralBase(key) + "(count) com LiveText em C#.";
+            else if (entry.Template != null && entry.Template.HasHoles)
+                problem = "'" + key + "' tem placeholders (" + Describe(entry.Template) + "); use Loc." + key + "(…) com LiveText em C#.";
+            if (problem != null) Report("L2LOC005", true, path, line, column, problem);
+            else _usedPaths.Add(key);
+        }
+
+        XDocument document;
+        try
+        {
+            document = XDocument.Parse(source, LoadOptions.SetLineInfo | LoadOptions.PreserveWhitespace);
+        }
+        catch (XmlException)
+        {
+            return;   // o compilador XAML do Avalonia reporta o erro
+        }
+        foreach (var element in document.Descendants())
+        {
+            foreach (var attribute in element.Attributes())
+            {
+                if (attribute.Name.Namespace != XNamespace.None || !TextAttributes.Contains(attribute.Name.LocalName)) continue;
+                var value = attribute.Value;
+                if (value.StartsWith("{}", StringComparison.Ordinal)) value = value.Substring(2);
+                else if (value.TrimStart().StartsWith("{", StringComparison.Ordinal)) continue;   // markup extension
+                if (!IsTranslatableLiteral(value, value)) continue;
+                var info = (IXmlLineInfo)attribute;
+                Report("L2LOC007", false, path, info.LineNumber, info.LinePosition,
+                    "Literal \"" + Preview(value) + "\" em " + attribute.Name.LocalName + " sem catálogo: use {DynamicResource Área.Chave} ou NonTranslatable.txt.");
+            }
+            var name = element.Name.LocalName;
+            if (!TextElements.Contains(name) && !TextPropertyElements.Any(suffix => name.EndsWith(suffix, StringComparison.Ordinal))) continue;
+            foreach (var text in element.Nodes().OfType<XText>())
+            {
+                var value = text.Value.Trim();
+                if (!IsTranslatableLiteral(value, value)) continue;
+                var info = (IXmlLineInfo)text;
+                int line = info.LineNumber, column = info.LinePosition;
+                int offset = text.Value.Length - text.Value.TrimStart().Length;   // aponta para o texto, não para o espaço antes
+                for (int i = 0; i < offset; i++)
+                {
+                    if (text.Value[i] == '\n') { line++; column = 1; }
+                    else if (text.Value[i] != '\r') column++;
+                }
+                Report("L2LOC007", false, path, line, column,
+                    "Literal \"" + Preview(value) + "\" em <" + name + "> sem catálogo: use {DynamicResource Área.Chave} ou NonTranslatable.txt.");
+            }
+        }
+    }
+
+    void ValidateCSharp(string path)
+    {
+        string source = File.ReadAllText(path);
+        var scan = new CSharpScan(source);
+        var code = new string(scan.Masked);
+        foreach (Match match in CodeUsagePattern.Matches(code))
+            _usedPaths.Add(Regex.Replace(match.Groups[1].Value, @"\s+", ""));
+
+        var relative = path.Substring(Math.Min(path.Length, (ProjectDirectory ?? "").TrimEnd('\\', '/').Length)).TrimStart('\\', '/');
+        if (!CSharpTextFolders.Any(f => relative.StartsWith(f + "\\", StringComparison.OrdinalIgnoreCase) || relative.StartsWith(f + "/", StringComparison.OrdinalIgnoreCase))) return;
+
+        var lines = new LineMap(source);
+        var reported = new HashSet<int>();   // posições já reportadas ou ignoradas
+        foreach (Match match in FileTypeListTrigger.Matches(code))
+        {
+            int end = SpanEnd(scan.Masked, match.Index + match.Length, false);
+            foreach (var literal in scan.Literals)
+                if (literal.Start >= match.Index && literal.Start < end) reported.Add(literal.Start);
+        }
+        foreach (Match match in AssignTrigger.Matches(code)) ReportLiterals(path, source, lines, scan, reported, match.Index, match.Index + match.Length, false);
+        foreach (Match match in CallTrigger.Matches(code)) ReportLiterals(path, source, lines, scan, reported, match.Index, match.Index + match.Length, true);
+    }
+
+    void ReportLiterals(string path, string source, LineMap lines, CSharpScan scan, HashSet<int> reported, int triggerStart, int start, bool call)
+    {
+        int end = SpanEnd(scan.Masked, start, call);
+        int triggerLine, triggerColumn;
+        lines.Locate(triggerStart, out triggerLine, out triggerColumn);
+        foreach (var literal in scan.Literals)
+        {
+            if (literal.Start < start || literal.Start >= end || reported.Contains(literal.Start)) continue;
+            if (!IsTranslatableLiteral(literal.Raw, literal.Visible)) continue;
+            int line, column;
+            lines.Locate(literal.Start, out line, out column);
+            if (lines.EndsWithLocOk(source, line) || lines.EndsWithLocOk(source, triggerLine)) continue;
+            reported.Add(literal.Start);
+            Report("L2LOC008", false, path, line, column,
+                "Literal \"" + Preview(literal.Raw) + "\" em C# sem catálogo: use Loc.Área.Chave, NonTranslatable.txt ou // loc-ok.");
+        }
+    }
+
+    // Fim do argumento: ')' do call, ou ';' / ',' / fechamento no nível da atribuição.
+    static int SpanEnd(char[] code, int start, bool call)
+    {
+        int depth = 0;
+        for (int i = start; i < code.Length; i++)
+        {
+            char c = code[i];
+            if (c == '(' || c == '[' || c == '{') depth++;
+            else if (c == ')' || c == ']' || c == '}') { if (depth == 0) return i; depth--; }
+            else if (depth == 0 && (c == ';' || (!call && c == ','))) return i;
+        }
+        return code.Length;
+    }
+
+    sealed class LineMap
+    {
+        readonly List<int> _starts = new List<int> { 0 };
+
+        public LineMap(string text)
+        {
+            for (int i = 0; i < text.Length; i++) if (text[i] == '\n') _starts.Add(i + 1);
+        }
+
+        public void Locate(int offset, out int line, out int column)
+        {
+            int index = _starts.BinarySearch(offset);
+            if (index < 0) index = ~index - 1;
+            line = index + 1;
+            column = offset - _starts[index] + 1;
+        }
+
+        public bool EndsWithLocOk(string text, int line)
+        {
+            int start = _starts[line - 1];
+            int end = line < _starts.Count ? _starts[line] : text.Length;
+            return text.Substring(start, end - start).TrimEnd().EndsWith("// loc-ok", StringComparison.Ordinal);
+        }
+    }
+
+    sealed class StringLiteral
+    {
+        public int Start;        // posição do primeiro caractere ($, @ ou ")
+        public string Raw;       // conteúdo entre as aspas, como escrito
+        public string Visible;   // texto fora dos buracos de interpolação, sem sequências de escape
+    }
+
+    // Separa código de strings e comentários. Masked é o fonte com comentários e conteúdo de strings em branco
+    // (quebras de linha preservadas); o código dentro de buracos de interpolação continua visível.
+    sealed class CSharpScan
+    {
+        readonly string _source;
+        public readonly char[] Masked;
+        public readonly List<StringLiteral> Literals = new List<StringLiteral>();
+
+        public CSharpScan(string source)
+        {
+            _source = source;
+            Masked = source.ToCharArray();
+            int i = 0;
+            ScanCode(ref i, false);
+            Literals.Sort((a, b) => a.Start.CompareTo(b.Start));
+        }
+
+        void Blank(int from, int to)
+        {
+            for (int k = from; k < to && k < Masked.Length; k++)
+                if (Masked[k] != '\n' && Masked[k] != '\r') Masked[k] = ' ';
+        }
+
+        bool IsStringStart(int i)
+        {
+            while (i < _source.Length && (_source[i] == '$' || _source[i] == '@')) i++;
+            return i < _source.Length && _source[i] == '"';
+        }
+
+        void ScanCode(ref int i, bool inHole)
+        {
+            var s = _source;
+            int depth = 0;
+            while (i < s.Length)
+            {
+                char c = s[i];
+                if (c == '/' && i + 1 < s.Length && s[i + 1] == '/')
+                {
+                    int e = s.IndexOf('\n', i);
+                    if (e < 0) e = s.Length;
+                    Blank(i, e);
+                    i = e;
+                    continue;
+                }
+                if (c == '/' && i + 1 < s.Length && s[i + 1] == '*')
+                {
+                    int e = s.IndexOf("*/", i + 2, StringComparison.Ordinal);
+                    e = e < 0 ? s.Length : e + 2;
+                    Blank(i, e);
+                    i = e;
+                    continue;
+                }
+                if (c == '\'')
+                {
+                    int e = i + 1;
+                    while (e < s.Length && s[e] != '\'' && s[e] != '\n') { if (s[e] == '\\') e++; e++; }
+                    e = Math.Min(e + 1, s.Length);
+                    Blank(i + 1, e - 1);
+                    i = e;
+                    continue;
+                }
+                if (c == '"' || ((c == '$' || c == '@') && IsStringStart(i)))
+                {
+                    i = ScanString(i);
+                    continue;
+                }
+                if (inHole)
+                {
+                    if (c == '{') depth++;
+                    else if (c == '}') { if (depth == 0) return; depth--; }
+                }
+                i++;
+            }
+        }
+
+        int EscapeLength(int i)
+        {
+            if (i + 1 >= _source.Length) return 1;
+            char c = _source[i + 1];
+            if (c == 'u') return 6;
+            if (c == 'U') return 10;
+            if (c != 'x') return 2;
+            int n = 2;
+            while (n < 6 && i + n < _source.Length && Uri.IsHexDigit(_source[i + n])) n++;
+            return n;
+        }
+
+        int ScanString(int start)
+        {
+            var s = _source;
+            int i = start;
+            bool interpolated = false, verbatim = false;
+            while (s[i] == '$' || s[i] == '@') { if (s[i] == '$') interpolated = true; else verbatim = true; i++; }
+            int quotes = 0;
+            while (i + quotes < s.Length && s[i + quotes] == '"') quotes++;
+            var literal = new StringLiteral { Start = start };
+            Literals.Add(literal);
+
+            if (quotes >= 3)   // raw string literal; buracos de interpolação contam como texto
+            {
+                int contentStart = i + quotes;
+                int end = s.IndexOf(new string('"', quotes), contentStart, StringComparison.Ordinal);
+                if (end < 0) end = s.Length;
+                literal.Raw = literal.Visible = s.Substring(contentStart, end - contentStart);
+                Blank(contentStart, end);
+                return Math.Min(end + quotes, s.Length);
+            }
+
+            i++;
+            int begin = i;
+            var visible = new StringBuilder();
+            while (i < s.Length)
+            {
+                char c = s[i];
+                if (verbatim)
+                {
+                    if (c == '"')
+                    {
+                        if (i + 1 < s.Length && s[i + 1] == '"') { visible.Append('"'); Blank(i, i + 2); i += 2; continue; }
+                        break;
+                    }
+                }
+                else
+                {
+                    if (c == '"' || c == '\n') break;
+                    if (c == '\\') { int n = EscapeLength(i); Blank(i, i + n); i += n; continue; }
+                }
+                if (interpolated && (c == '{' || c == '}'))
+                {
+                    if (i + 1 < s.Length && s[i + 1] == c) { visible.Append(c); Blank(i, i + 2); i += 2; continue; }
+                    if (c == '{')
+                    {
+                        Masked[i] = ' ';
+                        i++;
+                        ScanCode(ref i, true);
+                        if (i < s.Length) { Masked[i] = ' '; i++; }
+                        continue;
+                    }
+                }
+                visible.Append(c);
+                Blank(i, i + 1);
+                i++;
+            }
+            literal.Raw = s.Substring(begin, Math.Min(i, s.Length) - begin);
+            literal.Visible = visible.ToString();
+            return Math.Min(i + 1, s.Length);
+        }
+    }
+}
+]]></Code>
+    </Task>
+  </UsingTask>
+
+  <!-- Roda em todo build; o design-time build do IDE pula a validação (a geração continua). -->
+  <Target Name="ValidateLocalization" BeforeTargets="CoreCompile" Condition="'$(DesignTimeBuild)' != 'true'">
+    <ItemGroup>
+      <_L2LocAxaml Include="**\*.axaml" Exclude="$(DefaultItemExcludes);$(BaseIntermediateOutputPath)**;$(BaseOutputPath)**" />
+      <_L2LocCSharp Include="**\*.cs" Exclude="$(DefaultItemExcludes);$(BaseIntermediateOutputPath)**;$(BaseOutputPath)**" />
+    </ItemGroup>
+    <L2LocalizationTask Mode="Validate"
+                        Catalogs="@(L2LocCatalog)"
+                        AxamlFiles="@(_L2LocAxaml)"
+                        CSharpFiles="@(_L2LocCSharp)"
+                        NonTranslatableFile="$(MSBuildThisFileDirectory)NonTranslatable.txt"
+                        ProjectDirectory="$(MSBuildProjectDirectory)" />
+  </Target>
+
+  <!-- Itens criados aqui valem também quando o target é pulado por estar atualizado (output inference). -->
+  <Target Name="GenerateLocalization"
+          BeforeTargets="CoreCompile"
+          DependsOnTargets="ValidateLocalization"
+          Inputs="@(L2LocCatalog);$(MSBuildThisFileFullPath)"
+          Outputs="$(IntermediateOutputPath)Localization.g.cs">
+    <L2LocalizationTask Mode="Generate" Catalogs="@(L2LocCatalog)" OutputFile="$(IntermediateOutputPath)Localization.g.cs" />
+    <ItemGroup>
+      <Compile Include="$(IntermediateOutputPath)Localization.g.cs" />
+      <FileWrites Include="$(IntermediateOutputPath)Localization.g.cs" />
+    </ItemGroup>
+  </Target>
+</Project>
