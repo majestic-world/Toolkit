@@ -909,8 +909,7 @@ public partial class LiveData : UserControl
     {
         try
         {
-            var typeItem = TypeProcess.SelectedItem as ComboBoxItem;
-            string? type = typeItem?.Content?.ToString() ?? TypeProcess.SelectedItem as string;
+            var type = (TypeProcess.SelectedItem as ComboBoxItem)?.Tag as string;
             var ids = ProcessClientId.Text;
 
             if (string.IsNullOrEmpty(type) || string.IsNullOrEmpty(ids))
@@ -981,8 +980,7 @@ public partial class LiveData : UserControl
     private void TypeProcess_OnDropDownClosed(object? sender, Avalonia.Controls.SelectionChangedEventArgs e)
     {
         if (XmlTab == null) return;
-        var typeItem = TypeProcess.SelectedItem as ComboBoxItem;
-        string? textBox = typeItem?.Content?.ToString() ?? TypeProcess.SelectedItem as string;
+        var textBox = (TypeProcess.SelectedItem as ComboBoxItem)?.Tag as string;
         if (string.IsNullOrEmpty(textBox)) return;
 
         UpdatePresets(textBox);

@@ -13,6 +13,7 @@ using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.Styling;
 using L2Toolkit.ClientDat;
+using L2Toolkit.Models;
 using MsBox.Avalonia;
 using Avalonia.Controls.Documents;
 using L2Toolkit.Utilities;
@@ -477,7 +478,7 @@ public partial class EnchantEffect : UserControl
     private void PopulateSelectors()
     {
         var types  = _entries.Select(e => e.Type).Distinct().OrderBy(t => t)
-                             .Select(TypeLabel).ToList();
+                             .Select(t => new Option(t, TypeLabel(t))).ToList();
         var grades = _entries.Select(e => e.Grade).Distinct().ToList();
 
         TypeCombo.ItemsSource  = types;
@@ -489,13 +490,9 @@ public partial class EnchantEffect : UserControl
 
     private void OnEntrySelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
-        var label = TypeCombo.SelectedItem as string;
+        var type  = (TypeCombo.SelectedItem as Option)?.Id;
         var grade = GradeCombo.SelectedItem as string;
-        if (label == null || grade == null) return;
-
-        var type = label.Contains('(')
-            ? label[(label.LastIndexOf('(') + 1)..label.LastIndexOf(')')]
-            : label;
+        if (type == null || grade == null) return;
 
         _currentEntry = _entries.FirstOrDefault(en => en.Type == type && en.Grade == grade);
         if (_currentEntry == null) return;
