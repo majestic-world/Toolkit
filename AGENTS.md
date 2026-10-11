@@ -1,3 +1,8 @@
+## Idioma
+
+- Código, identificadores e comentários gerados: inglês. Textos de interface seguem os catálogos de localização (pt-BR e en).
+- Respostas ao usuário: pt-BR.
+
 ## Agent skills
 
 ### Issue tracker
