@@ -77,7 +77,7 @@
             <Setter Property="Foreground" Value="{DynamicResource ThemeTextBody}"/>
             <Setter Property="CaretBrush" Value="{DynamicResource ThemeAccent}"/>
             <Setter Property="SelectionBrush" Value="{DynamicResource ThemeSelection}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource ThemeSurfaceHover}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorder}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="CornerRadius" Value="4"/>
             <Setter Property="Padding" Value="10,7"/>
@@ -111,7 +111,7 @@
         <Style Selector="ComboBox">
             <Setter Property="Background" Value="{DynamicResource ThemeSurfaceInput}"/>
             <Setter Property="Foreground" Value="{DynamicResource ThemeTextBody}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource ThemeSurfaceHover}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorder}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="10,7"/>
             <Setter Property="HorizontalAlignment" Value="Stretch"/>

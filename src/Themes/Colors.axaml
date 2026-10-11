@@ -84,41 +84,53 @@
       <SolidColorBrush x:Key="ThemeStatusErrorBg" Color="#2A1818"/>
       <SolidColorBrush x:Key="ThemeButtonPrimary" Color="#1F7AA8"/>
       <SolidColorBrush x:Key="ThemeButtonPrimaryHover" Color="#19648C"/>
+      <!-- Sidebar: dark surface in both themes. -->
+      <SolidColorBrush x:Key="ThemeSidebarBackground" Color="#2A2A2A"/>
+      <SolidColorBrush x:Key="ThemeSidebarBorder" Color="#222222"/>
+      <SolidColorBrush x:Key="ThemeSidebarText" Color="#E8E8E8"/>
+      <SolidColorBrush x:Key="ThemeSidebarSection" Color="#A0A0A0"/>
+      <SolidColorBrush x:Key="ThemeSidebarIcon" Color="#5B9BD5"/>
+      <SolidColorBrush x:Key="ThemeSidebarIconActive" Color="#5B9BD5"/>
+      <SolidColorBrush x:Key="ThemeSidebarDivider" Color="#3A3A3A"/>
+      <SolidColorBrush x:Key="ThemeSidebarHover" Color="#3F3F3F"/>
+      <SolidColorBrush x:Key="ThemeSidebarSelected" Color="#3F3F3F"/>
+      <SolidColorBrush x:Key="ThemeSidebarPressed" Color="#484848"/>
+      <SolidColorBrush x:Key="ThemeSidebarIndicator" Color="#5B9BD5"/>
     </ResourceDictionary>
     <ResourceDictionary x:Key="Light">
-      <SolidColorBrush x:Key="ThemeSurfacePage" Color="#F3F3F3"/>
-      <SolidColorBrush x:Key="ThemeSurfaceChrome" Color="#E9E9E9"/>
+      <SolidColorBrush x:Key="ThemeSurfacePage" Color="#EBEBEB"/>
+      <SolidColorBrush x:Key="ThemeSurfaceChrome" Color="#E6E6E6"/>
       <SolidColorBrush x:Key="ThemeSurfaceCard" Color="#FFFFFF"/>
-      <SolidColorBrush x:Key="ThemeSurfaceInput" Color="#F2F3F5"/>
-      <SolidColorBrush x:Key="ThemeSurfacePressed" Color="#E2E2E2"/>
+      <SolidColorBrush x:Key="ThemeSurfaceInput" Color="#F7F7F8"/>
+      <SolidColorBrush x:Key="ThemeSurfacePressed" Color="#D0D0D0"/>
       <SolidColorBrush x:Key="ThemeSurfaceSave" Color="#F5F5F5"/>
-      <SolidColorBrush x:Key="ThemeSurfaceRaised" Color="#E6E6E6"/>
-      <SolidColorBrush x:Key="ThemeSurfaceHover" Color="#ECECEC"/>
-      <SolidColorBrush x:Key="ThemeSurfaceSelected" Color="#DEDEDE"/>
-      <SolidColorBrush x:Key="ThemeSurfaceItemHover" Color="#EDEDED"/>
+      <SolidColorBrush x:Key="ThemeSurfaceRaised" Color="#E3E3E3"/>
+      <SolidColorBrush x:Key="ThemeSurfaceHover" Color="#DCDCDC"/>
+      <SolidColorBrush x:Key="ThemeSurfaceSelected" Color="#D6D6D6"/>
+      <SolidColorBrush x:Key="ThemeSurfaceItemHover" Color="#E6E6E6"/>
       <SolidColorBrush x:Key="ThemeSurfaceFieldHover" Color="#F0F0F0"/>
-      <SolidColorBrush x:Key="ThemeSurfaceActive" Color="#D2D2D2"/>
-      <SolidColorBrush x:Key="ThemeSurfaceActiveAlt" Color="#D2D2D2"/>
-      <SolidColorBrush x:Key="ThemeSurfaceInputHover" Color="#F2F2F2"/>
+      <SolidColorBrush x:Key="ThemeSurfaceActive" Color="#C8C8C8"/>
+      <SolidColorBrush x:Key="ThemeSurfaceActiveAlt" Color="#C8C8C8"/>
+      <SolidColorBrush x:Key="ThemeSurfaceInputHover" Color="#F1F1F2"/>
       <SolidColorBrush x:Key="ThemeSurfaceInputFocus" Color="#FFFFFF"/>
       <SolidColorBrush x:Key="ThemeOverlay" Color="#66000000"/>
-      <SolidColorBrush x:Key="ThemeBorder" Color="#DADADA"/>
-      <SolidColorBrush x:Key="ThemeBorderMuted" Color="#CFCFCF"/>
-      <SolidColorBrush x:Key="ThemeBorderStrong" Color="#BDBDBD"/>
-      <SolidColorBrush x:Key="ThemeBorderHover" Color="#A8A8A8"/>
-      <SolidColorBrush x:Key="ThemeBorderHoverStrong" Color="#9A9A9A"/>
-      <SolidColorBrush x:Key="ThemeBorderSave" Color="#B0B0B0"/>
-      <SolidColorBrush x:Key="ThemeBorderChrome" Color="#D4D4D4"/>
+      <SolidColorBrush x:Key="ThemeBorder" Color="#C9C9C9"/>
+      <SolidColorBrush x:Key="ThemeBorderMuted" Color="#BEBEBE"/>
+      <SolidColorBrush x:Key="ThemeBorderStrong" Color="#A6A6A6"/>
+      <SolidColorBrush x:Key="ThemeBorderHover" Color="#8F8F8F"/>
+      <SolidColorBrush x:Key="ThemeBorderHoverStrong" Color="#7A7A7A"/>
+      <SolidColorBrush x:Key="ThemeBorderSave" Color="#9C9C9C"/>
+      <SolidColorBrush x:Key="ThemeBorderChrome" Color="#C8C8C8"/>
       <SolidColorBrush x:Key="ThemeTextTitle" Color="#1F1F1F"/>
       <SolidColorBrush x:Key="ThemeTextOutput" Color="#262626"/>
       <SolidColorBrush x:Key="ThemeTextBody" Color="#2B2B2B"/>
       <SolidColorBrush x:Key="ThemeTextButton" Color="#3A3A3A"/>
-      <SolidColorBrush x:Key="ThemeTextIcon" Color="#4A4A4A"/>
-      <SolidColorBrush x:Key="ThemeTextLabel" Color="#555555"/>
-      <SolidColorBrush x:Key="ThemeTextBadge" Color="#555555"/>
-      <SolidColorBrush x:Key="ThemeTextSubtitle" Color="#4B5563"/>
-      <SolidColorBrush x:Key="ThemeTextHint" Color="#6B7280"/>
-      <SolidColorBrush x:Key="ThemeTextSection" Color="#6E6E6E"/>
+      <SolidColorBrush x:Key="ThemeTextIcon" Color="#404040"/>
+      <SolidColorBrush x:Key="ThemeTextLabel" Color="#474747"/>
+      <SolidColorBrush x:Key="ThemeTextBadge" Color="#474747"/>
+      <SolidColorBrush x:Key="ThemeTextSubtitle" Color="#3F4752"/>
+      <SolidColorBrush x:Key="ThemeTextHint" Color="#565D6A"/>
+      <SolidColorBrush x:Key="ThemeTextSection" Color="#555555"/>
       <SolidColorBrush x:Key="ThemeTextCode" Color="#333333"/>
       <SolidColorBrush x:Key="ThemeTextLog" Color="#3F5A43"/>
       <SolidColorBrush x:Key="ThemeWatermark" Color="#000000"/>
@@ -166,6 +178,18 @@
       <SolidColorBrush x:Key="ThemeStatusErrorBg" Color="#FDECEC"/>
       <SolidColorBrush x:Key="ThemeButtonPrimary" Color="#3D3D3D"/>
       <SolidColorBrush x:Key="ThemeButtonPrimaryHover" Color="#2A2A2A"/>
+      <!-- Sidebar: dark surface in both themes; in Light, neutral light text and icons with stronger state steps. -->
+      <SolidColorBrush x:Key="ThemeSidebarBackground" Color="#2A2A2A"/>
+      <SolidColorBrush x:Key="ThemeSidebarBorder" Color="#1E1E1E"/>
+      <SolidColorBrush x:Key="ThemeSidebarText" Color="#F2F2F2"/>
+      <SolidColorBrush x:Key="ThemeSidebarSection" Color="#B4B4B4"/>
+      <SolidColorBrush x:Key="ThemeSidebarIcon" Color="#D0D0D0"/>
+      <SolidColorBrush x:Key="ThemeSidebarIconActive" Color="#FFFFFF"/>
+      <SolidColorBrush x:Key="ThemeSidebarDivider" Color="#444444"/>
+      <SolidColorBrush x:Key="ThemeSidebarHover" Color="#3A3A3A"/>
+      <SolidColorBrush x:Key="ThemeSidebarSelected" Color="#4A4A4A"/>
+      <SolidColorBrush x:Key="ThemeSidebarPressed" Color="#555555"/>
+      <SolidColorBrush x:Key="ThemeSidebarIndicator" Color="#FFFFFF"/>
     </ResourceDictionary>
   </ResourceDictionary.ThemeDictionaries>
 </ResourceDictionary>
