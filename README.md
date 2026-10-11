@@ -31,11 +31,11 @@ O Native AOT não compila entre sistemas operacionais: gere cada plataforma no p
 
 ### Saídas
 
-Tudo fica em `build/`, sem pastas `bin/` ou `obj/`:
+Tudo fica em `build/`, sem pastas `bin/` ou `obj/`, exceto o instalador do Windows:
 
 - `build/Debug/`: binários de desenvolvimento
 - `build/Release/<rid>/publish/`: executável Native AOT
-- `build/Release/win-x64/publish/Setup/L2 Toolkit Installer.exe`: instalador do Windows
+- `Setup/L2 Toolkit Installer.exe` (na raiz do repositório): instalador do Windows
 - `build/logs/<rid>/`: logs das ferramentas de build
 - `build/obj/`: arquivos intermediários
 

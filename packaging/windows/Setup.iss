@@ -42,7 +42,7 @@ ChangesAssociations=yes
 DisableProgramGroupPage=yes
 ; Remove the following line to run in administrative install mode (install for all users).
 PrivilegesRequired=lowest
-OutputDir={#PublishDir}Setup
+OutputDir={#RepoDir}Setup
 OutputBaseFilename=L2 Toolkit Installer
 SetupIconFile={#RepoDir}src\Assets\4game_icon.ico
 SolidCompression=yes

@@ -179,7 +179,7 @@ try {
                 Stop-BuildStep 'failed' (Get-DiagnosticLog $log) 'Error|error'
                 throw "Inno Setup failed. See $log"
             }
-            $artifact = Join-Path $publishDir "Setup/$appName Installer.exe"
+            $artifact = Join-Path $root "Setup/$appName Installer.exe"
             Complete-BuildStep "$(Split-Path -Leaf $artifact) $(Format-FileSize $artifact)"
         }
         'macos' {
